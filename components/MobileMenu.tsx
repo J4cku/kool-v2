@@ -2,13 +2,19 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 
+const navLinks = [
+  { href: '#projekty', label: 'projekty' },
+  { href: '#studio', label: 'studio' },
+  { href: '#oferta', label: 'oferta' },
+  { href: '#kontakt', label: 'kontakt' },
+];
+
 interface MobileMenuProps {
   isOpen: boolean;
   onClose: () => void;
-  links: { href: string; label: string }[];
 }
 
-export default function MobileMenu({ isOpen, onClose, links }: MobileMenuProps) {
+export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   return (
     <AnimatePresence>
       {isOpen && (
@@ -17,18 +23,23 @@ export default function MobileMenu({ isOpen, onClose, links }: MobileMenuProps) 
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.3 }}
-          className="fixed inset-0 z-[100] bg-coral flex flex-col items-center justify-center"
+          className="fixed inset-0 z-[100] bg-coral flex flex-col"
         >
-          <button
-            onClick={onClose}
-            className="absolute top-5 right-6 w-11 h-11 rounded-full bg-beige flex items-center justify-center text-dark text-2xl font-bold hover:bg-beige/90 transition-colors"
-            aria-label="Close menu"
-          >
-            &times;
-          </button>
+          <div className="w-full px-4 py-5 flex items-center justify-between">
+            <span className="text-white font-black text-[42px] leading-none tracking-tight">
+              kool
+            </span>
+            <button
+              onClick={onClose}
+              className="w-11 h-11 rounded-full bg-beige flex items-center justify-center text-dark text-2xl font-bold hover:bg-beige/90 transition-colors"
+              aria-label="Close menu"
+            >
+              &times;
+            </button>
+          </div>
 
-          <nav className="flex flex-col items-center gap-8">
-            {links.map((link, index) => (
+          <nav className="flex-1 flex flex-col items-center justify-center gap-8">
+            {navLinks.map((link, index) => (
               <motion.a
                 key={link.href}
                 href={link.href}
