@@ -1,22 +1,23 @@
-import Image from 'next/image'
+import Navbar from '@/components/Navbar';
+import Hero from '@/components/Hero';
+import GalleryStrip from '@/components/GalleryStrip';
+import ProjectsGrid from '@/components/ProjectsGrid';
+import AboutSection from '@/components/AboutSection';
+import ContactSection from '@/components/ContactSection';
+import Footer from '@/components/Footer';
 
 export default function Home() {
   return (
-    <main style={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      minHeight: '100vh',
-      backgroundColor: '#000',
-    }}>
-      <Image
-        src="https://koolstudio.pl/kool/logo.png"
-        alt="Kool Studio Logo"
-        width={300}
-        height={100}
-        priority
-      />
-    </main>
-  )
+    <>
+      <Navbar />
+      <main>
+        <Hero />
+        <GalleryStrip />
+        <ProjectsGrid />
+        <AboutSection />
+        <ContactSection />
+      </main>
+      <Footer />
+    </>
+  );
 }
