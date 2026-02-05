@@ -1,6 +1,13 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-beige: #E5DDD0;
+  --color-coral: #FC3117;
+  --color-dark: #1A1A1A;
+  --color-muted: #888888;
+  --font-sans: var(--font-poppins), sans-serif;
+  --max-width-content: 1400px;
+}
 
 html {
   scroll-behavior: smooth;
