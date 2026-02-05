@@ -21,10 +21,10 @@ export default function LanguageSwitcher() {
       transition={{ delay: 1, duration: 0.5 }}
       className="fixed bottom-6 right-6 z-50"
     >
-      <div className="flex items-center gap-1 px-3 py-2 rounded-full bg-white/20 backdrop-blur-xl border border-white/30 shadow-lg shadow-black/5">
+      <div className="flex items-center gap-0.5 px-1.5 py-1 rounded-full bg-white/20 backdrop-blur-xl border border-white/30 shadow-lg shadow-black/5">
         <a
           href={getLocalePath('pl')}
-          className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ${
+          className={`px-2 py-0.5 rounded-full text-xs font-medium transition-all duration-300 ${
             locale === 'pl'
               ? 'bg-coral text-white'
               : 'text-dark/70 hover:text-dark hover:bg-white/30'
@@ -34,7 +34,7 @@ export default function LanguageSwitcher() {
         </a>
         <a
           href={getLocalePath('en')}
-          className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ${
+          className={`px-2 py-0.5 rounded-full text-xs font-medium transition-all duration-300 ${
             locale === 'en'
               ? 'bg-coral text-white'
               : 'text-dark/70 hover:text-dark hover:bg-white/30'
