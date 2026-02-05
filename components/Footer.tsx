@@ -12,12 +12,19 @@ export default function Footer() {
           <p className="text-coral font-light text-2xl md:text-4xl uppercase tracking-wide">
             {t('studio')}
           </p>
-          <p className="text-coral font-light text-2xl md:text-4xl uppercase tracking-wide">
-            {t('address')}
-          </p>
-          <p className="text-coral font-light text-2xl md:text-4xl uppercase tracking-wide">
-            {t('city')}
-          </p>
+          <a
+            href="https://maps.app.goo.gl/f3nJEyLJXxKStLvPA"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:opacity-70 transition-opacity"
+          >
+            <p className="text-coral font-light text-2xl md:text-4xl uppercase tracking-wide">
+              {t('address')}
+            </p>
+            <p className="text-coral font-light text-2xl md:text-4xl uppercase tracking-wide">
+              {t('city')}
+            </p>
+          </a>
           <a
             href="mailto:hello@koolstudio.pl"
             className="text-coral font-medium text-2xl md:text-4xl uppercase tracking-wide hover:opacity-70 transition-opacity mt-2"

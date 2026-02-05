@@ -21,7 +21,7 @@ export default function Navbar() {
 
           <button
             onClick={() => setMenuOpen(true)}
-            className="w-11 h-11 rounded-full bg-coral hover:bg-coral/90 transition-colors flex items-center justify-center"
+            className="w-[30px] h-[30px] rounded-full bg-coral hover:bg-coral/90 transition-colors flex items-center justify-center"
             aria-label="Open menu"
           >
             <span className="sr-only">Menu</span>
