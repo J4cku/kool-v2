@@ -28,8 +28,10 @@
   },
   "about": {
     "label": "Studio",
+    "title": "Tworzymy przestrzenie",
     "title1": "Tworzymy przestrzenie",
     "title2": "z charakterem",
+    "highlight": "z charakterem",
     "description": "Kool Studio to pracownia architektury wnętrz z siedzibą we Wrocławiu. Specjalizujemy się w projektowaniu przestrzeni mieszkalnych, komercyjnych i hotelowych. Każdy projekt traktujemy indywidualnie, łącząc funkcjonalność z estetyką i zrównoważonym podejściem do designu."
   },
   "footer": {

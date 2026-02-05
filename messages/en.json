@@ -28,8 +28,10 @@
   },
   "about": {
     "label": "Studio",
+    "title": "We create spaces",
     "title1": "We create spaces",
     "title2": "with character",
+    "highlight": "with character",
     "description": "Kool Studio is an interior design studio based in Wrocław. We specialize in designing residential, commercial, and hotel spaces. We treat each project individually, combining functionality with aesthetics and a sustainable approach to design."
   },
   "footer": {
