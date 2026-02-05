@@ -1,0 +1,45 @@
+{
+  "nav": {
+    "projekty": "projects",
+    "studio": "studio",
+    "oferta": "services",
+    "kontakt": "contact"
+  },
+  "hero": {
+    "title1": "from waste to",
+    "title2": "object of desire",
+    "subtitle": "A shiny frame made from recycled plastic.",
+    "scroll": "Scroll"
+  },
+  "gallery": {
+    "apartamentCentrum": "Centrum apartment",
+    "biuroSkyline": "Skyline office",
+    "rezydencjaPark": "Park residence"
+  },
+  "projects": {
+    "title": "Projects",
+    "wszystkie": "all",
+    "mieszkalne": "residential",
+    "komercyjne": "commercial",
+    "hotele": "hotels",
+    "gastronomia": "gastronomy",
+    "underConstruction": "under construction",
+    "realizacja": "completed"
+  },
+  "about": {
+    "label": "Studio",
+    "title1": "We create spaces",
+    "title2": "with character",
+    "description": "Kool Studio is an interior design studio based in Wrocław. We specialize in designing residential, commercial, and hotel spaces. We treat each project individually, combining functionality with aesthetics and a sustainable approach to design."
+  },
+  "footer": {
+    "studio": "Kool Studio",
+    "address": "Zaporoska 83/15",
+    "city": "Wrocław",
+    "instagram": "Instagram"
+  },
+  "language": {
+    "pl": "PL",
+    "en": "EN"
+  }
+}

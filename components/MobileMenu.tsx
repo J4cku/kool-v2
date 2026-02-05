@@ -1,13 +1,7 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-
-const navLinks = [
-  { href: '#projekty', label: 'projekty' },
-  { href: '#studio', label: 'studio' },
-  { href: '#oferta', label: 'oferta' },
-  { href: '#kontakt', label: 'kontakt' },
-];
+import { useTranslations } from 'next-intl';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -15,6 +9,15 @@ interface MobileMenuProps {
 }
 
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
+  const t = useTranslations('nav');
+
+  const navLinks = [
+    { href: '#projekty', label: t('projekty') },
+    { href: '#studio', label: t('studio') },
+    { href: '#oferta', label: t('oferta') },
+    { href: '#kontakt', label: t('kontakt') },
+  ];
+
   return (
     <AnimatePresence>
       {isOpen && (

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import FilterTabs from './FilterTabs';
 import ProjectCard from './ProjectCard';
 import { projects } from '@/data/projects';
@@ -10,6 +11,7 @@ const categories = ['wszystkie', 'mieszkalne', 'komercyjne', 'hotele', 'gastrono
 
 export default function ProjectsGrid() {
   const [activeCategory, setActiveCategory] = useState('wszystkie');
+  const t = useTranslations('projects');
 
   const filteredProjects = activeCategory === 'wszystkie'
     ? projects
@@ -25,7 +27,7 @@ export default function ProjectsGrid() {
           className="mb-12"
         >
           <span className="text-coral font-bold text-sm uppercase tracking-[0.2em] mb-6 block">
-            Projekty
+            {t('title')}
           </span>
           <FilterTabs
             categories={categories}

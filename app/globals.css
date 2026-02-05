@@ -2,16 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap');
-
 html {
   scroll-behavior: smooth;
-}
-
-body {
-  font-family: 'Nunito', sans-serif;
-  background-color: #E5DDD0;
-  color: #1A1A1A;
 }
 
 .fluid-heading {

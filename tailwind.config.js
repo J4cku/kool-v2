@@ -8,12 +8,12 @@ module.exports = {
     extend: {
       colors: {
         beige: '#E5DDD0',
-        coral: '#E84832',
+        coral: '#FC3117',
         dark: '#1A1A1A',
         muted: '#888888',
       },
       fontFamily: {
-        sans: ['Nunito', 'sans-serif'],
+        sans: ['var(--font-poppins)', 'sans-serif'],
       },
       maxWidth: {
         'content': '1400px',

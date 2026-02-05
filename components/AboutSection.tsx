@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
 const studioImages = [
   'https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=400&fit=crop',
@@ -11,6 +12,8 @@ const studioImages = [
 ];
 
 export default function AboutSection() {
+  const t = useTranslations('about');
+
   return (
     <section id="studio" className="py-24 md:py-32 px-6">
       <div className="max-w-content mx-auto">
@@ -22,18 +25,15 @@ export default function AboutSection() {
             transition={{ duration: 0.6 }}
           >
             <span className="text-coral font-bold text-sm uppercase tracking-[0.2em] mb-6 block">
-              Studio
+              {t('label')}
             </span>
             <h2 className="fluid-heading-sm font-black text-dark mb-6">
-              Tworzymy przestrzenie
+              {t('title1')}
               <br />
-              <span className="italic">z charakterem</span>
+              <span className="italic">{t('title2')}</span>
             </h2>
             <p className="text-muted text-lg leading-relaxed">
-              Kool Studio to pracownia architektury wnętrz z siedzibą we Wrocławiu.
-              Specjalizujemy się w projektowaniu przestrzeni mieszkalnych, komercyjnych
-              i hotelowych. Każdy projekt traktujemy indywidualnie, łącząc funkcjonalność
-              z estetyką i zrównoważonym podejściem do designu.
+              {t('description')}
             </p>
           </motion.div>
 

@@ -1,37 +1,41 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
+
 export default function Footer() {
-  const currentYear = new Date().getFullYear();
+  const t = useTranslations('footer');
 
   return (
-    <footer className="border-t border-dark/10 py-8 px-6">
-      <div className="max-w-content mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-        <div className="flex items-center gap-6">
-          <a
-            href="https://instagram.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-coral font-bold text-sm uppercase tracking-wider hover:opacity-70 transition-opacity"
-          >
-            Instagram
-          </a>
-          <a
-            href="https://linkedin.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-coral font-bold text-sm uppercase tracking-wider hover:opacity-70 transition-opacity"
-          >
-            LinkedIn
-          </a>
+    <footer id="kontakt" className="py-20 px-4">
+      <div className="max-w-content mx-auto">
+        <div className="flex flex-col items-end text-right mb-16">
+          <p className="text-coral font-light text-2xl md:text-4xl uppercase tracking-wide">
+            {t('studio')}
+          </p>
+          <p className="text-coral font-light text-2xl md:text-4xl uppercase tracking-wide">
+            {t('address')}
+          </p>
+          <p className="text-coral font-light text-2xl md:text-4xl uppercase tracking-wide">
+            {t('city')}
+          </p>
           <a
             href="mailto:hello@koolstudio.pl"
-            className="text-coral font-bold text-sm uppercase tracking-wider hover:opacity-70 transition-opacity"
+            className="text-coral font-medium text-2xl md:text-4xl uppercase tracking-wide hover:opacity-70 transition-opacity mt-2"
           >
-            Email
+            hello@koolstudio.pl
           </a>
         </div>
 
-        <p className="text-muted text-sm">
-          &copy; {currentYear} Kool Studio. Wszystkie prawa zastrzeżone.
-        </p>
+        <div className="border-t border-coral/20 pt-6">
+          <a
+            href="https://instagram.com/koolstudio.pl"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-coral font-bold text-sm uppercase tracking-wider hover:opacity-70 transition-opacity"
+          >
+            {t('instagram')}
+          </a>
+        </div>
       </div>
     </footer>
   );

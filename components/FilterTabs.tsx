@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 interface FilterTabsProps {
   categories: string[];
   activeCategory: string;
@@ -7,6 +9,8 @@ interface FilterTabsProps {
 }
 
 export default function FilterTabs({ categories, activeCategory, onCategoryChange }: FilterTabsProps) {
+  const t = useTranslations('projects');
+
   return (
     <div className="flex flex-wrap gap-3">
       {categories.map((category) => (
@@ -19,7 +23,7 @@ export default function FilterTabs({ categories, activeCategory, onCategoryChang
               : 'bg-transparent border-2 border-dark/20 text-dark hover:border-dark'
           }`}
         >
-          {category}
+          {t(category)}
         </button>
       ))}
     </div>
