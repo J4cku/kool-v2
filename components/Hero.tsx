@@ -1,9 +1,11 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, type Variants } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 
-const letterVariants = {
+const easeOutExpo: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+const letterVariants: Variants = {
   hidden: {
     opacity: 0,
     y: 50,
@@ -16,12 +18,12 @@ const letterVariants = {
     transition: {
       delay: i * 0.04,
       duration: 0.5,
-      ease: [0.22, 1, 0.36, 1],
+      ease: easeOutExpo,
     },
   }),
 };
 
-const wordVariants = {
+const wordVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -73,7 +75,7 @@ function AnimatedLine({ text, delay = 0, className }: { text: string; delay?: nu
           transition={{
             delay: delay + wordIndex * 0.15,
             duration: 0.6,
-            ease: [0.22, 1, 0.36, 1],
+            ease: easeOutExpo,
           }}
         >
           <AnimatedWord word={word} />
@@ -101,7 +103,7 @@ export default function Hero() {
         <motion.p
           initial={{ opacity: 0, y: 30, filter: 'blur(10px)' }}
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          transition={{ duration: 0.8, delay: 1.2, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.8, delay: 1.2, ease: easeOutExpo }}
           className="mt-8 text-muted text-lg md:text-xl max-w-xl"
         >
           {t('subtitle')}
