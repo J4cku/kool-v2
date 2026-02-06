@@ -1,23 +1,17 @@
 import Navbar from '@/components/Navbar';
-import Hero from '@/components/Hero';
-import GalleryStrip from '@/components/GalleryStrip';
-import ProjectsGrid from '@/components/ProjectsGrid';
-import AboutSection from '@/components/AboutSection';
-import Footer from '@/components/Footer';
-import LanguageSwitcher from '@/components/LanguageSwitcher';
+import ImageStrip from '@/components/ImageStrip';
+import ManifestoSection from '@/components/ManifestoSection';
+import FooterBanner from '@/components/FooterBanner';
 
 export default function Home() {
   return (
     <>
       <Navbar />
-      <main>
-        <Hero />
-        <GalleryStrip />
-        <ProjectsGrid />
-        <AboutSection />
+      <main className="pt-[200px]">
+        <ImageStrip />
+        <ManifestoSection />
       </main>
-      <Footer />
-      <LanguageSwitcher />
+      <FooterBanner showAddress />
     </>
   );
 }

@@ -2,28 +2,31 @@
 
 import { useTranslations } from 'next-intl';
 
+type FilterValue = 'wszystkie' | 'mieszkalne' | 'komercyjne';
+
 interface FilterTabsProps {
-  categories: string[];
-  activeCategory: string;
-  onCategoryChange: (category: string) => void;
+  activeFilter: FilterValue;
+  onFilterChange: (filter: FilterValue) => void;
 }
 
-export default function FilterTabs({ categories, activeCategory, onCategoryChange }: FilterTabsProps) {
+const filters: FilterValue[] = ['wszystkie', 'mieszkalne', 'komercyjne'];
+
+export default function FilterTabs({ activeFilter, onFilterChange }: FilterTabsProps) {
   const t = useTranslations('projects');
 
   return (
-    <div className="flex flex-wrap gap-3">
-      {categories.map((category) => (
+    <div className="flex items-center gap-8">
+      {filters.map((filter) => (
         <button
-          key={category}
-          onClick={() => onCategoryChange(category)}
-          className={`px-6 py-2.5 rounded-full font-bold text-sm uppercase tracking-wider transition-all duration-300 ${
-            activeCategory === category
-              ? 'bg-dark text-beige'
-              : 'bg-transparent border-2 border-dark/20 text-dark hover:border-dark'
+          key={filter}
+          onClick={() => onFilterChange(filter)}
+          className={`text-[15px] lowercase tracking-wide transition-all duration-200 ${
+            activeFilter === filter
+              ? 'font-bold text-dark'
+              : 'font-normal text-dark hover:opacity-70'
           }`}
         >
-          {t(category)}
+          {t(filter)}
         </button>
       ))}
     </div>

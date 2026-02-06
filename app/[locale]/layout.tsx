@@ -14,11 +14,11 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: 'Kool Studio | Architektura Wnętrz Wrocław',
-  description: 'Kool Studio - pracownia architektury wnętrz. Projektowanie przestrzeni mieszkalnych, komercyjnych i hotelowych we Wrocławiu.',
+  description: 'Kool Studio - pracownia architektury wnętrz. Projektowanie przestrzeni mieszkalnych i komercyjnych we Wrocławiu.',
   keywords: 'architektura wnętrz, projektowanie wnętrz, Wrocław, design, interior design',
   openGraph: {
     title: 'Kool Studio | Architektura Wnętrz Wrocław',
-    description: 'Pracownia architektury wnętrz. Projektowanie przestrzeni mieszkalnych, komercyjnych i hotelowych.',
+    description: 'Pracownia architektury wnętrz. Projektowanie przestrzeni mieszkalnych i komercyjnych.',
     type: 'website',
     locale: 'pl_PL',
   },

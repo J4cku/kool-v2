@@ -5,43 +5,37 @@
     "oferta": "services",
     "kontakt": "contact"
   },
-  "hero": {
-    "title1": "from waste to",
-    "title2": "object of desire",
-    "subtitle": "A shiny frame made from recycled plastic.",
-    "scroll": "Scroll"
-  },
-  "gallery": {
-    "apartamentCentrum": "Centrum apartment",
-    "biuroSkyline": "Skyline office",
-    "rezydencjaPark": "Park residence"
+  "home": {
+    "manifesto": "ORIGINAL INTERIORS THAT STAY FOR LONGER. WE CREATE INTERIORS WITH A DISTINCT IDENTITY. WE COMBINE DESIGN SENSITIVITY WITH PRECISION AND EXPERIENCE, CREATING SPACES REFINED IN DETAIL AND GROUNDED IN REAL CONTEXT.",
+    "tagline": "ORIGINAL INTERIORS THAT STAY FOR LONGER."
   },
   "projects": {
-    "title": "Projects",
     "wszystkie": "all",
     "mieszkalne": "residential",
     "komercyjne": "commercial",
-    "hotele": "hotels",
-    "gastronomia": "gastronomy",
-    "underConstruction": "under construction",
-    "realizacja": "completed"
+    "inProgress": "in progress"
   },
-  "about": {
-    "label": "Studio",
-    "title": "We create spaces",
-    "title1": "We create spaces",
-    "title2": "with character",
-    "highlight": "with character",
-    "description": "Kool Studio is an interior design studio based in Wrocław. We specialize in designing residential, commercial, and hotel spaces. We treat each project individually, combining functionality with aesthetics and a sustainable approach to design."
+  "projectDetail": {
+    "projekt": "PROJECT",
+    "lokalizacja": "LOCATION",
+    "powierzchnia": "AREA",
+    "rok": "YEAR",
+    "zakres": "SCOPE"
+  },
+  "contact": {
+    "cta": "READY TO START A PROJECT TOGETHER?"
   },
   "footer": {
-    "studio": "Kool Studio",
-    "address": "Zaporoska 83/15",
-    "city": "Wrocław",
-    "instagram": "Instagram"
+    "banner": "WE ARE KOOL AND WE DESIGN KOOL THINGS!",
+    "address": "ZAPOROSKA 83/15, WROCŁAW",
+    "email": "HELLO@KOOLSTUDIO.PL"
   },
-  "language": {
-    "pl": "PL",
-    "en": "EN"
+  "studio": {
+    "title": "Studio",
+    "comingSoon": "Coming soon"
+  },
+  "oferta": {
+    "title": "Services",
+    "comingSoon": "Coming soon"
   }
 }

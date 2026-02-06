@@ -1,91 +1,123 @@
-export interface Project {
-  id: number;
+export type Project = {
+  id: string;
+  slug: string;
   title: string;
-  category: 'mieszkalne' | 'komercyjne' | 'hotele' | 'gastronomia';
-  status: string;
+  location: string;
+  category: 'mieszkalne' | 'komercyjne';
+  status: 'completed' | 'in_progress';
+  year: number;
+  area: string;
+  scope: string[];
+  thumbnail: string;
+  featured: boolean;
   images: string[];
-}
+  description: string;
+};
 
 export const projects: Project[] = [
   {
-    id: 1,
-    title: "hotel Belmonte Ustronie Morskie",
-    category: "hotele",
-    status: "under construction",
-    images: [
-      "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=600&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1615529182904-14819c35db37?w=600&h=600&fit=crop"
-    ]
+    id: '1',
+    slug: 'dom-dobrzykowice',
+    title: 'dom',
+    location: 'Dobrzykowice',
+    category: 'mieszkalne',
+    status: 'completed',
+    year: 2024,
+    area: '180 m²',
+    scope: ['projekt koncepcyjny', 'dokumentacja wykonawcza', 'nadzór autorski'],
+    thumbnail: '/images/dobrzykowice.jpg',
+    featured: false,
+    images: ['/images/dobrzykowice.jpg', '/images/dobrzykowice.jpg', '/images/dobrzykowice.jpg', '/images/dobrzykowice.jpg', '/images/dobrzykowice.jpg'],
+    description: 'Projekt domu jednorodzinnego w podwrocławskich Dobrzykowicach. Wnętrza łączą ciepło naturalnych materiałów z precyzyjnym detalem i funkcjonalnym układem przestrzeni.',
   },
   {
-    id: 2,
-    title: "pawilon usługowy Fandom",
-    category: "komercyjne",
-    status: "under construction",
-    images: [
-      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=600&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1600573472550-8090b5e0745e?w=600&h=600&fit=crop"
-    ]
+    id: '2',
+    slug: 'delikatesy-dehesa',
+    title: 'delikatesy Dehesa',
+    location: 'Wrocław',
+    category: 'komercyjne',
+    status: 'completed',
+    year: 2026,
+    area: '120 m²',
+    scope: ['projekt koncepcyjny', 'dokumentacja wykonawcza', 'nadzór autorski', 'projekt mebli', 'lamp', 'projekt identyfikacji wizualnej'],
+    thumbnail: '/images/dehesa.jpg',
+    featured: false,
+    images: ['/images/dehesa.jpg', '/images/dehesa.jpg', '/images/dehesa.jpg', '/images/dehesa.jpg', '/images/dehesa.jpg', '/images/dehesa.jpg'],
+    description: 'Autorskie wnętrza, które zostają na dłużej. Tworzymy wnętrza o wyraźnej tożsamości. Łączymy wrażliwość projektową z precyzją i doświadczeniem, tworząc przestrzenie dopracowane w detalu i osadzone w realnym kontekście.',
   },
   {
-    id: 3,
-    title: "apartament Grabiszynek",
-    category: "mieszkalne",
-    status: "realizacja 2024",
-    images: [
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=600&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1600210492493-0946911123ea?w=600&h=600&fit=crop"
-    ]
+    id: '3',
+    slug: 'winobar-lodz',
+    title: 'winobar',
+    location: 'Łódź',
+    category: 'komercyjne',
+    status: 'completed',
+    year: 2025,
+    area: '95 m²',
+    scope: ['projekt koncepcyjny', 'dokumentacja wykonawcza', 'nadzór autorski'],
+    thumbnail: '/images/prs.jpg',
+    featured: false,
+    images: ['/images/prs.jpg', '/images/prs.jpg', '/images/prs.jpg', '/images/prs.jpg'],
+    description: 'Autorskie wnętrza o wyraźnej tożsamości. Kameralny winobar w centrum Łodzi.',
   },
   {
-    id: 4,
-    title: "restauracja Umami",
-    category: "gastronomia",
-    status: "realizacja 2023",
-    images: [
-      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1559329007-40df8a9345d8?w=600&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&h=600&fit=crop"
-    ]
+    id: '4',
+    slug: 'pawilon-fandom',
+    title: 'pawilon usługowy Fandom',
+    location: 'Wrocław',
+    category: 'komercyjne',
+    status: 'in_progress',
+    year: 2026,
+    area: '250 m²',
+    scope: ['projekt koncepcyjny', 'dokumentacja wykonawcza'],
+    thumbnail: '/images/fnd.jpg',
+    featured: false,
+    images: ['/images/fnd.jpg', '/images/fnd.jpg', '/images/fnd.jpg', '/images/fnd.jpg', '/images/fnd.jpg'],
+    description: 'Pawilon usługowy o surowej, betonowej estetyce w centrum Wrocławia.',
   },
   {
-    id: 5,
-    title: "loft Nadodrze",
-    category: "mieszkalne",
-    status: "realizacja 2024",
-    images: [
-      "https://images.unsplash.com/photo-1600607687644-c7171b42498f?w=600&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=600&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=600&h=600&fit=crop"
-    ]
+    id: '5',
+    slug: 'hotel-belmonte',
+    title: 'hotel Belmonte',
+    location: 'Ustronie Morskie',
+    category: 'komercyjne',
+    status: 'in_progress',
+    year: 2026,
+    area: '1200 m²',
+    scope: ['projekt koncepcyjny', 'dokumentacja wykonawcza', 'nadzór autorski', 'projekt mebli'],
+    thumbnail: '/images/belmonte.jpg',
+    featured: true,
+    images: ['/images/belmonte.jpg', '/images/belmonte.jpg', '/images/belmonte.jpg', '/images/belmonte.jpg', '/images/belmonte.jpg', '/images/belmonte.jpg', '/images/belmonte.jpg'],
+    description: 'Hotel nad morzem z autorskim wystrojem wnętrz. Przestrzenie łączące nadmorski klimat z nowoczesnym designem.',
   },
   {
-    id: 6,
-    title: "butik hotelowy Marina",
-    category: "hotele",
-    status: "realizacja 2023",
-    images: [
-      "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=600&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=600&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=600&h=600&fit=crop"
-    ]
-  }
+    id: '6',
+    slug: 'kancelaria',
+    title: 'kancelaria',
+    location: 'Wrocław',
+    category: 'komercyjne',
+    status: 'completed',
+    year: 2025,
+    area: '80 m²',
+    scope: ['projekt koncepcyjny', 'dokumentacja wykonawcza'],
+    thumbnail: '/images/kancelaria.jpg',
+    featured: false,
+    images: ['/images/kancelaria.jpg', '/images/kancelaria.jpg', '/images/kancelaria.jpg', '/images/kancelaria.jpg'],
+    description: 'Przestrzeń biurowa o spokojnej, ciepłej estetyce. Jasne wnętrza z akcentami drewna i terrazzo.',
+  },
 ];
 
-export const galleryImages = [
+export const heroImages = [
   {
-    src: "https://images.unsplash.com/photo-1600210491892-03d54c0aaf87?w=800&h=1067&fit=crop",
-    title: "apartament Centrum"
+    src: '/images/dobrzykowice.jpg',
+    alt: 'dom Dobrzykowice',
   },
   {
-    src: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&h=1067&fit=crop",
-    title: "biuro Skyline"
+    src: '/images/dehesa.jpg',
+    alt: 'delikatesy Dehesa',
   },
   {
-    src: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&h=1067&fit=crop",
-    title: "rezydencja Park"
-  }
+    src: '/images/prs.jpg',
+    alt: 'winobar Łódź',
+  },
 ];
