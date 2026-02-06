@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+@theme {
+  --color-beige: #E5DDD0;
+  --color-coral: #FC3117;
+  --color-dark: #1A1A1A;
+  --color-muted: #888888;
+  --font-sans: var(--font-poppins), sans-serif;
+  --max-width-content: 1400px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.fluid-heading {
+  font-size: clamp(48px, 8vw, 96px);
+  line-height: 1.05;
+}
+
+.fluid-heading-sm {
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 1.1;
+}

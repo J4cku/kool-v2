@@ -1,0 +1,47 @@
+{
+  "nav": {
+    "projekty": "projekty",
+    "studio": "studio",
+    "oferta": "oferta",
+    "kontakt": "kontakt"
+  },
+  "hero": {
+    "title1": "od odpadu do",
+    "title2": "obiektu pożądania",
+    "subtitle": "Błyszcząca rama wykonana z plastiku pochodzącego z recyklingu.",
+    "scroll": "Scroll"
+  },
+  "gallery": {
+    "apartamentCentrum": "apartament Centrum",
+    "biuroSkyline": "biuro Skyline",
+    "rezydencjaPark": "rezydencja Park"
+  },
+  "projects": {
+    "title": "Projekty",
+    "wszystkie": "wszystkie",
+    "mieszkalne": "mieszkalne",
+    "komercyjne": "komercyjne",
+    "hotele": "hotele",
+    "gastronomia": "gastronomia",
+    "underConstruction": "under construction",
+    "realizacja": "realizacja"
+  },
+  "about": {
+    "label": "Studio",
+    "title": "Tworzymy przestrzenie",
+    "title1": "Tworzymy przestrzenie",
+    "title2": "z charakterem",
+    "highlight": "z charakterem",
+    "description": "Kool Studio to pracownia architektury wnętrz z siedzibą we Wrocławiu. Specjalizujemy się w projektowaniu przestrzeni mieszkalnych, komercyjnych i hotelowych. Każdy projekt traktujemy indywidualnie, łącząc funkcjonalność z estetyką i zrównoważonym podejściem do designu."
+  },
+  "footer": {
+    "studio": "Kool Studio",
+    "address": "Zaporoska 83/15",
+    "city": "Wrocław",
+    "instagram": "Instagram"
+  },
+  "language": {
+    "pl": "PL",
+    "en": "EN"
+  }
+}
