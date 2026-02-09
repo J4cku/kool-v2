@@ -20,9 +20,9 @@ export default function FilterTabs({ activeFilter, onFilterChange }: FilterTabsP
         <button
           key={filter}
           onClick={() => onFilterChange(filter)}
-          className={`text-[15px] lowercase tracking-wide transition-all duration-200 ${
+          className={`text-[15px] lowercase tracking-wide transition-all duration-200 px-4 py-1.5 rounded-full ${
             activeFilter === filter
-              ? 'font-bold text-coral'
+              ? 'font-bold text-beige bg-coral'
               : 'font-normal text-coral hover:opacity-70'
           }`}
         >

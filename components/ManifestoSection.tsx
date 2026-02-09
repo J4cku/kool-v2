@@ -11,11 +11,11 @@ export default function ManifestoSection() {
       <div className="max-w-[1400px] mx-auto px-5 md:px-10 lg:px-12">
         <div className="flex flex-col md:flex-row gap-12 md:gap-16">
           <div className="md:w-[55%]">
-            <p className="uppercase text-coral font-[400] text-[18px] md:text-[20px] leading-[1.5]">
-              {t('manifesto')}
-            </p>
-            <p className="uppercase text-coral font-[700] text-[22px] md:text-[26px] leading-[1.4] mt-8">
+            <h2 className="uppercase text-coral font-[900] leading-[1.15] mb-6" style={{ fontSize: 'clamp(32px, 5vw, 54px)' }}>
               {t('tagline')}
+            </h2>
+            <p className="uppercase text-coral/60 font-[400] text-[18px] md:text-[20px] leading-[1.5]">
+              {t('manifesto')}
             </p>
           </div>
 
