@@ -21,8 +21,8 @@ export default function KontaktPage() {
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
             <h1
-              className="text-coral font-[900] uppercase leading-tight"
-              style={{ fontSize: 'clamp(28px, 4vw, 36px)' }}
+              className="text-coral font-[700] uppercase leading-tight"
+              style={{ fontSize: 'clamp(32px, 5vw, 54px)' }}
             >
               {tContact('cta')}
             </h1>
@@ -42,13 +42,13 @@ export default function KontaktPage() {
               playsInline
               className="w-[160px] h-[160px] md:w-[220px] md:h-[220px] object-cover"
             />
-            <div className="text-right">
+            <div className="inline-flex flex-col">
               <a
                 href="https://maps.app.goo.gl/f3nJEyLJXxKStLvPA"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block text-coral font-bold uppercase hover:opacity-70 transition-opacity"
-                style={{ fontSize: 'clamp(24px, 3.5vw, 40px)' }}
+                className="block text-coral font-bold uppercase hover:opacity-70 transition-opacity w-full"
+                style={{ fontSize: 'clamp(24px, 3.5vw, 40px)', textAlign: 'justify', textAlignLast: 'justify' } as React.CSSProperties}
               >
                 {tFooter('address')}
               </a>
