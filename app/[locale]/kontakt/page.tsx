@@ -29,9 +29,9 @@ export default function KontaktPage() {
           </motion.div>
 
           <motion.div
-            className="self-end text-right mt-auto flex flex-col items-end"
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
+            className="mt-auto flex items-end justify-between gap-8"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
           >
             <video
@@ -40,24 +40,26 @@ export default function KontaktPage() {
               muted
               loop
               playsInline
-              className="w-auto h-auto max-w-[200px] md:max-w-[280px] mb-6"
+              className="w-auto h-auto max-w-[200px] md:max-w-[280px]"
             />
-            <a
-              href="https://maps.app.goo.gl/f3nJEyLJXxKStLvPA"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block text-coral font-bold hover:opacity-70 transition-opacity"
-              style={{ fontSize: 'clamp(32px, 4vw, 48px)' }}
-            >
-              {tFooter('address')}
-            </a>
-            <a
-              href="mailto:hello@koolstudio.pl"
-              className="text-coral font-[900] hover:opacity-70 transition-opacity"
-              style={{ fontSize: 'clamp(36px, 5vw, 56px)' }}
-            >
-              {tFooter('email')}
-            </a>
+            <div className="text-right">
+              <a
+                href="https://maps.app.goo.gl/f3nJEyLJXxKStLvPA"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block text-coral font-bold uppercase hover:opacity-70 transition-opacity"
+                style={{ fontSize: 'clamp(24px, 3.5vw, 40px)' }}
+              >
+                {tFooter('address')}
+              </a>
+              <a
+                href="mailto:hello@koolstudio.pl"
+                className="block text-coral font-[900] uppercase hover:opacity-70 transition-opacity"
+                style={{ fontSize: 'clamp(28px, 4.5vw, 52px)' }}
+              >
+                {tFooter('email')}
+              </a>
+            </div>
           </motion.div>
         </div>
 

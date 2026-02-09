@@ -31,7 +31,7 @@ export default function Navbar() {
             <Image src="/logo.svg" alt="Kool Studio" width={208} height={77} priority />
           </Link>
 
-          <div className="flex items-center gap-14">
+          <div className="flex items-center gap-10">
             {/* Desktop: menu items appear inline left of the dot */}
             <AnimatePresence>
               {menuOpen && (
