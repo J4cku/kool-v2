@@ -20,7 +20,7 @@ export default function LanguageToggle() {
         onClick={() => switchTo('pl')}
         className={`w-[26px] h-[26px] flex items-center justify-center rounded-full transition-colors ${
           locale === 'pl'
-            ? 'bg-coral text-white'
+            ? 'bg-coral text-beige'
             : 'bg-transparent text-coral hover:opacity-70'
         }`}
       >
@@ -30,7 +30,7 @@ export default function LanguageToggle() {
         onClick={() => switchTo('en')}
         className={`w-[26px] h-[26px] flex items-center justify-center rounded-full transition-colors ${
           locale === 'en'
-            ? 'bg-coral text-white'
+            ? 'bg-coral text-beige'
             : 'bg-transparent text-coral hover:opacity-70'
         }`}
       >

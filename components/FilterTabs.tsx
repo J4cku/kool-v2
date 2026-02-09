@@ -15,15 +15,15 @@ export default function FilterTabs({ activeFilter, onFilterChange }: FilterTabsP
   const t = useTranslations('projects');
 
   return (
-    <div className="flex items-center gap-8">
+    <div className="flex items-center gap-4">
       {filters.map((filter) => (
         <button
           key={filter}
           onClick={() => onFilterChange(filter)}
           className={`text-[15px] lowercase tracking-wide transition-all duration-200 ${
             activeFilter === filter
-              ? 'font-bold text-dark'
-              : 'font-normal text-dark hover:opacity-70'
+              ? 'font-bold text-coral'
+              : 'font-normal text-coral hover:opacity-70'
           }`}
         >
           {t(filter)}

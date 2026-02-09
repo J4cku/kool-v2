@@ -87,21 +87,19 @@ export default function ImageStrip() {
         </AnimatePresence>
       </div>
 
-      {/* Scroll indicator */}
+      {/* Scroll indicator — three animated dots */}
       <motion.div
         style={{ opacity: indicatorOpacity }}
-        className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1"
+        className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
-        <motion.div
-          animate={{ y: [0, 6, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          className="h-5 bg-coral/40" style={{ width: '0.5px' }}
-        />
-        <motion.div
-          animate={{ y: [0, 4, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut', delay: 0.15 }}
-          className="w-1.5 h-1.5 rounded-full bg-coral/50"
-        />
+        {[0, 1, 2].map((i) => (
+          <motion.div
+            key={i}
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut', delay: i * 0.2 }}
+            className="w-1.5 h-1.5 rounded-full bg-coral/60"
+          />
+        ))}
       </motion.div>
     </div>
   );

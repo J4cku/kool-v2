@@ -29,16 +29,24 @@ export default function KontaktPage() {
           </motion.div>
 
           <motion.div
-            className="self-end text-right mt-auto"
+            className="self-end text-right mt-auto flex flex-col items-end"
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
           >
+            <video
+              src="/videos/reel.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="w-[140px] h-[140px] md:w-[200px] md:h-[200px] object-cover mb-6"
+            />
             <a
               href="https://maps.app.goo.gl/f3nJEyLJXxKStLvPA"
               target="_blank"
               rel="noopener noreferrer"
-              className="block text-coral/80 font-bold hover:opacity-70 transition-opacity"
+              className="block text-coral font-bold hover:opacity-70 transition-opacity"
               style={{ fontSize: 'clamp(32px, 4vw, 48px)' }}
             >
               {tFooter('address')}
@@ -53,9 +61,11 @@ export default function KontaktPage() {
           </motion.div>
         </div>
 
-        {/* Fixed bottom bar (shared with FooterBanner) */}
+        {/* Coral separator line (in page flow) */}
+        <div className="w-full bg-coral" style={{ height: '0.5px' }} />
+
+        {/* Fixed language toggle */}
         <div className="fixed bottom-0 left-0 right-0 z-40">
-          <div className="w-full bg-coral" style={{ height: '0.5px' }} />
           <div className="px-3 md:px-5 py-2 flex justify-end">
             <LanguageToggle />
           </div>

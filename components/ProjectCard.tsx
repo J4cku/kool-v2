@@ -28,7 +28,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         </div>
       </Link>
 
-      <p className="mt-3 text-[13px] md:text-[14px] font-[300] text-dark text-center">
+      <p className="mt-3 text-[14px] md:text-[15px] font-[500] text-dark text-center">
         {project.title} / {project.location}
         {project.status === 'in_progress' && (
           <span className="text-coral"> / {t('inProgress')}</span>

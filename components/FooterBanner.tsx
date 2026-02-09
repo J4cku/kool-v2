@@ -22,7 +22,7 @@ export default function FooterBanner({ showAddress = false, showMarquee = true }
               <span
                 key={i}
                 className="font-[400] uppercase text-coral leading-tight mx-8 md:mx-16"
-                style={{ fontSize: 'clamp(32px, 6vw, 80px)' }}
+                style={{ fontSize: 'clamp(26px, 4.8vw, 64px)' }}
               >
                 {bannerText}
               </span>
@@ -65,9 +65,11 @@ export default function FooterBanner({ showAddress = false, showMarquee = true }
         </div>
       )}
 
-      {/* Fixed bottom bar: separator + language toggle — no background */}
+      {/* Coral separator line (in page flow) */}
+      <div className="w-full bg-coral" style={{ height: '0.5px' }} />
+
+      {/* Fixed language toggle */}
       <div className="fixed bottom-0 left-0 right-0 z-40">
-        <div className="w-full bg-coral" style={{ height: '0.5px' }} />
         <div className="px-3 md:px-5 py-2 flex justify-end">
           <LanguageToggle />
         </div>
