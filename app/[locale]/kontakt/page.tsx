@@ -40,7 +40,7 @@ export default function KontaktPage() {
               muted
               loop
               playsInline
-              className="w-auto h-auto max-w-[200px] md:max-w-[280px]"
+              className="w-[160px] h-[160px] md:w-[220px] md:h-[220px] object-cover"
             />
             <div className="text-right">
               <a
