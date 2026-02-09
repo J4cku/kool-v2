@@ -40,7 +40,7 @@ export default function KontaktPage() {
               muted
               loop
               playsInline
-              className="w-[140px] h-[140px] md:w-[200px] md:h-[200px] object-cover mb-6"
+              className="w-auto h-auto max-w-[200px] md:max-w-[280px] mb-6"
             />
             <a
               href="https://maps.app.goo.gl/f3nJEyLJXxKStLvPA"
