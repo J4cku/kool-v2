@@ -40,6 +40,7 @@ export default function KontaktPage() {
               muted
               loop
               playsInline
+              aria-label="Kool Studio showreel"
               className="w-[160px] h-[160px] md:w-[220px] md:h-[220px] object-cover"
             />
             <div className="inline-flex flex-col">

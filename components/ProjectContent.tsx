@@ -12,7 +12,7 @@ function PaddedImage({ src }: { src: string }) {
   return (
     <div className="w-full md:w-1/2 p-6 md:p-10 lg:p-14 xl:p-20">
       <div className="relative w-full h-full aspect-[3/4] md:aspect-auto">
-        <Image src={src} alt="" fill className="object-contain" sizes="(max-width: 768px) 100vw, 40vw" />
+        <Image src={src} alt="Kool Studio project" fill className="object-contain" sizes="(max-width: 768px) 100vw, 40vw" />
       </div>
     </div>
   );
@@ -21,7 +21,7 @@ function PaddedImage({ src }: { src: string }) {
 function FullImage({ src }: { src: string }) {
   return (
     <div className="w-full md:w-1/2 aspect-square relative">
-      <Image src={src} alt="" fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
+      <Image src={src} alt="Kool Studio project" fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
     </div>
   );
 }

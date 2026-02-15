@@ -41,6 +41,7 @@ export default function FooterBanner({ showAddress = false, showMarquee = true }
               muted
               loop
               playsInline
+              aria-label="Kool Studio showreel"
               className="w-[140px] h-[140px] md:w-[200px] md:h-[200px] object-cover"
             />
             <div className="inline-flex flex-col">

@@ -10,10 +10,6 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'koolstudio.pl',
       },
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-      },
     ],
   },
 };
