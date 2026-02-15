@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { Link, usePathname } from '@/i18n/navigation';
@@ -15,8 +15,26 @@ const navLinks = [
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [menuOpen]);
   const t = useTranslations('nav');
   const pathname = usePathname();
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    setIsMobile(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
+  const { scrollY } = useScroll();
+  const logoScale = useTransform(scrollY, [0, 200], [1, 0.45]);
+  const dotScale = useTransform(scrollY, [0, 200], isMobile ? [1, 0.7] : [1, 1]);
+  const dotY = useTransform(scrollY, [0, 200], isMobile ? [0, -16] : [0, 0]);
 
   const isActive = (href: string) => {
     if (href === '/') return pathname === '/';
@@ -28,7 +46,19 @@ export default function Navbar() {
       <nav className="fixed top-0 left-0 right-0 z-50">
         <div className="w-full px-4 md:px-6 pt-4 pb-6 flex items-center justify-between">
           <Link href="/">
-            <Image src="/logo.svg" alt="Kool Studio" width={208} height={77} priority />
+            {/* Desktop: static logo */}
+            <span className="hidden md:block">
+              <Image src="/logo.svg" alt="Kool Studio" width={208} height={77} priority />
+            </span>
+            {/* Mobile: shrink on scroll + burn blend */}
+            <motion.span
+              className="block md:hidden origin-top-left"
+              style={{
+                scale: logoScale,
+              }}
+            >
+              <Image src="/logo.svg" alt="Kool Studio" width={208} height={77} priority />
+            </motion.span>
           </Link>
 
           <div className="flex items-center gap-10">
@@ -73,13 +103,14 @@ export default function Navbar() {
             </AnimatePresence>
 
             {/* The single dot — always visible, toggles menu */}
-            <button
+            <motion.button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="w-[36px] h-[35px] hover:opacity-80 transition-opacity shrink-0"
+              className="w-[36px] h-[35px] hover:opacity-80 transition-opacity shrink-0 origin-top-right"
+              style={{ scale: dotScale, y: dotY }}
               aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             >
               <Image src="/dot.svg" alt="" width={36} height={35} />
-            </button>
+            </motion.button>
           </div>
         </div>
       </nav>
@@ -108,30 +139,40 @@ export default function Navbar() {
             transition={{ duration: 0.3 }}
             className="fixed inset-0 z-[100] bg-coral flex flex-col md:hidden"
           >
-            <div className="w-full px-4 pt-4 pb-6 flex items-end justify-between">
-              <Image src="/logo.svg" alt="Kool Studio" width={208} height={77} className="brightness-0 invert" />
-              <button
+            <div className="w-full px-4 pt-4 pb-6 flex items-center justify-between">
+              <motion.span className="origin-top-left" style={{ scale: logoScale }}>
+                <div
+                  className="w-[208px] h-[77px] bg-beige"
+                  style={{ maskImage: 'url(/logo.svg)', maskSize: 'contain', maskRepeat: 'no-repeat' }}
+                />
+              </motion.span>
+              <motion.button
                 onClick={() => setMenuOpen(false)}
-                className="w-[52px] h-[50px] rounded-full bg-beige flex items-center justify-center text-dark text-xl font-bold hover:bg-beige/90 transition-colors"
+                className="w-[36px] h-[35px] hover:opacity-80 transition-opacity shrink-0 origin-top-right"
+                style={{ scale: dotScale, y: dotY }}
                 aria-label="Close menu"
               >
-                &times;
-              </button>
+                <div
+                  className="w-[36px] h-[35px] bg-beige rounded-full"
+                  style={{ maskImage: 'url(/dot.svg)', maskSize: 'contain', maskRepeat: 'no-repeat' }}
+                />
+              </motion.button>
             </div>
 
-            <nav className="flex-1 flex flex-col items-center justify-center gap-8">
+            <nav className="absolute inset-0 flex flex-col items-center justify-center gap-8 text-center pointer-events-none">
               {navLinks.map((link, index) => (
                 <motion.div
                   key={link.key}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
+                  className="pointer-events-auto"
                 >
                   <Link
                     href={link.href}
                     onClick={() => setMenuOpen(false)}
                     className={`text-5xl uppercase tracking-wide transition-opacity hover:opacity-80 ${
-                      isActive(link.href) ? 'text-white font-[900]' : 'text-white/80 font-[700]'
+                      isActive(link.href) ? 'text-beige font-[900]' : 'text-beige/80 font-[700]'
                     }`}
                   >
                     {t(link.key)}

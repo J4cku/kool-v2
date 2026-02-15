@@ -41,6 +41,7 @@ export default async function ProjectDetailPage({
           <ProjectContent
             images={project.images.slice(1)}
             description={project.description}
+            descriptionBlocks={project.descriptionBlocks}
           />
 
           <FooterBanner showMarquee={false} />

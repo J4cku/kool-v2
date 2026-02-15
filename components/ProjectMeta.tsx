@@ -16,6 +16,9 @@ export default function ProjectMeta({ project }: ProjectMetaProps) {
     { label: t('powierzchnia'), value: project.area },
     { label: t('rok'), value: String(project.year) },
     { label: t('zakres'), value: project.scope.join(', ') },
+    ...(project.photoCredit
+      ? [{ label: t('zdjecia'), value: project.photoCredit }]
+      : []),
   ];
 
   return (

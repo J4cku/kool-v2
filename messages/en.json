@@ -20,7 +20,8 @@
     "lokalizacja": "LOCATION",
     "powierzchnia": "AREA",
     "rok": "YEAR",
-    "zakres": "SCOPE"
+    "zakres": "SCOPE",
+    "zdjecia": "PHOTOS"
   },
   "contact": {
     "cta": "READY TO START A PROJECT TOGETHER?"
