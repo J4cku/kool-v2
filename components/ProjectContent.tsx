@@ -30,7 +30,7 @@ function TextBlock({ text, align = 'end' }: { text: string; align?: 'start' | 'e
   return (
     <div className="w-full md:w-1/2 p-6 md:p-10 lg:p-14 xl:p-20">
       <div className={`flex h-full ${align === 'start' ? 'items-start' : 'items-end'}`}>
-        <p className="font-[300] text-[15px] md:text-[16px] leading-[1.7] text-dark text-justify">
+        <p className="font-[300] text-[13px] md:text-[14px] leading-[1.7] text-dark text-justify">
           {text}
         </p>
       </div>

@@ -35,8 +35,8 @@ export const projects: Project[] = [
   {
     id: '2',
     slug: 'delikatesy-dehesa',
-    title: 'DEHESA delikatesy iberyjskie',
-    location: 'Wrocław, ul. Zwycięska',
+    title: 'delikatesy dehesa',
+    location: 'Wrocław',
     category: 'komercyjne',
     status: 'completed',
     year: 2023,
