@@ -13,14 +13,34 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: 'Kool Studio | Architektura Wnętrz Wrocław',
-  description: 'Kool Studio - pracownia architektury wnętrz. Projektowanie przestrzeni mieszkalnych i komercyjnych we Wrocławiu.',
-  keywords: 'architektura wnętrz, projektowanie wnętrz, Wrocław, design, interior design',
+  metadataBase: new URL('https://koolstudio.pl'),
+  title: {
+    default: 'Kool Studio | Architektura Wnętrz Wrocław',
+    template: '%s | Kool Studio',
+  },
+  description: 'Kool Studio — wrocławska pracownia architektury wnętrz. Projektujemy autorskie wnętrza mieszkalne i komercyjne z dbałością o detal. Meble, lampy, identyfikacja wizualna.',
+  keywords: 'architektura wnętrz, projektowanie wnętrz, Wrocław, Warszawa, interior design, architekt wnętrz, projekt wnętrz, meble na wymiar, design',
+  authors: [{ name: 'Kool Studio' }],
+  creator: 'Kool Studio',
   openGraph: {
     title: 'Kool Studio | Architektura Wnętrz Wrocław',
-    description: 'Pracownia architektury wnętrz. Projektowanie przestrzeni mieszkalnych i komercyjnych.',
+    description: 'Autorskie wnętrza, które zostają na dłużej. Projektowanie przestrzeni mieszkalnych i komercyjnych.',
     type: 'website',
     locale: 'pl_PL',
+    alternateLocale: 'en_US',
+    siteName: 'Kool Studio',
+    url: 'https://koolstudio.pl',
+  },
+  alternates: {
+    canonical: 'https://koolstudio.pl',
+    languages: {
+      'pl': 'https://koolstudio.pl/pl',
+      'en': 'https://koolstudio.pl/en',
+    },
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
@@ -53,6 +73,40 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} className={poppins.variable}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'ProfessionalService',
+              name: 'Kool Studio',
+              description: 'Wrocław-based interior architecture practice specializing in residential and commercial interiors, custom furniture, lighting design, and visual identity.',
+              url: 'https://koolstudio.pl',
+              email: 'hello@koolstudio.pl',
+              address: {
+                '@type': 'PostalAddress',
+                streetAddress: 'Zaporoska 83/15',
+                addressLocality: 'Wrocław',
+                addressCountry: 'PL',
+              },
+              areaServed: [
+                { '@type': 'City', name: 'Wrocław' },
+                { '@type': 'City', name: 'Warszawa' },
+                { '@type': 'Country', name: 'Poland' },
+              ],
+              serviceType: [
+                'Interior Architecture',
+                'Interior Design',
+                'Custom Furniture Design',
+                'Lighting Design',
+                'Visual Identity Design',
+              ],
+              knowsLanguage: ['pl', 'en'],
+            }),
+          }}
+        />
+      </head>
       <body className="font-sans bg-beige text-dark antialiased">
         <NextIntlClientProvider locale={locale} messages={messages}>
           {children}

@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { projects } from '@/data/projects';
 import Navbar from '@/components/Navbar';
@@ -10,6 +11,38 @@ export function generateStaticParams() {
   return projects.map((project) => ({
     slug: project.slug,
   }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string; locale: string }>;
+}): Promise<Metadata> {
+  const { slug, locale } = await params;
+  const project = projects.find((p) => p.slug === slug);
+  if (!project) return {};
+
+  const title = `${project.title} / ${project.location}`;
+  const description = project.description;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title: `${title} | Kool Studio`,
+      description,
+      type: 'article',
+      locale: locale === 'en' ? 'en_US' : 'pl_PL',
+      images: project.images[0] ? [{ url: project.images[0] }] : undefined,
+    },
+    alternates: {
+      canonical: `https://koolstudio.pl/${locale}/projekty/${slug}`,
+      languages: {
+        'pl': `https://koolstudio.pl/pl/projekty/${slug}`,
+        'en': `https://koolstudio.pl/en/projekty/${slug}`,
+      },
+    },
+  };
 }
 
 export default async function ProjectDetailPage({
