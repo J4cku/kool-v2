@@ -17,7 +17,7 @@ export default function ProjectsListing() {
 
   return (
     <>
-      <div className="mb-12">
+      <div className="mb-4">
         <FilterTabs activeFilter={activeFilter} onFilterChange={setActiveFilter} />
       </div>
       <ProjectGrid key={activeFilter} projects={filteredProjects} />

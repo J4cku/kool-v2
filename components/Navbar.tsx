@@ -15,14 +15,10 @@ const navLinks = [
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    document.body.style.overflow = menuOpen ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
-  }, [menuOpen]);
+  const [isMobile, setIsMobile] = useState(false);
   const t = useTranslations('nav');
   const pathname = usePathname();
-  const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 768px)');
     setIsMobile(mq.matches);
@@ -30,6 +26,11 @@ export default function Navbar() {
     mq.addEventListener('change', handler);
     return () => mq.removeEventListener('change', handler);
   }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = menuOpen && isMobile ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [menuOpen, isMobile]);
 
   const { scrollY } = useScroll();
   const logoScale = useTransform(scrollY, [0, 200], [1, 0.45]);
@@ -109,7 +110,14 @@ export default function Navbar() {
               style={{ scale: dotScale, y: dotY }}
               aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             >
-              <Image src="/dot.svg" alt="" width={36} height={35} />
+              <motion.div
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                className="origin-center"
+              >
+                <Image src="/dot.svg" alt="" width={36} height={35} />
+              </motion.div>
             </motion.button>
           </div>
         </div>
