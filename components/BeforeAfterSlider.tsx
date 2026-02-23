@@ -14,6 +14,7 @@ export default function BeforeAfterSlider({ beforeSrc, afterSrc, beforeLabel, af
   const [position, setPosition] = useState(50);
   const [touched, setTouched] = useState(false);
   const [inView, setInView] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
 
@@ -62,8 +63,10 @@ export default function BeforeAfterSlider({ beforeSrc, afterSrc, beforeLabel, af
   }, []);
 
   const onPointerDown = useCallback((e: React.PointerEvent) => {
+    e.preventDefault();
     dragging.current = true;
     setTouched(true);
+    setIsDragging(true);
     (e.target as HTMLElement).setPointerCapture(e.pointerId);
     updatePosition(e.clientX);
   }, [updatePosition]);
@@ -75,6 +78,7 @@ export default function BeforeAfterSlider({ beforeSrc, afterSrc, beforeLabel, af
 
   const onPointerUp = useCallback(() => {
     dragging.current = false;
+    setIsDragging(false);
   }, []);
 
   return (
@@ -82,6 +86,7 @@ export default function BeforeAfterSlider({ beforeSrc, afterSrc, beforeLabel, af
       <div
         ref={containerRef}
         className="relative w-full aspect-[3/2] cursor-col-resize select-none overflow-hidden"
+        style={{ touchAction: 'none' }}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}

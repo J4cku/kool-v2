@@ -18,6 +18,7 @@ export default function ProjectHero({ src, alt }: ProjectHeroProps) {
         sizes="100vw"
         quality={100}
         priority
+        unoptimized
       />
     </div>
   );
