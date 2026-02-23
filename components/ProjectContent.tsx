@@ -6,6 +6,7 @@ interface ProjectContentProps {
   images: string[];
   description: string;
   descriptionBlocks?: string[];
+  fullWidthIndices?: number[];
 }
 
 function PaddedImage({ src }: { src: string }) {
@@ -38,10 +39,11 @@ function TextBlock({ text, align = 'end' }: { text: string; align?: 'start' | 'e
   );
 }
 
-export default function ProjectContent({ images, description, descriptionBlocks }: ProjectContentProps) {
+export default function ProjectContent({ images, description, descriptionBlocks, fullWidthIndices }: ProjectContentProps) {
   if (images.length === 0) return null;
 
   const texts = descriptionBlocks ?? [description];
+  const fullWidthSet = new Set(fullWidthIndices ?? []);
   const rows: React.ReactNode[] = [];
   let imgIdx = 0;
   let textIdx = 0;
@@ -50,6 +52,17 @@ export default function ProjectContent({ images, description, descriptionBlocks 
   const textAligns: ('end' | 'start')[] = ['end', 'start', 'end'];
 
   while (imgIdx < images.length) {
+    if (fullWidthSet.has(imgIdx)) {
+      rows.push(
+        <div key={`row-${rowIdx}`} className="w-full relative aspect-video">
+          <Image src={images[imgIdx]} alt="Kool Studio project" fill className="object-cover" sizes="100vw" />
+        </div>
+      );
+      imgIdx++;
+      rowIdx++;
+      continue;
+    }
+
     const fullLeft = rowIdx % 2 === 0;
     const isTextRow = rowIdx % 3 === 0 && textIdx < texts.length;
     const textAlign = textAligns[textIdx % textAligns.length];

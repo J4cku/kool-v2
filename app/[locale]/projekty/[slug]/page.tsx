@@ -75,6 +75,7 @@ export default async function ProjectDetailPage({
             images={project.images.slice(1)}
             description={project.description}
             descriptionBlocks={project.descriptionBlocks}
+            fullWidthIndices={project.fullWidthIndices?.map((i) => i - 1).filter((i) => i >= 0)}
           />
 
           <FooterBanner showMarquee={false} />

@@ -14,6 +14,7 @@ export type Project = {
   description: string;
   photoCredit?: string;
   descriptionBlocks?: string[];
+  fullWidthIndices?: number[];
 };
 
 export const projects: Project[] = [
@@ -27,10 +28,31 @@ export const projects: Project[] = [
     year: 2024,
     area: '180 m²',
     scope: ['projekt koncepcyjny', 'dokumentacja wykonawcza', 'nadzór autorski'],
-    thumbnail: '/images/dobrzykowice.jpg',
+    thumbnail: '/images/dobrzykowice/KOOL_dd_01.webp',
     featured: false,
-    images: ['/images/dobrzykowice.jpg', '/images/dobrzykowice.jpg', '/images/dobrzykowice.jpg', '/images/dobrzykowice.jpg', '/images/dobrzykowice.jpg'],
-    description: 'Projekt domu jednorodzinnego w podwrocławskich Dobrzykowicach. Wnętrza łączą ciepło naturalnych materiałów z precyzyjnym detalem i funkcjonalnym układem przestrzeni.',
+    images: [
+      '/images/dobrzykowice/KOOL_dd_01.webp',
+      '/images/dobrzykowice/KOOL_dd_02.webp',
+      '/images/dobrzykowice/KOOL_dd_03.webp',
+      '/images/dobrzykowice/KOOL_dd_04.webp',
+      '/images/dobrzykowice/KOOL_dd_05.webp',
+      '/images/dobrzykowice/KOOL_dd_06.webp',
+      '/images/dobrzykowice/KOOL_dd_07.webp',
+      '/images/dobrzykowice/KOOL_dd_14.webp',
+      '/images/dobrzykowice/KOOL_dd_08.webp',
+      '/images/dobrzykowice/KOOL_dd_09.webp',
+      '/images/dobrzykowice/KOOL_dd_10.webp',
+      '/images/dobrzykowice/KOOL_dd_11.webp',
+      '/images/dobrzykowice/KOOL_dd_12.webp',
+      '/images/dobrzykowice/KOOL_dd_13.webp',
+    ],
+    fullWidthIndices: [2, 8],
+    descriptionBlocks: [
+      'Projekt w Dobrzykowicach, w dwupoziomowym domu jednorodzinnym, nie zaczął się od pustej kartki. To reorganizacja istniejącego wnętrza — świadoma praca na zastanym układzie funkcjonalnym i szacunek do tego, co już było. Architektura domu pozostała niezmieniona, podobnie jak część rozwiązań konstrukcyjnych i wybranych elementów wyposażenia. Zamiast radykalnej przebudowy pojawia się precyzyjna ingerencja: zachowane struktury zostały uzupełnione o nowe zabudowy, materiały i kolorystyczną narrację, która nadała całości świeżą tożsamość. To projekt o transformacji poprzez warstwy — kolor, fakturę, światło i detal. O umiejętności wydobycia potencjału z istniejącej przestrzeni i nadania jej wyrazistego, ale spójnego charakteru, który stał się tu narzędziem. Nie jest krzykliwy ani dosłowny. Prowadzi subtelnie i spaja wszystkie kondygnacje w jedną, konsekwentną historię. Wysoki cokół w odcieniu burgundu to wyrazisty i nieoczywisty element dekoracyjny, który buduje rytm i porządkuje przestrzeń. Wędruje przez wiatrołap, salon, kółko, schodząc do prywatnej strefy piętra. Paleta domu opiera się na pięciu tonach: bordowym, beżowym, błękitnym, granatowym i szafkowym. Każdy z nich ma swoje miejsce i funkcję. Tu kolory się uzupełniają, a nie konkurują. Przestrzeń wiatrołapu została potraktowana jako coś więcej niż przejście. Ławeczka szafa w błękitnym laminacie, zintegrowane siedzisko i wielkoformatowe lustro wprowadzają komfort i funkcjonalność od wejścia. Między wiatrołapem a salonem pojawiają się przesuwne drzwi ze szkła ornamentowego. To rozwiązanie nie tylko oszczędza miejsca, lecz także filtruje światło, nadając mu miękkości i prywatności.',
+      'W kuchni kolor burgundowy przechodzi płynnie z korytarza w wysoką zabudowę, tworząc mocny element wnętrza. Koresponduje on z szafkową zabudową podręcznej spiżarki, która została ukryta za zabudową istniejącego kominka. To przykład tego, jak kolor może stulic funkcji: każda strefa ma swoją paletę, co intuicyjnie organizuje przestrzeń. Dolne szafki wykończono laminatem drewnopodobnym, z czarnymi i bordowymi detalami. Blat z beżowego konglomeratu z subtelnym wzorem wprowadza fakturę i nawiązuje do wzoru lastryko z wielkoformatowych płytek na posadzce. Na zakończeniu ciągu kuchennego powstał niewielki stolik barowy — miejsce na szybkie śniadania i rozmowy przy gotowaniu. W salonie kominek został wyeksponowany i ubrany w połyskujące, ryfowane płytki ceramiczne w kolorze szafetu. Ich połyskowa struktura pięknie pracuje ze światłem — szczególnie tym bocznym, emitowanym, które w całym domu buduje nastrojowość. Nowa zabudowa telewizyjna w granacie stanowi tło dla burgundowej, modularnej sofy w tkaninie bouclé — miękkiej i przytulnej. Na ścianie obok zawieszono retro witrynę na szklaną zastawę, a pod nią znajduje miejsce komódka na gramofon — ukłon w stronę analogowych rytuałów. Całość dopełnia beżowy dywan o mocnej teksturze. W drugiej części salonu zaprojektowano szafkową zabudowę na książki i dekoracje, przy której ustawiono strefę jadalną z okrągłym stołem. Zasłony z ciemnobezowego sztucznego jedwabiu miękko opadają przy oknach, tłumiąc światło i wspierając akustykę. Łazienka na parterze to odważne zestawienie. W strefie prysznica pojawia się motyw głębokiej mozaiki o wyraźnej fakturze. Sufit pomalowano na bordowo, a ściany wykończono lamperią z płytek w tym samym odcieniu, z jasną fugą podkreślającą rytm. Czarna szafka pod zieloną umywalką i okrągłe lustro dopełniają kompozycji.',
+      'Na piętrze korytarz zyskuje lamperię z paneli o wzorze „eklerków" w kolorze bordowym, powyżej której pojawia się jasna tapeta z abstrakcyjnym motywem fal. To subtelne przejście między intensywnością a lekkością. Główna sypialnia zachowuje spójność w kolorystycznym układzie, lecz zyskuje nową tożsamość. Tapeta z motywem pływaczek — inspiracja inwestorki — nadaje jej osobisty charakter. Płytki w wydłużonym formacie z ryfowaniem nawiązującym do paneli z korytarza występują w odcieniach burgundu i granatu. Ich podłużny geometryczny wzór lekko wprowadza rytm i dynamikę. Duże lustro i osobne kinkiety rozświetlają przestrzeń. Sypialnia została zaprojektowana jako kobieca oaza. Delikatna tapeta we wzór kwiatowy, zasłony z satynowego sztrusku, granatowa tapicerka zagłówka i duże owalne lustro w ciemnej ramie — wszystko to tworzy atmosferę intymności i komfortu. Siedzisko przed łóżkiem pełni podwójną funkcję: to zarówno wygodne miejsce do siedzenia, jak i pojemnik na przechowywanie.',
+    ],
+    description: 'Projekt domu jednorodzinnego w podwrocławskich Dobrzykowicach. Reorganizacja istniejącego wnętrza — świadoma praca na zastanym układzie funkcjonalnym z paletą bordów, granatów i szafetu.',
   },
   {
     id: '2',
@@ -134,7 +156,7 @@ export const projects: Project[] = [
 
 export const heroImages = [
   {
-    src: '/images/dobrzykowice.jpg',
+    src: '/images/dobrzykowice/KOOL_dd_01.webp',
     alt: 'dom Dobrzykowice',
   },
   {
