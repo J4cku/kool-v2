@@ -112,8 +112,16 @@ export default function Navbar() {
             >
               <motion.div
                 initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                animate={{
+                  scale: 1,
+                  opacity: 1,
+                  x: [0, 0, -3, 3, -2, 2, 0, 0],
+                }}
+                transition={{
+                  scale: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+                  opacity: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+                  x: { duration: 0.5, delay: 2, repeat: Infinity, repeatDelay: 5, ease: 'easeInOut' },
+                }}
                 className="origin-center"
               >
                 <Image src="/dot.svg" alt="" width={36} height={35} />

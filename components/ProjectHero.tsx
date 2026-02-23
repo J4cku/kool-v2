@@ -16,6 +16,7 @@ export default function ProjectHero({ src, alt }: ProjectHeroProps) {
         fill
         className="object-cover"
         sizes="100vw"
+        quality={100}
         priority
       />
     </div>

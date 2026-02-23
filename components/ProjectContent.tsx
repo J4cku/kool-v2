@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import BeforeAfterSlider from './BeforeAfterSlider';
 
 interface ProjectContentProps {
   images: string[];
@@ -24,7 +25,7 @@ function PaddedImage({ src }: { src: string }) {
 function FullImage({ src }: { src: string }) {
   return (
     <div className="w-full md:w-1/2 aspect-square relative">
-      <Image src={src} alt="Kool Studio project" fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
+      <Image src={src} alt="Kool Studio project" fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" quality={90} />
     </div>
   );
 }
@@ -76,7 +77,7 @@ export default function ProjectContent({ images, description, descriptionBlocks,
     if (fullWidthSet.has(imgIdx)) {
       rows.push(
         <div key={`row-${rowIdx}`} className="w-full relative aspect-video">
-          <Image src={images[imgIdx]} alt="Kool Studio project" fill className="object-cover" sizes="100vw" />
+          <Image src={images[imgIdx]} alt="Kool Studio project" fill className="object-cover" sizes="100vw" quality={90} />
         </div>
       );
       imgIdx++;
@@ -84,14 +85,18 @@ export default function ProjectContent({ images, description, descriptionBlocks,
       continue;
     }
 
-    // Both-contained row
+    // Before/after slider row
     const pairInfo = containedMap.get(imgIdx);
     if (pairInfo?.isFirst && imgIdx + 1 < images.length && containedMap.has(imgIdx + 1)) {
       const labels = pairInfo.labels;
       rows.push(
-        <div key={`row-${rowIdx}`} className="flex flex-col md:flex-row">
-          <ContainedImage key={`c-${imgIdx}`} src={images[imgIdx]} label={labels?.[0]} />
-          <ContainedImage key={`c-${imgIdx + 1}`} src={images[imgIdx + 1]} label={labels?.[1]} />
+        <div key={`row-${rowIdx}`}>
+          <BeforeAfterSlider
+            beforeSrc={images[imgIdx]}
+            afterSrc={images[imgIdx + 1]}
+            beforeLabel={labels?.[0]}
+            afterLabel={labels?.[1]}
+          />
         </div>
       );
       imgIdx += 2;
