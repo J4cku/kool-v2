@@ -7,6 +7,8 @@ interface ProjectContentProps {
   description: string;
   descriptionBlocks?: string[];
   fullWidthIndices?: number[];
+  containedPairs?: { indices: [number, number]; labels?: [string, string] }[];
+  reverseLastRow?: boolean;
 }
 
 function PaddedImage({ src }: { src: string }) {
@@ -27,6 +29,19 @@ function FullImage({ src }: { src: string }) {
   );
 }
 
+function ContainedImage({ src, label }: { src: string; label?: string }) {
+  return (
+    <div className="w-full md:w-1/2">
+      {label && (
+        <p className="text-[13px] font-[500] text-dark mb-2 md:ml-20">{label}</p>
+      )}
+      <div className="aspect-[3/2] relative">
+        <Image src={src} alt="Kool Studio project" fill className="object-contain object-left-top" sizes="(max-width: 768px) 100vw, 50vw" />
+      </div>
+    </div>
+  );
+}
+
 function TextBlock({ text, align = 'end' }: { text: string; align?: 'start' | 'end' }) {
   return (
     <div className="w-full md:w-1/2 p-6 md:p-10 lg:p-14 xl:p-20">
@@ -39,11 +54,16 @@ function TextBlock({ text, align = 'end' }: { text: string; align?: 'start' | 'e
   );
 }
 
-export default function ProjectContent({ images, description, descriptionBlocks, fullWidthIndices }: ProjectContentProps) {
+export default function ProjectContent({ images, description, descriptionBlocks, fullWidthIndices, containedPairs, reverseLastRow }: ProjectContentProps) {
   if (images.length === 0) return null;
 
   const texts = descriptionBlocks ?? [description];
   const fullWidthSet = new Set(fullWidthIndices ?? []);
+  const containedMap = new Map<number, { otherIdx: number; labels?: [string, string]; isFirst: boolean }>();
+  for (const pair of containedPairs ?? []) {
+    containedMap.set(pair.indices[0], { otherIdx: pair.indices[1], labels: pair.labels, isFirst: true });
+    containedMap.set(pair.indices[1], { otherIdx: pair.indices[0], labels: pair.labels, isFirst: false });
+  }
   const rows: React.ReactNode[] = [];
   let imgIdx = 0;
   let textIdx = 0;
@@ -52,6 +72,7 @@ export default function ProjectContent({ images, description, descriptionBlocks,
   const textAligns: ('end' | 'start')[] = ['end', 'start', 'end'];
 
   while (imgIdx < images.length) {
+    // Full-width row
     if (fullWidthSet.has(imgIdx)) {
       rows.push(
         <div key={`row-${rowIdx}`} className="w-full relative aspect-video">
@@ -63,7 +84,28 @@ export default function ProjectContent({ images, description, descriptionBlocks,
       continue;
     }
 
-    const fullLeft = rowIdx % 2 === 0;
+    // Both-contained row
+    const pairInfo = containedMap.get(imgIdx);
+    if (pairInfo?.isFirst && imgIdx + 1 < images.length && containedMap.has(imgIdx + 1)) {
+      const labels = pairInfo.labels;
+      rows.push(
+        <div key={`row-${rowIdx}`} className="flex flex-col md:flex-row">
+          <ContainedImage key={`c-${imgIdx}`} src={images[imgIdx]} label={labels?.[0]} />
+          <ContainedImage key={`c-${imgIdx + 1}`} src={images[imgIdx + 1]} label={labels?.[1]} />
+        </div>
+      );
+      imgIdx += 2;
+      rowIdx++;
+      continue;
+    }
+
+    // Check if this is the last 50/50 row and should be reversed
+    const remainingImages = images.length - imgIdx;
+    const remainingFullWidth = Array.from(fullWidthSet).filter(i => i >= imgIdx).length;
+    const isLastPair = remainingImages - remainingFullWidth === 2 && !fullWidthSet.has(imgIdx);
+    const shouldReverse = reverseLastRow && isLastPair;
+
+    const fullLeft = shouldReverse ? !(rowIdx % 2 === 0) : (rowIdx % 2 === 0);
     const isTextRow = rowIdx % 3 === 0 && textIdx < texts.length;
     const textAlign = textAligns[textIdx % textAligns.length];
 

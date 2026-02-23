@@ -15,6 +15,8 @@ export type Project = {
   photoCredit?: string;
   descriptionBlocks?: string[];
   fullWidthIndices?: number[];
+  containedPairs?: { indices: [number, number]; labels?: [string, string] }[];
+  reverseLastRow?: boolean;
 };
 
 export const projects: Project[] = [
@@ -91,6 +93,42 @@ export const projects: Project[] = [
       'Dopełnieniem konceptu był projekt identyfikacji wizualnej zachowujący paletę kolorystyczną nawiązującą do wnętrza. Logotyp przywodzi na myśl klasyczne hiszpańskie szyldy i został uzupełniony o szereg prostych ilustracji odnoszących się do głównych produktów z oferty deli. Motyw neonu świni został przeniesiony w formie grafiki na elementy drukowane. Uniformy, czyli granatowe koszulki w połączeniu z burgundowymi fartuchami wykończonymi delikatnym, skórzanym akcentem i żółtym haftem współgrają z wnętrzem sklepu.',
     ],
     description: 'Projekt wnętrz delikatesów iberyjskich we Wrocławiu. Przestrzeń łączy surowe materiały — terrazzo, ciemną stolarkę i czerwone akcenty — z ciepłem drewna i rzemieślniczym charakterem produktów. Całość dopełnia autorska identyfikacja wizualna.',
+  },
+  {
+    id: '7',
+    slug: 'mieszkanie-widmo',
+    title: 'mieszkanie widmo',
+    location: 'Wrocław',
+    category: 'mieszkalne',
+    status: 'completed',
+    year: 2022,
+    area: '58 m²',
+    scope: ['projekt koncepcyjny wnętrz', 'projekty mebli', 'projekt wykonawczy wnętrz', 'nadzór autorski'],
+    thumbnail: '/images/mieszkanie-widmo/KOOL_m_00_01.webp',
+    featured: false,
+    images: [
+      '/images/mieszkanie-widmo/KOOL_m_00_01.webp',
+      '/images/mieszkanie-widmo/KOOL_m_00_02.webp',
+      '/images/mieszkanie-widmo/KOOL_m_00_03.webp',
+      '/images/mieszkanie-widmo/KOOL_m_00_04.webp',
+      '/images/mieszkanie-widmo/KOOL_m_00_05.webp',
+      '/images/mieszkanie-widmo/KOOL_m_00_06.webp',
+      '/images/mieszkanie-widmo/KOOL_m_00_07.webp',
+      '/images/mieszkanie-widmo/KOOL_m_00_08.webp',
+      '/images/mieszkanie-widmo/KOOL_m_00_09.webp',
+      '/images/mieszkanie-widmo/KOOL_m_00_10.webp',
+      '/images/mieszkanie-widmo/KOOL_m_00_11.webp',
+      '/images/mieszkanie-widmo/KOOL_m_00_12.webp',
+      '/images/mieszkanie-widmo/KOOL_m_00_13.webp',
+      '/images/mieszkanie-widmo/KOOL_m_00_14.webp',
+    ],
+    fullWidthIndices: [8, 11],
+    containedPairs: [{ indices: [4, 5], labels: ['przed', 'po'] }],
+    reverseLastRow: true,
+    descriptionBlocks: [
+      'Projekt mieszkania zakładał odejście od pierwotnego, bardziej podzielonego układu na rzecz otwartej, płynnie przenikającej się przestrzeni. Zredukowanie zbędnych ścian pozwoliło wydobyć naturalne światło i stworzyć czytelną, funkcjonalną strefę dzienną, w której salon, jadalnia i kuchnia budują spójną, ponadczasową całość. Bazę aranżacji tworzą jasne, ciepłe tonacje oraz duże ilości naturalnego drewna, obecnego w zabudowach stolarskich i na podłogach. Miękkie tkaniny, proste formy mebli i subtelne detale nadają wnętrzu komfortowy charakter. Kolorowe lastryko wprowadza delikatną dynamikę i stanowi motyw przewodni, który przeszywa przestrzeń — od holu po łazienkę. Wyrazistym akcentem są turkusowe płytki pojawiające się na zabudowie szafy w holu oraz na obudowie kominka w strefie dziennej, a także ceglana zabudowa prowadząca z holu do kuchni. W części kuchennej klasyczny marmur Bianco Carrara zastosowany na blatach i zabudowie ściennej równoważy kolorystyczne akcenty i podkreśla ponadczasowy charakter projektu. Efektowne, przesuwne drzwi ze szkła ornamentowego w pionowym profilu oddzielają sypialnię, zapewniając prywatność przy jednoczesnym zachowaniu dostępu światła. Sama sypialnia została zaprojektowana jako przestrzeń wyciszenia — z dużą garderobą w energetycznym kolorze, która stanowi mocny, ale harmonijny akcent. Łazienka konsekwentnie rozwija przyjętą prostą materiałową: kolorowe lastryko, kamień, ceglana szafka pod umywalkę, drewniana zabudowa oraz kwadratowe płytki w szafkowym odcieniu. Spójność materiałów i dbałość o detal budują wnętrze nowoczesne, lecz odporne na zmieniające się trendy — ciepłe, funkcjonalne i ponadczasowe.',
+    ],
+    description: 'Projekt mieszkania zakładał odejście od podzielonego układu na rzecz otwartej, płynnie przenikającej się przestrzeni. Kolorowe lastryko, turkusowe płytki i marmur Bianco Carrara tworzą ciepłe, ponadczasowe wnętrze.',
   },
   {
     id: '3',

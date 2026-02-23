@@ -76,6 +76,8 @@ export default async function ProjectDetailPage({
             description={project.description}
             descriptionBlocks={project.descriptionBlocks}
             fullWidthIndices={project.fullWidthIndices?.map((i) => i - 1).filter((i) => i >= 0)}
+            containedPairs={project.containedPairs?.map((p) => ({ ...p, indices: [p.indices[0] - 1, p.indices[1] - 1] as [number, number] }))}
+            reverseLastRow={project.reverseLastRow}
           />
 
           <FooterBanner showMarquee={false} />
