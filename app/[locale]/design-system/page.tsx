@@ -36,8 +36,9 @@ export default async function DesignSystemPage({
           <p className="text-[13px] font-[700] uppercase tracking-[0.16em] text-coral/70">
             Local design system
           </p>
-          <h1 className="mt-4 uppercase text-coral font-[900] leading-[0.95] text-[42px] md:text-[82px]">
-            Kool Studio visual language
+          <h1 className="mt-4 uppercase text-coral font-[900] leading-[0.95] text-[36px] md:text-[82px]">
+            <span className="block">Kool Studio</span>
+            <span className="block">visual language</span>
           </h1>
           <p className="mt-6 max-w-[760px] text-[16px] md:text-[20px] leading-[1.6] font-[300] text-dark">
             Development-only reference for current tokens, type, layout, imagery, motion patterns, and project components.
