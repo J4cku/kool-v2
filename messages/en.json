@@ -7,7 +7,11 @@
   },
   "home": {
     "manifesto": "ORIGINAL INTERIORS THAT STAY FOR LONGER. WE CREATE INTERIORS WITH A DISTINCT IDENTITY. WE COMBINE DESIGN SENSITIVITY WITH PRECISION AND EXPERIENCE, CREATING SPACES REFINED IN DETAIL AND GROUNDED IN REAL CONTEXT.",
-    "tagline": "ORIGINAL INTERIORS THAT STAY FOR LONGER."
+    "tagline": "ORIGINAL INTERIORS THAT STAY FOR LONGER.",
+    "section1Heading": "WE CREATE TIMELESS INTERIORS",
+    "section1Text": "We design spaces that don't rely on trends. We treat each space individually, as an answer to a specific context and needs. Whether it's a residential or commercial project, we'll create an interior that tells your story.",
+    "section2Heading": "WE DESIGN AT EVERY SCALE",
+    "section2Text": "We have years of experience in delivering projects of various character — from furniture details, through apartments and houses, to gastronomic, commercial and hotel venues. We manage the process comprehensively, with full control over the final result. This is how refined spaces are created, filled with original, unique elements."
   },
   "projects": {
     "wszystkie": "all",
@@ -37,6 +41,62 @@
   },
   "oferta": {
     "title": "Services",
-    "comingSoon": "Coming soon"
+    "learnMore": "Learn more",
+    "portfolio": "See our portfolio",
+    "scopeTitle": "Scope of cooperation:",
+    "commercial": {
+      "label": "Commercial interiors",
+      "heading": "Restaurants, concept stores, boutiques, hotels, services",
+      "description": "In commercial spaces, design is a tool. We create visually cohesive places that support business and build brand value. We design expressive concepts that consciously shape the user experience. We know that first impressions are made only once.",
+      "scopeItems": [
+        "analysis of assumptions in the context of the interior",
+        "defining the character, atmosphere and principles of the venue",
+        "functional design and space zoning",
+        "visual concept of the venue",
+        "material solutions and design details",
+        "detailed construction documentation",
+        "support in the approval process with building managers",
+        "coordination of trades and author's supervision",
+        "branding",
+        "refurbishment of existing commercial interiors"
+      ],
+      "sloganHeading": "We create places that stay in memory",
+      "sloganText": "Beyond functionality and compliance with regulations, our years of experience allow us to create spaces that reflect the brand's character, building loyalty and recognition.",
+      "trustedBy": "They trusted us:"
+    },
+    "residential": {
+      "label": "Residential interiors",
+      "heading": "Premium apartments and houses",
+      "description": "We design private spaces thoughtfully, in dialogue with context and residents' needs. We consider daily comfort of use, durability of solutions, and unique approaches. The relationships between materials, colors and textures are important to us. We ensure that aesthetics stem from quality, not fleeting trends.",
+      "scopeItems": [
+        "analysis of residents' needs and expectations",
+        "functional space layout",
+        "color plans",
+        "conceptual design (visualizations)",
+        "custom cabinetry and joinery solutions",
+        "construction documentation",
+        "selection of ready-made furnishings",
+        "comprehensive material and equipment specifications",
+        "quotes from verified contractors",
+        "author's supervision"
+      ],
+      "sloganHeading": "We create places you want to come back to",
+      "sloganText": "We guide every project from concept to precise technical documentation, allowing the idea to be transformed into a calm and thoughtful realization. We have experience in both developer and secondary market construction, and we have contacts with verified contractors."
+    },
+    "process": {
+      "label": "Comprehensive project",
+      "heading": "We don't treat a project as a single stage. It's a process that requires consistency.",
+      "steps": [
+        "Brief and analysis of needs and budget",
+        "Inventory (if possible)",
+        "Functional layouts",
+        "Conceptual design",
+        "Construction design",
+        "Specifications and quotes",
+        "Author's supervision"
+      ],
+      "bottomHeading": "We manage the process comprehensively from initial assumptions to the final result.",
+      "bottomText": "We spread decisions over time, from general to specific, which allows us to capture all nuances and avoid random choices. We organize the entire process by eliminating doubts and, thanks to our experience, we facilitate decisions. This allows for a calm realization and a result consistent with the assumptions. As part of a comprehensive project, we support you at every stage."
+    }
   }
 }
