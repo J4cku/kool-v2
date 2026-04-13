@@ -49,14 +49,14 @@ export default function FooterBanner({ showAddress = false, showMarquee = true }
                 href="https://maps.app.goo.gl/f3nJEyLJXxKStLvPA"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block font-[400] uppercase text-coral hover:opacity-70 transition-opacity w-full"
+                className="block font-[400] uppercase text-dark hover:opacity-70 transition-opacity w-full"
                 style={{ fontSize: 'clamp(28px, 3.5vw, 45px)', textAlign: 'justify', textAlignLast: 'justify' } as React.CSSProperties}
               >
                 {t('address')}
               </a>
               <a
                 href="mailto:hello@koolstudio.pl"
-                className="block font-[700] uppercase text-coral hover:opacity-70 transition-opacity w-full"
+                className="block font-[700] uppercase text-dark hover:opacity-70 transition-opacity w-full"
                 style={{ fontSize: 'clamp(32px, 4.2vw, 55px)' }}
               >
                 {t('email')}

@@ -36,7 +36,7 @@ export default function ImageStrip() {
   }, [next]);
 
   return (
-    <div className="relative w-full min-h-[calc(100svh-200px)] flex items-start">
+    <div className="relative w-full min-h-[calc(100svh-160px)] flex items-start">
       {/* Desktop: 3-column grid */}
       <div className="hidden md:grid w-full grid-cols-3 gap-[3px]">
         {[0, 1, 2].map((col) => (
@@ -90,7 +90,7 @@ export default function ImageStrip() {
       {/* Scroll indicator — three animated dots */}
       <motion.div
         style={{ opacity: indicatorOpacity }}
-        className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
         {[0, 1, 2].map((i) => (
           <motion.div
