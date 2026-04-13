@@ -11,7 +11,7 @@ export default function Home() {
         <ImageStrip />
         <ManifestoSection />
       </main>
-      <FooterBanner showAddress />
+      <FooterBanner showAddress showMarquee={false} />
     </>
   );
 }

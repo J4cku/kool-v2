@@ -7,7 +7,11 @@
   },
   "home": {
     "manifesto": "AUTORSKIE WNĘTRZA, KTÓRE ZOSTAJĄ NA DŁUŻEJ. TWORZYMY WNĘTRZA O WYRAŹNEJ TOŻSAMOŚCI. ŁĄCZYMY WRAŻLIWOŚĆ PROJEKTOWĄ Z PRECYZJĄ I DOŚWIADCZENIEM, TWORZĄC PRZESTRZENIE DOPRACOWANE W DETALU I OSADZONE W REALNYM KONTEKŚCIE.",
-    "tagline": "AUTORSKIE WNĘTRZA, KTÓRE ZOSTAJĄ NA DŁUŻEJ."
+    "tagline": "AUTORSKIE WNĘTRZA, KTÓRE ZOSTAJĄ NA DŁUŻEJ.",
+    "section1Heading": "TWORZYMY PONADCZASOWE WNĘTRZA",
+    "section1Text": "Projektujemy miejsca, które nie opierają się na trendach. Każdą przestrzeń traktujemy indywidualnie, jako odpowiedź na konkretny kontekst oraz potrzeby. Niezależnie, czy jest to projekt mieszkalny, czy komercyjny, stworzymy wnętrze, które opowie twoją historię.",
+    "section2Heading": "PROJEKTUJEMY W KAŻDEJ SKALI",
+    "section2Text": "Posiadamy wieloletnie doświadczenie w realizowaniu projektów o różnym charakterze – od detalu mebla, przez mieszkania i domy, po obiekty gastronomiczne, komercyjne i hotele. Prowadzimy proces kompleksowo, z pełną kontrolą nad efektem końcowym. W ten sposób powstają dopracowane przestrzenie, wypełnione autorskimi, unikatowymi elementami."
   },
   "projects": {
     "wszystkie": "wszystkie",
@@ -37,6 +41,62 @@
   },
   "oferta": {
     "title": "Oferta",
-    "comingSoon": "Wkrótce"
+    "learnMore": "Dowiedz się więcej",
+    "portfolio": "Zobacz nasze portfolio",
+    "scopeTitle": "Zakres współpracy:",
+    "commercial": {
+      "label": "Wnętrza komercyjne",
+      "heading": "Restauracje, concept store'y, butiki, hotele, usługi",
+      "description": "W przestrzeniach komercyjnych design jest narzędziem. Tworzymy miejsca spójne wizualnie, które wspierają biznes i budują wartość marki. Projektujemy wyraziste koncepty, świadomie kształtujące doświadczenie użytkownika. Wiemy, że pierwsze wrażenie robi się tylko raz.",
+      "scopeItems": [
+        "analiza założeń w kontekście wnętrza",
+        "definiowanie charakteru, atmosfery i zasad funkcjonowania lokalu",
+        "projekt funkcjonalny i strefowanie przestrzeni",
+        "koncepcja wizualna lokalu",
+        "rozwiązania materiałowe i detali projektowych",
+        "szczegółowa dokumentacja wykonawcza",
+        "wsparcie w procesie uzgodnień z zarządcami",
+        "koordynacja branż i nadzór autorski",
+        "branding",
+        "lifting istniejących wnętrz komercyjnych"
+      ],
+      "sloganHeading": "Tworzymy miejsca, które zostają w pamięci",
+      "sloganText": "Oprócz funkcjonalności i zgodności z przepisami, nasze wieloletnie doświadczenia, pozwala kreować nam przestrzenie odpowiadające charakterowi marki budujące lojalność oraz rozpoznawalność.",
+      "trustedBy": "Zaufali nam:"
+    },
+    "residential": {
+      "label": "Wnętrza mieszkalne",
+      "heading": "Apartamenty i domy o podwyższonym standardzie",
+      "description": "Projektujemy przestrzenie prywatne w sposób uważny, w dialogu z kontekstem i potrzebami mieszkańców. Mamy na uwadze codzienny komfort użytkowania, trwałość rozwiązań, a także unikatowe rozwiązania. Ważne są dla nas relacje między materiałami, kolorami i fakturami. Dbamy o to, aby estetyka wynikała z jakości, a nie z chwilowej mody.",
+      "scopeItems": [
+        "analiza potrzeb i oczekiwań mieszkańców",
+        "układ funkcjonalny przestrzeni",
+        "plany kolorystyczne",
+        "projekt koncepcyjny (wizualizacje)",
+        "autorskie zabudowy i rozwiązania stolarskie",
+        "dokumentacja wykonawcza",
+        "dobór gotowego wyposażenia",
+        "kompleksowe zestawienia materiałów i wyposażenia",
+        "wyceny od sprawdzonych wykonawców",
+        "nadzór autorski"
+      ],
+      "sloganHeading": "Tworzymy miejsca, do których chce się wracać",
+      "sloganText": "Każdy projekt prowadzimy od koncepcji po precyzyjną dokumentację techniczną, która pozwala przekuć ideę na spokojną i przemyślaną realizację. Mamy doświadczenie pozwalające na projektowanie zarówno w budownictwie deweloperskim, jak i z rynku wtórnego oraz dysponujemy kontaktami do sprawdzonych wykonawców."
+    },
+    "process": {
+      "label": "Projekt kompleksowy",
+      "heading": "Nie traktujemy projektu jako pojedynczego etapu. To proces, który wymaga konsekwencji.",
+      "steps": [
+        "Brief oraz analiza potrzeb i budżetu",
+        "Inwentaryzacja (jeśli jest możliwa)",
+        "Układy funkcjonalne",
+        "Projekt koncepcyjny",
+        "Projekt wykonawczy",
+        "Zestawienia i wyceny",
+        "Nadzory autorskie"
+      ],
+      "bottomHeading": "Prowadzimy proces kompleksowo od pierwszych założeń po finalny efekt.",
+      "bottomText": "Decyzje rozkładamy w czasie, od ogółu do szczegółu, co pozwala uchwycić wszystkie niuanse i uniknąć przypadkowych wyborów. Porządkujemy cały proces eliminując wątpliwości i dzięki naszemu doświadczeniu, ułatwiamy decyzje. Pozwala to na spokojną realizację i efekt zgodny z założeniami. W ramach projektu kompleksowego wspieramy was na każdym jego etapie."
+    }
   }
 }
