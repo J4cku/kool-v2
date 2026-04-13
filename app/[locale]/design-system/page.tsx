@@ -36,34 +36,42 @@ export default async function DesignSystemPage({
           <p className="text-[13px] font-[700] uppercase tracking-[0.16em] text-coral/70">
             Local design system
           </p>
-          <h1 className="mt-4 uppercase text-coral font-[900] leading-[0.95] text-[36px] md:text-[82px]">
+          <h1 className="mt-4 uppercase text-dark font-[900] leading-[0.95] text-[36px] md:text-[82px]">
             <span className="block">Kool Studio</span>
             <span className="block">visual language</span>
           </h1>
           <p className="mt-6 max-w-[760px] text-[16px] md:text-[20px] leading-[1.6] font-[300] text-dark">
-            Development-only reference for current tokens, type, layout, imagery, motion patterns, and project components.
+            Development-only reference for the new PDF direction: dark editorial typography, coral brand accents, beige ground, image-led rhythm, and project components.
           </p>
         </header>
 
         <DsSection eyebrow="01" title="Tokens">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-5">
-            <TokenSwatch name="beige" value="#E5DDD0" className="bg-beige" />
-            <TokenSwatch name="coral" value="#FC3117" className="bg-coral" />
-            <TokenSwatch name="dark" value="#1A1A1A" className="bg-dark" />
-            <TokenSwatch name="muted" value="#888888" className="bg-muted" />
-            <TokenSwatch name="white" value="#FFFFFF" className="bg-white" />
+          <div className="grid gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-5">
+              <TokenSwatch name="beige" value="#E5DDD0" className="bg-beige" />
+              <TokenSwatch name="coral" value="#FC3117" className="bg-coral" />
+              <TokenSwatch name="dark" value="#1A1A1A" className="bg-dark" />
+              <TokenSwatch name="muted" value="#888888" className="bg-muted" />
+              <TokenSwatch name="white" value="#FFFFFF" className="bg-white" />
+            </div>
+            <DsBodyText>
+              Use dark for primary typography. Use coral for the logo, dot, lines, small labels, links, and marquee accents. Keep the current web coral token for now.
+            </DsBodyText>
           </div>
         </DsSection>
 
         <DsSection eyebrow="02" title="Typography">
-          <TypeSample label="Display heading" className="uppercase text-coral font-[900] leading-[0.95] text-[42px] md:text-[82px]">
-            AUTORSKIE WNĘTRZA
+          <TypeSample label="Display heading" className="uppercase text-dark font-[900] leading-[0.95] text-[38px] md:text-[82px]">
+            TWORZYMY PONADCZASOWE WNĘTRZA
           </TypeSample>
-          <TypeSample label="Section display" className="uppercase text-coral font-[700] leading-[1.15] text-[32px] md:text-[54px]">
-            WNĘTRZA, KTÓRE ZOSTAJĄ NA DŁUŻEJ.
+          <TypeSample label="Section display" className="uppercase text-dark font-[700] leading-[1.05] text-[32px] md:text-[54px]">
+            PROJEKTUJEMY W KAŻDEJ SKALI
           </TypeSample>
           <TypeSample label="Body copy" className="max-w-[760px] text-[15px] md:text-[18px] leading-[1.7] font-[300] text-dark">
             Projektujemy autorskie wnętrza mieszkalne i komercyjne z dbałością o detal, kontekst i charakter miejsca.
+          </TypeSample>
+          <TypeSample label="Accent line" className="uppercase text-coral font-[400] leading-[1.15] text-[26px] md:text-[54px]">
+            WE ARE KOOL AND WE DESIGN KOOL THINGS!
           </TypeSample>
         </DsSection>
 

@@ -4,27 +4,27 @@
 
 Kool Studio's site already has a recognizable design language: beige page background, coral brand accent, dark and muted text, Poppins typography, image-led portfolio layouts, fixed animated navigation, marquee footer treatment, and localized content under `/pl` and `/en`.
 
-The first design-system pass should codify the current site as-is. It should not redesign the public experience or clean up styling inconsistencies unless a small mechanical change is required to make the system work.
+After reviewing the new PDF layouts for the homepage and offer page, the design-system reference should follow that next direction: dark editorial typography is primary, while coral is used for brand and accent moments. The first public implementation of those PDFs is still out of scope here.
 
 ## Goals
 
 - Create a coded design-system layer that developers can use while maintaining this Next.js site.
 - Create a private styleguide surface for developers and the client to review the current visual language.
-- Keep the first pass faithful to the existing site.
+- Keep the first pass faithful to the new PDF direction without changing public pages yet.
 - Keep the styleguide unavailable on deployed production.
 - Avoid changing public navigation, sitemap output, or public page URLs.
 
 ## Non-Goals
 
 - No public design-system page.
-- No broad visual refresh.
-- No token cleanup pass beyond what is required for the design-system extraction.
+- No public homepage or offer-page rebuild in this phase.
+- No token cleanup pass beyond what is required for the design-system reference.
 - No Figma library or external documentation site in this phase.
 - No authentication system. Local development access is enough for this first pass.
 
 ## Proposed Approach
 
-Use a token-first, conservative extraction.
+Use a token-first, conservative update aligned to the new PDF direction.
 
 The source tokens stay in `app/globals.css` and continue to define the current palette, typeface, and content width:
 
@@ -51,6 +51,13 @@ Follow the repo's current flat `components/` convention unless implementation re
 
 Existing public components should continue to render the same way. The first implementation should favor reuse where it is low risk and defer deeper component API redesigns.
 
+Typography role update:
+
+- Primary display headings use `dark`.
+- Body copy uses `dark`.
+- Coral remains for the logo, dot, small labels, separator lines, text links, marquee/accent text, and project status accents.
+- Keep the current web coral token `#FC3117` for now rather than switching to the slightly duller red sampled from the PDF exports.
+
 ## Styleguide Route
 
 Add a dev-only localized styleguide route, for example:
@@ -70,6 +77,7 @@ The styleguide should use real site tokens, assets, and components where practic
 
 - Color palette
 - Typography examples
+- Color role guidance for dark primary typography and coral accents
 - Layout/container spacing
 - Navigation/menu behavior summary
 - Link/button-like interactions currently used on the site
@@ -83,6 +91,7 @@ The styleguide should be understandable for both developers and the client. It s
 ## Boundaries
 
 - Preserve the existing public pages and visual output.
+- Update only the private design-system reference for the PDF direction in this phase.
 - Do not add the design-system route to `Navbar`.
 - Do not add the design-system route to `app/sitemap.ts`.
 - Do not introduce a new styling framework or component library.
@@ -100,4 +109,4 @@ Implementation should be verified with:
 
 ## Open Follow-Up
 
-After this first pass lands, a later phase can normalize inconsistent classes and token usage, such as places where current pages use color utilities that do not correspond to the documented `coral` and `muted` tokens. That cleanup is intentionally out of scope for this phase.
+After this first pass lands, a later phase can rebuild the public homepage and offer page from the PDF direction and normalize inconsistent classes and token usage. That public-page work is intentionally out of scope for this phase.

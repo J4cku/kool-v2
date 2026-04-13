@@ -43,7 +43,7 @@ export function DsSection({
               {eyebrow}
             </p>
           )}
-          <h2 className="mt-2 text-[28px] md:text-[40px] font-[800] leading-[1.05] uppercase text-coral">
+          <h2 className="mt-2 text-[28px] md:text-[40px] font-[800] leading-[1.05] uppercase text-dark">
             {title}
           </h2>
         </div>
@@ -55,7 +55,7 @@ export function DsSection({
 
 export function DsDisplayText({ children, className }: WithChildren) {
   return (
-    <p className={cx('uppercase text-coral font-[700] leading-[1.1] text-[32px] md:text-[54px]', className)}>
+    <p className={cx('uppercase text-dark font-[700] leading-[1.1] text-[32px] md:text-[54px]', className)}>
       {children}
     </p>
   );
