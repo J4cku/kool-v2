@@ -10,7 +10,7 @@ export default function ManifestoSection() {
   return (
     <>
       {/* Section 1: text left, tilted image right */}
-      <section className="mt-[100px] md:mt-[140px]">
+      <section className="mt-[60px] md:mt-[80px]">
         <div className="max-w-[1400px] mx-auto px-5 md:px-10 lg:px-12">
           <div className="flex flex-col md:flex-row gap-12 md:gap-16 items-start">
             <div className="md:w-[50%]">
@@ -26,7 +26,7 @@ export default function ManifestoSection() {
             </div>
 
             <div className="md:w-[45%] md:ml-auto flex justify-end">
-              <div className="relative w-[80%] md:w-full aspect-[3/4] rotate-[6deg] overflow-hidden">
+              <div className="relative w-[80%] md:w-full aspect-[3/4] overflow-hidden">
                 <Image
                   src="/images/oferta/residential-04.jpg"
                   alt="Material moodboard"
