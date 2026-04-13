@@ -60,6 +60,13 @@ public/
 | `--font-sans`      | Poppins   | Primary typeface             |
 | `--max-width-content` | `1400px` | Content max-width          |
 
+## Design System
+
+- Local development only: `/pl/design-system` and `/en/design-system`
+- Route file: `app/[locale]/design-system/page.tsx`
+- Purpose: private reference for the new PDF direction: dark primary typography, coral accents, current tokens, layout, image treatment, interaction patterns, and project cards
+- Do not add this route to public navigation or sitemap unless the access model changes
+
 ## Conventions
 
 - **Components**: PascalCase, flat in `components/`, one component per file
