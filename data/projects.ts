@@ -19,10 +19,10 @@ export type Project = {
   reverseLastRow?: boolean;
   // Detail-page meta table overrides (card keeps the short title/location)
   meta?: { title?: string; location?: string; collaboration?: string };
-  // Instagram reel embedded in the gallery flow; index shares the
-  // fullWidthIndices space (position in images[], counting the hero, with
-  // the reel occupying its own slot)
-  reel?: { url: string; index: number };
+  // Self-hosted reel video (public/videos/) in the gallery flow; index
+  // shares the fullWidthIndices space (position in images[], counting the
+  // hero, with the reel occupying its own slot)
+  reel?: { src: string; index: number };
   // Explicit text-block placement (50/50 row index + which side the text
   // sits on); when omitted the default every-3rd-row rhythm applies
   textRows?: { row: number; side: 'left' | 'right' }[];
@@ -244,7 +244,7 @@ export const projects: Project[] = [
     fullWidthIndices: [2, 8, 10, 13],
     containedPairs: [{ indices: [3, 4], labels: ['aranżacja 1', 'aranżacja 2'] }],
     reverseLastRow: true,
-    reel: { url: 'https://www.instagram.com/reel/DTcuV1AjK_J/', index: 7 },
+    reel: { src: '/videos/biblioteka-gdansk-reel.mp4', index: 7 },
     textRows: [
       { row: 0, side: 'right' },
       { row: 3, side: 'left' },
@@ -315,7 +315,7 @@ export const projects: Project[] = [
     // Indices below count the hero (0) and the reel slot (4)
     fullWidthIndices: [2, 7],
     containedPairs: [{ indices: [5, 6], labels: ['noc', 'dzień'] }],
-    reel: { url: 'https://www.instagram.com/reel/DZwl7ylKzWY/', index: 4 },
+    reel: { src: '/videos/mieszkanie-gdansk-reel.mp4', index: 4 },
     textRows: [{ row: 0, side: 'right' }],
     flipRowParity: true,
     descriptionBlocks: [

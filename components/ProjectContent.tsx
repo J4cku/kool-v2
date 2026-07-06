@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import BeforeAfterSlider from './BeforeAfterSlider';
 
-type Item = { kind: 'image'; src: string } | { kind: 'reel'; url: string };
+type Item = { kind: 'image'; src: string } | { kind: 'reel'; src: string };
 
 interface ProjectContentProps {
   images: string[];
@@ -12,7 +12,7 @@ interface ProjectContentProps {
   fullWidthIndices?: number[];
   containedPairs?: { indices: [number, number]; labels?: [string, string] }[];
   reverseLastRow?: boolean;
-  reel?: { url: string; index: number };
+  reel?: { src: string; index: number };
   textRows?: { row: number; side: 'left' | 'right' }[];
   flipRowParity?: boolean;
   portraitIndices?: number[];
@@ -36,28 +36,28 @@ function FullImage({ src, portrait }: { src: string; portrait?: boolean }) {
   );
 }
 
-function ReelEmbed({ url }: { url: string }) {
+function ReelVideo({ src }: { src: string }) {
   return (
     <div className="w-full md:w-1/2 p-6 md:p-10 lg:p-14 xl:p-20 flex items-center">
-      <div className="mx-auto w-full max-w-[360px]">
-        <iframe
-          src={`${url}embed/`}
-          className="w-full aspect-[9/16] border-0"
-          allowFullScreen
-          loading="lazy"
-          title="Kool Studio - Instagram"
-        />
-      </div>
+      <video
+        src={src}
+        autoPlay
+        muted
+        loop
+        playsInline
+        aria-label="Kool Studio project video"
+        className="mx-auto w-full max-w-[360px] aspect-[9/16] object-cover"
+      />
     </div>
   );
 }
 
 function FullSlot({ item, portrait }: { item: Item; portrait?: boolean }) {
-  return item.kind === 'image' ? <FullImage src={item.src} portrait={portrait} /> : <ReelEmbed url={item.url} />;
+  return item.kind === 'image' ? <FullImage src={item.src} portrait={portrait} /> : <ReelVideo src={item.src} />;
 }
 
 function PaddedSlot({ item }: { item: Item }) {
-  return item.kind === 'image' ? <PaddedImage src={item.src} /> : <ReelEmbed url={item.url} />;
+  return item.kind === 'image' ? <PaddedImage src={item.src} /> : <ReelVideo src={item.src} />;
 }
 
 function TextBlock({ text, align = 'end' }: { text: string; align?: 'start' | 'end' }) {
@@ -87,7 +87,7 @@ export default function ProjectContent({ images, description, descriptionBlocks,
 
   const items: Item[] = images.map((src) => ({ kind: 'image', src }));
   if (reel) {
-    items.splice(Math.min(Math.max(reel.index, 0), items.length), 0, { kind: 'reel', url: reel.url });
+    items.splice(Math.min(Math.max(reel.index, 0), items.length), 0, { kind: 'reel', src: reel.src });
   }
 
   const rows: React.ReactNode[] = [];
