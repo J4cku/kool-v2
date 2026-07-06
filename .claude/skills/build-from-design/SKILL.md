@@ -9,6 +9,8 @@ Design files are full page mockups to implement **faithfully** — layout, spaci
 
 ## Pipeline
 
+0. **Create the work dir first** — poppler tools do not create output directories:
+   `mkdir -p .context/design/<name>`
 1. **Rasterize** one PNG per page/artboard and read them:
    `pdftoppm -r 200 -png design/<file> .context/design/<name>/page`
    For fine detail on one page: `pdftoppm -r 300 -f 2 -l 2 -png design/<file> .context/design/<name>/detail`

@@ -8,11 +8,11 @@ description: Use when adding a new project to the portfolio, or when updating an
 ## Checklist
 
 1. **Images** into `public/images/<slug>/`:
-   - webp, named `kool_<short-slug>_NN.webp` (older sets use other casings — don't copy those for new projects)
+   - webp, named `kool_<short-slug>_NN.webp` (existing sets vary in casing — use this lowercase form for new projects)
    - a gallery needs an orientation mix (squares, portraits, occasional full-width hero) — see the inline row comments on `delikatesy-dehesa` for how orientation drives layout
    - check dimensions: `sips -g pixelWidth -g pixelHeight public/images/<slug>/*.webp`
    - resize anything wider than 2560px: `sips --resampleWidth 2560 <file>` (**overwrites in place** — work on copies)
-   - in-progress projects without a photo set may use a single placeholder jpg in `public/images/` root (existing pattern: `prs.jpg`, `fnd.jpg`), repeated in `images` to fill the gallery
+   - projects without a final photo set (any status — see `winobar-lodz`, completed) may use a single placeholder jpg in `public/images/` root (existing pattern: `prs.jpg`, `fnd.jpg`), repeated in `images` to fill the gallery
 2. **Data entry** in `data/projects.ts` conforming to the `Project` type.
    - `id`: next unused integer as string — **scan every entry; array order does not match id order** (`rg "^    id:" data/projects.ts`)
    - **Array order = listing order** on `/pl/projekty`. Append at the end unless told where it belongs.

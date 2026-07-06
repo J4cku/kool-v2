@@ -20,9 +20,7 @@ Read `CLAUDE.md` first; it is the detailed project guide. This file keeps Codex 
 Run the smallest useful check while iterating, then run this before handoff:
 
 ```bash
-pnpm typecheck
-pnpm lint
-pnpm build
+pnpm check   # typecheck + lint + i18n key parity + build
 ```
 
 Do not claim a command passed unless you ran it in this workspace and checked the exit code.
