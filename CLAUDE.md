@@ -82,6 +82,18 @@ AGENTS.md                  # Cross-agent instructions (Codex, Conductor)
 - The route hard-404s outside development (`NODE_ENV` guard in page.tsx) — under `pnpm build && pnpm start` a 404 here is expected, not a regression; view it with `pnpm dev`
 - Background: design spec and implementation plan live in `docs/superpowers/specs/2026-04-11-design-system-design.md` and `docs/superpowers/plans/2026-04-11-design-system-implementation.md`
 
+## Design Language
+
+Rules for any UI work. Visual reference: `/pl/design-system` (dev only); primitives in `components/DesignSystem.tsx`.
+
+- **Typography is dark and editorial.** Display headings and body copy use `dark` on `beige`. Display headings are uppercase Poppins.
+- **Coral is an accent, used sparingly:** logo, dot, small labels, separator lines, text links, marquee/accent text, project-status accents. Never body copy, never large fills. Keep `#FC3117` exactly — do not resample reds from PDF exports.
+- **Muted** (`#888888`) is for secondary text and metadata only.
+- **Layout:** content constrained to `--max-width-content` (1400px), generous whitespace, image-led sections.
+- **Images:** `next/image`, webp under `public/images/<slug>/`, aspect patterns from `ProjectGrid` (squares, portraits, full-width breaks).
+- **Motion:** Framer Motion, subtle; marquee treatment for footer/accent text.
+- **Never** introduce new colors, typefaces, or a component library without an explicit token discussion first.
+
 ## Conductor
 
 - Shared workspace scripts live in `.conductor/settings.toml`
