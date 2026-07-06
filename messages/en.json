@@ -37,7 +37,55 @@
   },
   "studio": {
     "title": "Studio",
-    "comingSoon": "Coming soon"
+    "label": "Studio",
+    "heroLines": [
+      "Original",
+      "interiors",
+      "with character"
+    ],
+    "heroBody": "Kool Studio designs residential and commercial interiors with a clear identity, precise detailing, and a natural rhythm for everyday use.",
+    "heroImageAlt": "Material moodboard and samples in a design studio",
+    "detailImageAlt": "Detail of a colorful commercial interior",
+    "colorImageAlt": "Detail of a residential interior with custom color work",
+    "statementLabel": "About",
+    "statementHeading": "We design spaces that do not depend on seasonal decoration.",
+    "statementText": "We work with context, light, function, and material. Every project starts with understanding the place and the people who will use it. The result is technically refined, but still personal, relaxed, and resistant to passing trends.",
+    "details": [
+      {
+        "label": "city",
+        "value": "Wroclaw"
+      },
+      {
+        "label": "scale",
+        "value": "interiors and detail"
+      },
+      {
+        "label": "fields",
+        "value": "home / commercial"
+      }
+    ],
+    "principlesLabel": "How we work",
+    "principlesHeading": "We keep the process close to material, function, and construction decisions.",
+    "principles": [
+      {
+        "title": "Context before style",
+        "text": "We do not begin with a ready-made aesthetic. First we read the space, needs, budget, and technical limits, then build the design language."
+      },
+      {
+        "title": "Detail as structure",
+        "text": "Color, joinery, light, and materials organize the interior. Detail has to work, not only look good."
+      },
+      {
+        "title": "Calm delivery",
+        "text": "Documentation, material decisions, and contractor coordination are part of the design. A good interior happens when the concept can be built."
+      }
+    ],
+    "processLabel": "Studio scope",
+    "processHeading": "We combine interior design, custom elements, and implementation support.",
+    "processText": "We guide projects from functional layouts and visual concepts through technical documentation, furnishing selections, and support during delivery. We work on apartments and houses, as well as restaurants, service spaces, hotels, and brand interiors.",
+    "processImageAlt": "Work on interior delivery and details",
+    "closingHeading": "Let's talk about a space made to stay for longer.",
+    "contactLabel": "Contact"
   },
   "oferta": {
     "title": "Services",
