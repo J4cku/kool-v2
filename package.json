@@ -8,7 +8,8 @@
     "start": "next start --port ${PORT:-8080}",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "check": "pnpm typecheck && pnpm lint && pnpm build"
+    "check:i18n": "node scripts/check-i18n.mjs",
+    "check": "pnpm typecheck && pnpm lint && pnpm check:i18n && pnpm build"
   },
   "dependencies": {
     "framer-motion": "^12.33.0",

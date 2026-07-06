@@ -153,7 +153,7 @@ Run: `node scripts/check-i18n.mjs /tmp/i18n-broken; echo "exit=$?"`
 Expected: two `missing in ...` lines (one per direction) and `exit=1`.
 
 Run: `node scripts/check-i18n.mjs; echo "exit=$?"`
-Expected: `i18n OK: 66 keys match across pl, en` and `exit=0`.
+Expected: `i18n OK: 102 keys match across pl, en` and `exit=0`.
 
 - [ ] **Step 4: Wire into `package.json`**
 
@@ -183,7 +183,7 @@ pnpm check     # Typecheck, lint, i18n parity, and build
 - [ ] **Step 6: Verify wiring and commit**
 
 Run: `pnpm check:i18n`
-Expected: `i18n OK: 66 keys match across pl, en`
+Expected: `i18n OK: 102 keys match across pl, en`
 
 ```bash
 rm -rf /tmp/i18n-broken
@@ -462,7 +462,7 @@ scripts/check-i18n.mjs     # pl/en translation key parity check
 - [ ] **Step 3: Run the full gate**
 
 Run: `pnpm check`
-Expected: typecheck, lint, `i18n OK: 66 keys match across pl, en`, and build all pass.
+Expected: typecheck, lint, `i18n OK: 102 keys match across pl, en`, and build all pass.
 
 - [ ] **Step 4: Commit**
 

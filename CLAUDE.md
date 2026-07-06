@@ -19,7 +19,8 @@ pnpm build     # Production build
 pnpm start     # Start production server on $PORT, falling back to 8080
 pnpm lint      # Run ESLint CLI
 pnpm typecheck # Run TypeScript without emitting files
-pnpm check     # Typecheck, lint, and build
+pnpm check:i18n # Verify pl.json/en.json translation keys match
+pnpm check     # Typecheck, lint, i18n parity, and build
 ```
 
 ## Project Structure
@@ -99,7 +100,7 @@ AGENTS.md                  # Cross-agent instructions (Codex, Conductor)
 - **Project data**: All project metadata lives in `data/projects.ts` — `Project` type is the source of truth
 - **Content language**: Site content and project descriptions are in Polish; translations in `messages/`
 - **Font**: Poppins via `next/font/google`, exposed as CSS variable `--font-poppins`
-- **Verification**: Before handoff, run `pnpm typecheck`, `pnpm lint`, and `pnpm build`
+- **Verification**: Before handoff, run `pnpm check` (typecheck + lint + i18n parity + build)
 
 ## Adding a New Project
 
@@ -119,7 +120,7 @@ AGENTS.md                  # Cross-agent instructions (Codex, Conductor)
 
 - Next.js 16 App Router: route `params` is a Promise — type as `params: Promise<{...}>` and `await params` (see `app/[locale]/layout.tsx`)
 - There is intentionally no `tailwind.config.*` — Tailwind v4 design tokens live in `@theme` in `app/globals.css`
-- There are no automated tests — `pnpm check` (typecheck + lint + build) is the verification gate before claiming work done
+- There are no automated tests — `pnpm check` (typecheck + lint + i18n parity + build) is the verification gate before claiming work done
 
 ## SEO
 
