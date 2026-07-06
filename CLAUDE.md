@@ -14,10 +14,12 @@ Portfolio website for Kool Studio, a Wroclaw-based interior architecture practic
 ## Commands
 
 ```bash
-pnpm dev      # Start dev server
-pnpm build    # Production build
-pnpm start    # Start production server
-pnpm lint     # Run Next.js linter
+pnpm dev       # Start dev server on $CONDUCTOR_PORT, falling back to 8080
+pnpm build     # Production build
+pnpm start     # Start production server on $PORT, falling back to 8080
+pnpm lint      # Run ESLint CLI
+pnpm typecheck # Run TypeScript without emitting files
+pnpm check     # Typecheck, lint, and build
 ```
 
 ## Project Structure
@@ -34,7 +36,11 @@ app/
     studio/                # Studio/about page
     oferta/                # Services page
     kontakt/               # Contact page
-components/                # All UI components (flat, no subdirectories)
+    design-system/         # Private styleguide (dev-only, 404s in production)
+    [...rest]/             # Catch-all route -> notFound()
+    not-found.tsx          # Custom 404 page
+components/                # Shared UI components (PascalCase)
+  oferta/                  # Page-scoped components (ServiceSection, ProcessSection)
 data/projects.ts           # Project data + types (Project type, heroImages)
 i18n/
   request.ts               # Locale config, getRequestConfig
@@ -44,8 +50,14 @@ messages/
   en.json                  # English translations
 public/
   images/                  # Project photos organized by project slug
+  videos/                  # Video assets (reel.mp4)
   logo.svg, dot.svg        # Brand assets
   llms.txt                 # LLM-friendly site description
+docs/superpowers/          # Design spec + implementation plan (historical records)
+proxy.ts                   # next-intl locale proxy (Next.js 16 proxy convention)
+next.config.mjs            # next-intl plugin + image remotePatterns
+eslint.config.mjs          # ESLint flat config (next/core-web-vitals + typescript)
+AGENTS.md                  # Cross-agent instructions (Codex, Conductor)
 ```
 
 ## Design Tokens (globals.css @theme)
@@ -66,10 +78,19 @@ public/
 - Route file: `app/[locale]/design-system/page.tsx`
 - Purpose: private reference for the new PDF direction: dark primary typography, coral accents, current tokens, layout, image treatment, interaction patterns, and project cards
 - Do not add this route to public navigation or sitemap unless the access model changes
+- The route hard-404s outside development (`NODE_ENV` guard in page.tsx) — under `pnpm build && pnpm start` a 404 here is expected, not a regression; view it with `pnpm dev`
+- Background: design spec and implementation plan live in `docs/superpowers/specs/2026-04-11-design-system-design.md` and `docs/superpowers/plans/2026-04-11-design-system-implementation.md`
+
+## Conductor
+
+- Shared workspace scripts live in `.conductor/settings.toml`
+- `pnpm dev` reads `$CONDUCTOR_PORT` and falls back to `8080` for ordinary local development
+- Keep temporary multi-agent handoff notes in `.context/`
+- Use `run_mode = "concurrent"` only while local services remain port-isolated
 
 ## Conventions
 
-- **Components**: PascalCase, flat in `components/`, one component per file
+- **Components**: PascalCase, one component per file (exception: `components/DesignSystem.tsx` groups the design-system primitives). Shared components sit at the top of `components/`; page-scoped components go in subdirectories (e.g. `components/oferta/`)
 - **Client components**: Explicit `'use client'` directive when using hooks/motion
 - **Imports**: Use `@/` path alias (maps to project root)
 - **Navigation**: Use `Link`, `usePathname`, `useRouter` from `@/i18n/navigation` (not `next/link`)
@@ -78,6 +99,7 @@ public/
 - **Project data**: All project metadata lives in `data/projects.ts` — `Project` type is the source of truth
 - **Content language**: Site content and project descriptions are in Polish; translations in `messages/`
 - **Font**: Poppins via `next/font/google`, exposed as CSS variable `--font-poppins`
+- **Verification**: Before handoff, run `pnpm typecheck`, `pnpm lint`, and `pnpm build`
 
 ## Adding a New Project
 
@@ -89,9 +111,15 @@ public/
 ## i18n
 
 - Locales: `pl` (default), `en`
-- Locale prefix: `always` (URLs always include `/pl/` or `/en/`)
-- Locale detection: disabled (defaults to Polish)
+- Locale prefix: `always` (URLs always include `/pl/` or `/en/`) — enforced in `proxy.ts` (and mirrored in `i18n/navigation.ts` for the typed helpers)
+- Locale detection: disabled (defaults to Polish) — set in `proxy.ts`
 - Messages loaded dynamically in layout via `import(`../../messages/${locale}.json`)`
+
+## Gotchas
+
+- Next.js 16 App Router: route `params` is a Promise — type as `params: Promise<{...}>` and `await params` (see `app/[locale]/layout.tsx`)
+- There is intentionally no `tailwind.config.*` — Tailwind v4 design tokens live in `@theme` in `app/globals.css`
+- There are no automated tests — `pnpm check` (typecheck + lint + build) is the verification gate before claiming work done
 
 ## SEO
 

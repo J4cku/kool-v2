@@ -1,6 +1,8 @@
-# Design System Implementation Plan
+# Design System Implementation Record
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+Status: completed and retained as a historical implementation record. Do not treat this file as the active task list for current work. The verbatim code snippets below predate commit b548e8c (coral display headings were changed to dark per the PDF direction) — the current code in `app/[locale]/design-system/page.tsx` and `components/DesignSystem.tsx` is authoritative.
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Build a localhost-development-only design system for Kool Studio that codifies the current site as-is and gives developers and the client a private styleguide surface.
 
@@ -33,7 +35,7 @@
 **Files:**
 - Create: `components/DesignSystem.tsx`
 
-- [ ] **Step 1: Check for conflicting component names**
+- [x] **Step 1: Check for conflicting component names**
 
 Run:
 
@@ -43,7 +45,7 @@ rg "DesignSystem|SiteContainer|DsSection|TokenSwatch|TypeSample" components app
 
 Expected: no relevant existing definitions. If there are matches, inspect them and avoid duplicate names.
 
-- [ ] **Step 2: Create the primitive component file**
+- [x] **Step 2: Create the primitive component file**
 
 Create `components/DesignSystem.tsx` with primitives like this:
 
@@ -184,7 +186,7 @@ export function MediaFrame({ children, className }: WithChildren) {
 
 Keep these primitives intentionally small. Do not add a general-purpose component library or new styling tokens in this task.
 
-- [ ] **Step 3: Run TypeScript/build verification**
+- [x] **Step 3: Run TypeScript/build verification**
 
 Run:
 
@@ -194,7 +196,7 @@ pnpm build
 
 Expected: build reaches the same baseline as before this task, or fails only for a known pre-existing issue. If it fails due to `components/DesignSystem.tsx`, fix that before continuing.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add components/DesignSystem.tsx
@@ -208,7 +210,7 @@ git commit -m "Add design system primitives"
 - Read: `data/projects.ts`
 - Read: `components/ProjectCard.tsx`
 
-- [ ] **Step 1: Create the localized route directory**
+- [x] **Step 1: Create the localized route directory**
 
 Run:
 
@@ -216,7 +218,7 @@ Run:
 mkdir -p 'app/[locale]/design-system'
 ```
 
-- [ ] **Step 2: Add the route page**
+- [x] **Step 2: Add the route page**
 
 Create `app/[locale]/design-system/page.tsx`. Use this structure and adapt only for compile correctness:
 
@@ -347,7 +349,7 @@ export default async function DesignSystemPage({
 
 Keep the content factual and practical. Avoid marketing copy. If TypeScript reports an import or component issue, fix the smallest relevant part.
 
-- [ ] **Step 3: Confirm route is not added to public surfaces**
+- [x] **Step 3: Confirm route is not added to public surfaces**
 
 Run:
 
@@ -357,7 +359,7 @@ rg "design-system" components/Navbar.tsx app/sitemap.ts
 
 Expected: no matches. If there are matches, remove them unless they are comments in this plan.
 
-- [ ] **Step 4: Run build verification**
+- [x] **Step 4: Run build verification**
 
 Run:
 
@@ -367,7 +369,7 @@ pnpm build
 
 Expected: build succeeds, or any failure is unrelated and documented. A failure from `app/[locale]/design-system/page.tsx` must be fixed before continuing.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add 'app/[locale]/design-system/page.tsx'
@@ -379,7 +381,7 @@ git commit -m "Add dev-only design system route"
 **Files:**
 - Modify: `CLAUDE.md`
 
-- [ ] **Step 1: Add a short maintenance note**
+- [x] **Step 1: Add a short maintenance note**
 
 In `CLAUDE.md`, add a small section near the existing project structure or conventions:
 
@@ -392,7 +394,7 @@ In `CLAUDE.md`, add a small section near the existing project structure or conve
 - Do not add this route to public navigation or sitemap unless the access model changes
 ```
 
-- [ ] **Step 2: Check the diff**
+- [x] **Step 2: Check the diff**
 
 Run:
 
@@ -402,7 +404,7 @@ git diff -- CLAUDE.md
 
 Expected: only the design-system maintenance note changed.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add CLAUDE.md
@@ -417,7 +419,7 @@ git commit -m "Document design system route"
 - Verify: `app/sitemap.ts`
 - Verify: `components/Navbar.tsx`
 
-- [ ] **Step 1: Run production build**
+- [x] **Step 1: Run production build**
 
 Run:
 
@@ -427,7 +429,7 @@ pnpm build
 
 Expected: build succeeds.
 
-- [ ] **Step 2: Start the dev server**
+- [x] **Step 2: Start the dev server**
 
 Run:
 
@@ -437,12 +439,12 @@ pnpm dev
 
 Expected: Next dev server starts. Use the printed localhost URL.
 
-- [ ] **Step 3: Verify dev route renders**
+- [x] **Step 3: Verify dev route renders**
 
 Open:
 
 ```text
-http://localhost:3000/pl/design-system
+http://localhost:8080/pl/design-system
 ```
 
 Expected: the styleguide renders with token swatches, typography, layout notes, interaction/marquee example, image examples, and project cards.
@@ -450,12 +452,12 @@ Expected: the styleguide renders with token swatches, typography, layout notes, 
 Also check:
 
 ```text
-http://localhost:3000/en/design-system
+http://localhost:8080/en/design-system
 ```
 
 Expected: route renders in the English locale segment. Styleguide copy may remain English in both locales for this first pass because it is a private developer/client reference, not public content.
 
-- [ ] **Step 4: Verify responsive sanity**
+- [x] **Step 4: Verify responsive sanity**
 
 Use browser devtools or Playwright to check at:
 
@@ -466,7 +468,7 @@ Use browser devtools or Playwright to check at:
 
 Expected: text does not overflow horizontally, project cards remain stable, images render, and the marquee does not obscure following content.
 
-- [ ] **Step 5: Verify route is not in sitemap or nav**
+- [x] **Step 5: Verify route is not in sitemap or nav**
 
 Run:
 
@@ -476,7 +478,7 @@ rg "design-system" app/sitemap.ts components/Navbar.tsx
 
 Expected: no matches.
 
-- [ ] **Step 6: Verify production runtime blocks the route**
+- [x] **Step 6: Verify production runtime blocks the route**
 
 Stop the dev server from Step 2, then run:
 
@@ -488,12 +490,12 @@ pnpm start
 Open:
 
 ```text
-http://localhost:3000/pl/design-system
+http://localhost:8080/pl/design-system
 ```
 
 Expected: 404/not found because `process.env.NODE_ENV !== 'development'`.
 
-- [ ] **Step 7: Commit any verification fixes**
+- [x] **Step 7: Commit any verification fixes**
 
 If verification required fixes, commit them:
 
@@ -509,7 +511,7 @@ If there were no fixes, do not create an empty commit.
 **Files:**
 - Review all changed files.
 
-- [ ] **Step 1: Inspect status**
+- [x] **Step 1: Inspect status**
 
 Run:
 
@@ -519,7 +521,7 @@ git status --short
 
 Expected: no unintended tracked changes. Unrelated untracked local directories, such as `.omc/`, should remain untouched unless the user explicitly asks otherwise.
 
-- [ ] **Step 2: Inspect final commits**
+- [x] **Step 2: Inspect final commits**
 
 Run:
 
@@ -529,7 +531,7 @@ git log --oneline --decorate -6
 
 Expected: commits for primitives, route, docs, and any verification fixes appear above the spec commit.
 
-- [ ] **Step 3: Summarize verification**
+- [x] **Step 3: Summarize verification**
 
 Record the final verification commands and results in the handoff:
 
