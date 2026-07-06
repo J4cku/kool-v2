@@ -1,5 +1,7 @@
 # Design System Design
 
+> Status: implemented 2026-04-13 (PR #5). The public homepage/offer-page rebuild deferred as "out of scope" below has since landed (PRs #6/#7). Kept as a dated design record.
+
 ## Context
 
 Kool Studio's site already has a recognizable design language: beige page background, coral brand accent, dark and muted text, Poppins typography, image-led portfolio layouts, fixed animated navigation, marquee footer treatment, and localized content under `/pl` and `/en`.

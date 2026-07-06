@@ -32,8 +32,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# claude code
-.claude/
+# claude code (commit shared .claude/settings.json and skills; ignore personal overrides)
+.claude/settings.local.json
 
 # local brainstorming artifacts
 .superpowers/

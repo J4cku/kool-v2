@@ -37,7 +37,55 @@
   },
   "studio": {
     "title": "Studio",
-    "comingSoon": "Wkrótce"
+    "label": "Studio",
+    "heroLines": [
+      "Autorskie",
+      "wnętrza",
+      "z charakterem"
+    ],
+    "heroBody": "Kool Studio projektuje wnętrza mieszkalne i komercyjne, które mają wyraźną tożsamość, precyzyjny detal i naturalny rytm codziennego użytkowania.",
+    "heroImageAlt": "Moodboard materiałów i próbek w studio projektowym",
+    "detailImageAlt": "Detal kolorowego wnętrza komercyjnego",
+    "colorImageAlt": "Detal wnętrza mieszkalnego z autorską kolorystyką",
+    "statementLabel": "O nas",
+    "statementHeading": "Projektujemy przestrzenie, które nie potrzebują sezonowej dekoracji.",
+    "statementText": "Pracujemy z kontekstem, światłem, funkcją i materiałem. Każdy projekt zaczyna się od zrozumienia miejsca oraz ludzi, którzy będą z niego korzystać. Dzięki temu wnętrze jest dopracowane technicznie, ale pozostaje osobiste, swobodne i odporne na chwilowe trendy.",
+    "details": [
+      {
+        "label": "miasto",
+        "value": "Wrocław"
+      },
+      {
+        "label": "skala",
+        "value": "wnętrza i detal"
+      },
+      {
+        "label": "obszary",
+        "value": "dom / komercja"
+      }
+    ],
+    "principlesLabel": "Jak pracujemy",
+    "principlesHeading": "Proces prowadzimy blisko materiału, funkcji i decyzji wykonawczych.",
+    "principles": [
+      {
+        "title": "Kontekst przed stylem",
+        "text": "Nie zaczynamy od gotowej estetyki. Najpierw czytamy przestrzeń, potrzeby, budżet i ograniczenia techniczne, a dopiero potem budujemy język projektu."
+      },
+      {
+        "title": "Detal jako konstrukcja",
+        "text": "Kolor, zabudowy, światło i materiały traktujemy jak elementy porządkujące wnętrze. Detal ma działać, nie tylko dobrze wyglądać."
+      },
+      {
+        "title": "Spokojna realizacja",
+        "text": "Dokumentacja, decyzje materiałowe i kontakt z wykonawcami są częścią projektu. Dobre wnętrze powstaje wtedy, kiedy koncepcja ma przełożenie na budowę."
+      }
+    ],
+    "processLabel": "Zakres studia",
+    "processHeading": "Łączymy projekt wnętrz, autorskie elementy i nadzór nad realizacją.",
+    "processText": "Prowadzimy projekty od układu funkcjonalnego i koncepcji wizualnej po dokumentację wykonawczą, dobór wyposażenia oraz wsparcie na etapie realizacji. Pracujemy zarówno przy mieszkaniach i domach, jak i restauracjach, lokalach usługowych, hotelach oraz przestrzeniach marek.",
+    "processImageAlt": "Praca nad realizacją i detalami wnętrza",
+    "closingHeading": "Porozmawiajmy o przestrzeni, która ma zostać na dłużej.",
+    "contactLabel": "Kontakt"
   },
   "oferta": {
     "title": "Oferta",

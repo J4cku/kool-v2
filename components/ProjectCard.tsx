@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import type { Project } from '@/data/projects';
 
@@ -10,8 +9,6 @@ interface ProjectCardProps {
 }
 
 export default function ProjectCard({ project }: ProjectCardProps) {
-  const t = useTranslations('projects');
-
   return (
     <div>
       <Link href={`/projekty/${project.slug}`} className="block group">
