@@ -11,11 +11,14 @@ export default function ProjectMeta({ project }: ProjectMetaProps) {
   const t = useTranslations('projectDetail');
 
   const rows = [
-    { label: t('projekt'), value: project.title },
-    { label: t('lokalizacja'), value: project.location },
+    { label: t('projekt'), value: project.meta?.title ?? project.title },
+    { label: t('lokalizacja'), value: project.meta?.location ?? project.location },
     { label: t('powierzchnia'), value: project.area },
     { label: t('rok'), value: String(project.year) },
     { label: t('zakres'), value: project.scope.join(', ') },
+    ...(project.meta?.collaboration
+      ? [{ label: t('wspolpraca'), value: project.meta.collaboration }]
+      : []),
     ...(project.photoCredit
       ? [{ label: t('zdjecia'), value: project.photoCredit }]
       : []),

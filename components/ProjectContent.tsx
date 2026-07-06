@@ -3,6 +3,8 @@
 import Image from 'next/image';
 import BeforeAfterSlider from './BeforeAfterSlider';
 
+type Item = { kind: 'image'; src: string } | { kind: 'reel'; url: string };
+
 interface ProjectContentProps {
   images: string[];
   description: string;
@@ -10,6 +12,10 @@ interface ProjectContentProps {
   fullWidthIndices?: number[];
   containedPairs?: { indices: [number, number]; labels?: [string, string] }[];
   reverseLastRow?: boolean;
+  reel?: { url: string; index: number };
+  textRows?: { row: number; side: 'left' | 'right' }[];
+  flipRowParity?: boolean;
+  portraitIndices?: number[];
 }
 
 function PaddedImage({ src }: { src: string }) {
@@ -22,12 +28,36 @@ function PaddedImage({ src }: { src: string }) {
   );
 }
 
-function FullImage({ src }: { src: string }) {
+function FullImage({ src, portrait }: { src: string; portrait?: boolean }) {
   return (
-    <div className="w-full md:w-1/2 aspect-square relative">
+    <div className={`w-full md:w-1/2 ${portrait ? 'aspect-[2/3]' : 'aspect-square'} relative`}>
       <Image src={src} alt="Kool Studio project" fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" quality={90} />
     </div>
   );
+}
+
+function ReelEmbed({ url }: { url: string }) {
+  return (
+    <div className="w-full md:w-1/2 p-6 md:p-10 lg:p-14 xl:p-20 flex items-center">
+      <div className="mx-auto w-full max-w-[360px]">
+        <iframe
+          src={`${url}embed/`}
+          className="w-full aspect-[9/16] border-0"
+          allowFullScreen
+          loading="lazy"
+          title="Kool Studio - Instagram"
+        />
+      </div>
+    </div>
+  );
+}
+
+function FullSlot({ item, portrait }: { item: Item; portrait?: boolean }) {
+  return item.kind === 'image' ? <FullImage src={item.src} portrait={portrait} /> : <ReelEmbed url={item.url} />;
+}
+
+function PaddedSlot({ item }: { item: Item }) {
+  return item.kind === 'image' ? <PaddedImage src={item.src} /> : <ReelEmbed url={item.url} />;
 }
 
 function TextBlock({ text, align = 'end' }: { text: string; align?: 'start' | 'end' }) {
@@ -42,82 +72,96 @@ function TextBlock({ text, align = 'end' }: { text: string; align?: 'start' | 'e
   );
 }
 
-export default function ProjectContent({ images, description, descriptionBlocks, fullWidthIndices, containedPairs, reverseLastRow }: ProjectContentProps) {
+export default function ProjectContent({ images, description, descriptionBlocks, fullWidthIndices, containedPairs, reverseLastRow, reel, textRows, flipRowParity, portraitIndices }: ProjectContentProps) {
   if (images.length === 0) return null;
 
   const texts = descriptionBlocks ?? [description];
   const fullWidthSet = new Set(fullWidthIndices ?? []);
+  const portraitSet = new Set(portraitIndices ?? []);
   const containedMap = new Map<number, { otherIdx: number; labels?: [string, string]; isFirst: boolean }>();
   for (const pair of containedPairs ?? []) {
     containedMap.set(pair.indices[0], { otherIdx: pair.indices[1], labels: pair.labels, isFirst: true });
     containedMap.set(pair.indices[1], { otherIdx: pair.indices[0], labels: pair.labels, isFirst: false });
   }
+  const textRowMap = new Map((textRows ?? []).map((r) => [r.row, r.side]));
+
+  const items: Item[] = images.map((src) => ({ kind: 'image', src }));
+  if (reel) {
+    items.splice(Math.min(Math.max(reel.index, 0), items.length), 0, { kind: 'reel', url: reel.url });
+  }
+
   const rows: React.ReactNode[] = [];
-  let imgIdx = 0;
+  let itemIdx = 0;
   let textIdx = 0;
   let rowIdx = 0;
 
   const textAligns: ('end' | 'start')[] = ['end', 'start', 'end'];
 
-  while (imgIdx < images.length) {
+  while (itemIdx < items.length) {
+    const current = items[itemIdx];
+
     // Full-width row
-    if (fullWidthSet.has(imgIdx)) {
+    if (fullWidthSet.has(itemIdx) && current.kind === 'image') {
       rows.push(
         <div key={`row-${rowIdx}`} className="w-full relative aspect-video">
-          <Image src={images[imgIdx]} alt="Kool Studio project" fill className="object-cover" sizes="100vw" quality={90} />
+          <Image src={current.src} alt="Kool Studio project" fill className="object-cover" sizes="100vw" quality={90} />
         </div>
       );
-      imgIdx++;
+      itemIdx++;
       rowIdx++;
       continue;
     }
 
     // Before/after slider row
-    const pairInfo = containedMap.get(imgIdx);
-    if (pairInfo?.isFirst && imgIdx + 1 < images.length && containedMap.has(imgIdx + 1)) {
+    const pairInfo = containedMap.get(itemIdx);
+    const next = items[itemIdx + 1];
+    if (pairInfo?.isFirst && containedMap.has(itemIdx + 1) && current.kind === 'image' && next?.kind === 'image') {
       const labels = pairInfo.labels;
       rows.push(
         <div key={`row-${rowIdx}`}>
           <BeforeAfterSlider
-            beforeSrc={images[imgIdx]}
-            afterSrc={images[imgIdx + 1]}
+            beforeSrc={current.src}
+            afterSrc={next.src}
             beforeLabel={labels?.[0]}
             afterLabel={labels?.[1]}
           />
         </div>
       );
-      imgIdx += 2;
+      itemIdx += 2;
       rowIdx++;
       continue;
     }
 
     // Check if this is the last 50/50 row and should be reversed
-    const remainingImages = images.length - imgIdx;
-    const remainingFullWidth = Array.from(fullWidthSet).filter(i => i >= imgIdx).length;
-    const isLastPair = remainingImages - remainingFullWidth === 2 && !fullWidthSet.has(imgIdx);
+    const remainingItems = items.length - itemIdx;
+    const remainingFullWidth = Array.from(fullWidthSet).filter(i => i >= itemIdx).length;
+    const isLastPair = remainingItems - remainingFullWidth === 2 && !fullWidthSet.has(itemIdx);
     const shouldReverse = reverseLastRow && isLastPair;
 
-    const fullLeft = shouldReverse ? !(rowIdx % 2 === 0) : (rowIdx % 2 === 0);
-    const isTextRow = rowIdx % 3 === 0 && textIdx < texts.length;
+    const parityBase = flipRowParity ? 1 : 0;
+    const fullLeft = shouldReverse ? !(rowIdx % 2 === parityBase) : (rowIdx % 2 === parityBase);
+    const textSide = textRowMap.get(rowIdx);
+    const isTextRow = (textRows ? textSide !== undefined : rowIdx % 3 === 0) && textIdx < texts.length;
+    const textOnRight = isTextRow && (textRows ? textSide === 'right' : fullLeft);
     const textAlign = textAligns[textIdx % textAligns.length];
 
     let left: React.ReactNode;
     let right: React.ReactNode;
 
-    if (fullLeft) {
-      left = <FullImage key={`f-${imgIdx}`} src={images[imgIdx]} />;
-      imgIdx++;
-      right = isTextRow
-        ? <TextBlock key={`t-${textIdx}`} text={texts[textIdx++]} align={textAlign} />
-        : imgIdx < images.length
-          ? <PaddedImage key={`p-${imgIdx}`} src={images[imgIdx++]} />
-          : null;
+    if (isTextRow) {
+      const slot = <FullSlot key={`f-${itemIdx}`} portrait={portraitSet.has(itemIdx)} item={items[itemIdx++]} />;
+      const text = <TextBlock key={`t-${textIdx}`} text={texts[textIdx++]} align={textAlign} />;
+      left = textOnRight ? slot : text;
+      right = textOnRight ? text : slot;
+    } else if (fullLeft) {
+      left = <FullSlot key={`f-${itemIdx}`} portrait={portraitSet.has(itemIdx)} item={items[itemIdx++]} />;
+      right = itemIdx < items.length
+        ? <PaddedSlot key={`p-${itemIdx}`} item={items[itemIdx++]} />
+        : null;
     } else {
-      left = isTextRow
-        ? <TextBlock key={`t-${textIdx}`} text={texts[textIdx++]} align={textAlign} />
-        : <PaddedImage key={`p-${imgIdx}`} src={images[imgIdx++]} />;
-      right = imgIdx < images.length
-        ? <FullImage key={`f-${imgIdx}`} src={images[imgIdx++]} />
+      left = <PaddedSlot key={`p-${itemIdx}`} item={items[itemIdx++]} />;
+      right = itemIdx < items.length
+        ? <FullSlot key={`f-${itemIdx}`} portrait={portraitSet.has(itemIdx)} item={items[itemIdx++]} />
         : null;
     }
 
