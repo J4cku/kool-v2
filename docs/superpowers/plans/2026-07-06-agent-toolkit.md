@@ -279,7 +279,7 @@ A failing route gets reported with its screenshot and errors. Fixing is a separa
 
 - [ ] **Step 2: Application test — run the skill end-to-end**
 
-Execute the skill's procedure exactly as written against this checkout (dev server, all 24 routes: 22 public + design-system in both locales).
+Execute the skill's procedure exactly as written against this checkout (dev server, all 26 routes: 24 public + design-system in both locales).
 Expected: report table produced; all routes 200; screenshots exist under `.context/verify-site/`.
 
 - [ ] **Step 3: Fix any gaps the run exposed, re-run, commit**
