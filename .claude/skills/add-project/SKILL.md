@@ -1,0 +1,32 @@
+---
+name: add-project
+description: Use when adding a new project to the portfolio, or when updating an existing project's images, copy, or layout hints in data/projects.ts.
+---
+
+# Add Project
+
+## Checklist
+
+1. **Images** into `public/images/<slug>/`:
+   - webp, named `kool_<short-slug>_NN.webp` (older sets use other casings — don't copy those for new projects)
+   - a gallery needs an orientation mix (squares, portraits, occasional full-width hero) — see the inline row comments on `delikatesy-dehesa` for how orientation drives layout
+   - check dimensions: `sips -g pixelWidth -g pixelHeight public/images/<slug>/*.webp`
+   - resize anything wider than 2560px: `sips --resampleWidth 2560 <file>` (**overwrites in place** — work on copies)
+   - in-progress projects without a photo set may use a single placeholder jpg in `public/images/` root (existing pattern: `prs.jpg`, `fnd.jpg`), repeated in `images` to fill the gallery
+2. **Data entry** in `data/projects.ts` conforming to the `Project` type.
+   - `id`: next unused integer as string — **scan every entry; array order does not match id order** (`rg "^    id:" data/projects.ts`)
+   - **Array order = listing order** on `/pl/projekty`. Append at the end unless told where it belongs.
+   - `title` lowercase except proper nouns (`hotel Belmonte`); the UI uppercases for display
+   - `featured`: currently read by nothing in the UI — set `false` unless told otherwise
+   - Other required: `slug`, `location`, `category` (`'mieszkalne' | 'komercyjne'`), `status` (`'completed' | 'in_progress'`), `year`, `area` (`'NNN m²'`), `scope` (Polish phrases), `thumbnail`, `images`, `description`
+   - Optional layout/credit fields: copy the patterns from `dom-dobrzykowice` (`fullWidthIndices`, `descriptionBlocks`) and `mieszkanie-widmo` (`containedPairs`, `reverseLastRow`); `photoCredit` as in `delikatesy-dehesa`
+3. **Copy rules:** project copy is Polish and lives in `data/projects.ts`, not in `messages/`. Only touch `messages/*.json` when page chrome needs a new label — then add the key to BOTH `pl.json` and `en.json`. Paste Polish text exactly; never retype diacritics from screenshots.
+4. **Verify:** `pnpm check:i18n && pnpm typecheck` while iterating (fast loop), then the verify-site skill — it covers `/pl/projekty` and the new detail route, no separate manual check needed. Full `pnpm check` before handoff, per CLAUDE.md.
+5. **Committing is the caller's decision** — this skill ends at verification.
+
+## Gotchas
+
+- `thumbnail` must also appear in `images`
+- `description` is the 1-2 sentence listing/SEO teaser; `descriptionBlocks` are the long-form detail-page paragraphs
+- Sitemap picks the project up automatically from `data/projects.ts` — no manual step
+- Follow the Design Language section of CLAUDE.md for any layout deviation
