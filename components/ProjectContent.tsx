@@ -30,19 +30,6 @@ function FullImage({ src }: { src: string }) {
   );
 }
 
-function ContainedImage({ src, label }: { src: string; label?: string }) {
-  return (
-    <div className="w-full md:w-1/2">
-      {label && (
-        <p className="text-[13px] font-[500] text-dark mb-2 md:ml-20">{label}</p>
-      )}
-      <div className="aspect-[3/2] relative">
-        <Image src={src} alt="Kool Studio project" fill className="object-contain object-left-top" sizes="(max-width: 768px) 100vw, 50vw" />
-      </div>
-    </div>
-  );
-}
-
 function TextBlock({ text, align = 'end' }: { text: string; align?: 'start' | 'end' }) {
   return (
     <div className="w-full md:w-1/2 p-6 md:p-10 lg:p-14 xl:p-20">

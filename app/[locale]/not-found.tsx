@@ -2,9 +2,10 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 
 const letters = 'oops!'.split('');
+const letterRotations = [-12, 9, -5, 14, -8];
 
 export default function NotFound() {
   return (
@@ -45,8 +46,8 @@ export default function NotFound() {
       >
         {letters.map((letter, i) => (
           <motion.span
-            key={i}
-            initial={{ opacity: 0, y: 60, rotate: -15 + Math.random() * 30 }}
+            key={`${letter}-${i}`}
+            initial={{ opacity: 0, y: 60, rotate: letterRotations[i] }}
             animate={{ opacity: 1, y: 0, rotate: 0 }}
             transition={{
               delay: 0.8 + i * 0.1,
@@ -78,7 +79,7 @@ export default function NotFound() {
         transition={{ delay: 1.8, duration: 0.6 }}
       >
         <Link
-          href="/pl/projekty"
+          href="/projekty"
           className="text-coral font-[600] text-[14px] md:text-[16px] uppercase tracking-[0.15em] hover:opacity-70 transition-opacity border-b border-coral pb-1"
         >
           check out the projects

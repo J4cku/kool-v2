@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useSyncExternalStore } from 'react';
 import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
@@ -13,19 +13,31 @@ const navLinks = [
   { href: '/kontakt' as const, key: 'kontakt' },
 ];
 
+const mobileQuery = '(max-width: 768px)';
+
+function subscribeToMobileQuery(onStoreChange: () => void) {
+  const mq = window.matchMedia(mobileQuery);
+  mq.addEventListener('change', onStoreChange);
+  return () => mq.removeEventListener('change', onStoreChange);
+}
+
+function getMobileSnapshot() {
+  return window.matchMedia(mobileQuery).matches;
+}
+
+function getServerMobileSnapshot() {
+  return false;
+}
+
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useSyncExternalStore(
+    subscribeToMobileQuery,
+    getMobileSnapshot,
+    getServerMobileSnapshot
+  );
   const t = useTranslations('nav');
   const pathname = usePathname();
-
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 768px)');
-    setIsMobile(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
-  }, []);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen && isMobile ? 'hidden' : '';
