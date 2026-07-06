@@ -55,6 +55,9 @@ public/
   logo.svg, dot.svg        # Brand assets
   llms.txt                 # LLM-friendly site description
 docs/superpowers/          # Design spec + implementation plan (historical records)
+.claude/                   # Agent settings + project skills (verify-site, add-project, build-from-design)
+design/                    # Gitignored inbox for designer PDF/.ai mockups
+scripts/check-i18n.mjs     # pl/en translation key parity check
 proxy.ts                   # next-intl locale proxy (Next.js 16 proxy convention)
 next.config.mjs            # next-intl plugin + image remotePatterns
 eslint.config.mjs          # ESLint flat config (next/core-web-vitals + typescript)
@@ -93,6 +96,15 @@ Rules for any UI work. Visual reference: `/pl/design-system` (dev only); primiti
 - **Images:** `next/image`, webp under `public/images/<slug>/`, aspect patterns from `ProjectGrid` (squares, portraits, full-width breaks).
 - **Motion:** Framer Motion, subtle; marquee treatment for footer/accent text.
 - **Never** introduce new colors, typefaces, or a component library without an explicit token discussion first.
+
+## Agent Toolkit
+
+Project skills live in `.claude/skills/`; shared agent permissions in `.claude/settings.json`.
+
+- **verify-site** — browser QA gate: every route × both locales, status + console + screenshots. Run before handoff of visual changes.
+- **add-project** — the images → `data/projects.ts` → verification workflow for portfolio entries.
+- **build-from-design** — implement a view faithfully from a PDF/.ai mockup in `design/` (gitignored inbox). Extract copy/photos with poppler, map colors to `@theme` tokens (stop and ask on off-token values).
+- **check:i18n** — `pnpm check:i18n` enforces pl/en key parity (part of `pnpm check`).
 
 ## Conductor
 
