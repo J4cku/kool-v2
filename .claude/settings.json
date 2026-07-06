@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm typecheck)",
+      "Bash(pnpm lint)",
+      "Bash(pnpm check)",
+      "Bash(pnpm check:i18n)",
+      "Bash(pnpm build)",
+      "Bash(pnpm install)",
+      "Bash(pnpm dev:*)",
+      "Bash(node scripts/check-i18n.mjs:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git show:*)",
+      "Bash(git branch)",
+      "Bash(rg:*)",
+      "Bash(mkdir -p .context:*)",
+      "Bash(lsof:*)",
+      "Bash(curl -sf -o /dev/null http://localhost:*)",
+      "Bash(curl -s -o /dev/null -w:*)",
+      "Bash(pdftoppm:*)",
+      "Bash(pdftotext:*)",
+      "Bash(pdfimages:*)",
+      "Bash(pdffonts:*)",
+      "Bash(sips:*)"
+    ]
+  }
+}

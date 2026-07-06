@@ -19,7 +19,8 @@ pnpm build     # Production build
 pnpm start     # Start production server on $PORT, falling back to 8080
 pnpm lint      # Run ESLint CLI
 pnpm typecheck # Run TypeScript without emitting files
-pnpm check     # Typecheck, lint, and build
+pnpm check:i18n # Verify pl.json/en.json translation keys match
+pnpm check     # Typecheck, lint, i18n parity, and build
 ```
 
 ## Project Structure
@@ -54,6 +55,9 @@ public/
   logo.svg, dot.svg        # Brand assets
   llms.txt                 # LLM-friendly site description
 docs/superpowers/          # Design spec + implementation plan (historical records)
+.claude/                   # Agent settings + project skills (verify-site, add-project, build-from-design)
+design/                    # Gitignored inbox for designer PDF/.ai mockups
+scripts/check-i18n.mjs     # pl/en translation key parity check
 proxy.ts                   # next-intl locale proxy (Next.js 16 proxy convention)
 next.config.mjs            # next-intl plugin + image remotePatterns
 eslint.config.mjs          # ESLint flat config (next/core-web-vitals + typescript)
@@ -81,6 +85,27 @@ AGENTS.md                  # Cross-agent instructions (Codex, Conductor)
 - The route hard-404s outside development (`NODE_ENV` guard in page.tsx) — under `pnpm build && pnpm start` a 404 here is expected, not a regression; view it with `pnpm dev`
 - Background: design spec and implementation plan live in `docs/superpowers/specs/2026-04-11-design-system-design.md` and `docs/superpowers/plans/2026-04-11-design-system-implementation.md`
 
+## Design Language
+
+Rules for any UI work. Visual reference: `/pl/design-system` (dev only); primitives in `components/DesignSystem.tsx`.
+
+- **Typography is dark and editorial.** Display headings and body copy use `dark` on `beige`. Display headings are uppercase Poppins.
+- **Coral is an accent, used sparingly:** logo, dot, small labels, separator lines, text links, marquee/accent text, project-status accents. Never body copy, never large fills. Keep `#FC3117` exactly — do not resample reds from PDF exports.
+- **Muted** (`#888888`) is for secondary text and metadata only.
+- **Layout:** content constrained to `--max-width-content` (1400px), generous whitespace, image-led sections.
+- **Images:** `next/image`, webp under `public/images/<slug>/`, aspect patterns from `ProjectGrid` (squares, portraits, full-width breaks).
+- **Motion:** Framer Motion, subtle; marquee treatment for footer/accent text.
+- **Never** introduce new colors, typefaces, or a component library without an explicit token discussion first.
+
+## Agent Toolkit
+
+Project skills live in `.claude/skills/`; shared agent permissions in `.claude/settings.json`.
+
+- **verify-site** — browser QA gate: every route × both locales, status + console + screenshots. Run before handoff of visual changes.
+- **add-project** — the images → `data/projects.ts` → verification workflow for portfolio entries.
+- **build-from-design** — implement a view faithfully from a PDF/.ai mockup in `design/` (gitignored inbox). Extract copy/photos with poppler, map colors to `@theme` tokens (stop and ask on off-token values).
+- **check:i18n** — `pnpm check:i18n` enforces pl/en key parity (part of `pnpm check`).
+
 ## Conductor
 
 - Shared workspace scripts live in `.conductor/settings.toml`
@@ -99,7 +124,7 @@ AGENTS.md                  # Cross-agent instructions (Codex, Conductor)
 - **Project data**: All project metadata lives in `data/projects.ts` — `Project` type is the source of truth
 - **Content language**: Site content and project descriptions are in Polish; translations in `messages/`
 - **Font**: Poppins via `next/font/google`, exposed as CSS variable `--font-poppins`
-- **Verification**: Before handoff, run `pnpm typecheck`, `pnpm lint`, and `pnpm build`
+- **Verification**: Before handoff, run `pnpm check` (typecheck + lint + i18n parity + build)
 
 ## Adding a New Project
 
@@ -119,7 +144,7 @@ AGENTS.md                  # Cross-agent instructions (Codex, Conductor)
 
 - Next.js 16 App Router: route `params` is a Promise — type as `params: Promise<{...}>` and `await params` (see `app/[locale]/layout.tsx`)
 - There is intentionally no `tailwind.config.*` — Tailwind v4 design tokens live in `@theme` in `app/globals.css`
-- There are no automated tests — `pnpm check` (typecheck + lint + build) is the verification gate before claiming work done
+- There are no automated tests — `pnpm check` (typecheck + lint + i18n parity + build) is the verification gate before claiming work done
 
 ## SEO
 

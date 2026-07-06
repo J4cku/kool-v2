@@ -37,3 +37,6 @@ next-env.d.ts
 
 # local brainstorming artifacts
 .superpowers/
+
+# designer-delivered mockups (PDF/.ai inbox for build-from-design skill)
+/design/
