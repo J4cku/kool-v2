@@ -22,18 +22,13 @@ export default function ProjectCard({ project }: ProjectCardProps) {
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
             {project.status === 'in_progress' && (
-              <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div
-                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-[35deg] whitespace-nowrap py-2"
-                  style={{ width: '150%' }}
-                >
-                  <div className="animate-marquee-diagonal flex gap-8">
-                    {Array.from({ length: 20 }).map((_, i) => (
-                      <span key={i} className="text-coral text-[13px] font-[700] uppercase tracking-[0.15em] shrink-0">
-                        PROJECT IN PROGRESS
-                      </span>
-                    ))}
-                  </div>
+              <div className="absolute left-0 right-0 top-2/3 -translate-y-1/2 overflow-hidden pointer-events-none py-2">
+                <div className="animate-marquee flex gap-8 w-max">
+                  {Array.from({ length: 20 }).map((_, i) => (
+                    <span key={i} className="text-coral text-[13px] font-[700] uppercase tracking-[0.15em] shrink-0">
+                      PROJECT IN PROGRESS
+                    </span>
+                  ))}
                 </div>
               </div>
             )}
@@ -41,7 +36,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         </div>
       </Link>
 
-      <p className="mt-3 text-[14px] md:text-[15px] font-[500] text-dark text-center uppercase">
+      <p className="mt-2 text-[14px] md:text-[15px] font-[500] text-dark text-center uppercase">
         {project.title} / {project.location}
       </p>
     </div>

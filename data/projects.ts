@@ -35,6 +35,9 @@ export type Project = {
   // Items rendered 2:3 instead of square when in a flush slot; shares the
   // fullWidthIndices index space
   portraitIndices?: number[];
+  // Padded images rendered noticeably smaller (technical drawings); shares
+  // the fullWidthIndices index space
+  smallIndices?: number[];
 };
 
 export const projects: Project[] = [
@@ -299,7 +302,7 @@ export const projects: Project[] = [
     title: 'łazienki',
     location: 'Warszawa',
     category: 'mieszkalne',
-    status: 'in_progress',
+    status: 'completed',
     year: 2026,
     area: '8 m²',
     scope: ['projekt koncepcyjny wnętrz', 'projekty mebli', 'projekt wykonawczy wnętrz', 'nadzór autorski'],
@@ -318,6 +321,7 @@ export const projects: Project[] = [
     textRows: [{ row: 0, side: 'left' }],
     flipRowParity: true,
     portraitIndices: [5],
+    smallIndices: [4], // 05 aksonometria – small padded, not a full render
     descriptionBlocks: [
       'Łazienki w stylu współczesnym z silnymi wpływami retro i artystycznym podejściem do materiałów. Pierwsze wrażenie we wnętrzu buduje ciepła nasycona kolorystyka. Ceglana mozaika oplata zaobloną wnękę prysznicową jak ceramiczna tkanina, wprowadzając do wnętrza miękkość i głębię. Rezygnacja z wanny pozwoliła odzyskać przestrzeń i stworzyć układ bardziej płynny, podporządkowany rytmowi codziennych rytuałów. Centralnym punktem większej łazienki jest umywalkowa zabudowa w ziemistozielonym odcieniu zestawiona z żółtym onyksowym blatem. Kamień przyciąga uwagę wyraźnym użyleniem i połyskiem, który zmienia się wraz z kątem padania światła. Nad nim kremowe płytki strukturalne subtelnie rozpraszają światło, kontrastując z chłodnym połyskiem chromowanego lustra i granatowych detali armatury. Projekt operuje na wyraźnym zestawieniu surowości i elegancji w dopracowanych detalach. Ich relacja nie jest konfrontacją, lecz spokojnym dialogiem materiałów. Czarno-białe terrazzo wnosi graficzną energię inspirowaną estetyką retro, podczas gdy dębowa zabudowa porządkuje kompozycję i równoważy intensywność użytych materiałów. Druga łazienka rozwija tę samą narrację w jaśniejszej tonacji. Piaskowe płytki, jasne lastryko i wielkoformatowe lustro sprawiają, że niewielka przestrzeń nabiera butikowego, hotelowego klimatu. Nawet ceglana zabudowa skrywająca pralnię staje się częścią kompozycji, a nie tłem.',
     ],
@@ -329,29 +333,33 @@ export const projects: Project[] = [
     title: 'mieszkanie',
     location: 'Gdańsk',
     category: 'mieszkalne',
-    status: 'in_progress',
+    status: 'completed',
     year: 2026,
     area: '46 m²',
     scope: ['projekt koncepcyjny wnętrz', 'projekty mebli', 'projekt wykonawczy wnętrz', 'nadzór autorski'],
     thumbnail: '/images/mieszkanie-gdansk/kool_m_gdansk_MAIN.webp',
     featured: false,
+    // Display order (board): hero, [02 + text], [03 full], [slider + reel],
+    // [06 full], [07 + 08]. The 05a/05b bedroom pair is the noc/dzień slider;
+    // the shelf illustration (04) is dropped — the reel already animates it.
     images: [
       '/images/mieszkanie-gdansk/kool_m_gdansk_01.webp',  // 01 hero – kuchnia i strefa dzienna
       '/images/mieszkanie-gdansk/kool_m_gdansk_02.webp',  // 02 square – przedpokój z lustrem (text right)
       '/images/mieszkanie-gdansk/kool_m_gdansk_03.webp',  // 03 full-width – strefa dzienna za dnia
-      '/images/mieszkanie-gdansk/kool_m_gdansk_04.webp',  // 04 portrait – ilustracja regału, row left (padded, reel right)
-      '/images/mieszkanie-gdansk/kool_m_gdansk_05a.webp', // 05a sypialnia nocą – slider pair
-      '/images/mieszkanie-gdansk/kool_m_gdansk_05b.webp', // 05b sypialnia za dnia – slider pair
       '/images/mieszkanie-gdansk/kool_m_gdansk_06.webp',  // 06 full-width – kuchnia i regał z zabudową
       '/images/mieszkanie-gdansk/kool_m_gdansk_07.webp',  // 07 square – strefa dzienna wieczorem, row left
       '/images/mieszkanie-gdansk/kool_m_gdansk_08.webp',  // 08 portrait – regał wieczorem, row right (padded)
     ],
-    // Indices below count the hero (0) and the reel slot (4)
-    fullWidthIndices: [2, 7],
-    containedPairs: [{ indices: [5, 6], labels: ['noc', 'dzień'] }],
+    // Indices count the hero (0) and each inserted slot (slider 3, reel 4)
+    fullWidthIndices: [2, 5],
+    slider: {
+      beforeSrc: '/images/mieszkanie-gdansk/kool_m_gdansk_05a.webp', // noc
+      afterSrc: '/images/mieszkanie-gdansk/kool_m_gdansk_05b.webp',  // dzień
+      labels: ['noc', 'dzień'],
+      index: 3,
+    },
     reel: { src: '/videos/mieszkanie-gdansk-reel.mp4', index: 4 },
     textRows: [{ row: 0, side: 'right' }],
-    flipRowParity: true,
     descriptionBlocks: [
       'W tym mieszkaniu w Gdańsku beton nie chłodzi, przeciwnie, oddycha ciepłem i światłem, stając się tłem dla życia w powolnym tempie. Już od progu uwagę przyciąga miękka szarość przecieranych powierzchni, których nieregularna faktura łapie światło. To przestrzeń zbudowana na kontrastach, ale pozbawiona ostentacji. Surowość spotyka tu miękkość, industrialny charakter miesza się z atmosferą azylu. Projekt opiera się na dwóch wyraźnych światach kolorystycznych, które prowadzą między sobą subtelny dialog. Strefa dzienna tonie w odcieniach kości słoniowej, piaskowych tynków i lnianych beży, przełamanych złocistymi rudościami obszernej sofy obitej mięsistą, strukturalną tkaniną. To właśnie tutaj światło dzienne pracuje najmocniej. Rozlewa się po betonowej podłodze, podkreśla ziarnistość ścian i wydobywa ciepło drewna. Wieczorem charakter wnętrza zmienia się całkowicie. Boczne, pomarańczowe światło miękko osiada na powierzchniach, rozmywa granice i zamienia papierowy klosz w żarzący się punkt przypominający zachodzące słońce. Kuchnia i biblioteka tworzą bardziej wyrazisty kadr. Chłodniejsze odcienie betonu zestawiono tu z głęboką zielenią terakoty oraz lustrzanymi frontami górnych szafek, które odbijają światło i multiplikują przestrzeń. Centralnym elementem pozostaje wyspa w formie masywnej, wielofunkcyjnej bryły, wokół której koncentruje się codzienność: gotowanie, rozmowy, praca i spontaniczne spotkania. Regały wypełnione książkami i kolekcjonowanymi obiektami nadają wnętrzu osobistego charakteru. Sypialnia została pomyślana jako miejsce odpoczynku, pracy i twórczości. Łóżko osadzone na dedykowanej skrzyni jest sporym miejscem do przechowywania, a obecność instrumentów muzycznych podkreśla zainteresowania właściciela. W całym mieszkaniu czuć inspiracje estetyką lat 70. i japońsko-skandynawskim podejściem do materiału: szczerym, sensualnym, skupionym na świetle i strukturze. To ciepły brutalizm w intymnym wydaniu: miejska odskocznia, która nie imponuje rozmachem, lecz atmosferą pozostającą z użytkownikiem długo po zmroku.',
     ],

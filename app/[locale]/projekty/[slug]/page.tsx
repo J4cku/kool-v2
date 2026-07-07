@@ -83,6 +83,7 @@ export default async function ProjectDetailPage({
             textRows={project.textRows}
             flipRowParity={project.flipRowParity}
             portraitIndices={project.portraitIndices?.map((i) => i - 1).filter((i) => i >= 0)}
+            smallIndices={project.smallIndices?.map((i) => i - 1).filter((i) => i >= 0)}
           />
 
           <FooterBanner showMarquee={false} />
