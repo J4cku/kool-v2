@@ -14,7 +14,7 @@ interface ProjectContentProps {
   description: string;
   descriptionBlocks?: string[];
   fullWidthIndices?: number[];
-  containedPairs?: { indices: [number, number]; labels?: [string, string] }[];
+  containedPairs?: { indices: [number, number]; labels?: [string, string]; scale?: number }[];
   reverseLastRow?: boolean;
   reel?: { src: string; index: number };
   // Half-width before/after slider occupying a single gallery slot; index
@@ -114,10 +114,10 @@ export default function ProjectContent({ images, description, descriptionBlocks,
   const fullWidthSet = new Set(fullWidthIndices ?? []);
   const portraitSet = new Set(portraitIndices ?? []);
   const smallSet = new Set(smallIndices ?? []);
-  const containedMap = new Map<number, { otherIdx: number; labels?: [string, string]; isFirst: boolean }>();
+  const containedMap = new Map<number, { otherIdx: number; labels?: [string, string]; scale?: number; isFirst: boolean }>();
   for (const pair of containedPairs ?? []) {
-    containedMap.set(pair.indices[0], { otherIdx: pair.indices[1], labels: pair.labels, isFirst: true });
-    containedMap.set(pair.indices[1], { otherIdx: pair.indices[0], labels: pair.labels, isFirst: false });
+    containedMap.set(pair.indices[0], { otherIdx: pair.indices[1], labels: pair.labels, scale: pair.scale, isFirst: true });
+    containedMap.set(pair.indices[1], { otherIdx: pair.indices[0], labels: pair.labels, scale: pair.scale, isFirst: false });
   }
   const textRowMap = new Map((textRows ?? []).map((r) => [r.row, r.side]));
 
@@ -160,7 +160,11 @@ export default function ProjectContent({ images, description, descriptionBlocks,
     if (pairInfo?.isFirst && containedMap.has(itemIdx + 1) && current.kind === 'image' && next?.kind === 'image') {
       const labels = pairInfo.labels;
       rows.push(
-        <div key={`row-${rowIdx}`}>
+        <div
+          key={`row-${rowIdx}`}
+          className={pairInfo.scale ? 'mx-auto w-full' : undefined}
+          style={pairInfo.scale ? { maxWidth: `${pairInfo.scale * 100}%` } : undefined}
+        >
           <BeforeAfterSlider
             beforeSrc={current.src}
             afterSrc={next.src}

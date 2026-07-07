@@ -15,7 +15,7 @@ export type Project = {
   photoCredit?: string;
   descriptionBlocks?: string[];
   fullWidthIndices?: number[];
-  containedPairs?: { indices: [number, number]; labels?: [string, string] }[];
+  containedPairs?: { indices: [number, number]; labels?: [string, string]; scale?: number }[];
   reverseLastRow?: boolean;
   // Detail-page meta table overrides (card keeps the short title/location)
   meta?: { title?: string; location?: string; collaboration?: string };
@@ -51,7 +51,7 @@ export const projects: Project[] = [
     year: 2024,
     area: '180 m²',
     scope: ['projekt koncepcyjny', 'dokumentacja wykonawcza', 'nadzór autorski'],
-    thumbnail: '/images/dobrzykowice/KOOL_dd_01.webp',
+    thumbnail: '/images/dobrzykowice/KOOL_dd_MAIN.webp',
     featured: false,
     images: [
       '/images/dobrzykowice/KOOL_dd_01.webp',
@@ -125,7 +125,7 @@ export const projects: Project[] = [
     year: 2022,
     area: '58 m²',
     scope: ['projekt koncepcyjny wnętrz', 'projekty mebli', 'projekt wykonawczy wnętrz', 'nadzór autorski'],
-    thumbnail: '/images/mieszkanie-widmo/KOOL_m_00_01.webp',
+    thumbnail: '/images/mieszkanie-widmo/KOOL_m_00_MAIN.webp',
     featured: false,
     images: [
       '/images/mieszkanie-widmo/KOOL_m_00_01.webp',
@@ -144,7 +144,7 @@ export const projects: Project[] = [
       '/images/mieszkanie-widmo/KOOL_m_00_14.webp',
     ],
     fullWidthIndices: [8, 11],
-    containedPairs: [{ indices: [4, 5], labels: ['przed', 'po'] }],
+    containedPairs: [{ indices: [4, 5], labels: ['przed', 'po'], scale: 0.75 }],
     reverseLastRow: true,
     descriptionBlocks: [
       'Projekt mieszkania zakładał odejście od pierwotnego, bardziej podzielonego układu na rzecz otwartej, płynnie przenikającej się przestrzeni. Zredukowanie zbędnych ścian pozwoliło wydobyć naturalne światło i stworzyć czytelną, funkcjonalną strefę dzienną, w której salon, jadalnia i kuchnia budują spójną, ponadczasową całość. Bazę aranżacji tworzą jasne, ciepłe tonacje oraz duże ilości naturalnego drewna, obecnego w zabudowach stolarskich i na podłogach. Miękkie tkaniny, proste formy mebli i subtelne detale nadają wnętrzu komfortowy charakter. Kolorowe lastryko wprowadza delikatną dynamikę i stanowi motyw przewodni, który przeszywa przestrzeń — od holu po łazienkę. Wyrazistym akcentem są turkusowe płytki pojawiające się na zabudowie szafy w holu oraz na obudowie kominka w strefie dziennej, a także ceglana zabudowa prowadząca z holu do kuchni. W części kuchennej klasyczny marmur Bianco Carrara zastosowany na blatach i zabudowie ściennej równoważy kolorystyczne akcenty i podkreśla ponadczasowy charakter projektu. Efektowne, przesuwne drzwi ze szkła ornamentowego w pionowym profilu oddzielają sypialnię, zapewniając prywatność przy jednoczesnym zachowaniu dostępu światła. Sama sypialnia została zaprojektowana jako przestrzeń wyciszenia — z dużą garderobą w energetycznym kolorze, która stanowi mocny, ale harmonijny akcent. Łazienka konsekwentnie rozwija przyjętą prostą materiałową: kolorowe lastryko, kamień, ceglana szafka pod umywalkę, drewniana zabudowa oraz kwadratowe płytki w szafkowym odcieniu. Spójność materiałów i dbałość o detal budują wnętrze nowoczesne, lecz odporne na zmieniające się trendy — ciepłe, funkcjonalne i ponadczasowe.',
