@@ -39,6 +39,14 @@ export default function OfertaPage() {
   const residentialScope = t.raw('residential.scopeItems') as string[];
   const processSteps = t.raw('process.steps') as string[];
 
+  const trustedByLogos = [
+    { src: '/images/oferta/logos/dehesa.webp', alt: 'DEHESA', width: 2030, height: 709, className: 'h-6 md:h-7' },
+    { src: '/images/oferta/logos/piazza.webp', alt: 'PIAZZA', width: 2267, height: 542, className: 'h-6 md:h-7' },
+    { src: '/images/oferta/logos/fandom.webp', alt: 'FANDOM', width: 3075, height: 1031, className: 'h-9 md:h-11' },
+    { src: '/images/oferta/logos/dobry-material.webp', alt: 'DOBRY MATERIAŁ', width: 1842, height: 838, className: 'h-10 md:h-12' },
+    { src: '/images/oferta/logos/belmonte.webp', alt: 'BELMONTE — Hotel Ustronie Morskie', width: 2372, height: 1157, className: 'h-12 md:h-14' },
+  ];
+
   return (
     <>
       <Navbar />
@@ -65,7 +73,7 @@ export default function OfertaPage() {
           sloganHeading={t('commercial.sloganHeading')}
           sloganText={t('commercial.sloganText')}
           trustedByLabel={t('commercial.trustedBy')}
-          trustedByNames={['DEHESA', 'DOBRY MATERIAŁ', 'BELMONTE', 'PIAZZA', 'PIAZZA']}
+          trustedByLogos={trustedByLogos}
         />
 
         <FullWidthImage
