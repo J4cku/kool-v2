@@ -48,28 +48,36 @@ export default function ServiceSection({
       <div className="max-w-[1400px] mx-auto">
         {/* Always-visible text block */}
         <div>
-          <span className="text-[11px] font-[700] uppercase text-dark/50 mb-4 block">
+          <span
+            className="font-[400] uppercase text-dark/60 mb-4 md:mb-6 block"
+            style={{ fontSize: 'clamp(14px, 1.9vw, 27px)' }}
+          >
             {label}
           </span>
           <h2
-            className="font-[900] text-dark uppercase mb-6 leading-[1.05]"
-            style={{ fontSize: 'clamp(24px, 4.5vw, 48px)' }}
+            className="font-[700] text-dark uppercase mb-6 md:mb-8 leading-[1.02]"
+            style={{ fontSize: 'clamp(30px, 5vw, 72px)' }}
           >
             {heading}
           </h2>
-          <p className="text-dark/70 text-[14px] md:text-[15px] leading-relaxed max-w-[980px] mb-10 font-[400]">
+          <p
+            className="text-dark/80 leading-[1.5] max-w-[1240px] mb-10 md:mb-14 font-[400]"
+            style={{ fontSize: 'clamp(15px, 1.9vw, 27px)' }}
+          >
             {description}
           </p>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-4">
             <button
               onClick={onToggle}
-              className="text-dark font-[700] text-[11px] uppercase hover:opacity-50 transition-opacity"
+              className="text-dark font-[400] uppercase hover:opacity-50 transition-opacity"
+              style={{ fontSize: 'clamp(14px, 1.9vw, 27px)' }}
             >
               {learnMoreLabel}
             </button>
             <Link
               href={portfolioHref as '/projekty'}
-              className="text-dark font-[700] text-[11px] uppercase hover:opacity-50 transition-opacity"
+              className="text-dark font-[600] uppercase hover:opacity-50 transition-opacity whitespace-nowrap"
+              style={{ fontSize: 'clamp(14px, 1.9vw, 27px)' }}
             >
               [ {portfolioLabel} ]
             </Link>
@@ -100,15 +108,19 @@ export default function ServiceSection({
                 )}
                 <div className={scopeImageSrc ? '' : 'col-span-full'}>
                   <h3
-                    className="font-[900] text-dark uppercase mb-6 leading-[1.02]"
-                    style={{ fontSize: 'clamp(26px, 4vw, 44px)' }}
+                    className="font-[700] text-dark uppercase mb-6 md:mb-8 leading-[1.02]"
+                    style={{ fontSize: 'clamp(30px, 5vw, 72px)' }}
                   >
                     {scopeTitle}
                   </h3>
-                  <ul className="space-y-1.5">
+                  <ul className="space-y-2 md:space-y-2.5">
                     {scopeItems.map((item, i) => (
-                      <li key={i} className="text-dark text-[13px] md:text-[14px] font-[400] flex items-start gap-2">
-                        <span className="mt-[7px] w-1 h-1 bg-dark rounded-full flex-shrink-0" />
+                      <li
+                        key={i}
+                        className="text-dark font-[400] leading-[1.4] flex items-start gap-3"
+                        style={{ fontSize: 'clamp(15px, 1.9vw, 27px)' }}
+                      >
+                        <span className="mt-[0.6em] w-1.5 h-1.5 bg-dark rounded-full flex-shrink-0" />
                         <span>{item}</span>
                       </li>
                     ))}
@@ -117,24 +129,34 @@ export default function ServiceSection({
               </div>
 
               {/* Slogan + logos */}
-              <div className="pt-12 md:pt-16 max-w-[920px]">
+              <div className="pt-14 md:pt-20 max-w-[1240px]">
                 <h3
-                  className="font-[900] text-dark uppercase mb-5 leading-[1.05]"
-                  style={{ fontSize: 'clamp(24px, 3.5vw, 42px)' }}
+                  className="font-[700] text-dark uppercase mb-6 md:mb-8 leading-[1.02]"
+                  style={{ fontSize: 'clamp(30px, 5vw, 72px)' }}
                 >
                   {sloganHeading}
                 </h3>
-                <p className="text-dark/70 text-[14px] md:text-[15px] font-[400] leading-relaxed max-w-[720px]">
+                <p
+                  className="text-dark/80 font-[400] leading-[1.5] max-w-[1080px]"
+                  style={{ fontSize: 'clamp(15px, 1.9vw, 27px)' }}
+                >
                   {sloganText}
                 </p>
                 {trustedByLabel && trustedByNames && (
-                  <div className="mt-10">
-                    <span className="text-[11px] font-[700] uppercase text-dark/50 mb-5 block">
+                  <div className="mt-12 md:mt-16">
+                    <span
+                      className="font-[400] uppercase text-dark/60 mb-5 block"
+                      style={{ fontSize: 'clamp(13px, 1.3vw, 18px)' }}
+                    >
                       {trustedByLabel}
                     </span>
-                    <div className="flex items-center gap-x-8 gap-y-3 flex-wrap">
+                    <div className="flex items-center gap-x-10 gap-y-4 flex-wrap">
                       {trustedByNames.map((name, i) => (
-                        <span key={i} className="text-dark font-[700] text-[11px] uppercase opacity-60">
+                        <span
+                          key={i}
+                          className="text-dark font-[700] uppercase opacity-70"
+                          style={{ fontSize: 'clamp(13px, 1.3vw, 18px)' }}
+                        >
                           {name}
                         </span>
                       ))}
