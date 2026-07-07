@@ -86,7 +86,7 @@ export default function ServiceSection({
               className="overflow-hidden"
             >
               {/* Scope: image + list */}
-              <div className="mt-12 md:mt-16 max-w-[920px] mx-auto grid grid-cols-[minmax(104px,34%)_1fr] md:grid-cols-[280px_minmax(0,1fr)] gap-5 md:gap-16 items-start">
+              <div className="mt-12 md:mt-16 max-w-[1120px] grid grid-cols-[minmax(104px,34%)_1fr] md:grid-cols-[minmax(0,320px)_minmax(0,1fr)] gap-5 md:gap-16 items-start">
                 {scopeImageSrc && (
                   <div className="relative w-full aspect-[3/4] overflow-hidden">
                     <Image
@@ -100,14 +100,14 @@ export default function ServiceSection({
                 )}
                 <div className={scopeImageSrc ? '' : 'col-span-full'}>
                   <h3
-                    className="font-[900] text-dark uppercase mb-6 leading-[1.05]"
-                    style={{ fontSize: 'clamp(20px, 2.5vw, 30px)' }}
+                    className="font-[900] text-dark uppercase mb-6 leading-[1.02]"
+                    style={{ fontSize: 'clamp(26px, 4vw, 44px)' }}
                   >
                     {scopeTitle}
                   </h3>
                   <ul className="space-y-1.5">
                     {scopeItems.map((item, i) => (
-                      <li key={i} className="text-dark text-[13px] font-[400] flex items-start gap-2">
+                      <li key={i} className="text-dark text-[13px] md:text-[14px] font-[400] flex items-start gap-2">
                         <span className="mt-[7px] w-1 h-1 bg-dark rounded-full flex-shrink-0" />
                         <span>{item}</span>
                       </li>
