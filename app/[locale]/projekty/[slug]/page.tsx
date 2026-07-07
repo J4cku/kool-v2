@@ -79,9 +79,11 @@ export default async function ProjectDetailPage({
             containedPairs={project.containedPairs?.map((p) => ({ ...p, indices: [p.indices[0] - 1, p.indices[1] - 1] as [number, number] }))}
             reverseLastRow={project.reverseLastRow}
             reel={project.reel ? { ...project.reel, index: project.reel.index - 1 } : undefined}
+            slider={project.slider ? { ...project.slider, index: project.slider.index - 1 } : undefined}
             textRows={project.textRows}
             flipRowParity={project.flipRowParity}
             portraitIndices={project.portraitIndices?.map((i) => i - 1).filter((i) => i >= 0)}
+            smallIndices={project.smallIndices?.map((i) => i - 1).filter((i) => i >= 0)}
           />
 
           <FooterBanner showMarquee={false} />

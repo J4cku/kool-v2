@@ -26,7 +26,7 @@ export default function ManifestoSection() {
             </div>
 
             <div className="md:w-[45%] md:ml-auto flex justify-end">
-              <div className="relative w-[80%] md:w-full aspect-[3/4] overflow-hidden">
+              <div className="relative w-[70%] md:w-[336px] aspect-[3/4] overflow-hidden">
                 <Image
                   src="/images/oferta/residential-04.jpg"
                   alt="Material moodboard"
@@ -59,8 +59,8 @@ export default function ManifestoSection() {
       <section className="mb-[80px] md:mb-[120px]">
         <div className="max-w-[1400px] mx-auto px-5 md:px-10 lg:px-12">
           <div className="flex flex-col md:flex-row gap-12 md:gap-16 items-start">
-            <div className="md:w-[40%]">
-              <div className="relative w-full aspect-[3/4] overflow-hidden">
+            <div className="md:w-[40%] flex justify-start">
+              <div className="relative w-[70%] md:w-[336px] aspect-[3/4] overflow-hidden">
                 <Image
                   src="/images/oferta/commercial-02.jpg"
                   alt="Interior photography"

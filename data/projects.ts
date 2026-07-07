@@ -15,7 +15,7 @@ export type Project = {
   photoCredit?: string;
   descriptionBlocks?: string[];
   fullWidthIndices?: number[];
-  containedPairs?: { indices: [number, number]; labels?: [string, string] }[];
+  containedPairs?: { indices: [number, number]; labels?: [string, string]; scale?: number }[];
   reverseLastRow?: boolean;
   // Detail-page meta table overrides (card keeps the short title/location)
   meta?: { title?: string; location?: string; collaboration?: string };
@@ -23,6 +23,9 @@ export type Project = {
   // shares the fullWidthIndices space (position in images[], counting the
   // hero, with the reel occupying its own slot)
   reel?: { src: string; index: number };
+  // Half-width before/after slider occupying one gallery slot; index shares
+  // the same display-slot space as reel/fullWidthIndices
+  slider?: { beforeSrc: string; afterSrc: string; labels?: [string, string]; index: number };
   // Explicit text-block placement (50/50 row index + which side the text
   // sits on); when omitted the default every-3rd-row rhythm applies
   textRows?: { row: number; side: 'left' | 'right' }[];
@@ -32,6 +35,9 @@ export type Project = {
   // Items rendered 2:3 instead of square when in a flush slot; shares the
   // fullWidthIndices index space
   portraitIndices?: number[];
+  // Padded images rendered noticeably smaller (technical drawings); shares
+  // the fullWidthIndices index space
+  smallIndices?: number[];
 };
 
 export const projects: Project[] = [
@@ -45,7 +51,7 @@ export const projects: Project[] = [
     year: 2024,
     area: '180 m²',
     scope: ['projekt koncepcyjny', 'dokumentacja wykonawcza', 'nadzór autorski'],
-    thumbnail: '/images/dobrzykowice/KOOL_dd_01.webp',
+    thumbnail: '/images/dobrzykowice/KOOL_dd_MAIN.webp',
     featured: false,
     images: [
       '/images/dobrzykowice/KOOL_dd_01.webp',
@@ -119,7 +125,7 @@ export const projects: Project[] = [
     year: 2022,
     area: '58 m²',
     scope: ['projekt koncepcyjny wnętrz', 'projekty mebli', 'projekt wykonawczy wnętrz', 'nadzór autorski'],
-    thumbnail: '/images/mieszkanie-widmo/KOOL_m_00_01.webp',
+    thumbnail: '/images/mieszkanie-widmo/KOOL_m_00_MAIN.webp',
     featured: false,
     images: [
       '/images/mieszkanie-widmo/KOOL_m_00_01.webp',
@@ -138,7 +144,7 @@ export const projects: Project[] = [
       '/images/mieszkanie-widmo/KOOL_m_00_14.webp',
     ],
     fullWidthIndices: [8, 11],
-    containedPairs: [{ indices: [4, 5], labels: ['przed', 'po'] }],
+    containedPairs: [{ indices: [4, 5], labels: ['przed', 'po'], scale: 0.75 }],
     reverseLastRow: true,
     descriptionBlocks: [
       'Projekt mieszkania zakładał odejście od pierwotnego, bardziej podzielonego układu na rzecz otwartej, płynnie przenikającej się przestrzeni. Zredukowanie zbędnych ścian pozwoliło wydobyć naturalne światło i stworzyć czytelną, funkcjonalną strefę dzienną, w której salon, jadalnia i kuchnia budują spójną, ponadczasową całość. Bazę aranżacji tworzą jasne, ciepłe tonacje oraz duże ilości naturalnego drewna, obecnego w zabudowach stolarskich i na podłogach. Miękkie tkaniny, proste formy mebli i subtelne detale nadają wnętrzu komfortowy charakter. Kolorowe lastryko wprowadza delikatną dynamikę i stanowi motyw przewodni, który przeszywa przestrzeń — od holu po łazienkę. Wyrazistym akcentem są turkusowe płytki pojawiające się na zabudowie szafy w holu oraz na obudowie kominka w strefie dziennej, a także ceglana zabudowa prowadząca z holu do kuchni. W części kuchennej klasyczny marmur Bianco Carrara zastosowany na blatach i zabudowie ściennej równoważy kolorystyczne akcenty i podkreśla ponadczasowy charakter projektu. Efektowne, przesuwne drzwi ze szkła ornamentowego w pionowym profilu oddzielają sypialnię, zapewniając prywatność przy jednoczesnym zachowaniu dostępu światła. Sama sypialnia została zaprojektowana jako przestrzeń wyciszenia — z dużą garderobą w energetycznym kolorze, która stanowi mocny, ale harmonijny akcent. Łazienka konsekwentnie rozwija przyjętą prostą materiałową: kolorowe lastryko, kamień, ceglana szafka pod umywalkę, drewniana zabudowa oraz kwadratowe płytki w szafkowym odcieniu. Spójność materiałów i dbałość o detal budują wnętrze nowoczesne, lecz odporne na zmieniające się trendy — ciepłe, funkcjonalne i ponadczasowe.',
@@ -202,28 +208,35 @@ export const projects: Project[] = [
     scope: ['projekt koncepcyjny wnętrz', 'projekty mebli', 'projekt wykonawczy wnętrz', 'nadzór autorski'],
     thumbnail: '/images/kancelaria/KOOL_kancelaria01.webp',
     featured: false,
+    // Display order (board): hero, [02 + text], [reel + 04], [slider + 06],
+    // [07 + 08], [09 + 10], [11 + 12], [13 + 14], [15 + 16]. The 05A/05B
+    // before/after pair lives in the slider, not the images array.
     images: [
       '/images/kancelaria/KOOL_kancelaria01.webp',  // 01 hero – biurko, regał, okno
       '/images/kancelaria/KOOL_kancelaria02.webp',  // 02 square – regał z czerwoną misą (text right)
-      '/images/kancelaria/KOOL_kancelaria04.webp',  // 04 – niebieska grafika i lampa (reel to its left)
-      '/images/kancelaria/KOOL_kancelaria05A.webp', // 05A – zasłona i lampa Lexavala
-      '/images/kancelaria/KOOL_kancelaria05B.webp', // 05B – okrągły stół, krzesła Rey
-      '/images/kancelaria/KOOL_kancelaria06.webp',  // 06 – półka z segregatorami przy oknie
+      '/images/kancelaria/KOOL_kancelaria04.webp',  // 04 – niebieska grafika, stół, krzesła Rey (reel to its left)
+      '/images/kancelaria/KOOL_kancelaria06.webp',  // 06 – półka z segregatorami przy oknie (slider to its left)
       '/images/kancelaria/KOOL_kancelaria07.webp',  // 07 – szklana misa na parapecie
       '/images/kancelaria/KOOL_kancelaria08.webp',  // 08 square – detal stołu z lastryko
       '/images/kancelaria/KOOL_kancelaria09.webp',  // 09 – biurko z różową zabudową
       '/images/kancelaria/KOOL_kancelaria10.webp',  // 10 – wazon na blacie z lastryko
       '/images/kancelaria/KOOL_kancelaria11.webp',  // 11 – narożnik z żółtą komodą i grafiką
       '/images/kancelaria/KOOL_kancelaria12.webp',  // 12 square – detal niebieskiej lampy
-      '/images/kancelaria/KOOL_kancelaria13.webp',  // 13 – szklane kule i lampa nad oknem
+      '/images/kancelaria/KOOL_kancelaria13.webp',  // 13 – biurko, okno, grafika ze żmiją
       '/images/kancelaria/KOOL_kancelaria14.webp',  // 14 – niebieska grafika na ścianie
       '/images/kancelaria/KOOL_kancelaria15.webp',  // 15 – dwie szklane kule pod sufitem
       '/images/kancelaria/KOOL_kancelaria16.webp',  // 16 – regał z rośliną i czerwoną misą
     ],
-    // Indices below count the hero (0) and the reel slot (2)
+    // Indices count the hero (0) and each inserted slot (reel 2, slider 4)
     reel: { src: '/videos/kancelaria-reel.mp4', index: 2 },
+    slider: {
+      beforeSrc: '/images/kancelaria/KOOL_kancelaria05B.webp', // przed – stary gabinet
+      afterSrc: '/images/kancelaria/KOOL_kancelaria05A.webp',  // po – nowa aranżacja
+      labels: ['przed', 'po'],
+      index: 4,
+    },
     textRows: [{ row: 0, side: 'right' }],
-    portraitIndices: [3, 4, 7, 11, 15, 16],
+    portraitIndices: [3, 8, 12, 15],
     descriptionBlocks: [
       'Już od pierwszego kontaktu z przestrzenią wiedzieliśmy, że jej potencjał kryje się w uproszczeniu. Projekt tej kancelarii potraktowaliśmy jako proces porządkowania: funkcji i formy. Bazą stała się neutralna paleta bieli i beżu, pozwalająca wyciszyć przestrzeń i stworzyć eleganckie, ponadczasowe tło. Wprowadziliśmy subtelne, ale zdecydowane akcenty kolorystyczne, które nadają wnętrzu charakteru, nie zaburzając jego profesjonalnego tonu. Jednym z najważniejszych rozwiązań w projekcie jest ukrycie rozbudowanej strefy przechowywania za miękką, lnianą zasłoną. Rozwiązanie to porządkuje wizualnie przestrzeń, a jednocześnie buduje dużą, spokojną płaszczyznę, która wycisza wnętrze i nadaje mu rytm. Tkanina pochłania dźwięk, łagodząc akustykę i sprzyjając skupieniu. Pracuje też ze światłem, delikatnie je filtrując i uszlachetniając wnętrze. Centralnym punktem przestrzeni jest zaprojektowany przez nas stół. Połączenie stali nierdzewnej z blatem z drewnianego lastryko stanowi wyważony dialog między precyzją a materią. Towarzyszą mu odnowione krzesła Rey i charakterystyczna lampa Lexavala. Kluczową rolę w kształtowaniu charakteru wnętrza odegrał odnowiony parkiet drewniany, zachowany jako element tożsamości miejsca. Ociepla i scala wszystkie elementy w spójną całość. System stalowych regałów zawieszony na ścianie pozwala na selektywną ekspozycję. W efekcie powstała przestrzeń łącząca nowoczesną elegancję z poczuciem ciepła, uporządkowana i czytelna, a przy tym budująca zaufanie już od pierwszego spojrzenia.',
     ],
@@ -289,7 +302,7 @@ export const projects: Project[] = [
     title: 'łazienki',
     location: 'Warszawa',
     category: 'mieszkalne',
-    status: 'in_progress',
+    status: 'completed',
     year: 2026,
     area: '8 m²',
     scope: ['projekt koncepcyjny wnętrz', 'projekty mebli', 'projekt wykonawczy wnętrz', 'nadzór autorski'],
@@ -308,6 +321,7 @@ export const projects: Project[] = [
     textRows: [{ row: 0, side: 'left' }],
     flipRowParity: true,
     portraitIndices: [5],
+    smallIndices: [4], // 05 aksonometria – small padded, not a full render
     descriptionBlocks: [
       'Łazienki w stylu współczesnym z silnymi wpływami retro i artystycznym podejściem do materiałów. Pierwsze wrażenie we wnętrzu buduje ciepła nasycona kolorystyka. Ceglana mozaika oplata zaobloną wnękę prysznicową jak ceramiczna tkanina, wprowadzając do wnętrza miękkość i głębię. Rezygnacja z wanny pozwoliła odzyskać przestrzeń i stworzyć układ bardziej płynny, podporządkowany rytmowi codziennych rytuałów. Centralnym punktem większej łazienki jest umywalkowa zabudowa w ziemistozielonym odcieniu zestawiona z żółtym onyksowym blatem. Kamień przyciąga uwagę wyraźnym użyleniem i połyskiem, który zmienia się wraz z kątem padania światła. Nad nim kremowe płytki strukturalne subtelnie rozpraszają światło, kontrastując z chłodnym połyskiem chromowanego lustra i granatowych detali armatury. Projekt operuje na wyraźnym zestawieniu surowości i elegancji w dopracowanych detalach. Ich relacja nie jest konfrontacją, lecz spokojnym dialogiem materiałów. Czarno-białe terrazzo wnosi graficzną energię inspirowaną estetyką retro, podczas gdy dębowa zabudowa porządkuje kompozycję i równoważy intensywność użytych materiałów. Druga łazienka rozwija tę samą narrację w jaśniejszej tonacji. Piaskowe płytki, jasne lastryko i wielkoformatowe lustro sprawiają, że niewielka przestrzeń nabiera butikowego, hotelowego klimatu. Nawet ceglana zabudowa skrywająca pralnię staje się częścią kompozycji, a nie tłem.',
     ],
@@ -319,29 +333,33 @@ export const projects: Project[] = [
     title: 'mieszkanie',
     location: 'Gdańsk',
     category: 'mieszkalne',
-    status: 'in_progress',
+    status: 'completed',
     year: 2026,
     area: '46 m²',
     scope: ['projekt koncepcyjny wnętrz', 'projekty mebli', 'projekt wykonawczy wnętrz', 'nadzór autorski'],
     thumbnail: '/images/mieszkanie-gdansk/kool_m_gdansk_MAIN.webp',
     featured: false,
+    // Display order (board): hero, [02 + text], [03 full], [slider + reel],
+    // [06 full], [07 + 08]. The 05a/05b bedroom pair is the noc/dzień slider;
+    // the shelf illustration (04) is dropped — the reel already animates it.
     images: [
       '/images/mieszkanie-gdansk/kool_m_gdansk_01.webp',  // 01 hero – kuchnia i strefa dzienna
       '/images/mieszkanie-gdansk/kool_m_gdansk_02.webp',  // 02 square – przedpokój z lustrem (text right)
       '/images/mieszkanie-gdansk/kool_m_gdansk_03.webp',  // 03 full-width – strefa dzienna za dnia
-      '/images/mieszkanie-gdansk/kool_m_gdansk_04.webp',  // 04 portrait – ilustracja regału, row left (padded, reel right)
-      '/images/mieszkanie-gdansk/kool_m_gdansk_05a.webp', // 05a sypialnia nocą – slider pair
-      '/images/mieszkanie-gdansk/kool_m_gdansk_05b.webp', // 05b sypialnia za dnia – slider pair
       '/images/mieszkanie-gdansk/kool_m_gdansk_06.webp',  // 06 full-width – kuchnia i regał z zabudową
       '/images/mieszkanie-gdansk/kool_m_gdansk_07.webp',  // 07 square – strefa dzienna wieczorem, row left
       '/images/mieszkanie-gdansk/kool_m_gdansk_08.webp',  // 08 portrait – regał wieczorem, row right (padded)
     ],
-    // Indices below count the hero (0) and the reel slot (4)
-    fullWidthIndices: [2, 7],
-    containedPairs: [{ indices: [5, 6], labels: ['noc', 'dzień'] }],
+    // Indices count the hero (0) and each inserted slot (slider 3, reel 4)
+    fullWidthIndices: [2, 5],
+    slider: {
+      beforeSrc: '/images/mieszkanie-gdansk/kool_m_gdansk_05a.webp', // noc
+      afterSrc: '/images/mieszkanie-gdansk/kool_m_gdansk_05b.webp',  // dzień
+      labels: ['noc', 'dzień'],
+      index: 3,
+    },
     reel: { src: '/videos/mieszkanie-gdansk-reel.mp4', index: 4 },
     textRows: [{ row: 0, side: 'right' }],
-    flipRowParity: true,
     descriptionBlocks: [
       'W tym mieszkaniu w Gdańsku beton nie chłodzi, przeciwnie, oddycha ciepłem i światłem, stając się tłem dla życia w powolnym tempie. Już od progu uwagę przyciąga miękka szarość przecieranych powierzchni, których nieregularna faktura łapie światło. To przestrzeń zbudowana na kontrastach, ale pozbawiona ostentacji. Surowość spotyka tu miękkość, industrialny charakter miesza się z atmosferą azylu. Projekt opiera się na dwóch wyraźnych światach kolorystycznych, które prowadzą między sobą subtelny dialog. Strefa dzienna tonie w odcieniach kości słoniowej, piaskowych tynków i lnianych beży, przełamanych złocistymi rudościami obszernej sofy obitej mięsistą, strukturalną tkaniną. To właśnie tutaj światło dzienne pracuje najmocniej. Rozlewa się po betonowej podłodze, podkreśla ziarnistość ścian i wydobywa ciepło drewna. Wieczorem charakter wnętrza zmienia się całkowicie. Boczne, pomarańczowe światło miękko osiada na powierzchniach, rozmywa granice i zamienia papierowy klosz w żarzący się punkt przypominający zachodzące słońce. Kuchnia i biblioteka tworzą bardziej wyrazisty kadr. Chłodniejsze odcienie betonu zestawiono tu z głęboką zielenią terakoty oraz lustrzanymi frontami górnych szafek, które odbijają światło i multiplikują przestrzeń. Centralnym elementem pozostaje wyspa w formie masywnej, wielofunkcyjnej bryły, wokół której koncentruje się codzienność: gotowanie, rozmowy, praca i spontaniczne spotkania. Regały wypełnione książkami i kolekcjonowanymi obiektami nadają wnętrzu osobistego charakteru. Sypialnia została pomyślana jako miejsce odpoczynku, pracy i twórczości. Łóżko osadzone na dedykowanej skrzyni jest sporym miejscem do przechowywania, a obecność instrumentów muzycznych podkreśla zainteresowania właściciela. W całym mieszkaniu czuć inspiracje estetyką lat 70. i japońsko-skandynawskim podejściem do materiału: szczerym, sensualnym, skupionym na świetle i strukturze. To ciepły brutalizm w intymnym wydaniu: miejska odskocznia, która nie imponuje rozmachem, lecz atmosferą pozostającą z użytkownikiem długo po zmroku.',
     ],

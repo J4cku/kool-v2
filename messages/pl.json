@@ -104,13 +104,13 @@
         "koncepcja wizualna lokalu",
         "rozwiązania materiałowe i detali projektowych",
         "szczegółowa dokumentacja wykonawcza",
-        "wsparcie w procesie uzgodnień z zarządcami",
+        "wsparcie w procesie uzgodnień z Sanepidem",
         "koordynacja branż i nadzór autorski",
         "branding",
-        "lifting istniejących wnętrz komercyjnych"
+        "liftingi istniejących wnętrz komercyjnych"
       ],
       "sloganHeading": "Tworzymy miejsca, które zostają w pamięci",
-      "sloganText": "Oprócz funkcjonalności i zgodności z przepisami, nasze wieloletnie doświadczenia, pozwala kreować nam przestrzenie odpowiadające charakterowi marki budujące lojalność oraz rozpoznawalność.",
+      "sloganText": "Oprócz funkcjonalności i zgodności z przepisami, nasze wieloletnie doświadczenie, pozwala kreować nam przestrzenie odpowiadające charakterowi marki budujące jej rozpoznawalność.",
       "trustedBy": "Zaufali nam:"
     },
     "residential": {
@@ -120,7 +120,7 @@
       "scopeItems": [
         "analiza potrzeb i oczekiwań mieszkańców",
         "układ funkcjonalny przestrzeni",
-        "plany kolorystyczne",
+        "zmiany lokatorskie",
         "projekt koncepcyjny (wizualizacje)",
         "autorskie zabudowy i rozwiązania stolarskie",
         "dokumentacja wykonawcza",
@@ -130,7 +130,7 @@
         "nadzór autorski"
       ],
       "sloganHeading": "Tworzymy miejsca, do których chce się wracać",
-      "sloganText": "Każdy projekt prowadzimy od koncepcji po precyzyjną dokumentację techniczną, która pozwala przekuć ideę na spokojną i przemyślaną realizację. Mamy doświadczenie pozwalające na projektowanie zarówno w budownictwie deweloperskim, jak i z rynku wtórnego oraz dysponujemy kontaktami do sprawdzonych wykonawców."
+      "sloganText": "Każdy projekt prowadzimy od koncepcji po precyzyjną dokumentację techniczną, która pozwala przełożyć ideę na spokojną i przewidywalną realizację. Mamy doświadczenie pozwalające na projektowanie zarówno w budownictwie deweloperskim, jak i z rynku wtórnego oraz dysponujemy kontaktami do sprawdzonych wykonawców."
     },
     "process": {
       "label": "Projekt kompleksowy",
