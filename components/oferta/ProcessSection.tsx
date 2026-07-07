@@ -33,13 +33,13 @@ export default function ProcessSection({
         >
           <span
             className="font-[400] uppercase text-dark/60 mb-4 md:mb-6 block"
-            style={{ fontSize: 'clamp(14px, 1.9vw, 27px)' }}
+            style={{ fontSize: 'clamp(14px, 1.5vw, 20px)' }}
           >
             {label}
           </span>
           <h2
             className="font-[700] text-dark uppercase mb-12 md:mb-16 leading-[1.02]"
-            style={{ fontSize: 'clamp(30px, 5vw, 72px)' }}
+            style={{ fontSize: 'clamp(28px, 4.2vw, 60px)' }}
           >
             {heading}
           </h2>
@@ -50,25 +50,27 @@ export default function ProcessSection({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="grid grid-cols-[minmax(104px,34%)_1fr] md:grid-cols-[336px_minmax(0,1fr)] gap-5 md:gap-16 mb-16 md:mb-24 items-start"
+          className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-0 mb-16 md:mb-24 items-stretch"
         >
-          <div className="relative w-full aspect-[2/3] overflow-hidden">
-            <Image
-              src={imageSrc}
-              alt={imageAlt}
-              fill
-              className="object-cover"
-              sizes="(min-width: 768px) 336px, 34vw"
-            />
+          <div className="flex justify-center md:pr-8 lg:pr-12">
+            <div className="relative w-[78%] md:w-[72%] aspect-[2/3] overflow-hidden">
+              <Image
+                src={imageSrc}
+                alt={imageAlt}
+                fill
+                className="object-cover"
+                sizes="(min-width: 768px) 34vw, 78vw"
+              />
+            </div>
           </div>
 
-          <div className="flex flex-col justify-start">
-            <ol className="space-y-2.5 md:space-y-3">
+          <div className="flex flex-col justify-center md:pl-8 lg:pl-12">
+            <ol className="space-y-6 md:space-y-9">
               {steps.map((step, i) => (
                 <li
                   key={i}
                   className="flex items-start gap-3 md:gap-4 leading-[1.4]"
-                  style={{ fontSize: 'clamp(15px, 1.9vw, 27px)' }}
+                  style={{ fontSize: 'clamp(15px, 1.5vw, 20px)' }}
                 >
                   <span className="text-dark font-[700] tabular-nums">
                     {String(i + 1).padStart(2, '0')}
@@ -88,13 +90,13 @@ export default function ProcessSection({
         >
           <h2
             className="font-[700] text-dark uppercase mb-6 md:mb-8 leading-[1.02]"
-            style={{ fontSize: 'clamp(30px, 5vw, 72px)' }}
+            style={{ fontSize: 'clamp(28px, 4.2vw, 60px)' }}
           >
             {bottomHeading}
           </h2>
           <p
             className="text-dark/80 font-[400] leading-[1.5] max-w-[1080px]"
-            style={{ fontSize: 'clamp(15px, 1.9vw, 27px)' }}
+            style={{ fontSize: 'clamp(15px, 1.5vw, 20px)' }}
           >
             {bottomText}
           </p>

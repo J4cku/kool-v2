@@ -22,7 +22,7 @@ interface ServiceSectionProps {
   sloganHeading: string;
   sloganText: string;
   trustedByLabel?: string;
-  trustedByNames?: string[];
+  trustedByLogos?: { src: string; alt: string; width: number; height: number; className: string }[];
 }
 
 export default function ServiceSection({
@@ -41,7 +41,7 @@ export default function ServiceSection({
   sloganHeading,
   sloganText,
   trustedByLabel,
-  trustedByNames,
+  trustedByLogos,
 }: ServiceSectionProps) {
   return (
     <section className="px-5 md:px-10 lg:px-[68px] py-12 md:pt-24 md:pb-20">
@@ -50,19 +50,19 @@ export default function ServiceSection({
         <div>
           <span
             className="font-[400] uppercase text-dark/60 mb-4 md:mb-6 block"
-            style={{ fontSize: 'clamp(14px, 1.9vw, 27px)' }}
+            style={{ fontSize: 'clamp(14px, 1.5vw, 20px)' }}
           >
             {label}
           </span>
           <h2
             className="font-[700] text-dark uppercase mb-6 md:mb-8 leading-[1.02]"
-            style={{ fontSize: 'clamp(30px, 5vw, 72px)' }}
+            style={{ fontSize: 'clamp(28px, 4.2vw, 60px)' }}
           >
             {heading}
           </h2>
           <p
             className="text-dark/80 leading-[1.5] max-w-[1240px] mb-10 md:mb-14 font-[400]"
-            style={{ fontSize: 'clamp(15px, 1.9vw, 27px)' }}
+            style={{ fontSize: 'clamp(15px, 1.5vw, 20px)' }}
           >
             {description}
           </p>
@@ -70,14 +70,14 @@ export default function ServiceSection({
             <button
               onClick={onToggle}
               className="text-dark font-[400] uppercase hover:opacity-50 transition-opacity"
-              style={{ fontSize: 'clamp(14px, 1.9vw, 27px)' }}
+              style={{ fontSize: 'clamp(14px, 1.5vw, 20px)' }}
             >
               {learnMoreLabel}
             </button>
             <Link
               href={portfolioHref as '/projekty'}
               className="text-dark font-[600] uppercase hover:opacity-50 transition-opacity whitespace-nowrap"
-              style={{ fontSize: 'clamp(14px, 1.9vw, 27px)' }}
+              style={{ fontSize: 'clamp(14px, 1.5vw, 20px)' }}
             >
               [ {portfolioLabel} ]
             </Link>
@@ -93,32 +93,34 @@ export default function ServiceSection({
               exit={{ opacity: 0, height: 0, transition: { duration: 0.4, ease: easeOutExpo, height: { delay: 0.15 } } }}
               className="overflow-hidden"
             >
-              {/* Scope: image + list */}
-              <div className="mt-12 md:mt-16 max-w-[1120px] grid grid-cols-[minmax(104px,34%)_1fr] md:grid-cols-[336px_minmax(0,1fr)] gap-5 md:gap-16 items-start">
+              {/* Scope: image + list — split 50/50 down the page middle */}
+              <div className="mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-0 items-start">
                 {scopeImageSrc && (
-                  <div className="relative w-full aspect-[2/3] overflow-hidden">
-                    <Image
-                      src={scopeImageSrc}
-                      alt={scopeImageAlt}
-                      fill
-                      className="object-cover"
-                      sizes="(min-width: 768px) 336px, 34vw"
-                    />
+                  <div className="flex justify-center md:pr-8 lg:pr-12">
+                    <div className="relative w-[78%] md:w-[72%] aspect-[2/3] overflow-hidden">
+                      <Image
+                        src={scopeImageSrc}
+                        alt={scopeImageAlt}
+                        fill
+                        className="object-cover"
+                        sizes="(min-width: 768px) 34vw, 78vw"
+                      />
+                    </div>
                   </div>
                 )}
-                <div className={scopeImageSrc ? '' : 'col-span-full'}>
+                <div className={scopeImageSrc ? 'md:pl-8 lg:pl-12' : 'col-span-full'}>
                   <h3
                     className="font-[700] text-dark uppercase mb-6 md:mb-8 leading-[1.02]"
-                    style={{ fontSize: 'clamp(30px, 5vw, 72px)' }}
+                    style={{ fontSize: 'clamp(28px, 4.2vw, 60px)' }}
                   >
                     {scopeTitle}
                   </h3>
-                  <ul className="space-y-2 md:space-y-2.5">
+                  <ul className="space-y-3.5 md:space-y-[18px]">
                     {scopeItems.map((item, i) => (
                       <li
                         key={i}
                         className="text-dark font-[400] leading-[1.4] flex items-start gap-3"
-                        style={{ fontSize: 'clamp(15px, 1.9vw, 27px)' }}
+                        style={{ fontSize: 'clamp(15px, 1.5vw, 20px)' }}
                       >
                         <span className="mt-[0.6em] w-1.5 h-1.5 bg-dark rounded-full flex-shrink-0" />
                         <span>{item}</span>
@@ -132,33 +134,34 @@ export default function ServiceSection({
               <div className="pt-14 md:pt-20 max-w-[1240px]">
                 <h3
                   className="font-[700] text-dark uppercase mb-6 md:mb-8 leading-[1.02]"
-                  style={{ fontSize: 'clamp(30px, 5vw, 72px)' }}
+                  style={{ fontSize: 'clamp(28px, 4.2vw, 60px)' }}
                 >
                   {sloganHeading}
                 </h3>
                 <p
                   className="text-dark/80 font-[400] leading-[1.5] max-w-[1080px]"
-                  style={{ fontSize: 'clamp(15px, 1.9vw, 27px)' }}
+                  style={{ fontSize: 'clamp(15px, 1.5vw, 20px)' }}
                 >
                   {sloganText}
                 </p>
-                {trustedByLabel && trustedByNames && (
+                {trustedByLabel && trustedByLogos && (
                   <div className="mt-12 md:mt-16">
                     <span
-                      className="font-[400] uppercase text-dark/60 mb-5 block"
+                      className="font-[400] uppercase text-dark/60 mb-8 block text-center"
                       style={{ fontSize: 'clamp(13px, 1.3vw, 18px)' }}
                     >
                       {trustedByLabel}
                     </span>
-                    <div className="flex items-center gap-x-10 gap-y-4 flex-wrap">
-                      {trustedByNames.map((name, i) => (
-                        <span
+                    <div className="flex items-center justify-center gap-x-12 md:gap-x-20 gap-y-8 flex-wrap">
+                      {trustedByLogos.map((logo, i) => (
+                        <Image
                           key={i}
-                          className="text-dark font-[700] uppercase opacity-70"
-                          style={{ fontSize: 'clamp(13px, 1.3vw, 18px)' }}
-                        >
-                          {name}
-                        </span>
+                          src={logo.src}
+                          alt={logo.alt}
+                          width={logo.width}
+                          height={logo.height}
+                          className={`w-auto opacity-70 ${logo.className}`}
+                        />
                       ))}
                     </div>
                   </div>
