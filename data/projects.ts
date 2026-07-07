@@ -197,13 +197,37 @@ export const projects: Project[] = [
     location: 'Wrocław',
     category: 'komercyjne',
     status: 'completed',
-    year: 2025,
-    area: '80 m²',
-    scope: ['projekt koncepcyjny', 'dokumentacja wykonawcza'],
-    thumbnail: '/images/kancelaria.jpg',
+    year: 2026,
+    area: '50 m²',
+    scope: ['projekt koncepcyjny wnętrz', 'projekty mebli', 'projekt wykonawczy wnętrz', 'nadzór autorski'],
+    thumbnail: '/images/kancelaria/KOOL_kancelaria01.webp',
     featured: false,
-    images: ['/images/kancelaria.jpg', '/images/kancelaria.jpg', '/images/kancelaria.jpg', '/images/kancelaria.jpg'],
-    description: 'Przestrzeń biurowa o spokojnej, ciepłej estetyce. Jasne wnętrza z akcentami drewna i terrazzo.',
+    images: [
+      '/images/kancelaria/KOOL_kancelaria01.webp',  // 01 hero – biurko, regał, okno
+      '/images/kancelaria/KOOL_kancelaria02.webp',  // 02 square – regał z czerwoną misą (text right)
+      '/images/kancelaria/KOOL_kancelaria04.webp',  // 04 – niebieska grafika i lampa (reel to its left)
+      '/images/kancelaria/KOOL_kancelaria05A.webp', // 05A – zasłona i lampa Lexavala
+      '/images/kancelaria/KOOL_kancelaria05B.webp', // 05B – okrągły stół, krzesła Rey
+      '/images/kancelaria/KOOL_kancelaria06.webp',  // 06 – półka z segregatorami przy oknie
+      '/images/kancelaria/KOOL_kancelaria07.webp',  // 07 – szklana misa na parapecie
+      '/images/kancelaria/KOOL_kancelaria08.webp',  // 08 square – detal stołu z lastryko
+      '/images/kancelaria/KOOL_kancelaria09.webp',  // 09 – biurko z różową zabudową
+      '/images/kancelaria/KOOL_kancelaria10.webp',  // 10 – wazon na blacie z lastryko
+      '/images/kancelaria/KOOL_kancelaria11.webp',  // 11 – narożnik z żółtą komodą i grafiką
+      '/images/kancelaria/KOOL_kancelaria12.webp',  // 12 square – detal niebieskiej lampy
+      '/images/kancelaria/KOOL_kancelaria13.webp',  // 13 – szklane kule i lampa nad oknem
+      '/images/kancelaria/KOOL_kancelaria14.webp',  // 14 – niebieska grafika na ścianie
+      '/images/kancelaria/KOOL_kancelaria15.webp',  // 15 – dwie szklane kule pod sufitem
+      '/images/kancelaria/KOOL_kancelaria16.webp',  // 16 – regał z rośliną i czerwoną misą
+    ],
+    // Indices below count the hero (0) and the reel slot (2)
+    reel: { src: '/videos/kancelaria-reel.mp4', index: 2 },
+    textRows: [{ row: 0, side: 'right' }],
+    portraitIndices: [3, 4, 7, 11, 15, 16],
+    descriptionBlocks: [
+      'Już od pierwszego kontaktu z przestrzenią wiedzieliśmy, że jej potencjał kryje się w uproszczeniu. Projekt tej kancelarii potraktowaliśmy jako proces porządkowania: funkcji i formy. Bazą stała się neutralna paleta bieli i beżu, pozwalająca wyciszyć przestrzeń i stworzyć eleganckie, ponadczasowe tło. Wprowadziliśmy subtelne, ale zdecydowane akcenty kolorystyczne, które nadają wnętrzu charakteru, nie zaburzając jego profesjonalnego tonu. Jednym z najważniejszych rozwiązań w projekcie jest ukrycie rozbudowanej strefy przechowywania za miękką, lnianą zasłoną. Rozwiązanie to porządkuje wizualnie przestrzeń, a jednocześnie buduje dużą, spokojną płaszczyznę, która wycisza wnętrze i nadaje mu rytm. Tkanina pochłania dźwięk, łagodząc akustykę i sprzyjając skupieniu. Pracuje też ze światłem, delikatnie je filtrując i uszlachetniając wnętrze. Centralnym punktem przestrzeni jest zaprojektowany przez nas stół. Połączenie stali nierdzewnej z blatem z drewnianego lastryko stanowi wyważony dialog między precyzją a materią. Towarzyszą mu odnowione krzesła Rey i charakterystyczna lampa Lexavala. Kluczową rolę w kształtowaniu charakteru wnętrza odegrał odnowiony parkiet drewniany, zachowany jako element tożsamości miejsca. Ociepla i scala wszystkie elementy w spójną całość. System stalowych regałów zawieszony na ścianie pozwala na selektywną ekspozycję. W efekcie powstała przestrzeń łącząca nowoczesną elegancję z poczuciem ciepła, uporządkowana i czytelna, a przy tym budująca zaufanie już od pierwszego spojrzenia.',
+    ],
+    description: 'Kameralna kancelaria we Wrocławiu, w której projekt stał się procesem porządkowania funkcji i formy. Neutralna paleta bieli i beżu, lniana zasłona skrywająca strefę przechowywania oraz autorski stół z blatem z drewnianego lastryko budują nowoczesną elegancję z poczuciem ciepła.',
   },
   {
     id: '8',
