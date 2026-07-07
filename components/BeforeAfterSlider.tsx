@@ -8,9 +8,10 @@ interface BeforeAfterSliderProps {
   afterSrc: string;
   beforeLabel?: string;
   afterLabel?: string;
+  aspectClass?: string;
 }
 
-export default function BeforeAfterSlider({ beforeSrc, afterSrc, beforeLabel, afterLabel }: BeforeAfterSliderProps) {
+export default function BeforeAfterSlider({ beforeSrc, afterSrc, beforeLabel, afterLabel, aspectClass = 'aspect-[3/2]' }: BeforeAfterSliderProps) {
   const [position, setPosition] = useState(50);
   const [touched, setTouched] = useState(false);
   const [inView, setInView] = useState(false);
@@ -82,7 +83,7 @@ export default function BeforeAfterSlider({ beforeSrc, afterSrc, beforeLabel, af
     <div className="w-full">
       <div
         ref={containerRef}
-        className="relative w-full aspect-[3/2] cursor-col-resize select-none overflow-hidden"
+        className={`relative w-full ${aspectClass} cursor-col-resize select-none overflow-hidden`}
         style={{ touchAction: 'none' }}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}

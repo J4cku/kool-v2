@@ -23,6 +23,9 @@ export type Project = {
   // shares the fullWidthIndices space (position in images[], counting the
   // hero, with the reel occupying its own slot)
   reel?: { src: string; index: number };
+  // Half-width before/after slider occupying one gallery slot; index shares
+  // the same display-slot space as reel/fullWidthIndices
+  slider?: { beforeSrc: string; afterSrc: string; labels?: [string, string]; index: number };
   // Explicit text-block placement (50/50 row index + which side the text
   // sits on); when omitted the default every-3rd-row rhythm applies
   textRows?: { row: number; side: 'left' | 'right' }[];
@@ -202,28 +205,35 @@ export const projects: Project[] = [
     scope: ['projekt koncepcyjny wnętrz', 'projekty mebli', 'projekt wykonawczy wnętrz', 'nadzór autorski'],
     thumbnail: '/images/kancelaria/KOOL_kancelaria01.webp',
     featured: false,
+    // Display order (board): hero, [02 + text], [reel + 04], [slider + 06],
+    // [07 + 08], [09 + 10], [11 + 12], [13 + 14], [15 + 16]. The 05A/05B
+    // before/after pair lives in the slider, not the images array.
     images: [
       '/images/kancelaria/KOOL_kancelaria01.webp',  // 01 hero – biurko, regał, okno
       '/images/kancelaria/KOOL_kancelaria02.webp',  // 02 square – regał z czerwoną misą (text right)
-      '/images/kancelaria/KOOL_kancelaria04.webp',  // 04 – niebieska grafika i lampa (reel to its left)
-      '/images/kancelaria/KOOL_kancelaria05A.webp', // 05A – zasłona i lampa Lexavala
-      '/images/kancelaria/KOOL_kancelaria05B.webp', // 05B – okrągły stół, krzesła Rey
-      '/images/kancelaria/KOOL_kancelaria06.webp',  // 06 – półka z segregatorami przy oknie
+      '/images/kancelaria/KOOL_kancelaria04.webp',  // 04 – niebieska grafika, stół, krzesła Rey (reel to its left)
+      '/images/kancelaria/KOOL_kancelaria06.webp',  // 06 – półka z segregatorami przy oknie (slider to its left)
       '/images/kancelaria/KOOL_kancelaria07.webp',  // 07 – szklana misa na parapecie
       '/images/kancelaria/KOOL_kancelaria08.webp',  // 08 square – detal stołu z lastryko
       '/images/kancelaria/KOOL_kancelaria09.webp',  // 09 – biurko z różową zabudową
       '/images/kancelaria/KOOL_kancelaria10.webp',  // 10 – wazon na blacie z lastryko
       '/images/kancelaria/KOOL_kancelaria11.webp',  // 11 – narożnik z żółtą komodą i grafiką
       '/images/kancelaria/KOOL_kancelaria12.webp',  // 12 square – detal niebieskiej lampy
-      '/images/kancelaria/KOOL_kancelaria13.webp',  // 13 – szklane kule i lampa nad oknem
+      '/images/kancelaria/KOOL_kancelaria13.webp',  // 13 – biurko, okno, grafika ze żmiją
       '/images/kancelaria/KOOL_kancelaria14.webp',  // 14 – niebieska grafika na ścianie
       '/images/kancelaria/KOOL_kancelaria15.webp',  // 15 – dwie szklane kule pod sufitem
       '/images/kancelaria/KOOL_kancelaria16.webp',  // 16 – regał z rośliną i czerwoną misą
     ],
-    // Indices below count the hero (0) and the reel slot (2)
+    // Indices count the hero (0) and each inserted slot (reel 2, slider 4)
     reel: { src: '/videos/kancelaria-reel.mp4', index: 2 },
+    slider: {
+      beforeSrc: '/images/kancelaria/KOOL_kancelaria05B.webp', // przed – stary gabinet
+      afterSrc: '/images/kancelaria/KOOL_kancelaria05A.webp',  // po – nowa aranżacja
+      labels: ['przed', 'po'],
+      index: 4,
+    },
     textRows: [{ row: 0, side: 'right' }],
-    portraitIndices: [3, 4, 7, 11, 15, 16],
+    portraitIndices: [3, 8, 12, 15],
     descriptionBlocks: [
       'Już od pierwszego kontaktu z przestrzenią wiedzieliśmy, że jej potencjał kryje się w uproszczeniu. Projekt tej kancelarii potraktowaliśmy jako proces porządkowania: funkcji i formy. Bazą stała się neutralna paleta bieli i beżu, pozwalająca wyciszyć przestrzeń i stworzyć eleganckie, ponadczasowe tło. Wprowadziliśmy subtelne, ale zdecydowane akcenty kolorystyczne, które nadają wnętrzu charakteru, nie zaburzając jego profesjonalnego tonu. Jednym z najważniejszych rozwiązań w projekcie jest ukrycie rozbudowanej strefy przechowywania za miękką, lnianą zasłoną. Rozwiązanie to porządkuje wizualnie przestrzeń, a jednocześnie buduje dużą, spokojną płaszczyznę, która wycisza wnętrze i nadaje mu rytm. Tkanina pochłania dźwięk, łagodząc akustykę i sprzyjając skupieniu. Pracuje też ze światłem, delikatnie je filtrując i uszlachetniając wnętrze. Centralnym punktem przestrzeni jest zaprojektowany przez nas stół. Połączenie stali nierdzewnej z blatem z drewnianego lastryko stanowi wyważony dialog między precyzją a materią. Towarzyszą mu odnowione krzesła Rey i charakterystyczna lampa Lexavala. Kluczową rolę w kształtowaniu charakteru wnętrza odegrał odnowiony parkiet drewniany, zachowany jako element tożsamości miejsca. Ociepla i scala wszystkie elementy w spójną całość. System stalowych regałów zawieszony na ścianie pozwala na selektywną ekspozycję. W efekcie powstała przestrzeń łącząca nowoczesną elegancję z poczuciem ciepła, uporządkowana i czytelna, a przy tym budująca zaufanie już od pierwszego spojrzenia.',
     ],

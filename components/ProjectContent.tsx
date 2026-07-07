@@ -3,7 +3,11 @@
 import Image from 'next/image';
 import BeforeAfterSlider from './BeforeAfterSlider';
 
-type Item = { kind: 'image'; src: string } | { kind: 'reel'; src: string };
+type SliderData = { beforeSrc: string; afterSrc: string; labels?: [string, string] };
+type Item =
+  | { kind: 'image'; src: string }
+  | { kind: 'reel'; src: string }
+  | ({ kind: 'slider' } & SliderData);
 
 interface ProjectContentProps {
   images: string[];
@@ -13,6 +17,9 @@ interface ProjectContentProps {
   containedPairs?: { indices: [number, number]; labels?: [string, string] }[];
   reverseLastRow?: boolean;
   reel?: { src: string; index: number };
+  // Half-width before/after slider occupying a single gallery slot; index
+  // shares the same display-slot space as reel/fullWidthIndices
+  slider?: SliderData & { index: number };
   textRows?: { row: number; side: 'left' | 'right' }[];
   flipRowParity?: boolean;
   portraitIndices?: number[];
@@ -52,11 +59,27 @@ function ReelVideo({ src }: { src: string }) {
   );
 }
 
+function SliderCell({ item }: { item: SliderData }) {
+  return (
+    <div className="w-full md:w-1/2">
+      <BeforeAfterSlider
+        beforeSrc={item.beforeSrc}
+        afterSrc={item.afterSrc}
+        beforeLabel={item.labels?.[0]}
+        afterLabel={item.labels?.[1]}
+        aspectClass="aspect-[2/3]"
+      />
+    </div>
+  );
+}
+
 function FullSlot({ item, portrait }: { item: Item; portrait?: boolean }) {
+  if (item.kind === 'slider') return <SliderCell item={item} />;
   return item.kind === 'image' ? <FullImage src={item.src} portrait={portrait} /> : <ReelVideo src={item.src} />;
 }
 
 function PaddedSlot({ item }: { item: Item }) {
+  if (item.kind === 'slider') return <SliderCell item={item} />;
   return item.kind === 'image' ? <PaddedImage src={item.src} /> : <ReelVideo src={item.src} />;
 }
 
@@ -64,7 +87,7 @@ function TextBlock({ text, align = 'end' }: { text: string; align?: 'start' | 'e
   return (
     <div className="w-full md:w-1/2 p-6 md:p-10 lg:p-14 xl:p-20">
       <div className={`flex h-full ${align === 'start' ? 'items-start' : 'items-end'}`}>
-        <p className="font-[300] text-[13px] md:text-[14px] leading-[1.7] text-dark text-justify">
+        <p className="font-[400] text-[13px] md:text-[14px] leading-[1.7] text-dark text-justify">
           {text}
         </p>
       </div>
@@ -72,7 +95,7 @@ function TextBlock({ text, align = 'end' }: { text: string; align?: 'start' | 'e
   );
 }
 
-export default function ProjectContent({ images, description, descriptionBlocks, fullWidthIndices, containedPairs, reverseLastRow, reel, textRows, flipRowParity, portraitIndices }: ProjectContentProps) {
+export default function ProjectContent({ images, description, descriptionBlocks, fullWidthIndices, containedPairs, reverseLastRow, reel, slider, textRows, flipRowParity, portraitIndices }: ProjectContentProps) {
   if (images.length === 0) return null;
 
   const texts = descriptionBlocks ?? [description];
@@ -86,8 +109,14 @@ export default function ProjectContent({ images, description, descriptionBlocks,
   const textRowMap = new Map((textRows ?? []).map((r) => [r.row, r.side]));
 
   const items: Item[] = images.map((src) => ({ kind: 'image', src }));
-  if (reel) {
-    items.splice(Math.min(Math.max(reel.index, 0), items.length), 0, { kind: 'reel', src: reel.src });
+  // Insert reel/slider items by ascending display index (each index is
+  // measured in the final array, so inserting low-to-high keeps them aligned)
+  const inserts: { index: number; item: Item }[] = [];
+  if (reel) inserts.push({ index: reel.index, item: { kind: 'reel', src: reel.src } });
+  if (slider) inserts.push({ index: slider.index, item: { kind: 'slider', beforeSrc: slider.beforeSrc, afterSrc: slider.afterSrc, labels: slider.labels } });
+  inserts.sort((a, b) => a.index - b.index);
+  for (const ins of inserts) {
+    items.splice(Math.min(Math.max(ins.index, 0), items.length), 0, ins.item);
   }
 
   const rows: React.ReactNode[] = [];
