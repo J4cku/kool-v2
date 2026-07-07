@@ -17,6 +17,21 @@ export type Project = {
   fullWidthIndices?: number[];
   containedPairs?: { indices: [number, number]; labels?: [string, string] }[];
   reverseLastRow?: boolean;
+  // Detail-page meta table overrides (card keeps the short title/location)
+  meta?: { title?: string; location?: string; collaboration?: string };
+  // Self-hosted reel video (public/videos/) in the gallery flow; index
+  // shares the fullWidthIndices space (position in images[], counting the
+  // hero, with the reel occupying its own slot)
+  reel?: { src: string; index: number };
+  // Explicit text-block placement (50/50 row index + which side the text
+  // sits on); when omitted the default every-3rd-row rhythm applies
+  textRows?: { row: number; side: 'left' | 'right' }[];
+  // Flush image sits right on even rows instead of left (mirrors the
+  // default alternation)
+  flipRowParity?: boolean;
+  // Items rendered 2:3 instead of square when in a flush slot; shares the
+  // fullWidthIndices index space
+  portraitIndices?: number[];
 };
 
 export const projects: Project[] = [
@@ -182,13 +197,155 @@ export const projects: Project[] = [
     location: 'Wrocław',
     category: 'komercyjne',
     status: 'completed',
-    year: 2025,
-    area: '80 m²',
-    scope: ['projekt koncepcyjny', 'dokumentacja wykonawcza'],
-    thumbnail: '/images/kancelaria.jpg',
+    year: 2026,
+    area: '50 m²',
+    scope: ['projekt koncepcyjny wnętrz', 'projekty mebli', 'projekt wykonawczy wnętrz', 'nadzór autorski'],
+    thumbnail: '/images/kancelaria/KOOL_kancelaria01.webp',
     featured: false,
-    images: ['/images/kancelaria.jpg', '/images/kancelaria.jpg', '/images/kancelaria.jpg', '/images/kancelaria.jpg'],
-    description: 'Przestrzeń biurowa o spokojnej, ciepłej estetyce. Jasne wnętrza z akcentami drewna i terrazzo.',
+    images: [
+      '/images/kancelaria/KOOL_kancelaria01.webp',  // 01 hero – biurko, regał, okno
+      '/images/kancelaria/KOOL_kancelaria02.webp',  // 02 square – regał z czerwoną misą (text right)
+      '/images/kancelaria/KOOL_kancelaria04.webp',  // 04 – niebieska grafika i lampa (reel to its left)
+      '/images/kancelaria/KOOL_kancelaria05A.webp', // 05A – zasłona i lampa Lexavala
+      '/images/kancelaria/KOOL_kancelaria05B.webp', // 05B – okrągły stół, krzesła Rey
+      '/images/kancelaria/KOOL_kancelaria06.webp',  // 06 – półka z segregatorami przy oknie
+      '/images/kancelaria/KOOL_kancelaria07.webp',  // 07 – szklana misa na parapecie
+      '/images/kancelaria/KOOL_kancelaria08.webp',  // 08 square – detal stołu z lastryko
+      '/images/kancelaria/KOOL_kancelaria09.webp',  // 09 – biurko z różową zabudową
+      '/images/kancelaria/KOOL_kancelaria10.webp',  // 10 – wazon na blacie z lastryko
+      '/images/kancelaria/KOOL_kancelaria11.webp',  // 11 – narożnik z żółtą komodą i grafiką
+      '/images/kancelaria/KOOL_kancelaria12.webp',  // 12 square – detal niebieskiej lampy
+      '/images/kancelaria/KOOL_kancelaria13.webp',  // 13 – szklane kule i lampa nad oknem
+      '/images/kancelaria/KOOL_kancelaria14.webp',  // 14 – niebieska grafika na ścianie
+      '/images/kancelaria/KOOL_kancelaria15.webp',  // 15 – dwie szklane kule pod sufitem
+      '/images/kancelaria/KOOL_kancelaria16.webp',  // 16 – regał z rośliną i czerwoną misą
+    ],
+    // Indices below count the hero (0) and the reel slot (2)
+    reel: { src: '/videos/kancelaria-reel.mp4', index: 2 },
+    textRows: [{ row: 0, side: 'right' }],
+    portraitIndices: [3, 4, 7, 11, 15, 16],
+    descriptionBlocks: [
+      'Już od pierwszego kontaktu z przestrzenią wiedzieliśmy, że jej potencjał kryje się w uproszczeniu. Projekt tej kancelarii potraktowaliśmy jako proces porządkowania: funkcji i formy. Bazą stała się neutralna paleta bieli i beżu, pozwalająca wyciszyć przestrzeń i stworzyć eleganckie, ponadczasowe tło. Wprowadziliśmy subtelne, ale zdecydowane akcenty kolorystyczne, które nadają wnętrzu charakteru, nie zaburzając jego profesjonalnego tonu. Jednym z najważniejszych rozwiązań w projekcie jest ukrycie rozbudowanej strefy przechowywania za miękką, lnianą zasłoną. Rozwiązanie to porządkuje wizualnie przestrzeń, a jednocześnie buduje dużą, spokojną płaszczyznę, która wycisza wnętrze i nadaje mu rytm. Tkanina pochłania dźwięk, łagodząc akustykę i sprzyjając skupieniu. Pracuje też ze światłem, delikatnie je filtrując i uszlachetniając wnętrze. Centralnym punktem przestrzeni jest zaprojektowany przez nas stół. Połączenie stali nierdzewnej z blatem z drewnianego lastryko stanowi wyważony dialog między precyzją a materią. Towarzyszą mu odnowione krzesła Rey i charakterystyczna lampa Lexavala. Kluczową rolę w kształtowaniu charakteru wnętrza odegrał odnowiony parkiet drewniany, zachowany jako element tożsamości miejsca. Ociepla i scala wszystkie elementy w spójną całość. System stalowych regałów zawieszony na ścianie pozwala na selektywną ekspozycję. W efekcie powstała przestrzeń łącząca nowoczesną elegancję z poczuciem ciepła, uporządkowana i czytelna, a przy tym budująca zaufanie już od pierwszego spojrzenia.',
+    ],
+    description: 'Kameralna kancelaria we Wrocławiu, w której projekt stał się procesem porządkowania funkcji i formy. Neutralna paleta bieli i beżu, lniana zasłona skrywająca strefę przechowywania oraz autorski stół z blatem z drewnianego lastryko budują nowoczesną elegancję z poczuciem ciepła.',
+  },
+  {
+    id: '8',
+    slug: 'biblioteka-gdansk',
+    title: 'biblioteka',
+    location: 'Gdańsk',
+    category: 'komercyjne',
+    status: 'completed',
+    year: 2025,
+    area: '850 m²',
+    scope: ['koncept miejsca', 'projekt wnętrz', 'projekty mebli', 'projekt lamp'],
+    thumbnail: '/images/biblioteka-gdansk/kool_biblioteka_gdansk_MAIN.webp',
+    featured: false,
+    meta: {
+      title: 'Wojewódzka i miejska biblioteka publiczna im. Josepha Conrada Korzeniowskiego - Konkurs na opracowanie projektu koncepcyjnego architektury wnętrz',
+      location: 'Gdańsk, Targ Rakowy 5/6',
+      collaboration: 'blsk.studio',
+    },
+    images: [
+      '/images/biblioteka-gdansk/kool_biblioteka_gdansk_01.webp',  // 01 hero – mediateka
+      '/images/biblioteka-gdansk/kool_biblioteka_gdansk_02.webp',  // 02 square – lada recepcyjna, row 0 left (intro text right)
+      '/images/biblioteka-gdansk/kool_biblioteka_gdansk_03.webp',  // 03 full-width – paleta materiałowa
+      '/images/biblioteka-gdansk/kool_biblioteka_gdansk_05a.webp', // 05a czytelnia – slider pair (aranżacja 1)
+      '/images/biblioteka-gdansk/kool_biblioteka_gdansk_05b.webp', // 05b czytelnia – slider pair (aranżacja 2)
+      '/images/biblioteka-gdansk/kool_biblioteka_gdansk_06.webp',  // 06 square – strefa zielona (colors text left)
+      '/images/biblioteka-gdansk/kool_biblioteka_gdansk_07.webp',  // 07 square – sala cichej pracy (reel right)
+      '/images/biblioteka-gdansk/kool_biblioteka_gdansk_09.webp',  // 09 full-width – parter, strefa wejściowa
+      '/images/biblioteka-gdansk/kool_biblioteka_gdansk_10.webp',  // 10 square – aksonometria parteru (parter text right)
+      '/images/biblioteka-gdansk/kool_biblioteka_gdansk_11.webp',  // 11 full-width – biblioteka dla dzieci
+      '/images/biblioteka-gdansk/kool_biblioteka_gdansk_12.webp',  // 12 square – mediateka young adult
+      '/images/biblioteka-gdansk/kool_biblioteka_gdansk_13.webp',  // 13 portrait – aksonometria biblioteki dla dzieci
+      '/images/biblioteka-gdansk/kool_biblioteka_gdansk_14.webp',  // 14 full-width – strefa biurowa
+      '/images/biblioteka-gdansk/kool_biblioteka_gdansk_15.webp',  // 15 square – pokój socjalny (piętro text left)
+      '/images/biblioteka-gdansk/kool_biblioteka_gdansk_16.webp',  // 16 square – pomieszczenie biurowe
+      '/images/biblioteka-gdansk/kool_biblioteka_gdansk_17.webp',  // 17 portrait – aksonometria piętra
+    ],
+    // Indices below count the hero (0) and the reel slot (7)
+    fullWidthIndices: [2, 8, 10, 13],
+    containedPairs: [{ indices: [3, 4], labels: ['aranżacja 1', 'aranżacja 2'] }],
+    reverseLastRow: true,
+    reel: { src: '/videos/biblioteka-gdansk-reel.mp4', index: 7 },
+    textRows: [
+      { row: 0, side: 'right' },
+      { row: 3, side: 'left' },
+      { row: 6, side: 'right' },
+      { row: 10, side: 'left' },
+    ],
+    descriptionBlocks: [
+      'Głównym celem, który przyświecał nam podczas projektowania wnętrz pierwszego piętra oraz parteru budynku przy Targu Rakowym 5/6 w Gdańsku, było stworzenie przestrzeni inkluzywnych, otwartych i nieonieśmielających, miejsc dostępnych dla wszystkich użytkowników, bez względu na wiek, potrzeby czy sposób korzystania z biblioteki. Kluczowa była dla nas elastyczność: zarówno funkcjonalna, umożliwiająca realizację obecnych zadań biblioteki, jak i przyszłościowa, pozwalająca na płynne dostosowanie się do nowych aktywności, sposobów pracy i form uczestnictwa. Aby osiągnąć ten cel, oparliśmy koncept na świadomym wykorzystaniu teorii barw i ich oddziaływania — to właśnie kolor stał się fundamentem spójności wizualnej oraz emocjonalnej całego projektu. W projektowaniu wnętrz kolor nie pełni jedynie roli estetycznej — jest jednym z kluczowych środków oddziaływania na percepcję, samopoczucie i funkcjonowanie użytkowników. Teoria barw opisuje relacje między kolorami, ich wpływ na odbiór przestrzeni oraz psychofizyczne reakcje, jakie wywołują. Odpowiednio dobrana paleta może wspierać koncentrację, wyciszać, pobudzać, porządkować przestrzeń lub kierować ruchem. W bibliotece, jako miejscu łączącym różnorodne aktywności, od pracy i nauki, przez rekreację, po spotkania i wydarzenia, kolor staje się sprzymierzeńcem w budowaniu nastroju, funkcjonalnego podziału oraz intuicyjności wnętrza. Na tej podstawie wybraliśmy trzy barwy przewodnie o silnych, a jednocześnie komplementarnych właściwościach: ceglany, zielony i niebieski. Każdy z nich niesie inne znaczenia, wspiera odmienny typ aktywności oraz współtworzy charakter miejsca. Zestawienie tych barw pozwala nastrojowo różnicować przestrzenie, a jednocześnie zachować całościową, harmonijną identyfikację.',
+      'Kolor ceglany: Ceglany wprowadza do wnętrza ciepło, przytulność i poczucie bliskości. Sprzyja relaksowi i budowaniu kameralnej atmosfery, zachęca do spokojnych interakcji i daje wrażenie naturalności. Kojarzy się z autentycznością, ziemią i tradycyjnymi wartościami, dzięki czemu tworzy przyjazne otoczenie. Kolor niebieski: Niebieski nadaje przestrzeni świeżość, harmonię i uczucie oddechu. Koi emocje, sprzyja koncentracji i wspiera myślenie logiczne, tworząc idealne warunki do pracy umysłowej. Budzi zaufanie i poczucie stabilności, wprowadzając nowoczesny i profesjonalny charakter. Kolor zielony: Zielony działa kojąco i harmonizująco, pozwala wzrokowi odpocząć i tworzy atmosferę spokoju. Sprzyja skupieniu i łagodnie porządkuje przestrzeń, nie narzucając się użytkownikowi. Jako kolor związany z naturą wprowadza do wnętrza świeżość, autentyczność i poczucie równowagi. Wybrana paleta — ceglany, zielony i niebieski — tworzy razem wielowymiarowy język wizualny, który wspiera ideę biblioteki jako przestrzeni otwartej, przyjaznej i elastycznej. Każdy z kolorów pełni określoną funkcję, odpowiada na potrzeby różnych grup użytkowników i typów aktywności. Dzięki świadomej pracy z barwą powstaje wnętrze, które nie tylko spełnia wymagania funkcjonalne, ale przede wszystkim buduje doświadczenie — spokojne, bezpieczne, inspirujące i dostępne dla wszystkich.',
+      'Parter pełni rolę reprezentacyjnej i najbardziej dostępnej części biblioteki, dlatego zaplanowaliśmy go jako przestrzeń otwartą, czytelną i przyjazną już od pierwszego kroku. W strefie wejściowej zastosowaliśmy ceglany kolor przewodni, którego ciepło i naturalność budują atmosferę gościnności oraz przełamują formalność typową dla instytucji publicznych. Kolor ten wzmacnia poczucie bliskości i tworzy komfortowy próg wejścia dla użytkowników. Centralnie, na wprost drzwi, znajduje się okrągła lada recepcyjna, która organizuje ruch i stanowi pierwszy punkt kontaktu. Jej forma jest inkluzywna i dostępna z każdej strony, a miękkie, obłe kształty wpisują się w założenie nieonieśmielającej przestrzeni. Bezpośrednio za ladą umieszczono donicę z bujną roślinnością, wprowadzającą element natury i tworzącą wizualny akcent, który łagodzi odbiór przestrzeni wejściowej. Wokół tej centralnej części rozmieszczono ławki, oferujące chwilę odpoczynku; im głębiej wchodzimy w przestrzeń parteru, tym siedziska stają się coraz bardziej miękkie i zachęcające do dłuższego pobytu. Po prawej stronie od recepcji zlokalizowana jest sala cichej pracy, w której zastosowaliśmy kolor przewodni niebieski — sprzyjający koncentracji, skupieniu i kreatywności. Przestrzeń ta może pełnić również funkcję salki konferencyjnej lub sali spotkań, dzięki wyposażeniu umożliwiającemu łatwą adaptację do różnych potrzeb. Po lewej stronie od wejścia znajduje się strefa czytelni, utrzymana w zielonej palecie barw. To przestrzeń spokojna, naturalna i elastyczna. Wykorzystaliśmy tu transparentne zasłony, które pozwalają subtelnie wydzielać mniejsze, bardziej kameralne strefy bez utraty lekkości i przepuszczalności światła. Czytelnia wyposażona jest w sofki oraz stanowiska do pracy przy długim blacie pod oknami. Wszystkie pozostałe meble są mobilne, co umożliwia szybkie i wygodne przearanżowanie przestrzeni — nawet pod większe wydarzenia kulturalne. Zwieńczeniem strefy jest wysoki regał, pełniący funkcję tła dla prelekcji, rozmów i spotkań, a jednocześnie porządkujący przestrzeń wizualnie.',
+      'Piętro biblioteki zostało podzielone na dwie wyraźne strefy funkcjonalne, odpowiadające różnym grupom użytkowników oraz ich potrzebom. Projekt zakłada stworzenie przestrzeni elastycznych, przyjaznych i sprzyjających zarówno pracy, jak i odpoczynkowi, a także zapewnienie odpowiedniego zaplecza dla pracowników. W prawym skrzydle ulokowana została mediateka młodzieżowa, w której głównym kolorem przewodnim jest ceglany. Jego ciepło buduje atmosferę swobody i zachęca młodych użytkowników do spędzania tu czasu. Centralna część tej strefy została podzielona regałami, tworząc bardziej kameralne wnętrza: z długim stołem do pracy, spotkań i gier oraz miękkimi meblami, które sprzyjają czytaniu i odpoczynkowi. Wzdłuż okien zaplanowano blaty do pracy z indywidualnym oświetleniem, wyposażone w możliwość podłączenia tabletu lub laptopa. Pojawiają się tu także miękkie sofki i wygodne fotele ze stolikami, tworzące komfortowe mikroprzestrzenie. Ciekawym elementem jest zastosowanie lustrzanej okładziny ponad regałami, która optycznie powiększa wnętrze oraz nadaje mu lekkości. W lewym skrzydle mieści się biblioteka dla dzieci, zaprojektowana w przewodnim niebieskim kolorze, sprzyjającym skupieniu, wyciszeniu i poczuciu bezpieczeństwa. Wysokie regały dzielą przestrzeń na mniejsze, przyjazne dla najmłodszych obszary, a w ich strukturze umieszczono okna do siedzenia, które kadrują widoki i tworzą atrakcyjne miejsca do lektury. Całość uzupełniają tapicerowane siedziska o obłych, miękkich kształtach, bezpieczne i zachęcające do zabawy oraz odpoczynku. Naprzeciwko biblioteki znajduje się strefa relaksu dla dzieci, w kolorze ceglanym. Umieszczono tu niski regał z książkami i miękkie elementy sprzyjające zabawie i eksploracji. W ramach tej części piętra wydzielono również pomieszczenie terapeutyczne, przeznaczone dla osób w różnym wieku, w tym w spektrum autyzmu. Zaprojektowane zostało w kojącym zielonym kolorze, aby wspierać poczucie bezpieczeństwa i komfort sensoryczny. Dalszą część lewego skrzydła zajmuje kompleks pomieszczeń socjalnych, biurowych i magazynowych, stanowiących zaplecze dla pracowników biblioteki.',
+    ],
+    description: 'Konkursowy projekt koncepcyjny wnętrz wojewódzkiej i miejskiej biblioteki publicznej w Gdańsku. Trzy barwy przewodnie — ceglany, zielony i niebieski — porządkują przestrzenie parteru i piętra, tworząc miejsce otwarte, elastyczne i dostępne dla wszystkich.',
+  },
+  {
+    id: '9',
+    slug: 'lazienki-warszawa',
+    title: 'łazienki',
+    location: 'Warszawa',
+    category: 'mieszkalne',
+    status: 'in_progress',
+    year: 2026,
+    area: '8 m²',
+    scope: ['projekt koncepcyjny wnętrz', 'projekty mebli', 'projekt wykonawczy wnętrz', 'nadzór autorski'],
+    thumbnail: '/images/lazienki-warszawa/kool_l_warszawa_MAIN.webp',
+    featured: false,
+    images: [
+      '/images/lazienki-warszawa/kool_l_warszawa_01.webp', // 01 hero – onyksowy blat, dębowa zabudowa
+      '/images/lazienki-warszawa/kool_l_warszawa_02.webp', // 02 square – łazienka 1 (text left)
+      '/images/lazienki-warszawa/kool_l_warszawa_03.webp', // 03 square – prysznic i umywalka, row left
+      '/images/lazienki-warszawa/kool_l_warszawa_04.webp', // 04 portrait – prysznic i wc, row right (padded)
+      '/images/lazienki-warszawa/kool_l_warszawa_05.webp', // 05 portrait – aksonometria, row left (padded)
+      '/images/lazienki-warszawa/kool_l_warszawa_06.webp', // 06 portrait 2:3 – łazienka 2, row right (flush)
+      '/images/lazienki-warszawa/kool_l_warszawa_07.webp', // 07 square – umywalka łazienki 2, row left
+      '/images/lazienki-warszawa/kool_l_warszawa_08.webp', // 08 portrait – prysznic łazienki 2, row right (padded)
+    ],
+    textRows: [{ row: 0, side: 'left' }],
+    flipRowParity: true,
+    portraitIndices: [5],
+    descriptionBlocks: [
+      'Łazienki w stylu współczesnym z silnymi wpływami retro i artystycznym podejściem do materiałów. Pierwsze wrażenie we wnętrzu buduje ciepła nasycona kolorystyka. Ceglana mozaika oplata zaobloną wnękę prysznicową jak ceramiczna tkanina, wprowadzając do wnętrza miękkość i głębię. Rezygnacja z wanny pozwoliła odzyskać przestrzeń i stworzyć układ bardziej płynny, podporządkowany rytmowi codziennych rytuałów. Centralnym punktem większej łazienki jest umywalkowa zabudowa w ziemistozielonym odcieniu zestawiona z żółtym onyksowym blatem. Kamień przyciąga uwagę wyraźnym użyleniem i połyskiem, który zmienia się wraz z kątem padania światła. Nad nim kremowe płytki strukturalne subtelnie rozpraszają światło, kontrastując z chłodnym połyskiem chromowanego lustra i granatowych detali armatury. Projekt operuje na wyraźnym zestawieniu surowości i elegancji w dopracowanych detalach. Ich relacja nie jest konfrontacją, lecz spokojnym dialogiem materiałów. Czarno-białe terrazzo wnosi graficzną energię inspirowaną estetyką retro, podczas gdy dębowa zabudowa porządkuje kompozycję i równoważy intensywność użytych materiałów. Druga łazienka rozwija tę samą narrację w jaśniejszej tonacji. Piaskowe płytki, jasne lastryko i wielkoformatowe lustro sprawiają, że niewielka przestrzeń nabiera butikowego, hotelowego klimatu. Nawet ceglana zabudowa skrywająca pralnię staje się częścią kompozycji, a nie tłem.',
+    ],
+    description: 'Dwie łazienki w stylu współczesnym z silnymi wpływami retro. Ceglana mozaika, żółty onyksowy blat i czarno-białe terrazzo prowadzą spokojny dialog materiałów, a dębowa zabudowa porządkuje kompozycję.',
+  },
+  {
+    id: '10',
+    slug: 'mieszkanie-gdansk',
+    title: 'mieszkanie',
+    location: 'Gdańsk',
+    category: 'mieszkalne',
+    status: 'in_progress',
+    year: 2026,
+    area: '46 m²',
+    scope: ['projekt koncepcyjny wnętrz', 'projekty mebli', 'projekt wykonawczy wnętrz', 'nadzór autorski'],
+    thumbnail: '/images/mieszkanie-gdansk/kool_m_gdansk_MAIN.webp',
+    featured: false,
+    images: [
+      '/images/mieszkanie-gdansk/kool_m_gdansk_01.webp',  // 01 hero – kuchnia i strefa dzienna
+      '/images/mieszkanie-gdansk/kool_m_gdansk_02.webp',  // 02 square – przedpokój z lustrem (text right)
+      '/images/mieszkanie-gdansk/kool_m_gdansk_03.webp',  // 03 full-width – strefa dzienna za dnia
+      '/images/mieszkanie-gdansk/kool_m_gdansk_04.webp',  // 04 portrait – ilustracja regału, row left (padded, reel right)
+      '/images/mieszkanie-gdansk/kool_m_gdansk_05a.webp', // 05a sypialnia nocą – slider pair
+      '/images/mieszkanie-gdansk/kool_m_gdansk_05b.webp', // 05b sypialnia za dnia – slider pair
+      '/images/mieszkanie-gdansk/kool_m_gdansk_06.webp',  // 06 full-width – kuchnia i regał z zabudową
+      '/images/mieszkanie-gdansk/kool_m_gdansk_07.webp',  // 07 square – strefa dzienna wieczorem, row left
+      '/images/mieszkanie-gdansk/kool_m_gdansk_08.webp',  // 08 portrait – regał wieczorem, row right (padded)
+    ],
+    // Indices below count the hero (0) and the reel slot (4)
+    fullWidthIndices: [2, 7],
+    containedPairs: [{ indices: [5, 6], labels: ['noc', 'dzień'] }],
+    reel: { src: '/videos/mieszkanie-gdansk-reel.mp4', index: 4 },
+    textRows: [{ row: 0, side: 'right' }],
+    flipRowParity: true,
+    descriptionBlocks: [
+      'W tym mieszkaniu w Gdańsku beton nie chłodzi, przeciwnie, oddycha ciepłem i światłem, stając się tłem dla życia w powolnym tempie. Już od progu uwagę przyciąga miękka szarość przecieranych powierzchni, których nieregularna faktura łapie światło. To przestrzeń zbudowana na kontrastach, ale pozbawiona ostentacji. Surowość spotyka tu miękkość, industrialny charakter miesza się z atmosferą azylu. Projekt opiera się na dwóch wyraźnych światach kolorystycznych, które prowadzą między sobą subtelny dialog. Strefa dzienna tonie w odcieniach kości słoniowej, piaskowych tynków i lnianych beży, przełamanych złocistymi rudościami obszernej sofy obitej mięsistą, strukturalną tkaniną. To właśnie tutaj światło dzienne pracuje najmocniej. Rozlewa się po betonowej podłodze, podkreśla ziarnistość ścian i wydobywa ciepło drewna. Wieczorem charakter wnętrza zmienia się całkowicie. Boczne, pomarańczowe światło miękko osiada na powierzchniach, rozmywa granice i zamienia papierowy klosz w żarzący się punkt przypominający zachodzące słońce. Kuchnia i biblioteka tworzą bardziej wyrazisty kadr. Chłodniejsze odcienie betonu zestawiono tu z głęboką zielenią terakoty oraz lustrzanymi frontami górnych szafek, które odbijają światło i multiplikują przestrzeń. Centralnym elementem pozostaje wyspa w formie masywnej, wielofunkcyjnej bryły, wokół której koncentruje się codzienność: gotowanie, rozmowy, praca i spontaniczne spotkania. Regały wypełnione książkami i kolekcjonowanymi obiektami nadają wnętrzu osobistego charakteru. Sypialnia została pomyślana jako miejsce odpoczynku, pracy i twórczości. Łóżko osadzone na dedykowanej skrzyni jest sporym miejscem do przechowywania, a obecność instrumentów muzycznych podkreśla zainteresowania właściciela. W całym mieszkaniu czuć inspiracje estetyką lat 70. i japońsko-skandynawskim podejściem do materiału: szczerym, sensualnym, skupionym na świetle i strukturze. To ciepły brutalizm w intymnym wydaniu: miejska odskocznia, która nie imponuje rozmachem, lecz atmosferą pozostającą z użytkownikiem długo po zmroku.',
+    ],
+    description: 'Mieszkanie w Gdańsku, w którym beton oddycha ciepłem i światłem. Ciepły brutalizm w intymnym wydaniu — piaskowe tynki i lniane beże strefy dziennej prowadzą dialog z zielenią terakoty w kuchni, a wieczorem wnętrze zmienia charakter.',
   },
 ];
 
