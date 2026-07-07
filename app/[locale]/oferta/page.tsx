@@ -44,9 +44,9 @@ export default function OfertaPage() {
       <Navbar />
       <main>
         <FullWidthImage
-          src="/images/oferta/commercial-01.jpg"
+          src="/images/oferta/KOOL_oferta_komercyjne.webp"
           alt="Restaurant interior"
-          aspect="aspect-[8/5]"
+          aspect="aspect-[16/9]"
         />
 
         <ServiceSection
@@ -60,7 +60,7 @@ export default function OfertaPage() {
           onToggle={() => setCommercialExpanded(!commercialExpanded)}
           scopeTitle={t('scopeTitle')}
           scopeItems={commercialScope}
-          scopeImageSrc="/images/oferta/commercial-03.jpg"
+          scopeImageSrc="/images/oferta/KOOL_oferta_komercyjne_small.webp"
           scopeImageAlt="Restaurant storefront"
           sloganHeading={t('commercial.sloganHeading')}
           sloganText={t('commercial.sloganText')}
@@ -69,9 +69,9 @@ export default function OfertaPage() {
         />
 
         <FullWidthImage
-          src="/images/oferta/residential-01.jpg"
+          src="/images/oferta/KOOL_oferta_prywatne.webp"
           alt="Living room"
-          aspect="aspect-[8/5]"
+          aspect="aspect-[16/9]"
         />
 
         <ServiceSection
@@ -85,23 +85,23 @@ export default function OfertaPage() {
           onToggle={() => setResidentialExpanded(!residentialExpanded)}
           scopeTitle={t('scopeTitle')}
           scopeItems={residentialScope}
-          scopeImageSrc="/images/oferta/residential-02.jpg"
+          scopeImageSrc="/images/oferta/KOOL_oferta_prywatne_small.webp"
           scopeImageAlt="Kitchen interior"
           sloganHeading={t('residential.sloganHeading')}
           sloganText={t('residential.sloganText')}
         />
 
         <FullWidthImage
-          src="/images/oferta/residential-04.jpg"
+          src="/images/oferta/KOOL_oferta_finish.webp"
           alt="Material selection"
-          aspect="aspect-[8/5]"
+          aspect="aspect-[16/9]"
         />
 
         <ProcessSection
           label={t('process.label')}
           heading={t('process.heading')}
           steps={processSteps}
-          imageSrc="/images/oferta/residential-03.jpg"
+          imageSrc="/images/oferta/KOOL_oferta_finish_small.webp"
           imageAlt="Construction supervision"
           bottomHeading={t('process.bottomHeading')}
           bottomText={t('process.bottomText')}

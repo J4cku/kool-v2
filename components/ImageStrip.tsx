@@ -36,9 +36,9 @@ export default function ImageStrip() {
   }, [next]);
 
   return (
-    <div className="relative w-full min-h-[calc(100svh-160px)] flex items-start">
+    <div className="relative w-full min-h-[calc(100svh-160px)] flex items-center">
       {/* Desktop: 3-column grid */}
-      <div className="hidden md:grid w-full max-w-[1400px] mx-auto px-5 md:px-10 lg:px-16 grid-cols-3 gap-5 lg:gap-10">
+      <div className="hidden md:grid w-full px-6 md:px-10 lg:px-16 grid-cols-3 gap-4 md:gap-8">
         {[0, 1, 2].map((col) => (
           <div key={col} className="relative aspect-square overflow-hidden">
             <AnimatePresence mode="popLayout">

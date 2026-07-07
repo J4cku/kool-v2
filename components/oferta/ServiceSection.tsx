@@ -86,15 +86,15 @@ export default function ServiceSection({
               className="overflow-hidden"
             >
               {/* Scope: image + list */}
-              <div className="mt-12 md:mt-16 max-w-[1120px] grid grid-cols-[minmax(104px,34%)_1fr] md:grid-cols-[minmax(0,320px)_minmax(0,1fr)] gap-5 md:gap-16 items-start">
+              <div className="mt-12 md:mt-16 max-w-[1120px] grid grid-cols-[minmax(104px,34%)_1fr] md:grid-cols-[336px_minmax(0,1fr)] gap-5 md:gap-16 items-start">
                 {scopeImageSrc && (
-                  <div className="relative w-full aspect-[3/4] overflow-hidden">
+                  <div className="relative w-full aspect-[2/3] overflow-hidden">
                     <Image
                       src={scopeImageSrc}
                       alt={scopeImageAlt}
                       fill
                       className="object-cover"
-                      sizes="(min-width: 768px) 280px, 34vw"
+                      sizes="(min-width: 768px) 336px, 34vw"
                     />
                   </div>
                 )}

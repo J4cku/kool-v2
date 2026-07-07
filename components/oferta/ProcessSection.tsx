@@ -47,15 +47,15 @@ export default function ProcessSection({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="grid grid-cols-[minmax(104px,34%)_1fr] md:grid-cols-[2fr_3fr] gap-5 md:gap-20 mb-16 md:mb-24 items-start"
+          className="grid grid-cols-[minmax(104px,34%)_1fr] md:grid-cols-[336px_minmax(0,1fr)] gap-5 md:gap-16 mb-16 md:mb-24 items-start"
         >
-          <div className="relative w-full aspect-[3/4] overflow-hidden">
+          <div className="relative w-full aspect-[2/3] overflow-hidden">
             <Image
               src={imageSrc}
               alt={imageAlt}
               fill
               className="object-cover"
-              sizes="(min-width: 768px) 360px, 34vw"
+              sizes="(min-width: 768px) 336px, 34vw"
             />
           </div>
 
