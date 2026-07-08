@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Image from 'next/image';
+import ColumnImage from '@/components/ColumnImage';
 
 interface ProcessSectionProps {
   label: string;
@@ -52,17 +52,13 @@ export default function ProcessSection({
           transition={{ duration: 0.6, delay: 0.2 }}
           className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-0 mb-16 md:mb-24 items-stretch"
         >
-          <div className="flex justify-center md:pr-8 lg:pr-12">
-            <div className="relative w-[78%] md:w-[72%] aspect-[2/3] overflow-hidden">
-              <Image
-                src={imageSrc}
-                alt={imageAlt}
-                fill
-                className="object-cover"
-                sizes="(min-width: 768px) 34vw, 78vw"
-              />
-            </div>
-          </div>
+          <ColumnImage
+            src={imageSrc}
+            alt={imageAlt}
+            width="w-[74%] md:w-[64%]"
+            className="md:pr-8 lg:pr-12"
+            sizes="(min-width: 768px) 32vw, 74vw"
+          />
 
           <div className="flex flex-col justify-center md:pl-8 lg:pl-12">
             <ol className="space-y-6 md:space-y-9">

@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { Link } from '@/i18n/navigation';
+import ColumnImage from '@/components/ColumnImage';
 
 const easeOutExpo: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -96,17 +97,13 @@ export default function ServiceSection({
               {/* Scope: image + list — split 50/50 down the page middle */}
               <div className="mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-0 items-start">
                 {scopeImageSrc && (
-                  <div className="flex justify-center md:pr-8 lg:pr-12">
-                    <div className="relative w-[78%] md:w-[72%] aspect-[2/3] overflow-hidden">
-                      <Image
-                        src={scopeImageSrc}
-                        alt={scopeImageAlt}
-                        fill
-                        className="object-cover"
-                        sizes="(min-width: 768px) 34vw, 78vw"
-                      />
-                    </div>
-                  </div>
+                  <ColumnImage
+                    src={scopeImageSrc}
+                    alt={scopeImageAlt}
+                    width="w-[68%] md:w-[56%]"
+                    className="md:pr-8 lg:pr-12 md:pt-14 lg:pt-24"
+                    sizes="(min-width: 768px) 28vw, 68vw"
+                  />
                 )}
                 <div className={scopeImageSrc ? 'md:pl-8 lg:pl-12' : 'col-span-full'}>
                   <h3
@@ -147,12 +144,12 @@ export default function ServiceSection({
                 {trustedByLabel && trustedByLogos && (
                   <div className="mt-12 md:mt-16">
                     <span
-                      className="font-[400] uppercase text-dark/60 mb-8 block text-center"
+                      className="font-[400] uppercase text-dark/60 mb-8 block"
                       style={{ fontSize: 'clamp(13px, 1.3vw, 18px)' }}
                     >
                       {trustedByLabel}
                     </span>
-                    <div className="flex items-center justify-center gap-x-12 md:gap-x-20 gap-y-8 flex-wrap">
+                    <div className="flex items-center justify-start gap-x-12 md:gap-x-20 gap-y-8 flex-wrap">
                       {trustedByLogos.map((logo, i) => (
                         <Image
                           key={i}

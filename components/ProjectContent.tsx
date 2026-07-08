@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import BeforeAfterSlider from './BeforeAfterSlider';
+import ColumnImage from './ColumnImage';
 
 type SliderData = { beforeSrc: string; afterSrc: string; labels?: [string, string] };
 type Item =
@@ -31,11 +32,15 @@ interface ProjectContentProps {
 function PaddedImage({ src, small }: { src: string; small?: boolean }) {
   if (small) {
     return (
-      <div className="w-full md:w-1/2 p-6 md:p-10 lg:p-14 xl:p-20 flex items-start justify-center">
-        <div className="relative w-[72%] md:w-[60%] aspect-[9/16]">
-          <Image src={src} alt="Kool Studio project" fill className="object-contain" sizes="(max-width: 768px) 72vw, 30vw" />
-        </div>
-      </div>
+      <ColumnImage
+        src={src}
+        alt="Kool Studio project"
+        aspect="aspect-[9/16]"
+        width="w-[72%] md:w-[60%]"
+        fit="contain"
+        className="w-full md:w-1/2 p-6 md:p-10 lg:p-14 xl:p-20"
+        sizes="(max-width: 768px) 72vw, 30vw"
+      />
     );
   }
   return (
