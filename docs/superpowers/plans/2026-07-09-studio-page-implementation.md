@@ -8,6 +8,23 @@
 
 **Tech Stack:** Next.js 16 App Router, React 19, TypeScript 5.9, next-intl 4, Tailwind CSS 4, next/image, pnpm.
 
+## Client-Approved Revision (Supersedes Task 3 Hero and Manifesto Direction)
+
+Client review supersedes the static inline 16:9 hero and static manifesto described in Task 3. The Studio route must reuse `ProjectHero` with `/images/studio/team.webp`, render an `h-screen` spacer, and place all beige content plus `FooterBanner showMarquee={false}` inside a `relative z-10 bg-beige` wrapper. Replace the static manifesto heading with the existing homepage `animate-marquee` pattern: four repeated copies in one semantic `h1`, with only the first copy exposed to assistive technology. The intro, press header, links, and responsive 1/2/3-column grid remain unchanged.
+
+Revision acceptance contract:
+
+```bash
+node -e "const fs=require('fs'); const source=fs.readFileSync('app/[locale]/studio/page.tsx','utf8'); for (const value of ['ProjectHero','className=\"h-screen\"','animate-marquee']) { if (!source.includes(value)) throw new Error('missing '+value); } if (source.includes('aspect-video')) throw new Error('inline hero remains');"
+pnpm typecheck
+pnpm exec eslint 'app/[locale]/studio/page.tsx'
+pnpm check:i18n
+pnpm check
+git diff --check
+```
+
+The revision is authoritative wherever the original Task 3 code sample or static-hero/static-manifesto language conflicts with it.
+
 ## Global Constraints
 
 - Work in `/Users/jacek/conductor/workspaces/kool-v2/tianjin-v1` on the existing branch; do not rename it.

@@ -27,6 +27,10 @@ The page must stay within the site's existing visual system: Poppins, beige `#E5
 
 Replace the existing Studio route rather than retaining any placeholder sections below the new layout. Keep the implementation page-scoped: a small typed press-card data structure and local rendering helpers are appropriate, but a generalized publication abstraction is unnecessary.
 
+### Client-Approved Revision
+
+The client review supersedes the initial static hero and manifesto direction below. Reuse `ProjectHero` for a fixed, full-viewport Studio cover behind the shared navigation. After an `h-screen` reveal, the beige page content—including the footer—scrolls over the cover using the same layering pattern as project-detail routes. The manifesto reuses the homepage marquee treatment: four repeated coral copies move continuously, while a single semantic `h1` exposes only the first copy to assistive technology.
+
 Move the nine supplied final assets into `public/images/studio/` with stable descriptive names:
 
 - Studio team hero image
@@ -40,11 +44,11 @@ Render photography with `next/image`. Publication links use ordinary external an
 
 ### 1. Hero
 
-Keep the fixed shared `Navbar` above a wide 16:9 team portrait. The portrait is the page's visual thesis and uses the supplied `KOOL_studio_main.webp` image. Its crop remains centered and preserves both founders at all supported desktop widths.
+Keep the fixed shared `Navbar` above a fixed, full-viewport team portrait rendered by `ProjectHero`. The portrait is the page's visual thesis and uses the supplied `KOOL_studio_main.webp` image. An `h-screen` spacer reveals the cover before a beige, relatively positioned content wrapper scrolls over it. Its cover crop preserves both founders at supported widths.
 
 ### 2. Manifesto Line
 
-Place `WE ARE KOOL AND WE DESIGN KOOL THINGS!` beneath the hero as a large coral, regular-weight uppercase line. It remains a single line where space allows and wraps naturally on narrow screens. This is static, not a marquee.
+Place `WE ARE KOOL AND WE DESIGN KOOL THINGS!` at the start of the beige scrolling content as a large coral, regular-weight uppercase marquee. Match the homepage's overflow-hidden, no-wrap spacing and `animate-marquee` treatment with four repeated copies. Keep one semantic `h1`: expose the first copy to assistive technology and hide the remaining three copies with `aria-hidden="true"`.
 
 ### 3. Studio Introduction
 
@@ -90,12 +94,12 @@ The `[PL]` marker is visible text and part of the localized title, so screen rea
 
 ### 6. Footer
 
-Keep the existing `FooterBanner` without its marquee. This preserves the site separator and fixed language switcher without duplicating the manifesto line.
+Keep the existing `FooterBanner` without its own marquee. Place it inside the beige scrolling content wrapper so the fixed Studio cover never shows behind the footer.
 
 ## Responsive Behavior
 
 - Desktop follows the supplied 1528px artboard proportions within the site's 1400px content convention.
-- The hero remains wide and image-led; crop changes must not cut off either founder.
+- The hero is a fixed full-viewport cover; crop changes must not cut off either founder.
 - The intro collapses from two columns to one.
 - The press header logos wrap below the heading when horizontal space is insufficient.
 - The press grid moves from three to two to one column.
@@ -108,7 +112,7 @@ Keep the existing `FooterBanner` without its marquee. This preserves the site se
 - Publication logos are decorative because the publication names appear in card text; render them with empty alt text.
 - Every press card is a single clear link with a visible keyboard focus state.
 - Preserve semantic heading order: one page-level heading, followed by the press section heading and card content.
-- Respect existing motion behavior; this page introduces no new motion.
+- Reuse the existing homepage marquee motion; introduce no new animation primitive.
 
 ## Localization
 
