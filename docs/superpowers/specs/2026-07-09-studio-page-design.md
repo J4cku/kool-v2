@@ -59,6 +59,8 @@ Use the PDF's asymmetric two-column composition:
 
 The section retains generous negative space. On mobile, copy appears before the image.
 
+Match the established Oferta body-copy treatment exactly: `max-w-[610px] font-[400] leading-[1.5] text-dark/80` with `fontSize: 'clamp(15px, 1.5vw, 20px)'`.
+
 Polish source copy remains verbatim from the supplied PDF except for responsive line wrapping. The English translation preserves the meaning and tone rather than mirroring Polish syntax mechanically.
 
 ### 4. Press Header

@@ -101,7 +101,10 @@ export default function StudioPage() {
 
           <section className="px-5 py-20 md:px-10 md:py-28 lg:px-[68px] lg:py-36">
             <div className="mx-auto grid max-w-content gap-14 md:grid-cols-2 md:items-start md:gap-16 lg:gap-24">
-              <p className="max-w-[610px] text-[18px] font-[400] leading-[1.35] tracking-[-0.025em] text-dark md:text-[23px] lg:text-[27px]">
+              <p
+                className="max-w-[610px] font-[400] leading-[1.5] text-dark/80"
+                style={{ fontSize: 'clamp(15px, 1.5vw, 20px)' }}
+              >
                 {t('intro')}
               </p>
               <div className="flex md:justify-center">
