@@ -119,6 +119,7 @@ Keep the existing `FooterBanner` without its own marquee. Place it inside the be
 - Every press card is a single clear link with a visible keyboard focus state.
 - Preserve semantic heading order: one page-level heading, followed by the press section heading and card content.
 - Reuse the existing homepage marquee motion; introduce no new animation primitive.
+- Disable the manifesto animation with `motion-reduce:animate-none` when the visitor prefers reduced motion.
 
 ## Localization
 

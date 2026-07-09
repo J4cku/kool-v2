@@ -79,7 +79,7 @@ export default function StudioPage() {
 
         <div className="relative z-10 bg-beige">
           <section className="overflow-hidden whitespace-nowrap pt-16 pb-8 md:pt-24 md:pb-12">
-            <h1 className="animate-marquee inline-block">
+            <h1 className="animate-marquee inline-block motion-reduce:animate-none">
               <span
                 className="font-[400] uppercase text-coral leading-tight mx-8 md:mx-16"
                 style={{ fontSize: 'clamp(26px, 4.8vw, 64px)' }}
