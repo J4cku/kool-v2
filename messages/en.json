@@ -38,55 +38,31 @@
   },
   "studio": {
     "title": "Studio",
-    "label": "Studio",
-    "heroLines": [
-      "Original",
-      "interiors",
-      "with character"
-    ],
-    "heroBody": "Kool Studio designs residential and commercial interiors with a clear identity, precise detailing, and a natural rhythm for everyday use.",
-    "heroImageAlt": "Material moodboard and samples in a design studio",
-    "detailImageAlt": "Detail of a colorful commercial interior",
-    "colorImageAlt": "Detail of a residential interior with custom color work",
-    "statementLabel": "About",
-    "statementHeading": "We design spaces that do not depend on seasonal decoration.",
-    "statementText": "We work with context, light, function, and material. Every project starts with understanding the place and the people who will use it. The result is technically refined, but still personal, relaxed, and resistant to passing trends.",
-    "details": [
-      {
-        "label": "city",
-        "value": "Wroclaw"
-      },
-      {
-        "label": "scale",
-        "value": "interiors and detail"
-      },
-      {
-        "label": "fields",
-        "value": "home / commercial"
+    "manifesto": "WE ARE KOOL AND WE DESIGN KOOL THINGS!",
+    "intro": "Kool is a Wrocław-based design studio founded by the dynamic architect duo Ola Kilińska and Ola Leszczyńska. We create distinctive interiors and commercial spaces that are as functional as they are inspiring. Combining disciplines from interior design and strategy to product development and visual identity, we create concepts that unite practicality with beauty. Our spaces do more than work – they resonate, evoke emotion, and leave a lasting impression.",
+    "heroImageAlt": "Ola Kilińska and Ola Leszczyńska in the Kool Studio workspace",
+    "detailImageAlt": "Materials and samples in the Kool Studio workspace",
+    "pressHeading": "Featured in",
+    "press": {
+      "items": {
+        "labelDehesa": {
+          "title": "An Iberian delicatessen in Wrocław, filled with colours straight out of Almodóvar's films [PL]",
+          "imageAlt": "Burgundy interior of the Dehesa delicatessen"
+        },
+        "whitemadDehesa": {
+          "title": "A delicatessen in Wrocław inspired by the colours of Spain [PL]",
+          "imageAlt": "Counter and red lights in the Dehesa delicatessen"
+        },
+        "labelGuide": {
+          "title": "Poland. City Guide [PL]",
+          "imageAlt": "Cover of the Poland. City Guide book"
+        },
+        "plndesignOffice": {
+          "title": "Architects designed a 19 m² law office in Wrocław [PL]",
+          "imageAlt": "Interior of a small law office in Wrocław"
+        }
       }
-    ],
-    "principlesLabel": "How we work",
-    "principlesHeading": "We keep the process close to material, function, and construction decisions.",
-    "principles": [
-      {
-        "title": "Context before style",
-        "text": "We do not begin with a ready-made aesthetic. First we read the space, needs, budget, and technical limits, then build the design language."
-      },
-      {
-        "title": "Detail as structure",
-        "text": "Color, joinery, light, and materials organize the interior. Detail has to work, not only look good."
-      },
-      {
-        "title": "Calm delivery",
-        "text": "Documentation, material decisions, and contractor coordination are part of the design. A good interior happens when the concept can be built."
-      }
-    ],
-    "processLabel": "Studio scope",
-    "processHeading": "We combine interior design, custom elements, and implementation support.",
-    "processText": "We guide projects from functional layouts and visual concepts through technical documentation, furnishing selections, and support during delivery. We work on apartments and houses, as well as restaurants, service spaces, hotels, and brand interiors.",
-    "processImageAlt": "Work on interior delivery and details",
-    "closingHeading": "Let's talk about a space made to stay for longer.",
-    "contactLabel": "Contact"
+    }
   },
   "oferta": {
     "title": "Services",

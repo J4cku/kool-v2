@@ -2,202 +2,178 @@
 
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
-import Navbar from '@/components/Navbar';
 import FooterBanner from '@/components/FooterBanner';
-import { Link } from '@/i18n/navigation';
+import Navbar from '@/components/Navbar';
+import ProjectHero from '@/components/ProjectHero';
 
-type Principle = {
-  title: string;
-  text: string;
+type PressItemKey =
+  | 'labelDehesa'
+  | 'whitemadDehesa'
+  | 'labelGuide'
+  | 'plndesignOffice';
+
+type PressItem = {
+  key: PressItemKey;
+  publication: string;
+  href: string;
+  image: string;
 };
 
-type StudioDetail = {
-  label: string;
-  value: string;
-};
+const pressItems: PressItem[] = [
+  {
+    key: 'labelDehesa',
+    publication: 'Label Magazine',
+    href: 'https://label-magazine.com/wnetrza/artykuly/delikatesy-iberyjskie-we-wroclawiu-wypelnily-je-kolory-jak-z-filmow-almodovara',
+    image: '/images/studio/press-label-dehesa.webp',
+  },
+  {
+    key: 'whitemadDehesa',
+    publication: 'WhiteMAD',
+    href: 'https://www.whitemad.pl/delikatesy-we-wroclawiu-dehesa/',
+    image: '/images/studio/press-whitemad-dehesa.webp',
+  },
+  {
+    key: 'labelGuide',
+    publication: 'Label Magazine',
+    href: 'https://label-magazine.com/sklep/ksiazki/polska-miejski-przewodnik',
+    image: '/images/studio/press-label-guide.webp',
+  },
+  {
+    key: 'plndesignOffice',
+    publication: 'PLNdesign.pl',
+    href: 'https://plndesign.pl/wnetrza/architektki-urzadzily-kancelarie-na-19-m2-we-wroclawiu-zaczely-od-pytania/',
+    image: '/images/studio/press-plndesign-kancelaria.webp',
+  },
+];
 
-function StudioImage({
-  src,
-  alt,
-  className,
-  sizes,
-}: {
-  src: string;
-  alt: string;
-  className: string;
-  sizes: string;
-}) {
-  return (
-    <div className={`relative overflow-hidden bg-dark/5 ${className}`}>
-      <Image
-        src={src}
-        alt={alt}
-        fill
-        className="object-cover"
-        sizes={sizes}
-        priority={src.includes('residential-04')}
-      />
-    </div>
-  );
-}
-
-function Eyebrow({ children }: { children: string }) {
-  return (
-    <span className="mb-4 block text-[11px] font-[700] uppercase tracking-[0.14em] text-dark/50">
-      {children}
-    </span>
-  );
-}
+const publicationLogos = [
+  {
+    src: '/images/studio/logo-label.png',
+    width: 104,
+    height: 54,
+    className: 'h-[38px] w-auto md:h-[48px]',
+  },
+  {
+    src: '/images/studio/logo-whitemad.png',
+    width: 70,
+    height: 66,
+    className: 'h-[48px] w-auto md:h-[58px]',
+  },
+  {
+    src: '/images/studio/logo-plndesign.png',
+    width: 122,
+    height: 14,
+    className: 'h-[13px] w-auto md:h-[16px]',
+  },
+] as const;
 
 export default function StudioPage() {
   const t = useTranslations('studio');
-  const heroLines = t.raw('heroLines') as string[];
-  const details = t.raw('details') as StudioDetail[];
-  const principles = t.raw('principles') as Principle[];
 
   return (
     <>
+      <ProjectHero src="/images/studio/team.webp" alt={t('heroImageAlt')} />
       <Navbar />
-      <main className="pt-[112px] md:pt-[148px]">
-        <section className="px-5 pb-16 md:px-10 md:pb-24 lg:px-[68px]">
-          <div className="mx-auto grid max-w-[1400px] gap-10 lg:grid-cols-[minmax(0,0.98fr)_minmax(360px,0.62fr)] lg:items-end">
-            <div>
-              <Eyebrow>{t('label')}</Eyebrow>
-              <h1 className="max-w-[880px] text-[46px] font-[900] uppercase leading-[0.92] text-dark md:text-[86px] lg:text-[112px]">
-                {heroLines.map((line) => (
-                  <span key={line} className="block">
-                    {line}
-                  </span>
-                ))}
-              </h1>
-              <p className="mt-8 max-w-[720px] text-[15px] font-[400] leading-[1.7] text-dark/70 md:text-[17px]">
-                {t('heroBody')}
-              </p>
-            </div>
+      <main>
+        <div className="h-screen" />
 
-            <div className="grid gap-[3px]">
-              <StudioImage
-                src="/images/oferta/residential-04.jpg"
-                alt={t('heroImageAlt')}
-                className="aspect-[4/5]"
-                sizes="(max-width: 1024px) 100vw, 38vw"
-              />
-              <div className="grid grid-cols-2 gap-[3px]">
-                <StudioImage
-                  src="/images/dehesa/kool_dehesa_04.webp"
-                  alt={t('detailImageAlt')}
-                  className="aspect-square"
-                  sizes="(max-width: 1024px) 50vw, 19vw"
-                />
-                <StudioImage
-                  src="/images/dobrzykowice/KOOL_dd_10.webp"
-                  alt={t('colorImageAlt')}
-                  className="aspect-square"
-                  sizes="(max-width: 1024px) 50vw, 19vw"
-                />
+        <div className="relative z-10 bg-beige">
+          <section className="overflow-hidden whitespace-nowrap pt-16 pb-8 md:pt-24 md:pb-12">
+            <h1 className="animate-marquee inline-block motion-reduce:animate-none">
+              <span
+                className="font-[400] uppercase text-coral leading-tight mx-8 md:mx-16"
+                style={{ fontSize: 'clamp(26px, 4.8vw, 64px)' }}
+              >
+                {t('manifesto')}
+              </span>
+              {Array.from({ length: 3 }).map((_, index) => (
+                <span
+                  key={index}
+                  aria-hidden="true"
+                  className="font-[400] uppercase text-coral leading-tight mx-8 md:mx-16"
+                  style={{ fontSize: 'clamp(26px, 4.8vw, 64px)' }}
+                >
+                  {t('manifesto')}
+                </span>
+              ))}
+            </h1>
+          </section>
+
+          <section className="px-5 pt-10 pb-20 md:px-10 md:pt-14 md:pb-28 lg:px-[68px] lg:pt-20 lg:pb-36">
+            <div className="mx-auto grid max-w-content gap-14 md:grid-cols-2 md:items-start md:gap-16 lg:gap-24">
+              <p
+                className="max-w-[610px] font-[400] leading-[1.5] text-dark/80"
+                style={{ fontSize: 'clamp(15px, 1.5vw, 20px)' }}
+              >
+                {t('intro')}
+              </p>
+              <div className="flex md:justify-center">
+                <div className="relative aspect-[2/3] w-full max-w-[470px] overflow-hidden">
+                  <Image
+                    src="/images/studio/studio-detail.webp"
+                    alt={t('detailImageAlt')}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 40vw"
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <section className="border-y border-coral/35 px-5 py-14 md:px-10 md:py-20 lg:px-[68px]">
-          <div className="mx-auto grid max-w-[1400px] gap-10 md:grid-cols-[0.72fr_1fr] md:items-start">
-            <div>
-              <Eyebrow>{t('statementLabel')}</Eyebrow>
-              <h2 className="max-w-[560px] text-[32px] font-[900] uppercase leading-[1.02] text-dark md:text-[54px]">
-                {t('statementHeading')}
-              </h2>
-            </div>
-            <div>
-              <p className="max-w-[760px] text-[15px] font-[400] leading-[1.75] text-dark/75 md:text-[18px]">
-                {t('statementText')}
-              </p>
-              <dl className="mt-10 grid gap-6 border-t border-dark/20 pt-6 sm:grid-cols-3">
-                {details.map((detail) => (
-                  <div key={detail.label}>
-                    <dt className="text-[11px] font-[700] uppercase tracking-[0.12em] text-dark/45">
-                      {detail.label}
-                    </dt>
-                    <dd className="mt-2 text-[14px] font-[700] uppercase text-dark">
-                      {detail.value}
-                    </dd>
-                  </div>
+          <section className="px-5 pb-24 md:px-10 md:pb-32 lg:px-[68px] lg:pb-44">
+            <div className="mx-auto max-w-content">
+              <div className="mb-14 flex flex-col gap-10 md:mb-20 md:flex-row md:items-center md:justify-between">
+                <h2 className="text-[clamp(42px,5vw,72px)] font-[700] uppercase leading-none tracking-[-0.045em] text-dark">
+                  {t('pressHeading')}
+                </h2>
+                <div className="flex flex-wrap items-center gap-8 md:justify-end md:gap-10 lg:gap-12">
+                  {publicationLogos.map((logo) => (
+                    <Image
+                      key={logo.src}
+                      src={logo.src}
+                      alt=""
+                      width={logo.width}
+                      height={logo.height}
+                      className={logo.className}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid gap-x-12 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
+                {pressItems.map((item) => (
+                  <a
+                    key={item.key}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-coral"
+                  >
+                    <div className="relative aspect-square overflow-hidden">
+                      <Image
+                        src={item.image}
+                        alt={t(`press.items.${item.key}.imageAlt`)}
+                        fill
+                        className="object-cover transition-opacity duration-200 group-hover:opacity-80 group-focus-visible:opacity-80"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      />
+                    </div>
+                    <h3 className="mt-4 text-[16px] font-[900] uppercase leading-[1.1] text-dark md:text-[18px]">
+                      {item.publication}
+                    </h3>
+                    <p className="mt-1 max-w-[410px] text-[14px] font-[400] leading-[1.25] text-dark md:text-[16px]">
+                      {t(`press.items.${item.key}.title`)}
+                    </p>
+                  </a>
                 ))}
-              </dl>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <section className="px-5 py-16 md:px-10 md:py-24 lg:px-[68px]">
-          <div className="mx-auto max-w-[1400px]">
-            <div className="mb-12 max-w-[760px] md:mb-16">
-              <Eyebrow>{t('principlesLabel')}</Eyebrow>
-              <h2 className="text-[32px] font-[900] uppercase leading-[1.04] text-dark md:text-[58px]">
-                {t('principlesHeading')}
-              </h2>
-            </div>
-
-            <div className="divide-y divide-dark/20 border-y border-dark/20">
-              {principles.map((principle, index) => (
-                <article
-                  key={principle.title}
-                  className="grid gap-5 py-7 md:grid-cols-[120px_minmax(220px,0.52fr)_1fr] md:gap-8 md:py-9"
-                >
-                  <span className="text-[13px] font-[900] tabular-nums text-coral">
-                    {String(index + 1).padStart(2, '0')}
-                  </span>
-                  <h3 className="text-[22px] font-[900] uppercase leading-[1.05] text-dark md:text-[30px]">
-                    {principle.title}
-                  </h3>
-                  <p className="max-w-[620px] text-[14px] font-[400] leading-[1.65] text-dark/70 md:text-[15px]">
-                    {principle.text}
-                  </p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="px-5 pb-16 md:px-10 md:pb-24 lg:px-[68px]">
-          <div className="mx-auto grid max-w-[1400px] gap-10 md:grid-cols-[minmax(220px,0.42fr)_1fr] md:gap-16 md:items-start">
-            <StudioImage
-              src="/images/oferta/residential-03.jpg"
-              alt={t('processImageAlt')}
-              className="aspect-[3/4]"
-              sizes="(max-width: 768px) 100vw, 36vw"
-            />
-            <div className="md:pt-8">
-              <Eyebrow>{t('processLabel')}</Eyebrow>
-              <h2 className="max-w-[760px] text-[32px] font-[900] uppercase leading-[1.04] text-dark md:text-[58px]">
-                {t('processHeading')}
-              </h2>
-              <p className="mt-8 max-w-[720px] text-[15px] font-[400] leading-[1.75] text-dark/70 md:text-[17px]">
-                {t('processText')}
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <section className="overflow-hidden border-t border-coral/35 px-5 py-14 md:px-10 md:py-20 lg:px-[68px]">
-          <div className="mx-auto max-w-[1400px]">
-            <p className="mb-8 text-[44px] font-[900] uppercase leading-[0.88] text-coral md:text-[108px] lg:text-[148px]">
-              KOOL
-            </p>
-            <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
-              <h2 className="max-w-[780px] text-[30px] font-[900] uppercase leading-[1.05] text-dark md:text-[52px]">
-                {t('closingHeading')}
-              </h2>
-              <Link
-                href="/kontakt"
-                className="text-[12px] font-[800] uppercase tracking-[0.12em] text-dark transition-opacity hover:opacity-50"
-              >
-                [ {t('contactLabel')} ]
-              </Link>
-            </div>
-          </div>
-        </section>
+          <FooterBanner showMarquee={false} />
+        </div>
       </main>
-      <FooterBanner showMarquee={false} />
     </>
   );
 }
