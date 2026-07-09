@@ -78,7 +78,7 @@ export default function StudioPage() {
         <div className="h-screen" />
 
         <div className="relative z-10 bg-beige">
-          <section className="overflow-hidden whitespace-nowrap py-16 md:py-24">
+          <section className="overflow-hidden whitespace-nowrap pt-16 pb-8 md:pt-24 md:pb-12">
             <h1 className="animate-marquee inline-block">
               <span
                 className="font-[400] uppercase text-coral leading-tight mx-8 md:mx-16"
@@ -99,7 +99,7 @@ export default function StudioPage() {
             </h1>
           </section>
 
-          <section className="px-5 py-20 md:px-10 md:py-28 lg:px-[68px] lg:py-36">
+          <section className="px-5 pt-10 pb-20 md:px-10 md:pt-14 md:pb-28 lg:px-[68px] lg:pt-20 lg:pb-36">
             <div className="mx-auto grid max-w-content gap-14 md:grid-cols-2 md:items-start md:gap-16 lg:gap-24">
               <p
                 className="max-w-[610px] font-[400] leading-[1.5] text-dark/80"

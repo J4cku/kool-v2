@@ -50,6 +50,8 @@ Keep the fixed shared `Navbar` above a fixed, full-viewport team portrait render
 
 Place `WE ARE KOOL AND WE DESIGN KOOL THINGS!` at the start of the beige scrolling content as a large coral, regular-weight uppercase marquee. Match the homepage's overflow-hidden, no-wrap spacing and `animate-marquee` treatment with four repeated copies. Keep one semantic `h1`: expose the first copy to assistive technology and hide the remaining three copies with `aria-hidden="true"`.
 
+Use asymmetric marquee padding—`pt-16 pb-8 md:pt-24 md:pb-12`—to reduce the distance to the introduction without changing the motion.
+
 ### 3. Studio Introduction
 
 Use the PDF's asymmetric two-column composition:
@@ -58,6 +60,8 @@ Use the PDF's asymmetric two-column composition:
 - Right: the supplied vertical atelier photograph.
 
 The section retains generous negative space. On mobile, copy appears before the image.
+
+Use `pt-10 pb-20 md:pt-14 md:pb-28 lg:pt-20 lg:pb-36` so the section starts closer to the marquee while preserving its established lower spacing.
 
 Match the established Oferta body-copy treatment exactly: `max-w-[610px] font-[400] leading-[1.5] text-dark/80` with `fontSize: 'clamp(15px, 1.5vw, 20px)'`.
 
