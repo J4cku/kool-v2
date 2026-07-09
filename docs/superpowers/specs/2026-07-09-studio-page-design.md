@@ -63,7 +63,7 @@ Polish source copy remains verbatim from the supplied PDF except for responsive 
 
 ### 4. Press Header
 
-Display `NAPISALI O NAS` on Polish and `FEATURED IN` on English. Align the Label, WhiteMAD, and PLNdesign logos opposite the heading on desktop. On mobile, the logo row moves below the heading and stays legible without dominating it.
+Display `NAPISALI O NAS` on Polish and `FEATURED IN` on English at Poppins font weight `700`. Align the Label, WhiteMAD, and PLNdesign logos opposite the heading on desktop. On mobile, the logo row moves below the heading and stays legible without dominating it.
 
 ### 5. Press Grid
 

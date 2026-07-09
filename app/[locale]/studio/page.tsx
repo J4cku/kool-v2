@@ -121,7 +121,7 @@ export default function StudioPage() {
           <section className="px-5 pb-24 md:px-10 md:pb-32 lg:px-[68px] lg:pb-44">
             <div className="mx-auto max-w-content">
               <div className="mb-14 flex flex-col gap-10 md:mb-20 md:flex-row md:items-center md:justify-between">
-                <h2 className="text-[clamp(42px,5vw,72px)] font-[900] uppercase leading-none tracking-[-0.045em] text-dark">
+                <h2 className="text-[clamp(42px,5vw,72px)] font-[700] uppercase leading-none tracking-[-0.045em] text-dark">
                   {t('pressHeading')}
                 </h2>
                 <div className="flex flex-wrap items-center gap-8 md:justify-end md:gap-10 lg:gap-12">

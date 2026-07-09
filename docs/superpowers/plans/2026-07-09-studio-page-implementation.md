@@ -10,7 +10,7 @@
 
 ## Client-Approved Revision (Supersedes Task 3 Hero and Manifesto Direction)
 
-Client review supersedes the static inline 16:9 hero and static manifesto described in Task 3. The Studio route must reuse `ProjectHero` with `/images/studio/team.webp`, render an `h-screen` spacer, and place all beige content plus `FooterBanner showMarquee={false}` inside a `relative z-10 bg-beige` wrapper. Replace the static manifesto heading with the existing homepage `animate-marquee` pattern: four repeated copies in one semantic `h1`, with only the first copy exposed to assistive technology. The intro, press header, links, and responsive 1/2/3-column grid remain unchanged.
+Client review supersedes the static inline 16:9 hero and static manifesto described in Task 3. The Studio route must reuse `ProjectHero` with `/images/studio/team.webp`, render an `h-screen` spacer, and place all beige content plus `FooterBanner showMarquee={false}` inside a `relative z-10 bg-beige` wrapper. Replace the static manifesto heading with the existing homepage `animate-marquee` pattern: four repeated copies in one semantic `h1`, with only the first copy exposed to assistive technology. The localized press-section heading uses Poppins font weight `700`, explicitly superseding the older Task 3 sample's `font-[900]`; publication-card heading weights do not change. The intro, press header layout, links, and responsive 1/2/3-column grid remain unchanged.
 
 Revision acceptance contract:
 
