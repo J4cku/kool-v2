@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useSyncExternalStore } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { Link, usePathname } from '@/i18n/navigation';
@@ -44,22 +44,15 @@ export default function Navbar() {
     return () => { document.body.style.overflow = ''; };
   }, [menuOpen, isMobile]);
 
-  // Threshold toggle + CSS transition instead of a scroll-linked motion value:
-  // JS-driven transforms jank in Mobile Safari during touch scroll, while a
-  // one-shot CSS transform transition runs on the compositor. Hysteresis
-  // (80/20) prevents flicker at the boundary and during rubber-banding.
-  const [shrunk, setShrunk] = useState(false);
-  useEffect(() => {
-    const onScroll = () => {
-      const y = window.scrollY;
-      setShrunk((prev) => (prev ? y > 20 : y > 80));
-    };
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  const shrinkTransition = 'transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]';
+  // Scroll-linked shrink: browsers with CSS scroll timelines animate the
+  // .nav-logo-shrink/.nav-dot-shrink classes on the compositor (globals.css),
+  // which overrides these inline values and stays smooth in Mobile Safari.
+  // Older browsers fall back to the spring-smoothed values below.
+  const { scrollY } = useScroll();
+  const smoothScrollY = useSpring(scrollY, { stiffness: 260, damping: 34, restDelta: 0.5 });
+  const logoScale = useTransform(smoothScrollY, [0, 200], [1, 0.45]);
+  const dotScale = useTransform(smoothScrollY, [0, 200], isMobile ? [1, 0.7] : [1, 1]);
+  const dotY = useTransform(smoothScrollY, [0, 200], isMobile ? [0, -16] : [0, 0]);
 
   const isActive = (href: string) => {
     if (href === '/') return pathname === '/';
@@ -75,14 +68,13 @@ export default function Navbar() {
             <span className="hidden md:block">
               <Image src="/logo.svg" alt="Kool Studio" width={208} height={77} priority />
             </span>
-            {/* Mobile: shrink past the scroll threshold, grow back near the top */}
-            <span
-              className={`block md:hidden origin-top-left will-change-transform ${shrinkTransition} ${
-                shrunk ? 'scale-[0.45]' : 'scale-100'
-              }`}
+            {/* Mobile: scale tracks scroll position */}
+            <motion.span
+              className="block md:hidden origin-top-left will-change-transform nav-logo-shrink"
+              style={{ scale: logoScale }}
             >
               <Image src="/logo.svg" alt="Kool Studio" width={208} height={77} priority />
-            </span>
+            </motion.span>
           </Link>
 
           <div className="flex items-center gap-10">
@@ -127,11 +119,10 @@ export default function Navbar() {
             </AnimatePresence>
 
             {/* The single dot — always visible, toggles menu */}
-            <button
+            <motion.button
               onClick={() => setMenuOpen(!menuOpen)}
-              className={`w-[36px] h-[35px] hover:opacity-80 shrink-0 origin-top-right will-change-transform ${shrinkTransition} ${
-                shrunk ? 'max-md:scale-[0.7] max-md:-translate-y-4' : ''
-              }`}
+              className="w-[36px] h-[35px] hover:opacity-80 shrink-0 origin-top-right will-change-transform nav-dot-shrink"
+              style={{ scale: dotScale, y: dotY }}
               aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             >
               <motion.div
@@ -150,7 +141,7 @@ export default function Navbar() {
               >
                 <Image src="/dot.svg" alt="" width={36} height={35} />
               </motion.div>
-            </button>
+            </motion.button>
           </div>
         </div>
       </nav>
@@ -180,28 +171,26 @@ export default function Navbar() {
             className="fixed inset-0 z-[100] bg-coral flex flex-col md:hidden"
           >
             <div className="w-full px-4 pt-4 pb-6 flex items-center justify-between">
-              <span
-                className={`origin-top-left will-change-transform ${shrinkTransition} ${
-                  shrunk ? 'scale-[0.45]' : 'scale-100'
-                }`}
+              <motion.span
+                className="origin-top-left will-change-transform nav-logo-shrink"
+                style={{ scale: logoScale }}
               >
                 <div
                   className="w-[208px] h-[77px] bg-beige"
                   style={{ maskImage: 'url(/logo.svg)', maskSize: 'contain', maskRepeat: 'no-repeat' }}
                 />
-              </span>
-              <button
+              </motion.span>
+              <motion.button
                 onClick={() => setMenuOpen(false)}
-                className={`w-[36px] h-[35px] hover:opacity-80 shrink-0 origin-top-right will-change-transform ${shrinkTransition} ${
-                  shrunk ? 'scale-[0.7] -translate-y-4' : ''
-                }`}
+                className="w-[36px] h-[35px] hover:opacity-80 shrink-0 origin-top-right will-change-transform nav-dot-shrink"
+                style={{ scale: dotScale, y: dotY }}
                 aria-label="Close menu"
               >
                 <div
                   className="w-[36px] h-[35px] bg-beige rounded-full"
                   style={{ maskImage: 'url(/dot.svg)', maskSize: 'contain', maskRepeat: 'no-repeat' }}
                 />
-              </button>
+              </motion.button>
             </div>
 
             <nav className="absolute inset-0 flex flex-col items-center justify-center gap-8 text-center pointer-events-none">

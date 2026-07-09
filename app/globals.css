@@ -34,3 +34,47 @@ body {
 .animate-marquee-diagonal {
   animation: marquee 15s linear infinite;
 }
+
+/* Mobile navbar: logo/dot scale tracks scroll position (0-200px).
+   Where CSS scroll timelines are supported (Safari 26+, Chrome 115+) the
+   animation runs on the compositor, immune to main-thread jank during touch
+   scrolling, and overrides the inline Framer Motion transform. Elsewhere the
+   spring-smoothed Framer values in Navbar.tsx keep driving the transform. */
+@media (width < 768px) {
+  @supports (animation-timeline: scroll()) {
+    .nav-logo-shrink,
+    .nav-dot-shrink {
+      animation-duration: auto;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: scroll(root);
+      animation-range: 0px 200px;
+    }
+    .nav-logo-shrink {
+      animation-name: nav-logo-shrink;
+    }
+    .nav-dot-shrink {
+      animation-name: nav-dot-shrink;
+    }
+  }
+}
+
+/* Explicit from-keyframes so the animation replaces the inline Framer
+   transform instead of compositing with it */
+@keyframes nav-logo-shrink {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0.45);
+  }
+}
+
+@keyframes nav-dot-shrink {
+  from {
+    transform: translateY(0) scale(1);
+  }
+  to {
+    transform: translateY(-16px) scale(0.7);
+  }
+}
