@@ -72,7 +72,11 @@ export default function StudioPage() {
 
   return (
     <>
-      <ProjectHero src="/images/studio/team.webp" alt={t('heroImageAlt')} />
+      <ProjectHero
+        src="/images/studio/team.webp"
+        alt={t('heroImageAlt')}
+        imageClassName="object-[60%_center] md:object-center"
+      />
       <Navbar />
       <main>
         <div className="h-screen" />
