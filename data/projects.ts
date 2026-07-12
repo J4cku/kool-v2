@@ -15,7 +15,7 @@ export type Project = {
   photoCredit?: string;
   descriptionBlocks?: string[];
   fullWidthIndices?: number[];
-  containedPairs?: { indices: [number, number]; labels?: [string, string]; scale?: number }[];
+  containedPairs?: { indices: [number, number]; labels?: [string, string]; scale?: number; aspect?: string }[];
   reverseLastRow?: boolean;
   // Detail-page meta table overrides (card keeps the short title/location)
   meta?: { title?: string; location?: string; collaboration?: string };
@@ -364,6 +364,93 @@ export const projects: Project[] = [
       'W tym mieszkaniu w Gdańsku beton nie chłodzi, przeciwnie, oddycha ciepłem i światłem, stając się tłem dla życia w powolnym tempie. Już od progu uwagę przyciąga miękka szarość przecieranych powierzchni, których nieregularna faktura łapie światło. To przestrzeń zbudowana na kontrastach, ale pozbawiona ostentacji. Surowość spotyka tu miękkość, industrialny charakter miesza się z atmosferą azylu. Projekt opiera się na dwóch wyraźnych światach kolorystycznych, które prowadzą między sobą subtelny dialog. Strefa dzienna tonie w odcieniach kości słoniowej, piaskowych tynków i lnianych beży, przełamanych złocistymi rudościami obszernej sofy obitej mięsistą, strukturalną tkaniną. To właśnie tutaj światło dzienne pracuje najmocniej. Rozlewa się po betonowej podłodze, podkreśla ziarnistość ścian i wydobywa ciepło drewna. Wieczorem charakter wnętrza zmienia się całkowicie. Boczne, pomarańczowe światło miękko osiada na powierzchniach, rozmywa granice i zamienia papierowy klosz w żarzący się punkt przypominający zachodzące słońce. Kuchnia i biblioteka tworzą bardziej wyrazisty kadr. Chłodniejsze odcienie betonu zestawiono tu z głęboką zielenią terakoty oraz lustrzanymi frontami górnych szafek, które odbijają światło i multiplikują przestrzeń. Centralnym elementem pozostaje wyspa w formie masywnej, wielofunkcyjnej bryły, wokół której koncentruje się codzienność: gotowanie, rozmowy, praca i spontaniczne spotkania. Regały wypełnione książkami i kolekcjonowanymi obiektami nadają wnętrzu osobistego charakteru. Sypialnia została pomyślana jako miejsce odpoczynku, pracy i twórczości. Łóżko osadzone na dedykowanej skrzyni jest sporym miejscem do przechowywania, a obecność instrumentów muzycznych podkreśla zainteresowania właściciela. W całym mieszkaniu czuć inspiracje estetyką lat 70. i japońsko-skandynawskim podejściem do materiału: szczerym, sensualnym, skupionym na świetle i strukturze. To ciepły brutalizm w intymnym wydaniu: miejska odskocznia, która nie imponuje rozmachem, lecz atmosferą pozostającą z użytkownikiem długo po zmroku.',
     ],
     description: 'Mieszkanie w Gdańsku, w którym beton oddycha ciepłem i światłem. Ciepły brutalizm w intymnym wydaniu — piaskowe tynki i lniane beże strefy dziennej prowadzą dialog z zielenią terakoty w kuchni, a wieczorem wnętrze zmienia charakter.',
+  },
+  {
+    id: '11',
+    slug: 'mieszkanie-strachowicka',
+    title: 'mieszkanie',
+    location: 'Wrocław',
+    category: 'mieszkalne',
+    status: 'completed',
+    year: 2026,
+    area: '72 m²',
+    scope: ['projekt koncepcyjny wnętrz', 'projekty mebli', 'projekt wykonawczy wnętrz', 'nadzór autorski'],
+    thumbnail: '/images/mieszkanie-strachowicka/kool_m_strachowicka_04.webp',
+    featured: false,
+    // Display order (board): hero, [02 + text], [03 full], [04 + reel],
+    // [text + 06], [07 + 08], [rzut przed/po slider], [10 full], [11 + 12],
+    // [13 full]. The reel animates the axonometry illustration from the
+    // designer's layout.
+    images: [
+      '/images/mieszkanie-strachowicka/kool_m_strachowicka_01.webp',         // 01 hero – strefa dzienna z kuchnią
+      '/images/mieszkanie-strachowicka/kool_m_strachowicka_02.webp',         // 02 square – przedpokój z ceglaną zabudową (text right)
+      '/images/mieszkanie-strachowicka/kool_m_strachowicka_03.webp',         // 03 full-width – jadalnia i salon z sofą
+      '/images/mieszkanie-strachowicka/kool_m_strachowicka_04.webp',         // 04 square – wyspa kuchenna z błękitnymi lampami (reel right)
+      '/images/mieszkanie-strachowicka/kool_m_strachowicka_06.webp',         // 06 square – salon z zabudową TV (text left)
+      '/images/mieszkanie-strachowicka/kool_m_strachowicka_07.webp',         // 07 square – łazienka z różowym prysznicem, row left
+      '/images/mieszkanie-strachowicka/kool_m_strachowicka_08.webp',         // 08 portrait – detal blatu z lastryko, row right (padded)
+      '/images/mieszkanie-strachowicka/kool_m_strachowicka_rzut_przed.webp', // rzut – stan przed (slider pair)
+      '/images/mieszkanie-strachowicka/kool_m_strachowicka_rzut_po.webp',    // rzut – stan po (slider pair)
+      '/images/mieszkanie-strachowicka/kool_m_strachowicka_10.webp',         // 10 full-width – łazienka z błękitną zabudową
+      '/images/mieszkanie-strachowicka/kool_m_strachowicka_11.webp',         // 11 portrait – miejsce do pracy, row left (padded)
+      '/images/mieszkanie-strachowicka/kool_m_strachowicka_12.webp',         // 12 square – sypialnia z błękitną tapetą, row right
+      '/images/mieszkanie-strachowicka/kool_m_strachowicka_13.webp',         // 13 full-width – sypialnia
+    ],
+    // Indices count the hero (0) and the reel slot (4)
+    fullWidthIndices: [2, 10, 13],
+    reel: { src: '/videos/mieszkanie-strachowicka-reel.mp4', index: 4 },
+    containedPairs: [{ indices: [8, 9], labels: ['przed', 'po'], scale: 0.75, aspect: 'aspect-[2560/1006]' }],
+    textRows: [
+      { row: 0, side: 'right' },
+      { row: 3, side: 'left' },
+    ],
+    descriptionBlocks: [
+      'Mieszkanie zaprojektowane z myślą o rodzinie, dla której dom miał stać się przestrzenią wspierającą codzienne funkcjonowanie. Jednym z kluczowych założeń projektu było uwzględnienie potrzeb związanych z ADHD – stworzenie wnętrza terapeutycznego, które będzie działało kojąco na układ nerwowy i dawało poczucie harmonii. Czytelny układ funkcjonalny, ograniczenie otwartych półek, proste zabudowy nadały wizualnego porządku przestrzeni. Obłości w meblach oraz miękkości naturalnych tkanin koją zmysły. Przyszłym mieszkańcom zależało na kolorach, ale spokojnych tonacjach, stąd paleta ciepłych beży, błękitów oraz róży uzupełniona o elementy z naturalnego drewna.\nSercem mieszkania jest otwarta strefa dzienna, zaprojektowana jako miejsce wspólnego spędzania czasu. Kuchnia z wyspą organizuje codzienne życie domowników – to tutaj toczą się rozmowy podczas gotowania i spotkania przy porannej kawie. Ciepły dębowy fornir zestawiono z czekoladową wyspą z barwionego MDF-u, stalowym okapem i wyrazistym akcentem w postaci błękitnych lamp, które subtelnie ożywiają stonowaną kompozycję.\nPłynnie połączony z kuchnią salon oferuje różne scenariusze użytkowania. Modułowa sofa pozwala łatwo dostosować przestrzeń do rodzinnych seansów filmowych lub spokojnego wieczoru z książką. Błękitna zabudowa dyskretnie ukrywa telewizor, dzięki czemu wnętrze pozostaje spokojne wizualnie, a lustrzane fronty dodatkowo wzmacniają wrażenie przestronności. W drugiej części salonu znalazła się jadalnia z rozkładanym stołem, któremu towarzyszą lekkie, gięte krzesła polskiej produkcji.',
+      'Prywatna część mieszkania utrzymana jest w równie spokojnym tonie. W sypialni główną rolę odgrywa wielkoformatowa tapeta w odcieniach błękitu nadając wnętrzu wyrazisty charakter. Tuż obok, oddzielone stalową witryną z ornamentowym szkłem, znajduje się kompaktowe miejsce do pracy. Transparentna przegroda pozwala zachować dostęp światła i wizualną lekkość, jednocześnie subtelnie wyznaczając granicę między strefą odpoczynku a pracy.\nŁazienka dopełnia opowieść o mieszkaniu. Pudrowy róż wielkoformatowych płytek spotyka się z błękitną zabudową, tworząc spokojną, lecz niebanalną kompozycję. Mikrocement w beżowym kolorze zwiększa komfort użytkowania, a blaty z lastryko, robione na specjalne zamówienie oraz duże lustra dodają wnętrzu elegancji i optycznej lekkości.\nCałość to przykład projektu, w którym estetyka wynika z uważnego projektowania codzienności. Zamiast nadmiaru form i dekoracji pojawia się świadomie zaplanowany porządek, sprzyjający koncentracji, odpoczynkowi i wspólnemu życiu. To wnętrze, które nie tylko dobrze wygląda, ale przede wszystkim odpowiada na realne potrzeby swoich mieszkańców.',
+    ],
+    description: 'Mieszkanie we Wrocławiu zaprojektowane z myślą o rodzinie i potrzebach związanych z ADHD — wnętrze terapeutyczne, które koi układ nerwowy i daje poczucie harmonii. Paleta ciepłych beży, błękitów oraz różu uzupełniona o naturalne drewno.',
+  },
+  {
+    id: '12',
+    slug: 'biuro-dobry-material',
+    title: 'biuro Dobry Materiał',
+    location: 'Wrocław',
+    category: 'komercyjne',
+    status: 'completed',
+    year: 2023,
+    area: '79 m²',
+    scope: ['projekt koncepcyjny wnętrz', 'projekty mebli', 'projekt wykonawczy wnętrz', 'nadzór autorski'],
+    thumbnail: '/images/biuro-dobry-material/kool_dobry_material_02.webp',
+    featured: false,
+    meta: {
+      title: 'biuro firmy Dobry Materiał®',
+    },
+    // Display order (board): hero, [02 + text], [parawany + 04], [05 full],
+    // [text + 06], [rzut aranżacja 1/2 slider], [08 full], [09 + 10]
+    images: [
+      '/images/biuro-dobry-material/kool_dobry_material_01.webp',       // 01 hero – strefa wejściowa z zielonym parawanem
+      '/images/biuro-dobry-material/kool_dobry_material_02.webp',       // 02 square – część socjalna z grafikami marki (text right)
+      '/images/biuro-dobry-material/kool_dobry_material_parawany.webp', // ilustracja – mobilne parawany, row left (padded)
+      '/images/biuro-dobry-material/kool_dobry_material_04.webp',       // 04 square – sofa i neon Dobry Materiał, row right
+      '/images/biuro-dobry-material/kool_dobry_material_05.webp',       // 05 full-width – strefa open office z pomarańczowym parawanem
+      '/images/biuro-dobry-material/kool_dobry_material_06.webp',       // 06 square – drugie biuro z plakatami (text left)
+      '/images/biuro-dobry-material/kool_dobry_material_rzut_01.webp',  // rzut – aranżacja 1 (slider pair)
+      '/images/biuro-dobry-material/kool_dobry_material_rzut_02.webp',  // rzut – aranżacja 2 (slider pair)
+      '/images/biuro-dobry-material/kool_dobry_material_08.webp',       // 08 full-width – biuro z rowerem na ścianie
+      '/images/biuro-dobry-material/kool_dobry_material_09.webp',       // 09 square – stół konferencyjny na tle muralu, row left
+      '/images/biuro-dobry-material/kool_dobry_material_10.webp',       // 10 portrait – zielona sofa i wyspa, row right (padded)
+    ],
+    fullWidthIndices: [4, 8],
+    containedPairs: [{ indices: [6, 7], labels: ['aranżacja 1', 'aranżacja 2'], scale: 0.75, aspect: 'aspect-[2560/1488]' }],
+    textRows: [
+      { row: 0, side: 'right' },
+      { row: 3, side: 'left' },
+    ],
+    descriptionBlocks: [
+      'Siedziba Dobrego Materiału powstała jako przestrzeń, która odzwierciedla charakter marki – dynamicznej, wyrazistej i otwartej na zmianę. Głównym założeniem było pozostawienie istniejącej bazy - koloru ścian, elektryki, drewnianego parkietu po renowacji, stolarki i uzupełnienie jej o mocne akcenty kolorystyczne i graficzne, nawiązujące do energetycznych kolorów etykiet napojów.\nStrefa wejściowa najlepiej oddaje osobowość marki – swobodny, otwarty i sprzyjający budowaniu relacji. To jednocześnie przestrzeń relaksu, w której zamiast tradycyjnej recepcji znalazła się ekspozycja Dobrego Materiału, aneks kawowy oraz miejsce do wspólnego spędzania czasu z projektorem i konsolą do gier. Miękka sofa oraz zasłona subtelnie wydzielają część socjalną, a wielkoformatowe grafiki z neonowym akcentem od pierwszych chwil wprowadzają do wnętrza energię marki.\nCharakterystycznym elementem projektu są mobilne parawany, które porządkują otwartą przestrzeń, jednocześnie ukrywając istniejące instalacje. Każdy z nich pełni dodatkową funkcję – zielony stał się ekspozytorem produktów, natomiast pomarańczowy zamieniono w tablicę do przypinania notatek, inspiracji i materiałów roboczych.',
+      'Centralnym punktem biura jest strefa open office, zaprojektowana z myślą o maksymalnej elastyczności. Duże wspólne biurko można w razie potrzeby rozdzielić na dwa niezależne stanowiska, a system oświetlenia oparty na szynoprzewodach pozwala swobodnie dopasować układ opraw do zmieniającej się konfiguracji mebli. Dzięki temu przestrzeń może ewoluować wraz z potrzebami firmy.\nDrugie biuro pełni podwójną funkcję – jest zarówno miejscem codziennej pracy, jak i przestrzenią spotkań z klientami. Centralnie usytuowane biurko zostało zaprojektowane specjalnie na potrzeby tego wnętrza i detalami nawiązuje do wyposażenia strefy open office, budując spójną tożsamość całego projektu. Ważnym elementem pomieszczenia jest także duży stół konferencyjny z blatem wykończonym fornirem z ciemnej czeczoty. Ustawiony na tle muralu z logo marki staje się naturalnym centrum spotkań i prezentacji, podkreślając indywidualny charakter siedziby.\nProjekt pokazuje, że wyrazista identyfikacja wizualna może współistnieć z racjonalnym podejściem do projektowania. Zamiast całkowitej przebudowy postawiono na twórcze wykorzystanie zastanej przestrzeni, nadając jej nową energię poprzez kolor, grafikę i elastyczne rozwiązania funkcjonalne.',
+    ],
+    description: 'Siedziba firmy Dobry Materiał we Wrocławiu — biuro, które odzwierciedla dynamiczny charakter marki. Zastana przestrzeń zyskała nową energię dzięki mocnym akcentom kolorystycznym, wielkoformatowym grafikom i mobilnym parawanom.',
   },
 ];
 
