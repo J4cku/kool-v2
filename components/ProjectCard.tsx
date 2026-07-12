@@ -22,8 +22,8 @@ export default function ProjectCard({ project }: ProjectCardProps) {
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
             {project.status === 'in_progress' && (
-              <div className="absolute left-0 right-0 top-2/3 -translate-y-1/2 overflow-hidden pointer-events-none py-2">
-                <div className="animate-marquee flex gap-8 w-max">
+              <div className="absolute left-0 right-0 top-[72%] -translate-y-1/2 overflow-hidden pointer-events-none py-2">
+                <div className="animate-marquee flex gap-8 w-max" style={{ animationDuration: '28s' }}>
                   {Array.from({ length: 20 }).map((_, i) => (
                     <span key={i} className="text-coral text-[13px] font-[700] uppercase tracking-[0.15em] shrink-0">
                       PROJECT IN PROGRESS
