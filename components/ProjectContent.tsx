@@ -15,7 +15,7 @@ interface ProjectContentProps {
   description: string;
   descriptionBlocks?: string[];
   fullWidthIndices?: number[];
-  containedPairs?: { indices: [number, number]; labels?: [string, string]; scale?: number }[];
+  containedPairs?: { indices: [number, number]; labels?: [string, string]; scale?: number; aspect?: string }[];
   reverseLastRow?: boolean;
   reel?: { src: string; index: number };
   // Half-width before/after slider occupying a single gallery slot; index
@@ -104,7 +104,7 @@ function TextBlock({ text, align = 'end' }: { text: string; align?: 'start' | 'e
   return (
     <div className="w-full md:w-1/2 p-6 md:p-10 lg:p-14 xl:p-20">
       <div className={`flex h-full ${align === 'start' ? 'items-start' : 'items-end'}`}>
-        <p className="font-[400] text-[13px] md:text-[14px] leading-[1.7] text-dark text-justify">
+        <p className="font-[400] text-[13px] md:text-[14px] leading-[1.7] text-dark text-justify whitespace-pre-line">
           {text}
         </p>
       </div>
@@ -119,10 +119,10 @@ export default function ProjectContent({ images, description, descriptionBlocks,
   const fullWidthSet = new Set(fullWidthIndices ?? []);
   const portraitSet = new Set(portraitIndices ?? []);
   const smallSet = new Set(smallIndices ?? []);
-  const containedMap = new Map<number, { otherIdx: number; labels?: [string, string]; scale?: number; isFirst: boolean }>();
+  const containedMap = new Map<number, { otherIdx: number; labels?: [string, string]; scale?: number; aspect?: string; isFirst: boolean }>();
   for (const pair of containedPairs ?? []) {
-    containedMap.set(pair.indices[0], { otherIdx: pair.indices[1], labels: pair.labels, scale: pair.scale, isFirst: true });
-    containedMap.set(pair.indices[1], { otherIdx: pair.indices[0], labels: pair.labels, scale: pair.scale, isFirst: false });
+    containedMap.set(pair.indices[0], { otherIdx: pair.indices[1], labels: pair.labels, scale: pair.scale, aspect: pair.aspect, isFirst: true });
+    containedMap.set(pair.indices[1], { otherIdx: pair.indices[0], labels: pair.labels, scale: pair.scale, aspect: pair.aspect, isFirst: false });
   }
   const textRowMap = new Map((textRows ?? []).map((r) => [r.row, r.side]));
 
@@ -175,6 +175,7 @@ export default function ProjectContent({ images, description, descriptionBlocks,
             afterSrc={next.src}
             beforeLabel={labels?.[0]}
             afterLabel={labels?.[1]}
+            aspectClass={pairInfo.aspect}
           />
         </div>
       );
