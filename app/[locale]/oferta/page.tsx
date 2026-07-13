@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Navbar from '@/components/Navbar';
 import FooterBanner from '@/components/FooterBanner';
+import ProjectHero from '@/components/ProjectHero';
 import ServiceSection from '@/components/oferta/ServiceSection';
 import ProcessSection from '@/components/oferta/ProcessSection';
 
@@ -49,73 +50,75 @@ export default function OfertaPage() {
 
   return (
     <>
+      <ProjectHero src="/images/oferta/KOOL_oferta_komercyjne.webp" alt="Restaurant interior" />
       <Navbar />
       <main>
-        <FullWidthImage
-          src="/images/oferta/KOOL_oferta_komercyjne.webp"
-          alt="Restaurant interior"
-          aspect="aspect-[16/9]"
-        />
+        {/* Spacer: lets the fixed hero image show through */}
+        <div className="h-screen" />
 
-        <ServiceSection
-          label={t('commercial.label')}
-          heading={t('commercial.heading')}
-          description={t('commercial.description')}
-          learnMoreLabel={t('learnMore')}
-          portfolioLabel={t('portfolio')}
-          portfolioHref="/projekty?filter=komercyjne"
-          expanded={commercialExpanded}
-          onToggle={() => setCommercialExpanded(!commercialExpanded)}
-          scopeTitle={t('scopeTitle')}
-          scopeItems={commercialScope}
-          scopeImageSrc="/images/oferta/KOOL_oferta_komercyjne_small.webp"
-          scopeImageAlt="Restaurant storefront"
-          sloganHeading={t('commercial.sloganHeading')}
-          sloganText={t('commercial.sloganText')}
-          trustedByLabel={t('commercial.trustedBy')}
-          trustedByLogos={trustedByLogos}
-        />
+        {/* Content scrolls over the hero */}
+        <div className="relative z-10 bg-beige">
+          <ServiceSection
+            label={t('commercial.label')}
+            heading={t('commercial.heading')}
+            description={t('commercial.description')}
+            learnMoreLabel={t('learnMore')}
+            portfolioLabel={t('portfolio')}
+            portfolioHref="/projekty?filter=komercyjne"
+            expanded={commercialExpanded}
+            onToggle={() => setCommercialExpanded(!commercialExpanded)}
+            scopeTitle={t('scopeTitle')}
+            scopeItems={commercialScope}
+            scopeImageSrc="/images/oferta/KOOL_oferta_komercyjne_small.webp"
+            scopeImageAlt="Restaurant storefront"
+            sloganHeading={t('commercial.sloganHeading')}
+            sloganText={t('commercial.sloganText')}
+            trustedByLabel={t('commercial.trustedBy')}
+            trustedByLogos={trustedByLogos}
+          />
 
-        <FullWidthImage
-          src="/images/oferta/KOOL_oferta_prywatne.webp"
-          alt="Living room"
-          aspect="aspect-[16/9]"
-        />
+          <FullWidthImage
+            src="/images/oferta/KOOL_oferta_prywatne.webp"
+            alt="Living room"
+            aspect="aspect-[16/9]"
+          />
 
-        <ServiceSection
-          label={t('residential.label')}
-          heading={t('residential.heading')}
-          description={t('residential.description')}
-          learnMoreLabel={t('learnMore')}
-          portfolioLabel={t('portfolio')}
-          portfolioHref="/projekty?filter=mieszkalne"
-          expanded={residentialExpanded}
-          onToggle={() => setResidentialExpanded(!residentialExpanded)}
-          scopeTitle={t('scopeTitle')}
-          scopeItems={residentialScope}
-          scopeImageSrc="/images/oferta/KOOL_oferta_prywatne_small.webp"
-          scopeImageAlt="Kitchen interior"
-          sloganHeading={t('residential.sloganHeading')}
-          sloganText={t('residential.sloganText')}
-        />
+          <ServiceSection
+            label={t('residential.label')}
+            heading={t('residential.heading')}
+            description={t('residential.description')}
+            learnMoreLabel={t('learnMore')}
+            portfolioLabel={t('portfolio')}
+            portfolioHref="/projekty?filter=mieszkalne"
+            expanded={residentialExpanded}
+            onToggle={() => setResidentialExpanded(!residentialExpanded)}
+            scopeTitle={t('scopeTitle')}
+            scopeItems={residentialScope}
+            scopeImageSrc="/images/oferta/KOOL_oferta_prywatne_small.webp"
+            scopeImageAlt="Kitchen interior"
+            sloganHeading={t('residential.sloganHeading')}
+            sloganText={t('residential.sloganText')}
+          />
 
-        <FullWidthImage
-          src="/images/oferta/KOOL_oferta_finish.webp"
-          alt="Material selection"
-          aspect="aspect-[16/9]"
-        />
+          <FullWidthImage
+            src="/images/oferta/KOOL_oferta_finish.webp"
+            alt="Material selection"
+            aspect="aspect-[16/9]"
+          />
 
-        <ProcessSection
-          label={t('process.label')}
-          heading={t('process.heading')}
-          steps={processSteps}
-          imageSrc="/images/oferta/KOOL_oferta_finish_small.webp"
-          imageAlt="Construction supervision"
-          bottomHeading={t('process.bottomHeading')}
-          bottomText={t('process.bottomText')}
-        />
+          <ProcessSection
+            label={t('process.label')}
+            heading={t('process.heading')}
+            steps={processSteps}
+            imageSrc="/images/oferta/KOOL_oferta_finish_small.webp"
+            imageAlt="Construction supervision"
+            bottomHeading={t('process.bottomHeading')}
+            bottomText={t('process.bottomText')}
+          />
+
+          <FooterBanner showMarquee={false} />
+        </div>
       </main>
-      <FooterBanner showMarquee={false} />
     </>
   );
 }
