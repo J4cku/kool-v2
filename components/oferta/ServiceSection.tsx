@@ -94,21 +94,22 @@ export default function ServiceSection({
               exit={{ opacity: 0, height: 0, transition: { duration: 0.4, ease: easeOutExpo, height: { delay: 0.15 } } }}
               className="overflow-hidden"
             >
-              {/* Scope: image + list — split 50/50 down the page middle */}
-              <div className="mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-0 items-start">
+              {/* Scope: image + list — split 50/50 down the page middle,
+                  vertically centred on a shared axis */}
+              <div className="mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-0 items-start md:items-center">
                 {scopeImageSrc && (
                   <ColumnImage
                     src={scopeImageSrc}
                     alt={scopeImageAlt}
                     width="w-[68%] md:w-[56%]"
-                    className="md:pr-8 lg:pr-12 md:pt-14 lg:pt-24"
+                    className="md:pr-8 lg:pr-12"
                     sizes="(min-width: 768px) 28vw, 68vw"
                   />
                 )}
                 <div className={scopeImageSrc ? 'md:pl-8 lg:pl-12' : 'col-span-full'}>
                   <h3
-                    className="font-[700] text-dark uppercase mb-6 md:mb-8 leading-[1.02]"
-                    style={{ fontSize: 'clamp(28px, 4.2vw, 60px)' }}
+                    className="font-[700] text-dark uppercase mb-6 md:mb-8 leading-[1.2]"
+                    style={{ fontSize: 'clamp(16px, 1.6vw, 22px)' }}
                   >
                     {scopeTitle}
                   </h3>
@@ -130,7 +131,7 @@ export default function ServiceSection({
               {/* Slogan + logos */}
               <div className="pt-14 md:pt-20 max-w-[1240px]">
                 <h3
-                  className="font-[700] text-dark uppercase mb-6 md:mb-8 leading-[1.02]"
+                  className="font-[700] text-dark uppercase mb-6 md:mb-8 leading-[1.02] whitespace-pre-line"
                   style={{ fontSize: 'clamp(28px, 4.2vw, 60px)' }}
                 >
                   {sloganHeading}
@@ -157,7 +158,7 @@ export default function ServiceSection({
                           alt={logo.alt}
                           width={logo.width}
                           height={logo.height}
-                          className={`w-auto opacity-70 ${logo.className}`}
+                          className={`w-auto ${logo.className}`}
                         />
                       ))}
                     </div>

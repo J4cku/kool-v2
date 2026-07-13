@@ -176,6 +176,7 @@ export default function ProjectContent({ images, description, descriptionBlocks,
             beforeLabel={labels?.[0]}
             afterLabel={labels?.[1]}
             aspectClass={pairInfo.aspect}
+            labelPosition="above"
           />
         </div>
       );

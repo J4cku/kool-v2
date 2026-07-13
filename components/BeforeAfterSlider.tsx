@@ -9,9 +9,12 @@ interface BeforeAfterSliderProps {
   beforeLabel?: string;
   afterLabel?: string;
   aspectClass?: string;
+  /** 'overlay' places labels on the image corners (photos); 'above' puts them
+      just over the frame (plans/drawings the labels would otherwise cover). */
+  labelPosition?: 'overlay' | 'above';
 }
 
-export default function BeforeAfterSlider({ beforeSrc, afterSrc, beforeLabel, afterLabel, aspectClass = 'aspect-[3/2]' }: BeforeAfterSliderProps) {
+export default function BeforeAfterSlider({ beforeSrc, afterSrc, beforeLabel, afterLabel, aspectClass = 'aspect-[3/2]', labelPosition = 'overlay' }: BeforeAfterSliderProps) {
   const [position, setPosition] = useState(50);
   const [touched, setTouched] = useState(false);
   const [inView, setInView] = useState(false);
@@ -81,6 +84,12 @@ export default function BeforeAfterSlider({ beforeSrc, afterSrc, beforeLabel, af
 
   return (
     <div className="w-full">
+      {labelPosition === 'above' && (beforeLabel || afterLabel) && (
+        <div className="flex justify-between mb-2">
+          <p className="text-[13px] font-[500] text-dark">{beforeLabel}</p>
+          <p className="text-[13px] font-[500] text-dark">{afterLabel}</p>
+        </div>
+      )}
       <div
         ref={containerRef}
         className={`relative w-full ${aspectClass} cursor-col-resize select-none overflow-hidden`}
@@ -103,10 +112,10 @@ export default function BeforeAfterSlider({ beforeSrc, afterSrc, beforeLabel, af
         </div>
 
         {/* Labels */}
-        {beforeLabel && (
+        {labelPosition === 'overlay' && beforeLabel && (
           <p className="absolute top-3 left-4 z-10 text-[13px] font-[500] text-dark">{beforeLabel}</p>
         )}
-        {afterLabel && (
+        {labelPosition === 'overlay' && afterLabel && (
           <p className="absolute top-3 right-4 z-10 text-[13px] font-[500] text-dark">{afterLabel}</p>
         )}
 

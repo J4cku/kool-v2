@@ -144,7 +144,7 @@ export const projects: Project[] = [
       '/images/mieszkanie-widmo/KOOL_m_00_14.webp',
     ],
     fullWidthIndices: [8, 11],
-    containedPairs: [{ indices: [4, 5], labels: ['przed', 'po'], scale: 0.75 }],
+    containedPairs: [{ indices: [4, 5], labels: ['przed', 'po'], scale: 0.75, aspect: 'aspect-[3764/2484]' }],
     reverseLastRow: true,
     descriptionBlocks: [
       'Projekt mieszkania zakładał odejście od pierwotnego, bardziej podzielonego układu na rzecz otwartej, płynnie przenikającej się przestrzeni. Zredukowanie zbędnych ścian pozwoliło wydobyć naturalne światło i stworzyć czytelną, funkcjonalną strefę dzienną, w której salon, jadalnia i kuchnia budują spójną, ponadczasową całość. Bazę aranżacji tworzą jasne, ciepłe tonacje oraz duże ilości naturalnego drewna, obecnego w zabudowach stolarskich i na podłogach. Miękkie tkaniny, proste formy mebli i subtelne detale nadają wnętrzu komfortowy charakter. Kolorowe lastryko wprowadza delikatną dynamikę i stanowi motyw przewodni, który przeszywa przestrzeń — od holu po łazienkę. Wyrazistym akcentem są turkusowe płytki pojawiające się na zabudowie szafy w holu oraz na obudowie kominka w strefie dziennej, a także ceglana zabudowa prowadząca z holu do kuchni. W części kuchennej klasyczny marmur Bianco Carrara zastosowany na blatach i zabudowie ściennej równoważy kolorystyczne akcenty i podkreśla ponadczasowy charakter projektu. Efektowne, przesuwne drzwi ze szkła ornamentowego w pionowym profilu oddzielają sypialnię, zapewniając prywatność przy jednoczesnym zachowaniu dostępu światła. Sama sypialnia została zaprojektowana jako przestrzeń wyciszenia — z dużą garderobą w energetycznym kolorze, która stanowi mocny, ale harmonijny akcent. Łazienka konsekwentnie rozwija przyjętą prostą materiałową: kolorowe lastryko, kamień, ceglana szafka pod umywalkę, drewniana zabudowa oraz kwadratowe płytki w szafkowym odcieniu. Spójność materiałów i dbałość o detal budują wnętrze nowoczesne, lecz odporne na zmieniające się trendy — ciepłe, funkcjonalne i ponadczasowe.',
@@ -206,7 +206,7 @@ export const projects: Project[] = [
     year: 2026,
     area: '50 m²',
     scope: ['projekt koncepcyjny wnętrz', 'projekty mebli', 'projekt wykonawczy wnętrz', 'nadzór autorski'],
-    thumbnail: '/images/kancelaria/KOOL_kancelaria01.webp',
+    thumbnail: '/images/kancelaria/KOOL_kancelaria_MAIN.webp',
     featured: false,
     // Display order (board): hero, [02 + text], [reel + 04], [slider + 06],
     // [07 + 08], [09 + 10], [11 + 12], [13 + 14], [15 + 16]. The 05A/05B
@@ -279,7 +279,7 @@ export const projects: Project[] = [
     ],
     // Indices below count the hero (0) and the reel slot (7)
     fullWidthIndices: [2, 8, 10, 13],
-    containedPairs: [{ indices: [3, 4], labels: ['aranżacja 1', 'aranżacja 2'] }],
+    containedPairs: [{ indices: [3, 4], labels: ['aranżacja 1', 'aranżacja 2'], aspect: 'aspect-[2560/1440]' }],
     reverseLastRow: true,
     reel: { src: '/videos/biblioteka-gdansk-reel.mp4', index: 7 },
     textRows: [
