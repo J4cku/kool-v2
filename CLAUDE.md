@@ -42,7 +42,7 @@ app/
     not-found.tsx          # Custom 404 page
 components/                # Shared UI components (PascalCase)
   oferta/                  # Page-scoped components (ServiceSection, ProcessSection)
-data/projects.ts           # Project data + types (Project type, heroImages)
+data/projects.ts           # Project data + types (Project type)
 i18n/
   request.ts               # Locale config, getRequestConfig
   navigation.ts            # Typed Link, redirect, usePathname, useRouter

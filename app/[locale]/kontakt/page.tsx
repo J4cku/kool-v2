@@ -29,7 +29,7 @@ export default function KontaktPage() {
           </motion.div>
 
           <motion.div
-            className="mt-auto flex items-end justify-between gap-8"
+            className="mt-auto flex flex-col items-start md:flex-row md:items-end justify-between gap-8"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}

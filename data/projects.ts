@@ -504,18 +504,3 @@ export const projects: Project[] = [
     description: 'Konkursowy projekt koncepcyjny toalet Teatru Wielkiego Opery Narodowej w Warszawie. Język teatralnej scenografii — głęboka zieleń, miedziane detale i miękkie tekstylia — czyni z przestrzeni użytkowej kolejny akt teatralnego doświadczenia.',
   },
 ];
-
-export const heroImages = [
-  {
-    src: '/images/dobrzykowice/KOOL_dd_01.webp',
-    alt: 'dom Dobrzykowice',
-  },
-  {
-    src: '/images/dehesa/kool_dehesa_01.webp',
-    alt: 'delikatesy Dehesa',
-  },
-  {
-    src: '/images/prs.jpg',
-    alt: 'winobar Łódź',
-  },
-];

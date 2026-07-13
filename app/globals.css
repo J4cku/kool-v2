@@ -35,6 +35,12 @@ body {
   animation: marquee 15s linear infinite;
 }
 
+/* Homepage hero slider: ease-out with a short settle tail, so the incoming
+   slide doesn't visibly crawl through its last few pixels */
+.hero-swiper .swiper-wrapper {
+  transition-timing-function: cubic-bezier(0.33, 1, 0.68, 1);
+}
+
 /* Mobile navbar: logo/dot scale tracks scroll position (0-200px).
    Where CSS scroll timelines are supported (Safari 26+, Chrome 115+) the
    animation runs on the compositor, immune to main-thread jank during touch

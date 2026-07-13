@@ -1,7 +1,41 @@
 'use client';
 
-import Image from 'next/image';
 import { useTranslations } from 'next-intl';
+import ColumnImage from '@/components/ColumnImage';
+
+function ManifestoText({ heading, text }: { heading: string; text: string }) {
+  return (
+    <div className="w-full md:w-1/2 p-6 md:p-10 lg:p-14 xl:p-20">
+      <div className="flex h-full items-center">
+        <div>
+          <h2
+            className="uppercase text-dark font-[700] leading-[1.02] mb-6 md:mb-8 whitespace-pre-line"
+            style={{ fontSize: 'clamp(28px, 4.2vw, 60px)' }}
+          >
+            {heading}
+          </h2>
+          <p
+            className="text-dark/80 font-[400] leading-[1.5]"
+            style={{ fontSize: 'clamp(15px, 1.5vw, 20px)' }}
+          >
+            {text}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ManifestoImage({ src, alt }: { src: string; alt: string }) {
+  return (
+    <ColumnImage
+      src={src}
+      alt={alt}
+      valign="center"
+      className="w-full md:w-1/2 p-6 md:p-10"
+    />
+  );
+}
 
 export default function ManifestoSection() {
   const t = useTranslations('home');
@@ -9,34 +43,11 @@ export default function ManifestoSection() {
 
   return (
     <>
-      {/* Section 1: text left, tilted image right */}
+      {/* Section 1: text left, image right — project-page 50/50 row */}
       <section className="mt-[60px] md:mt-[80px]">
-        <div className="max-w-[1400px] mx-auto px-5 md:px-10 lg:px-12">
-          <div className="flex flex-col md:flex-row gap-12 md:gap-16 items-start">
-            <div className="md:w-[50%]">
-              <h2
-                className="uppercase text-dark font-[900] leading-[1.05] mb-6"
-                style={{ fontSize: 'clamp(28px, 4.5vw, 48px)' }}
-              >
-                {t('section1Heading')}
-              </h2>
-              <p className="text-dark/70 font-[400] text-[14px] md:text-[15px] leading-[1.6]">
-                {t('section1Text')}
-              </p>
-            </div>
-
-            <div className="md:w-[45%] md:ml-auto flex justify-end">
-              <div className="relative w-[70%] md:w-[336px] aspect-[3/4] overflow-hidden">
-                <Image
-                  src="/images/oferta/residential-04.jpg"
-                  alt="Material moodboard"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 60vw, 35vw"
-                />
-              </div>
-            </div>
-          </div>
+        <div className="flex flex-col md:flex-row">
+          <ManifestoText heading={t('section1Heading')} text={t('section1Text')} />
+          <ManifestoImage src="/images/home/kool_main_01.webp" alt="Material moodboard" />
         </div>
       </section>
 
@@ -55,34 +66,11 @@ export default function ManifestoSection() {
         </div>
       </div>
 
-      {/* Section 2: image left, text right */}
+      {/* Section 2: image left, text right — project-page 50/50 row */}
       <section className="mb-[80px] md:mb-[120px]">
-        <div className="max-w-[1400px] mx-auto px-5 md:px-10 lg:px-12">
-          <div className="flex flex-col md:flex-row gap-12 md:gap-16 items-start">
-            <div className="md:w-[40%] flex justify-start">
-              <div className="relative w-[70%] md:w-[336px] aspect-[3/4] overflow-hidden">
-                <Image
-                  src="/images/oferta/commercial-02.jpg"
-                  alt="Interior photography"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 35vw"
-                />
-              </div>
-            </div>
-
-            <div className="md:w-[50%] md:ml-auto md:pt-8">
-              <h2
-                className="uppercase text-dark font-[900] leading-[1.05] mb-6"
-                style={{ fontSize: 'clamp(28px, 4.5vw, 48px)' }}
-              >
-                {t('section2Heading')}
-              </h2>
-              <p className="text-dark/70 font-[400] text-[14px] md:text-[15px] leading-[1.6]">
-                {t('section2Text')}
-              </p>
-            </div>
-          </div>
+        <div className="flex flex-col md:flex-row">
+          <ManifestoImage src="/images/home/kool_main_02.webp" alt="Interior photography" />
+          <ManifestoText heading={t('section2Heading')} text={t('section2Text')} />
         </div>
       </section>
     </>
