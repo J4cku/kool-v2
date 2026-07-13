@@ -452,6 +452,43 @@ export const projects: Project[] = [
     ],
     description: 'Siedziba firmy Dobry Materiał we Wrocławiu — biuro, które odzwierciedla dynamiczny charakter marki. Zastana przestrzeń zyskała nową energię dzięki mocnym akcentom kolorystycznym, wielkoformatowym grafikom i mobilnym parawanom.',
   },
+  {
+    id: '13',
+    slug: 'toalety-w-teatrze',
+    title: 'toalety w teatrze',
+    location: 'Warszawa',
+    category: 'komercyjne',
+    status: 'completed',
+    year: 2022,
+    area: '58 m²',
+    scope: ['projekt koncepcyjny wnętrz'],
+    thumbnail: '/images/toalety-w-teatrze/kool_toalety_teatr_MAIN.webp',
+    featured: false,
+    meta: {
+      title: 'toalety Teatru Wielkiego Opery Narodowej w Warszawie - konkurs na opracowanie projektu koncepcyjnego architektury wnętrz',
+    },
+    // Display order (board): hero, [02 + text], [03 full], [04 padded + 05],
+    // [06 full], [08 + 09 padded]. Delivered 07 is a byte-identical duplicate
+    // of 06 and is omitted.
+    images: [
+      '/images/toalety-w-teatrze/kool_toalety_teatr_01.webp', // 01 hero – marmurowa umywalka na tle zielonego lastryko
+      '/images/toalety-w-teatrze/kool_toalety_teatr_02.webp', // 02 square – korytarz z rdzawym portalem (text right)
+      '/images/toalety-w-teatrze/kool_toalety_teatr_03.webp', // 03 full-width – zielona kurtyna i lustro
+      '/images/toalety-w-teatrze/kool_toalety_teatr_04.webp', // 04 portrait – lampy nad umywalką, row left (padded)
+      '/images/toalety-w-teatrze/kool_toalety_teatr_05.webp', // 05 square – kurtyna przy przejściu, row right (flush)
+      '/images/toalety-w-teatrze/kool_toalety_teatr_06.webp', // 06 full-width – umywalki i kabiny z boku
+      '/images/toalety-w-teatrze/kool_toalety_teatr_08.webp', // 08 square – drzwi kabin z miedzianymi pochwytami, row left (flush)
+      '/images/toalety-w-teatrze/kool_toalety_teatr_09.webp', // 09 portrait – ciemna kabina z umywalką, row right (padded)
+    ],
+    fullWidthIndices: [2, 5],
+    flipRowParity: true,
+    reverseLastRow: true,
+    textRows: [{ row: 0, side: 'right' }],
+    descriptionBlocks: [
+      'Projekt toalet redefiniuje przestrzeń o czysto użytkowej funkcji, czyniąc z niej integralny element doświadczenia architektonicznego teatru. To miejsce, które nie stanowi jedynie zaplecza budynku, lecz naturalną kontynuację jego narracji – przestrzeń budującą nastrój jeszcze przed wejściem na widownię i pozostającą w pamięci długo po zakończeniu spektaklu.\nInspiracją dla koncepcji stał się język teatralnej scenografii. Wnętrza rozwijają się sekwencyjnie, odsłaniając kolejne plany i perspektywy, w których światło, kolor i proporcje prowadzą użytkownika przez starannie skomponowaną opowieść. Poszczególne strefy zyskują własną tożsamość, a jednocześnie pozostają częścią spójnej kompozycji opartej na rytmie kontrastów i przenikających się przestrzeni.\nPaleta barw została zbudowana wokół ciepłych, naturalnych tonów przełamanych głęboką zielenią oraz ciemnymi akcentami. Miedziane detale subtelnie wprowadzają elegancję i szlachetność, natomiast miękkie tekstylia stanowią nawiązanie do teatralnej kurtyny – symbolicznej granicy pomiędzy rzeczywistością a światem przedstawienia.\nPowściągliwe oświetlenie dopełnia kompozycję, wydobywając głębię przestrzeni i podkreślając jej sceniczny charakter. Dzięki temu toalety stają się czymś więcej niż funkcjonalnym elementem programu budynku – są kolejnym aktem teatralnego doświadczenia, w którym architektura odgrywa rolę cichego scenografa.',
+    ],
+    description: 'Konkursowy projekt koncepcyjny toalet Teatru Wielkiego Opery Narodowej w Warszawie. Język teatralnej scenografii — głęboka zieleń, miedziane detale i miękkie tekstylia — czyni z przestrzeni użytkowej kolejny akt teatralnego doświadczenia.',
+  },
 ];
 
 export const heroImages = [
