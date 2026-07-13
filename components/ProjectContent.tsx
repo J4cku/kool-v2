@@ -21,7 +21,7 @@ interface ProjectContentProps {
   // Half-width before/after slider occupying a single gallery slot; index
   // shares the same display-slot space as reel/fullWidthIndices
   slider?: SliderData & { index: number };
-  textRows?: { row: number; side: 'left' | 'right' }[];
+  textRows?: { row: number; side: 'left' | 'right'; align?: 'start' | 'end' }[];
   flipRowParity?: boolean;
   portraitIndices?: number[];
   // Padded images rendered noticeably smaller (top-aligned, capped width);
@@ -113,7 +113,7 @@ function TextBlock({ text, align = 'end' }: { text: string; align?: 'start' | 'e
 }
 
 export default function ProjectContent({ images, description, descriptionBlocks, fullWidthIndices, containedPairs, reverseLastRow, reel, slider, textRows, flipRowParity, portraitIndices, smallIndices }: ProjectContentProps) {
-  if (images.length === 0) return null;
+  if (images.length === 0 && !reel && !slider) return null;
 
   const texts = descriptionBlocks ?? [description];
   const fullWidthSet = new Set(fullWidthIndices ?? []);
@@ -124,7 +124,7 @@ export default function ProjectContent({ images, description, descriptionBlocks,
     containedMap.set(pair.indices[0], { otherIdx: pair.indices[1], labels: pair.labels, scale: pair.scale, aspect: pair.aspect, isFirst: true });
     containedMap.set(pair.indices[1], { otherIdx: pair.indices[0], labels: pair.labels, scale: pair.scale, aspect: pair.aspect, isFirst: false });
   }
-  const textRowMap = new Map((textRows ?? []).map((r) => [r.row, r.side]));
+  const textRowMap = new Map((textRows ?? []).map((r) => [r.row, r]));
 
   const items: Item[] = images.map((src) => ({ kind: 'image', src }));
   // Insert reel/slider items by ascending display index (each index is
@@ -193,10 +193,10 @@ export default function ProjectContent({ images, description, descriptionBlocks,
 
     const parityBase = flipRowParity ? 1 : 0;
     const fullLeft = shouldReverse ? !(rowIdx % 2 === parityBase) : (rowIdx % 2 === parityBase);
-    const textSide = textRowMap.get(rowIdx);
-    const isTextRow = (textRows ? textSide !== undefined : rowIdx % 3 === 0) && textIdx < texts.length;
-    const textOnRight = isTextRow && (textRows ? textSide === 'right' : fullLeft);
-    const textAlign = textAligns[textIdx % textAligns.length];
+    const textRow = textRowMap.get(rowIdx);
+    const isTextRow = (textRows ? textRow !== undefined : rowIdx % 3 === 0) && textIdx < texts.length;
+    const textOnRight = isTextRow && (textRows ? textRow?.side === 'right' : fullLeft);
+    const textAlign = textRow?.align ?? textAligns[textIdx % textAligns.length];
 
     let left: React.ReactNode;
     let right: React.ReactNode;

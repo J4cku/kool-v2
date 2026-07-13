@@ -27,8 +27,9 @@ export type Project = {
   // the same display-slot space as reel/fullWidthIndices
   slider?: { beforeSrc: string; afterSrc: string; labels?: [string, string]; index: number };
   // Explicit text-block placement (50/50 row index + which side the text
-  // sits on); when omitted the default every-3rd-row rhythm applies
-  textRows?: { row: number; side: 'left' | 'right' }[];
+  // sits on); when omitted the default every-3rd-row rhythm applies.
+  // align overrides the default end/start/end vertical cycling
+  textRows?: { row: number; side: 'left' | 'right'; align?: 'start' | 'end' }[];
   // Flush image sits right on even rows instead of left (mirrors the
   // default alternation)
   flipRowParity?: boolean;
@@ -118,7 +119,7 @@ export const projects: Project[] = [
   {
     id: '7',
     slug: 'mieszkanie-widmo',
-    title: 'mieszkanie widmo',
+    title: 'mieszkanie',
     location: 'Wrocław',
     category: 'mieszkalne',
     status: 'completed',
@@ -190,11 +191,24 @@ export const projects: Project[] = [
     status: 'in_progress',
     year: 2026,
     area: '1200 m²',
-    scope: ['projekt koncepcyjny', 'dokumentacja wykonawcza', 'nadzór autorski', 'projekt mebli'],
-    thumbnail: '/images/belmonte.jpg',
+    scope: ['projekt koncepcyjny wnętrz', 'projekty mebli', 'projekty oświetlenia', 'projekt wykonawczy wnętrz', 'nadzór autorski'],
+    thumbnail: '/images/hotel-belmonte/kool_belmonte_main.webp',
     featured: true,
-    images: ['/images/belmonte.jpg', '/images/belmonte.jpg', '/images/belmonte.jpg', '/images/belmonte.jpg', '/images/belmonte.jpg', '/images/belmonte.jpg', '/images/belmonte.jpg'],
-    description: 'Hotel nad morzem z autorskim wystrojem wnętrz. Przestrzenie łączące nadmorski klimat z nowoczesnym designem.',
+    meta: {
+      title: '4-gwiazdkowy hotel Belmonte',
+    },
+    // Display order (board): hero, [9:16 site reel + status text]. The reel
+    // is the kool.studio Instagram construction reel (first 5s trimmed off).
+    images: [
+      '/images/hotel-belmonte/kool_belmonte_01.webp', // 01 hero – budowa, okrągłe okno (kadr 16:9)
+    ],
+    // Index counts the hero (0); the reel occupies the row-0 slot
+    reel: { src: '/videos/hotel-belmonte-reel.mp4', index: 1 },
+    textRows: [{ row: 0, side: 'right', align: 'start' }],
+    descriptionBlocks: [
+      'Projekt 4-gwiazdkowego hotelu w Ustroniu Morskim jest obecnie w realizacji.\nGdy budowa dobiegnie końca, odsłonimy wszystkie detale.',
+    ],
+    description: 'Projekt 4-gwiazdkowego hotelu w Ustroniu Morskim, obecnie w realizacji. Gdy budowa dobiegnie końca, odsłonimy wszystkie detale.',
   },
   {
     id: '6',
