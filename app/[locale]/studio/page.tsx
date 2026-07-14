@@ -78,10 +78,13 @@ export default function StudioPage() {
         src="/images/studio/team.webp"
         alt={t('heroImageAlt')}
         imageClassName="object-[60%_center] md:object-center"
+        mobileKeepAspect
       />
       <Navbar />
       <main>
-        <div className="h-screen" />
+        {/* Spacer: lets the fixed hero image show through (native 16:9 on
+            mobile, full screen from md up — mirrors ProjectHero) */}
+        <div className="aspect-video md:aspect-auto md:h-screen" />
 
         <div className="relative z-10 bg-beige">
           <section className="overflow-hidden whitespace-nowrap pt-16 pb-8 md:pt-24 md:pb-12">

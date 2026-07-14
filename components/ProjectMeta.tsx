@@ -28,8 +28,10 @@ export default function ProjectMeta({ project }: ProjectMetaProps) {
     <div className="w-full py-10 md:py-14">
       {rows.map((row, index) => (
         <div key={index}>
+          {/* Hairline: 1px scaled to half — iOS Safari paints a raw 0.5px
+              div across two device-pixel rows, which reads as doubled */}
           {index > 0 && (
-            <div className="w-full bg-dark" style={{ height: '0.5px' }} />
+            <div className="w-full bg-dark h-px origin-top [transform:scaleY(0.5)]" />
           )}
           <div className="flex items-baseline py-2.5 gap-8 px-5 md:px-10 lg:px-12">
             <span className="text-[12px] md:text-[13px] font-[600] uppercase tracking-[0.15em] text-dark w-[180px] shrink-0">

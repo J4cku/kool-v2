@@ -184,7 +184,10 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[100] bg-coral flex flex-col md:hidden"
+            /* h-dvh (not inset-0) so the menu centers within the VISIBLE
+               viewport on iOS Safari, whose collapsing bars shift the
+               layout-viewport center */
+            className="fixed inset-x-0 top-0 h-dvh z-[100] bg-coral flex flex-col md:hidden"
           >
             <div className="w-full px-4 pt-4 pb-6 flex items-center justify-between">
               <motion.span

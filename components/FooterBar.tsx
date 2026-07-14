@@ -16,14 +16,17 @@ export default function FooterBar() {
           className="w-[26px] h-[26px] flex items-center justify-center rounded-full bg-coral text-beige hover:opacity-70 transition-opacity"
         >
           <svg
-            width="15"
-            height="15"
+            /* 16px inside the 26px circle = whole-pixel 5px margins all
+               around; fractional margins render off-center at mobile DPRs */
+            width="16"
+            height="16"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
+            className="block"
             aria-hidden="true"
           >
             <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
