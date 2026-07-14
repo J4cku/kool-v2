@@ -26,7 +26,7 @@ export type Project = {
   containedPairs?: { indices: [number, number]; labels?: [string, string]; scale?: number; aspect?: string }[];
   reverseLastRow?: boolean;
   // Detail-page meta table overrides (card keeps the short title/location)
-  meta?: { title?: string; location?: string; collaboration?: string };
+  meta?: { title?: string; location?: string; collaboration?: string; visualizations?: string };
   // Self-hosted reel video (public/videos/) in the gallery flow; index
   // shares the fullWidthIndices space (position in images[], counting the
   // hero, with the reel occupying its own slot). aspect overrides the
@@ -169,13 +169,30 @@ export const projects: Project[] = [
     location: 'Łódź',
     category: 'komercyjne',
     status: 'completed',
-    year: 2025,
-    area: '95 m²',
-    scope: ['projekt koncepcyjny', 'dokumentacja wykonawcza', 'nadzór autorski'],
-    thumbnail: '/images/prs.jpg',
+    year: 2024,
+    area: '311 m²',
+    scope: ['projekt koncepcyjny wnętrz', 'food concept'],
+    thumbnail: '/images/winobar-lodz/KOOL_www_prs_wersja01_main.webp',
     featured: false,
-    images: ['/images/prs.jpg', '/images/prs.jpg', '/images/prs.jpg', '/images/prs.jpg'],
-    description: 'Autorskie wnętrza o wyraźnej tożsamości. Kameralny winobar w centrum Łodzi.',
+    meta: {
+      collaboration: 'blsk.studio',
+      visualizations: 'Michał Sokołowski',
+    },
+    // Display order (board): hero, [02 + text], [03 full], [04 padded + 05]
+    images: [
+      '/images/winobar-lodz/KOOL_www_prs_wersja01_01.webp', // 01 hero – hokery przy barze
+      '/images/winobar-lodz/KOOL_www_prs_wersja01_02.webp', // 02 square – bar z ekspresem i kolekcją win (text right)
+      '/images/winobar-lodz/KOOL_www_prs_wersja01_03.webp', // 03 full-width – sala z ceglanym sklepieniem
+      '/images/winobar-lodz/KOOL_www_prs_wersja01_04.webp', // 04 portrait – loże pod lampami, row left (padded)
+      '/images/winobar-lodz/KOOL_www_prs_wersja01_05.webp', // 05 square – sala ze sceną jazzową, row right (flush)
+    ],
+    fullWidthIndices: [2],
+    flipRowParity: true,
+    textRows: [{ row: 0, side: 'right' }],
+    descriptionBlocks: [
+      'Projekt wnętrza powstał z poszanowaniem postindustrialnego charakteru istniejącego budynku, którego największym atutem jest zachowany ceglany sufit nadający przestrzeni wyjątkowy rytm. Historyczna tkanka stanowi tło dla współczesnej aranżacji, opartej na wyrazistych akcentach kolorystycznych i świadomie budowanej atmosferze. Centralnym elementem jest bar, zaakcentowany intensywnym odcieniem oranżu, który przyciąga uwagę gości już od wejścia. Eksponowane kolekcje win stają się integralną częścią wystroju, budując tożsamość miejsca. Projekt opiera się na równowadze pomiędzy otwartością a kameralnością, gdzie gastronomia, wino i architektura tworzą spójną opowieść o wspólnym doświadczaniu.',
+    ],
+    description: 'Winobar w postindustrialnym wnętrzu w centrum Łodzi. Zachowany ceglany sufit spotyka intensywny oranż baru, a eksponowane kolekcje win budują tożsamość miejsca. Projekt powstał we współpracy z blsk.studio.',
   },
   {
     id: '4',

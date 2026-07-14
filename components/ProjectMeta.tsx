@@ -19,6 +19,9 @@ export default function ProjectMeta({ project }: ProjectMetaProps) {
     ...(project.meta?.collaboration
       ? [{ label: t('wspolpraca'), value: project.meta.collaboration }]
       : []),
+    ...(project.meta?.visualizations
+      ? [{ label: t('wizualizacje'), value: project.meta.visualizations }]
+      : []),
     ...(project.photoCredit
       ? [{ label: t('zdjecia'), value: project.photoCredit }]
       : []),
