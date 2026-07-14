@@ -5,7 +5,7 @@ import { AnimatePresence, motion, useScroll, useSpring, useTransform } from 'fra
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { Link, usePathname } from '@/i18n/navigation';
-import { INSTAGRAM_URL } from './FooterBar';
+import { INSTAGRAM_URL } from '@/lib/site';
 
 const navLinks = [
   { href: '/projekty' as const, key: 'projekty' },
@@ -79,60 +79,64 @@ export default function Navbar() {
           </Link>
 
           <div className="flex items-center gap-10">
-            {/* Desktop: menu items appear inline left of the dot */}
-            <AnimatePresence>
-              {menuOpen && (
-                <div className="hidden md:flex items-center">
-                  {navLinks.map((link, index) => (
-                    <motion.span
-                      key={link.key}
-                      className="inline-flex items-center"
-                      initial={{ opacity: 0, y: -16 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -16 }}
-                      transition={{ delay: index * 0.06, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                    >
-                      <Link
-                        href={link.href}
-                        onClick={() => setMenuOpen(false)}
-                        className={`relative transition-colors duration-200 text-[15px] text-coral hover:opacity-60 ${
-                          isActive(link.href) ? 'font-bold' : 'font-normal'
-                        }`}
-                      >
-                        <span className="relative">
-                          {t(link.key)}
-                          <motion.span
-                            className="absolute left-0 right-0 bottom-[-2px] bg-coral origin-left"
-                            style={{ height: '0.5px' }}
-                            initial={{ scaleX: 0 }}
-                            whileHover={{ scaleX: 1 }}
-                            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                          />
-                        </span>
-                      </Link>
-                      <span className="text-coral text-[15px] mr-1">,</span>
-                    </motion.span>
-                  ))}
-                  <motion.span
-                    key="instagram"
-                    className="inline-flex items-center"
-                    initial={{ opacity: 0, y: -16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -16 }}
-                    transition={{ delay: navLinks.length * 0.06, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            {/* Desktop: menu items appear inline left of the dot. Always
+                mounted (animated by state, not AnimatePresence) so the nav
+                links exist in the server HTML for crawlers. `inert` removes
+                hit-testing, focus and a11y exposure while closed; the
+                delayed visibility flip hides the text from find-in-page
+                after the staggered fade-out completes */}
+            <div
+              className={`hidden md:flex items-center transition-[visibility] duration-[600ms] ${
+                menuOpen ? 'visible' : 'invisible'
+              }`}
+              inert={!menuOpen}
+            >
+              {navLinks.map((link, index) => (
+                <motion.span
+                  key={link.key}
+                  className="inline-flex items-center"
+                  initial={false}
+                  animate={menuOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: -16 }}
+                  transition={{ delay: index * 0.06, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <Link
+                    href={link.href}
+                    onClick={() => setMenuOpen(false)}
+                    className={`relative transition-colors duration-200 text-[15px] text-coral hover:opacity-60 ${
+                      isActive(link.href) ? 'font-bold' : 'font-normal'
+                    }`}
                   >
-                    <a
-                      href={INSTAGRAM_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="relative transition-colors duration-200 text-[15px] text-coral hover:opacity-60 font-normal"
-                    >
-                      instagram
-                    </a>
-                  </motion.span>
-                </div>
-              )}
-            </AnimatePresence>
+                    <span className="relative">
+                      {t(link.key)}
+                      <motion.span
+                        className="absolute left-0 right-0 bottom-[-2px] bg-coral origin-left"
+                        style={{ height: '0.5px' }}
+                        initial={{ scaleX: 0 }}
+                        whileHover={{ scaleX: 1 }}
+                        transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                      />
+                    </span>
+                  </Link>
+                  <span className="text-coral text-[15px] mr-1">,</span>
+                </motion.span>
+              ))}
+              <motion.span
+                key="instagram"
+                className="inline-flex items-center"
+                initial={false}
+                animate={menuOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: -16 }}
+                transition={{ delay: navLinks.length * 0.06, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <a
+                  href={INSTAGRAM_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="relative transition-colors duration-200 text-[15px] text-coral hover:opacity-60 font-normal"
+                >
+                  instagram
+                </a>
+              </motion.span>
+            </div>
 
             {/* The single dot — always visible, toggles menu */}
             <motion.button
@@ -176,7 +180,12 @@ export default function Navbar() {
         )}
       </AnimatePresence>
 
-      {/* Mobile: full-screen overlay */}
+      {/* Mobile: full-screen overlay. Conditionally mounted is fine for
+          crawlers — the desktop link list above is always in the HTML
+          (hidden on mobile only by CSS).
+          h-dvh (not inset-0) so the menu centers within the VISIBLE
+          viewport on iOS Safari, whose collapsing bars shift the
+          layout-viewport center */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -184,9 +193,6 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            /* h-dvh (not inset-0) so the menu centers within the VISIBLE
-               viewport on iOS Safari, whose collapsing bars shift the
-               layout-viewport center */
             className="fixed inset-x-0 top-0 h-dvh z-[100] bg-coral flex flex-col md:hidden"
           >
             <div className="w-full px-4 pt-4 pb-6 flex items-center justify-between">

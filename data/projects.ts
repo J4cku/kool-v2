@@ -1,3 +1,6 @@
+export type ProjectFilter = 'wszystkie' | 'mieszkalne' | 'komercyjne';
+export const projectFilters: ProjectFilter[] = ['wszystkie', 'mieszkalne', 'komercyjne'];
+
 export type ProjectSlider = {
   beforeSrc: string;
   afterSrc: string;

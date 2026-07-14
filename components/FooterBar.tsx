@@ -1,8 +1,7 @@
 'use client';
 
+import { INSTAGRAM_URL } from '@/lib/site';
 import LanguageToggle from './LanguageToggle';
-
-export const INSTAGRAM_URL = 'https://www.instagram.com/kool.studio/';
 
 export default function FooterBar() {
   return (
