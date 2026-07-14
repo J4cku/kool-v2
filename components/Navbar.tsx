@@ -5,6 +5,7 @@ import { AnimatePresence, motion, useScroll, useSpring, useTransform } from 'fra
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { Link, usePathname } from '@/i18n/navigation';
+import { INSTAGRAM_URL } from './FooterBar';
 
 const navLinks = [
   { href: '/projekty' as const, key: 'projekty' },
@@ -109,11 +110,26 @@ export default function Navbar() {
                           />
                         </span>
                       </Link>
-                      {index < navLinks.length - 1 && (
-                        <span className="text-coral text-[15px] mr-1">,</span>
-                      )}
+                      <span className="text-coral text-[15px] mr-1">,</span>
                     </motion.span>
                   ))}
+                  <motion.span
+                    key="instagram"
+                    className="inline-flex items-center"
+                    initial={{ opacity: 0, y: -16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -16 }}
+                    transition={{ delay: navLinks.length * 0.06, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <a
+                      href={INSTAGRAM_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="relative transition-colors duration-200 text-[15px] text-coral hover:opacity-60 font-normal"
+                    >
+                      instagram
+                    </a>
+                  </motion.span>
                 </div>
               )}
             </AnimatePresence>
@@ -213,6 +229,22 @@ export default function Navbar() {
                   </Link>
                 </motion.div>
               ))}
+              <motion.div
+                key="instagram"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: navLinks.length * 0.1 }}
+                className="pointer-events-auto"
+              >
+                <a
+                  href={INSTAGRAM_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-5xl uppercase tracking-wide transition-opacity hover:opacity-80 text-beige/80 font-[700]"
+                >
+                  instagram
+                </a>
+              </motion.div>
             </nav>
           </motion.div>
         )}

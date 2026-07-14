@@ -15,15 +15,15 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   metadataBase: new URL('https://koolstudio.pl'),
   title: {
-    default: 'Kool Studio | Architektura Wnętrz Wrocław',
-    template: '%s | Kool Studio',
+    default: 'kool studio | architektura wnętrz wrocław',
+    template: '%s | kool studio',
   },
   description: 'Kool Studio — wrocławska pracownia architektury wnętrz. Projektujemy autorskie wnętrza mieszkalne i komercyjne z dbałością o detal. Meble, lampy, identyfikacja wizualna.',
   keywords: 'architektura wnętrz, projektowanie wnętrz, Wrocław, Warszawa, interior design, architekt wnętrz, projekt wnętrz, meble na wymiar, design',
   authors: [{ name: 'Kool Studio' }],
   creator: 'Kool Studio',
   openGraph: {
-    title: 'Kool Studio | Architektura Wnętrz Wrocław',
+    title: 'kool studio | architektura wnętrz wrocław',
     description: 'Autorskie wnętrza, które zostają na dłużej. Projektowanie przestrzeni mieszkalnych i komercyjnych.',
     type: 'website',
     locale: 'pl_PL',

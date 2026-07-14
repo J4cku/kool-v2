@@ -1,5 +1,6 @@
 'use client';
 
+import { useSyncExternalStore } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -9,19 +10,44 @@ import { projects } from '@/data/projects';
 
 import 'swiper/css';
 
-const slides = projects.map((project) => ({
+const baseSlides = projects.map((project) => ({
   src: project.thumbnail,
   alt: `${project.title} ${project.location}`,
   slug: project.slug,
 }));
 
+function shuffle<T>(items: T[]): T[] {
+  const result = [...items];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
+// Client-only random order: the server snapshot keeps the data order so SSR
+// markup is deterministic, the client snapshot shuffles once per page load.
+let shuffledSlides: typeof baseSlides | null = null;
+const emptySubscribe = () => () => {};
+function getShuffledSlides() {
+  shuffledSlides ??= shuffle(baseSlides);
+  return shuffledSlides;
+}
+function getServerSlides() {
+  return baseSlides;
+}
+
 export default function ImageStrip() {
+  // The key remount keeps Swiper's loop clones in sync once the shuffled
+  // order replaces the SSR order at hydration.
+  const slides = useSyncExternalStore(emptySubscribe, getShuffledSlides, getServerSlides);
   const { scrollY } = useScroll();
   const indicatorOpacity = useTransform(scrollY, [0, 80], [1, 0]);
 
   return (
     <div className="relative w-full min-h-[calc(100svh-160px)] flex items-start">
       <Swiper
+        key={slides === baseSlides ? 'initial' : 'shuffled'}
         className="hero-swiper w-full"
         modules={[Autoplay]}
         slidesPerView={1}

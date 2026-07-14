@@ -3,11 +3,11 @@
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import Navbar from '@/components/Navbar';
-import LanguageToggle from '@/components/LanguageToggle';
+import AddressBlock from '@/components/AddressBlock';
+import FooterBar from '@/components/FooterBar';
 
 export default function KontaktPage() {
   const tContact = useTranslations('contact');
-  const tFooter = useTranslations('footer');
 
   return (
     <>
@@ -43,36 +43,15 @@ export default function KontaktPage() {
               aria-label="Kool Studio showreel"
               className="w-[160px] h-[160px] md:w-[220px] md:h-[220px] object-cover"
             />
-            <div className="inline-flex flex-col">
-              <a
-                href="https://maps.app.goo.gl/f3nJEyLJXxKStLvPA"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block text-coral font-bold uppercase hover:opacity-70 transition-opacity w-full"
-                style={{ fontSize: 'clamp(24px, 3.5vw, 40px)', textAlign: 'justify', textAlignLast: 'justify' } as React.CSSProperties}
-              >
-                {tFooter('address')}
-              </a>
-              <a
-                href="mailto:hello@koolstudio.pl"
-                className="block text-coral font-[900] uppercase hover:opacity-70 transition-opacity"
-                style={{ fontSize: 'clamp(28px, 4.5vw, 52px)' }}
-              >
-                {tFooter('email')}
-              </a>
-            </div>
+            <AddressBlock />
           </motion.div>
         </div>
 
         {/* Coral separator line (in page flow) */}
         <div className="w-full bg-coral" style={{ height: '0.5px' }} />
 
-        {/* Fixed language toggle */}
-        <div className="fixed bottom-0 left-0 right-0 z-40">
-          <div className="px-3 md:px-5 py-2 flex justify-end">
-            <LanguageToggle />
-          </div>
-        </div>
+        {/* Fixed bottom bar: instagram + language toggle */}
+        <FooterBar />
       </main>
     </>
   );

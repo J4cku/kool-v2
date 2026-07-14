@@ -1,7 +1,8 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import LanguageToggle from './LanguageToggle';
+import AddressBlock from './AddressBlock';
+import FooterBar from './FooterBar';
 
 interface FooterBannerProps {
   showAddress?: boolean;
@@ -44,24 +45,7 @@ export default function FooterBanner({ showAddress = false, showMarquee = true }
               aria-label="Kool Studio showreel"
               className="w-[140px] h-[140px] md:w-[200px] md:h-[200px] object-cover"
             />
-            <div className="inline-flex flex-col">
-              <a
-                href="https://maps.app.goo.gl/f3nJEyLJXxKStLvPA"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block font-[400] uppercase text-dark hover:opacity-70 transition-opacity w-full"
-                style={{ fontSize: 'clamp(28px, 3.5vw, 45px)', textAlign: 'justify', textAlignLast: 'justify' } as React.CSSProperties}
-              >
-                {t('address')}
-              </a>
-              <a
-                href="mailto:hello@koolstudio.pl"
-                className="block font-[700] uppercase text-dark hover:opacity-70 transition-opacity w-full"
-                style={{ fontSize: 'clamp(32px, 4.2vw, 55px)' }}
-              >
-                {t('email')}
-              </a>
-            </div>
+            <AddressBlock />
           </div>
         </div>
       )}
@@ -69,12 +53,8 @@ export default function FooterBanner({ showAddress = false, showMarquee = true }
       {/* Coral separator line (in page flow) */}
       <div className="w-full bg-coral" style={{ height: '0.5px' }} />
 
-      {/* Fixed language toggle */}
-      <div className="fixed bottom-0 left-0 right-0 z-40">
-        <div className="px-3 md:px-5 py-2 flex justify-end">
-          <LanguageToggle />
-        </div>
-      </div>
+      {/* Fixed bottom bar: instagram + language toggle */}
+      <FooterBar />
     </footer>
   );
 }

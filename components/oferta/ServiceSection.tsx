@@ -2,8 +2,12 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay } from 'swiper/modules';
 import { Link } from '@/i18n/navigation';
 import ColumnImage from '@/components/ColumnImage';
+
+import 'swiper/css';
 
 const easeOutExpo: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -150,18 +154,31 @@ export default function ServiceSection({
                     >
                       {trustedByLabel}
                     </span>
-                    <div className="flex items-center justify-start gap-x-12 md:gap-x-20 gap-y-8 flex-wrap">
-                      {trustedByLogos.map((logo, i) => (
-                        <Image
-                          key={i}
-                          src={logo.src}
-                          alt={logo.alt}
-                          width={logo.width}
-                          height={logo.height}
-                          className={`w-auto ${logo.className}`}
-                        />
+                    {/* Logos loop as a slider; the list is doubled so Swiper
+                        always has enough slides for a seamless loop */}
+                    <Swiper
+                      modules={[Autoplay]}
+                      slidesPerView={2}
+                      spaceBetween={32}
+                      breakpoints={{ 768: { slidesPerView: 4, spaceBetween: 64 } }}
+                      loop
+                      speed={800}
+                      autoplay={{ delay: 2000, disableOnInteraction: false }}
+                    >
+                      {[...trustedByLogos, ...trustedByLogos].map((logo, i) => (
+                        <SwiperSlide key={i}>
+                          <div className="flex items-center justify-center h-16 md:h-20">
+                            <Image
+                              src={logo.src}
+                              alt={logo.alt}
+                              width={logo.width}
+                              height={logo.height}
+                              className={`w-auto ${logo.className}`}
+                            />
+                          </div>
+                        </SwiperSlide>
                       ))}
-                    </div>
+                    </Swiper>
                   </div>
                 )}
               </div>

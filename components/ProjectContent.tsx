@@ -7,7 +7,7 @@ import ColumnImage from './ColumnImage';
 type SliderData = { beforeSrc: string; afterSrc: string; labels?: [string, string] };
 type Item =
   | { kind: 'image'; src: string }
-  | { kind: 'reel'; src: string }
+  | { kind: 'reel'; src: string; aspect?: string }
   | ({ kind: 'slider' } & SliderData);
 
 interface ProjectContentProps {
@@ -17,7 +17,7 @@ interface ProjectContentProps {
   fullWidthIndices?: number[];
   containedPairs?: { indices: [number, number]; labels?: [string, string]; scale?: number; aspect?: string }[];
   reverseLastRow?: boolean;
-  reel?: { src: string; index: number };
+  reel?: { src: string; index: number; aspect?: string };
   // Half-width before/after slider occupying a single gallery slot; index
   // shares the same display-slot space as reel/fullWidthIndices
   slider?: SliderData & { index: number };
@@ -60,7 +60,7 @@ function FullImage({ src, portrait }: { src: string; portrait?: boolean }) {
   );
 }
 
-function ReelVideo({ src }: { src: string }) {
+function ReelVideo({ src, aspect = 'aspect-[9/16]' }: { src: string; aspect?: string }) {
   return (
     <div className="w-full md:w-1/2 p-6 md:p-10 lg:p-14 xl:p-20 flex items-center">
       <video
@@ -70,7 +70,7 @@ function ReelVideo({ src }: { src: string }) {
         loop
         playsInline
         aria-label="Kool Studio project video"
-        className="mx-auto w-full max-w-[360px] aspect-[9/16] object-cover"
+        className={`mx-auto w-full max-w-[360px] ${aspect} object-cover`}
       />
     </div>
   );
@@ -92,12 +92,12 @@ function SliderCell({ item }: { item: SliderData }) {
 
 function FullSlot({ item, portrait }: { item: Item; portrait?: boolean }) {
   if (item.kind === 'slider') return <SliderCell item={item} />;
-  return item.kind === 'image' ? <FullImage src={item.src} portrait={portrait} /> : <ReelVideo src={item.src} />;
+  return item.kind === 'image' ? <FullImage src={item.src} portrait={portrait} /> : <ReelVideo src={item.src} aspect={item.aspect} />;
 }
 
 function PaddedSlot({ item, small }: { item: Item; small?: boolean }) {
   if (item.kind === 'slider') return <SliderCell item={item} />;
-  return item.kind === 'image' ? <PaddedImage src={item.src} small={small} /> : <ReelVideo src={item.src} />;
+  return item.kind === 'image' ? <PaddedImage src={item.src} small={small} /> : <ReelVideo src={item.src} aspect={item.aspect} />;
 }
 
 function TextBlock({ text, align = 'end' }: { text: string; align?: 'start' | 'end' }) {
@@ -130,7 +130,7 @@ export default function ProjectContent({ images, description, descriptionBlocks,
   // Insert reel/slider items by ascending display index (each index is
   // measured in the final array, so inserting low-to-high keeps them aligned)
   const inserts: { index: number; item: Item }[] = [];
-  if (reel) inserts.push({ index: reel.index, item: { kind: 'reel', src: reel.src } });
+  if (reel) inserts.push({ index: reel.index, item: { kind: 'reel', src: reel.src, aspect: reel.aspect } });
   if (slider) inserts.push({ index: slider.index, item: { kind: 'slider', beforeSrc: slider.beforeSrc, afterSrc: slider.afterSrc, labels: slider.labels } });
   inserts.sort((a, b) => a.index - b.index);
   for (const ins of inserts) {

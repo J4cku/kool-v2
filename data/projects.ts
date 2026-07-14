@@ -21,8 +21,9 @@ export type Project = {
   meta?: { title?: string; location?: string; collaboration?: string };
   // Self-hosted reel video (public/videos/) in the gallery flow; index
   // shares the fullWidthIndices space (position in images[], counting the
-  // hero, with the reel occupying its own slot)
-  reel?: { src: string; index: number };
+  // hero, with the reel occupying its own slot). aspect overrides the
+  // default 9:16 frame (e.g. 'aspect-[2/3]')
+  reel?: { src: string; index: number; aspect?: string };
   // Half-width before/after slider occupying one gallery slot; index shares
   // the same display-slot space as reel/fullWidthIndices
   slider?: { beforeSrc: string; afterSrc: string; labels?: [string, string]; index: number };
@@ -203,7 +204,7 @@ export const projects: Project[] = [
       '/images/hotel-belmonte/kool_belmonte_01.webp', // 01 hero – budowa, okrągłe okno (kadr 16:9)
     ],
     // Index counts the hero (0); the reel occupies the row-0 slot
-    reel: { src: '/videos/hotel-belmonte-reel.mp4', index: 1 },
+    reel: { src: '/videos/hotel-belmonte-reel.mp4', index: 1, aspect: 'aspect-[2/3]' },
     textRows: [{ row: 0, side: 'right', align: 'start' }],
     descriptionBlocks: [
       'Projekt 4-gwiazdkowego hotelu w Ustroniu Morskim jest obecnie w realizacji.\nGdy budowa dobiegnie końca, odsłonimy wszystkie detale.',

@@ -84,3 +84,12 @@ body {
     transform: translateY(-16px) scale(0.7);
   }
 }
+
+/* Horizontal scroll rows (filter tabs) — scrollable without a visible bar */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
