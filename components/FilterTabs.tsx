@@ -17,7 +17,9 @@ export default function FilterTabs({ activeFilter, onFilterChange }: FilterTabsP
   return (
     /* Sliding row: scrolls horizontally when the labels don't fit, bleeding
        to the viewport edge on mobile (parent has px-5) so nothing gets cut */
-    <div className="flex items-center gap-1.5 md:gap-3 overflow-x-auto no-scrollbar -mx-5 px-5 md:mx-0 md:px-0">
+    /* Mobile: justified — pills spread over the full content width with
+       equal gaps; md+ keeps the original left-aligned row */
+    <div className="flex items-center justify-between gap-1.5 md:justify-start md:gap-3 overflow-x-auto no-scrollbar -mx-5 px-5 md:mx-0 md:px-0">
       {filters.map((filter) => (
         <button
           key={filter}
