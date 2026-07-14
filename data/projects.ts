@@ -458,7 +458,7 @@ export const projects: Project[] = [
     year: 2023,
     area: '79 m²',
     scope: ['projekt koncepcyjny wnętrz', 'projekty mebli', 'projekt wykonawczy wnętrz', 'nadzór autorski'],
-    thumbnail: '/images/biuro-dobry-material/kool_dobry_material_02.webp',
+    thumbnail: '/images/biuro-dobry-material/kool_dobry_material_main.webp',
     featured: false,
     meta: {
       title: 'biuro firmy Dobry Materiał®',
@@ -535,9 +535,7 @@ export const projects: Project[] = [
     category: 'komercyjne',
     status: 'completed',
     year: 2026,
-    // NOTE: the designer layout says "8 m2" — almost certainly a copy-paste
-    // leftover from the łazienki meta table; confirm the real value
-    area: '8 m²',
+    area: '340 m²',
     scope: ['projekt koncepcyjny wnętrz', 'projekty mebli', 'projekt wykonawczy wnętrz', 'nadzór autorski'],
     thumbnail: '/images/foodhall-piazza/kool_piazza_main.webp',
     featured: false,
