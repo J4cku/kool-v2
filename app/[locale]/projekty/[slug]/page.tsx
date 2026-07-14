@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { projects } from '@/data/projects';
+import { BASE_URL } from '@/lib/site';
+import { jsonLdScript, localeAlternates, ogLocale } from '@/lib/metadata';
 import Navbar from '@/components/Navbar';
 import FooterBanner from '@/components/FooterBanner';
 import ProjectHero from '@/components/ProjectHero';
@@ -32,16 +34,10 @@ export async function generateMetadata({
       title: `${title} | kool studio`,
       description,
       type: 'article',
-      locale: locale === 'en' ? 'en_US' : 'pl_PL',
+      locale: ogLocale(locale),
       images: project.images[0] ? [{ url: project.images[0] }] : undefined,
     },
-    alternates: {
-      canonical: `https://koolstudio.pl/${locale}/projekty/${slug}`,
-      languages: {
-        'pl': `https://koolstudio.pl/pl/projekty/${slug}`,
-        'en': `https://koolstudio.pl/en/projekty/${slug}`,
-      },
-    },
+    alternates: localeAlternates(locale, `/projekty/${slug}`),
   };
 }
 
@@ -50,15 +46,66 @@ export default async function ProjectDetailPage({
 }: {
   params: Promise<{ slug: string; locale: string }>;
 }) {
-  const { slug } = await params;
+  const { slug, locale } = await params;
   const project = projects.find((p) => p.slug === slug);
 
   if (!project) {
     notFound();
   }
 
+  const displayTitle = project.meta?.title ?? project.title;
+  const displayLocation = project.meta?.location ?? project.location;
+  const pageUrl = `${BASE_URL}/${locale}/projekty/${slug}`;
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'CreativeWork',
+        '@id': `${pageUrl}#project`,
+        name: `${displayTitle} — ${displayLocation}`,
+        description: project.description,
+        url: pageUrl,
+        image: project.images.map((image) => `${BASE_URL}${image}`),
+        dateCreated: String(project.year),
+        locationCreated: {
+          '@type': 'Place',
+          name: displayLocation,
+          address: { '@type': 'PostalAddress', addressCountry: 'PL' },
+        },
+        creator: {
+          '@type': 'ProfessionalService',
+          '@id': `${BASE_URL}/#studio`,
+          name: 'Kool Studio',
+          url: BASE_URL,
+        },
+        ...(project.meta?.collaboration
+          ? { contributor: { '@type': 'Organization', name: project.meta.collaboration } }
+          : {}),
+        inLanguage: 'pl',
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'kool studio', item: `${BASE_URL}/${locale}` },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: locale === 'en' ? 'projects' : 'projekty',
+            item: `${BASE_URL}/${locale}/projekty`,
+          },
+          { '@type': 'ListItem', position: 3, name: displayTitle, item: pageUrl },
+        ],
+      },
+    ],
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(jsonLd) }}
+      />
       {project.images[0] && (
         <ProjectHero src={project.images[0]} alt={project.title} mobileKeepAspect />
       )}

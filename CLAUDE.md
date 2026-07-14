@@ -30,6 +30,7 @@ app/
   globals.css              # Tailwind @theme tokens (colors, fonts, max-width)
   robots.ts                # SEO robots.txt
   sitemap.ts               # Dynamic sitemap from project data
+  llms.txt/route.ts        # llms.txt generated from data/projects.ts + data/press.ts
   [locale]/                # All pages nested under locale segment
     layout.tsx             # Root layout, Poppins font, JSON-LD, NextIntlClientProvider
     page.tsx               # Homepage (Navbar, ImageStrip, ManifestoSection, FooterBanner)
@@ -43,6 +44,9 @@ app/
 components/                # Shared UI components (PascalCase)
   oferta/                  # Page-scoped components (ServiceSection, ProcessSection)
 data/projects.ts           # Project data + types (Project type)
+data/press.ts              # Press features (studio page + llms.txt)
+lib/site.ts                # BASE_URL, INSTAGRAM_URL (client-safe constants)
+lib/metadata.ts            # localeAlternates + pageMetadata helpers (server-only)
 i18n/
   request.ts               # Locale config, getRequestConfig
   navigation.ts            # Typed Link, redirect, usePathname, useRouter
@@ -53,7 +57,6 @@ public/
   images/                  # Project photos organized by project slug
   videos/                  # Video assets (reel.mp4)
   logo.svg, dot.svg        # Brand assets
-  llms.txt                 # LLM-friendly site description
 docs/superpowers/          # Design spec + implementation plan (historical records)
 .claude/                   # Agent settings + project skills (verify-site, add-project, build-from-design)
 design/                    # Gitignored inbox for designer PDF/.ai mockups
@@ -148,7 +151,8 @@ Project skills live in `.claude/skills/`; shared agent permissions in `.claude/s
 
 ## SEO
 
-- Metadata in `app/[locale]/layout.tsx` (title, OG, alternates)
-- JSON-LD `ProfessionalService` schema in layout `<head>`
+- Locale-aware metadata via `generateMetadata` in `app/[locale]/layout.tsx`; each static subpage sets its own title/description/canonical via `pageMetadata()` from `lib/metadata.ts` (strings live in `messages/*.json` under `meta.*` — keep pl/en parity)
+- JSON-LD `ProfessionalService` schema in layout `<head>`; per-project `CreativeWork` + `BreadcrumbList` in `app/[locale]/projekty/[slug]/page.tsx`
 - Dynamic sitemap at `app/sitemap.ts` covers all locale + page + project combinations
-- `public/llms.txt` for LLM discovery
+- `/llms.txt` for LLM discovery — generated from `data/projects.ts` + `data/press.ts` in `app/llms.txt/route.ts` (never hand-edit project facts)
+- Crawlability invariants: nav links stay in the server HTML (Navbar animates visibility by state, no conditional mounting) and the projects listing grid is server-rendered from `searchParams`

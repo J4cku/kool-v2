@@ -1,15 +1,12 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-
-type FilterValue = 'wszystkie' | 'mieszkalne' | 'komercyjne';
+import { projectFilters, type ProjectFilter } from '@/data/projects';
 
 interface FilterTabsProps {
-  activeFilter: FilterValue;
-  onFilterChange: (filter: FilterValue) => void;
+  activeFilter: ProjectFilter;
+  onFilterChange: (filter: ProjectFilter) => void;
 }
-
-const filters: FilterValue[] = ['wszystkie', 'mieszkalne', 'komercyjne'];
 
 export default function FilterTabs({ activeFilter, onFilterChange }: FilterTabsProps) {
   const t = useTranslations('projects');
@@ -20,7 +17,7 @@ export default function FilterTabs({ activeFilter, onFilterChange }: FilterTabsP
     /* Mobile: justified — pills spread over the full content width with
        equal gaps; md+ keeps the original left-aligned row */
     <div className="flex items-center justify-between gap-1.5 md:justify-start md:gap-3 overflow-x-auto no-scrollbar -mx-5 px-5 md:mx-0 md:px-0">
-      {filters.map((filter) => (
+      {projectFilters.map((filter) => (
         <button
           key={filter}
           onClick={() => onFilterChange(filter)}

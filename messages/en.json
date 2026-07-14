@@ -11,7 +11,31 @@
     "section1Heading": "WE CREATE TIMELESS INTERIORS",
     "section1Text": "We design spaces that don't rely on trends. We treat each space individually, as an answer to a specific context and needs. Whether it's a residential or commercial project, we'll create an interior that tells your story.",
     "section2Heading": "WE DESIGN AT EVERY SCALE",
-    "section2Text": "We have years of experience in delivering projects of various character — from furniture details, through apartments and houses, to gastronomic, commercial and hotel venues. We manage the process comprehensively, with full control over the final result. This is how refined spaces are created, filled with original, unique elements."
+    "section2Text": "We have years of experience in delivering projects of various character — from furniture details, through apartments and houses, to gastronomic, commercial and hotel venues. We manage the process comprehensively, with full control over the final result. This is how refined spaces are created, filled with original, unique elements. We are based in Wrocław and run projects across Poland — including Warsaw, Łódź and Gdańsk."
+  },
+  "meta": {
+    "schemaDescription": "Wrocław-based interior architecture practice specializing in residential and commercial interiors, custom furniture, lighting design, and visual identity. Projects across Poland, including Warsaw.",
+    "home": {
+      "title": "kool studio | interior architecture wrocław, poland",
+      "description": "Kool Studio — a Wrocław-based interior architecture practice. We design original residential and commercial interiors across Poland. Custom furniture, lighting, visual identity.",
+      "ogDescription": "Original interiors that stay for longer. We design residential and commercial spaces in Wrocław, Warsaw and across Poland."
+    },
+    "projekty": {
+      "title": "projects — interior design portfolio",
+      "description": "Kool Studio portfolio — apartments, houses, restaurants, hotels and commercial interiors in Wrocław, Warsaw and across Poland."
+    },
+    "studio": {
+      "title": "studio — about us",
+      "description": "Kool Studio is led by architects Ola Kilińska and Ola Leszczyńska. The Wrocław-based practice designs residential and commercial interiors across Poland."
+    },
+    "oferta": {
+      "title": "services — interior design",
+      "description": "Comprehensive interior design for commercial and residential spaces: concept, construction documentation, author's supervision, custom furniture, branding. Wrocław and all of Poland."
+    },
+    "kontakt": {
+      "title": "contact",
+      "description": "Get in touch with Kool Studio — an interior architecture practice from Wrocław, Poland. Studio: Zaporoska 83/15, 53-415 Wrocław. Email: hello@koolstudio.pl."
+    }
   },
   "projects": {
     "wszystkie": "all",

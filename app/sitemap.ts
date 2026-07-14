@@ -1,7 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { projects } from '@/data/projects';
-
-const BASE_URL = 'https://koolstudio.pl';
+import { BASE_URL } from '@/lib/site';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const locales = ['pl', 'en'];

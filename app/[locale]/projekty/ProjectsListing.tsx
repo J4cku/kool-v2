@@ -1,19 +1,20 @@
 'use client';
 
 import { useState } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { projects } from '@/data/projects';
+import { projects, type ProjectFilter } from '@/data/projects';
 import FilterTabs from '@/components/FilterTabs';
 import ProjectGrid from '@/components/ProjectGrid';
 
-type FilterValue = 'wszystkie' | 'mieszkalne' | 'komercyjne';
-const validFilters: FilterValue[] = ['wszystkie', 'mieszkalne', 'komercyjne'];
+export default function ProjectsListing({ initialFilter }: { initialFilter: ProjectFilter }) {
+  const [activeFilter, setActiveFilter] = useState<ProjectFilter>(initialFilter);
 
-export default function ProjectsListing() {
-  const searchParams = useSearchParams();
-  const paramFilter = searchParams.get('filter') as FilterValue | null;
-  const initialFilter = paramFilter && validFilters.includes(paramFilter) ? paramFilter : 'wszystkie';
-  const [activeFilter, setActiveFilter] = useState<FilterValue>(initialFilter);
+  const handleFilterChange = (filter: ProjectFilter) => {
+    setActiveFilter(filter);
+    // Shallow history update keeps the filter shareable in the URL without
+    // a server round-trip (window.location keeps the locale prefix)
+    const query = filter === 'wszystkie' ? '' : `?filter=${filter}`;
+    window.history.replaceState(null, '', `${window.location.pathname}${query}`);
+  };
 
   const filteredProjects =
     activeFilter === 'wszystkie'
@@ -23,7 +24,7 @@ export default function ProjectsListing() {
   return (
     <>
       <div className="mb-4">
-        <FilterTabs activeFilter={activeFilter} onFilterChange={setActiveFilter} />
+        <FilterTabs activeFilter={activeFilter} onFilterChange={handleFilterChange} />
       </div>
       <ProjectGrid projects={filteredProjects} />
     </>
