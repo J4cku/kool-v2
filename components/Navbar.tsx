@@ -212,7 +212,10 @@ export default function Navbar() {
               </motion.button>
             </div>
 
-            <nav className="absolute inset-0 flex flex-col items-center justify-center gap-8 text-center pointer-events-none">
+            {/* In-flow flex-1 (not absolute inset-0): centers the items in
+                the space below the logo header — full-screen centering left
+                far less air above the menu than below it */}
+            <nav className="flex-1 flex flex-col items-center justify-center gap-8 text-center pb-[8vh]">
               {navLinks.map((link, index) => (
                 <motion.div
                   key={link.key}
