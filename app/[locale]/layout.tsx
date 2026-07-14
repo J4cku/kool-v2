@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/next';
 import { NextIntlClientProvider } from 'next-intl';
 import { notFound } from 'next/navigation';
 import { locales, type Locale } from '@/i18n/request';
@@ -112,6 +113,9 @@ export default async function LocaleLayout({
         <NextIntlClientProvider locale={locale} messages={messages}>
           <PageTransition>{children}</PageTransition>
         </NextIntlClientProvider>
+        {/* Cookieless visit counting — needs Web Analytics enabled in the
+            Vercel dashboard to start collecting */}
+        <Analytics />
       </body>
     </html>
   );

@@ -12,6 +12,7 @@
     "check": "pnpm typecheck && pnpm lint && pnpm check:i18n && pnpm build"
   },
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
     "framer-motion": "^12.33.0",
     "next": "^16.1.6",
     "next-intl": "^4.8.2",
