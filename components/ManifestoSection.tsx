@@ -2,18 +2,18 @@
 
 import { useTranslations } from 'next-intl';
 import ColumnImage from '@/components/ColumnImage';
+import RevealHeading from '@/components/RevealHeading';
 
 function ManifestoText({ heading, text }: { heading: string; text: string }) {
   return (
     <div className="w-full md:w-1/2 p-6 md:p-10 lg:p-14 xl:p-20">
       <div className="flex h-full items-center">
         <div>
-          <h2
-            className="uppercase text-dark font-[700] leading-[1.02] mb-6 md:mb-8 whitespace-pre-line"
+          <RevealHeading
+            text={heading}
+            className="uppercase text-dark font-[700] leading-[1.02] mb-6 md:mb-8"
             style={{ fontSize: 'clamp(28px, 4.2vw, 60px)' }}
-          >
-            {heading}
-          </h2>
+          />
           <p
             className="text-dark/80 font-[400] leading-[1.5]"
             style={{ fontSize: 'clamp(15px, 1.5vw, 20px)' }}

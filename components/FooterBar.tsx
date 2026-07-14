@@ -13,11 +13,11 @@ export default function FooterBar() {
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Instagram"
-          className="w-[26px] h-[26px] flex items-center justify-center text-coral hover:opacity-70 transition-opacity"
+          className="w-[26px] h-[26px] flex items-center justify-center rounded-full bg-coral text-beige hover:opacity-70 transition-opacity"
         >
           <svg
-            width="17"
-            height="17"
+            width="15"
+            height="15"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"

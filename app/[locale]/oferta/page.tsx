@@ -2,34 +2,12 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import Image from 'next/image';
 import Navbar from '@/components/Navbar';
 import FooterBanner from '@/components/FooterBanner';
+import ParallaxImage from '@/components/ParallaxImage';
 import ProjectHero from '@/components/ProjectHero';
 import ServiceSection from '@/components/oferta/ServiceSection';
 import ProcessSection from '@/components/oferta/ProcessSection';
-
-function FullWidthImage({
-  src,
-  alt,
-  aspect = 'aspect-[8/5]',
-}: {
-  src: string;
-  alt: string;
-  aspect?: string;
-}) {
-  return (
-    <div className={`relative w-full ${aspect} overflow-hidden`}>
-      <Image
-        src={src}
-        alt={alt}
-        fill
-        className="object-cover"
-        sizes="100vw"
-      />
-    </div>
-  );
-}
 
 export default function OfertaPage() {
   const t = useTranslations('oferta');
@@ -78,7 +56,7 @@ export default function OfertaPage() {
             trustedByLogos={trustedByLogos}
           />
 
-          <FullWidthImage
+          <ParallaxImage
             src="/images/oferta/KOOL_oferta_prywatne.webp"
             alt="Living room"
             aspect="aspect-[16/9]"
@@ -101,7 +79,7 @@ export default function OfertaPage() {
             sloganText={t('residential.sloganText')}
           />
 
-          <FullWidthImage
+          <ParallaxImage
             src="/images/oferta/KOOL_oferta_finish.webp"
             alt="Material selection"
             aspect="aspect-[16/9]"

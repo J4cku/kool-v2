@@ -21,7 +21,7 @@ export default function KontaktPage() {
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
             <h1
-              className="text-coral font-[700] uppercase leading-tight"
+              className="text-dark font-[700] uppercase leading-tight"
               style={{ fontSize: 'clamp(32px, 5vw, 54px)' }}
             >
               {tContact('cta')}

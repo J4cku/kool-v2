@@ -3,8 +3,9 @@
 import Image from 'next/image';
 import BeforeAfterSlider from './BeforeAfterSlider';
 import ColumnImage from './ColumnImage';
+import ParallaxImage from './ParallaxImage';
 
-type SliderData = { beforeSrc: string; afterSrc: string; labels?: [string, string] };
+type SliderData = { beforeSrc: string; afterSrc: string; labels?: [string, string]; aspect?: string };
 type Item =
   | { kind: 'image'; src: string }
   | { kind: 'reel'; src: string; aspect?: string }
@@ -18,9 +19,9 @@ interface ProjectContentProps {
   containedPairs?: { indices: [number, number]; labels?: [string, string]; scale?: number; aspect?: string }[];
   reverseLastRow?: boolean;
   reel?: { src: string; index: number; aspect?: string };
-  // Half-width before/after slider occupying a single gallery slot; index
-  // shares the same display-slot space as reel/fullWidthIndices
-  slider?: SliderData & { index: number };
+  // Half-width before/after slider(s), each occupying a single gallery slot;
+  // index shares the same display-slot space as reel/fullWidthIndices
+  slider?: (SliderData & { index: number }) | (SliderData & { index: number })[];
   textRows?: { row: number; side: 'left' | 'right'; align?: 'start' | 'end' }[];
   flipRowParity?: boolean;
   portraitIndices?: number[];
@@ -40,6 +41,7 @@ function PaddedImage({ src, small }: { src: string; small?: boolean }) {
         fit="contain"
         className="w-full md:w-1/2 p-6 md:p-10 lg:p-14 xl:p-20"
         sizes="(max-width: 768px) 72vw, 30vw"
+        reveal={false}
       />
     );
   }
@@ -84,7 +86,7 @@ function SliderCell({ item }: { item: SliderData }) {
         afterSrc={item.afterSrc}
         beforeLabel={item.labels?.[0]}
         afterLabel={item.labels?.[1]}
-        aspectClass="aspect-[2/3]"
+        aspectClass={item.aspect ?? 'aspect-[2/3]'}
       />
     </div>
   );
@@ -131,7 +133,9 @@ export default function ProjectContent({ images, description, descriptionBlocks,
   // measured in the final array, so inserting low-to-high keeps them aligned)
   const inserts: { index: number; item: Item }[] = [];
   if (reel) inserts.push({ index: reel.index, item: { kind: 'reel', src: reel.src, aspect: reel.aspect } });
-  if (slider) inserts.push({ index: slider.index, item: { kind: 'slider', beforeSrc: slider.beforeSrc, afterSrc: slider.afterSrc, labels: slider.labels } });
+  for (const s of slider ? (Array.isArray(slider) ? slider : [slider]) : []) {
+    inserts.push({ index: s.index, item: { kind: 'slider', beforeSrc: s.beforeSrc, afterSrc: s.afterSrc, labels: s.labels, aspect: s.aspect } });
+  }
   inserts.sort((a, b) => a.index - b.index);
   for (const ins of inserts) {
     items.splice(Math.min(Math.max(ins.index, 0), items.length), 0, ins.item);
@@ -150,9 +154,7 @@ export default function ProjectContent({ images, description, descriptionBlocks,
     // Full-width row
     if (fullWidthSet.has(itemIdx) && current.kind === 'image') {
       rows.push(
-        <div key={`row-${rowIdx}`} className="w-full relative aspect-video">
-          <Image src={current.src} alt="Kool Studio project" fill className="object-cover" sizes="100vw" quality={90} />
-        </div>
+        <ParallaxImage key={`row-${rowIdx}`} src={current.src} alt="Kool Studio project" sizes="100vw" quality={90} />
       );
       itemIdx++;
       rowIdx++;

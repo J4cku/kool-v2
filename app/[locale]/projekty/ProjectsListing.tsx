@@ -25,7 +25,7 @@ export default function ProjectsListing() {
       <div className="mb-4">
         <FilterTabs activeFilter={activeFilter} onFilterChange={setActiveFilter} />
       </div>
-      <ProjectGrid key={activeFilter} projects={filteredProjects} />
+      <ProjectGrid projects={filteredProjects} />
     </>
   );
 }

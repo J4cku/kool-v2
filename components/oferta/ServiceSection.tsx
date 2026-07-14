@@ -6,6 +6,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import { Link } from '@/i18n/navigation';
 import ColumnImage from '@/components/ColumnImage';
+import RevealHeading from '@/components/RevealHeading';
 
 import 'swiper/css';
 
@@ -59,12 +60,11 @@ export default function ServiceSection({
           >
             {label}
           </span>
-          <h2
+          <RevealHeading
+            text={heading}
             className="font-[700] text-dark uppercase mb-6 md:mb-8 leading-[1.02]"
             style={{ fontSize: 'clamp(28px, 4.2vw, 60px)' }}
-          >
-            {heading}
-          </h2>
+          />
           <p
             className="text-dark/80 leading-[1.5] max-w-[1240px] mb-10 md:mb-14 font-[400]"
             style={{ fontSize: 'clamp(15px, 1.5vw, 20px)' }}
@@ -134,12 +134,12 @@ export default function ServiceSection({
 
               {/* Slogan + logos */}
               <div className="pt-14 md:pt-20 max-w-[1240px]">
-                <h3
-                  className="font-[700] text-dark uppercase mb-6 md:mb-8 leading-[1.02] whitespace-pre-line"
+                <RevealHeading
+                  as="h3"
+                  text={sloganHeading}
+                  className="font-[700] text-dark uppercase mb-6 md:mb-8 leading-[1.02]"
                   style={{ fontSize: 'clamp(28px, 4.2vw, 60px)' }}
-                >
-                  {sloganHeading}
-                </h3>
+                />
                 <p
                   className="text-dark/80 font-[400] leading-[1.5] max-w-[1080px]"
                   style={{ fontSize: 'clamp(15px, 1.5vw, 20px)' }}

@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Reveal from './Reveal';
 
 type Fit = 'cover' | 'contain';
 type Align = 'start' | 'center' | 'end';
@@ -23,6 +24,8 @@ interface ColumnImageProps {
   /** next/image sizes hint (default "(min-width: 768px) 30vw, 70vw"). */
   sizes?: string;
   priority?: boolean;
+  /** Scroll-in un-mask animation (default true); false renders statically. */
+  reveal?: boolean;
 }
 
 const JUSTIFY: Record<Align, string> = {
@@ -47,19 +50,27 @@ export default function ColumnImage({
   className = '',
   sizes = '(min-width: 768px) 30vw, 70vw',
   priority,
+  reveal = true,
 }: ColumnImageProps) {
+  const image = (
+    <Image
+      src={src}
+      alt={alt}
+      fill
+      className={fit === 'contain' ? 'object-contain' : 'object-cover'}
+      sizes={sizes}
+      priority={priority}
+    />
+  );
+  const frame = `relative ${width} ${aspect}`;
+
   return (
     <div className={`flex ${JUSTIFY[align]} ${valign === 'center' ? 'items-center' : 'items-start'} ${className}`}>
-      <div className={`relative ${width} ${aspect} overflow-hidden`}>
-        <Image
-          src={src}
-          alt={alt}
-          fill
-          className={fit === 'contain' ? 'object-contain' : 'object-cover'}
-          sizes={sizes}
-          priority={priority}
-        />
-      </div>
+      {reveal ? (
+        <Reveal className={frame}>{image}</Reveal>
+      ) : (
+        <div className={`${frame} overflow-hidden`}>{image}</div>
+      )}
     </div>
   );
 }

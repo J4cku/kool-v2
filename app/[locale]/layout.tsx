@@ -3,6 +3,7 @@ import { Poppins } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
 import { notFound } from 'next/navigation';
 import { locales, type Locale } from '@/i18n/request';
+import PageTransition from '@/components/PageTransition';
 import '../globals.css';
 
 const poppins = Poppins({
@@ -109,7 +110,7 @@ export default async function LocaleLayout({
       </head>
       <body className="font-sans bg-beige text-dark antialiased">
         <NextIntlClientProvider locale={locale} messages={messages}>
-          {children}
+          <PageTransition>{children}</PageTransition>
         </NextIntlClientProvider>
       </body>
     </html>

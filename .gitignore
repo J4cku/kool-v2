@@ -40,3 +40,7 @@ next-env.d.ts
 
 # designer-delivered mockups (PDF/.ai inbox for build-from-design skill)
 /design/
+
+# Agent/tooling artifacts
+.omc/
+.playwright-mcp/

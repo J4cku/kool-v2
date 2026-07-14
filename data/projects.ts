@@ -1,3 +1,11 @@
+export type ProjectSlider = {
+  beforeSrc: string;
+  afterSrc: string;
+  labels?: [string, string];
+  index: number;
+  aspect?: string;
+};
+
 export type Project = {
   id: string;
   slug: string;
@@ -24,9 +32,10 @@ export type Project = {
   // hero, with the reel occupying its own slot). aspect overrides the
   // default 9:16 frame (e.g. 'aspect-[2/3]')
   reel?: { src: string; index: number; aspect?: string };
-  // Half-width before/after slider occupying one gallery slot; index shares
-  // the same display-slot space as reel/fullWidthIndices
-  slider?: { beforeSrc: string; afterSrc: string; labels?: [string, string]; index: number };
+  // Half-width before/after slider(s), each occupying one gallery slot; index
+  // shares the same display-slot space as reel/fullWidthIndices. aspect
+  // overrides the default 2:3 frame (e.g. 'aspect-square')
+  slider?: ProjectSlider | ProjectSlider[];
   // Explicit text-block placement (50/50 row index + which side the text
   // sits on); when omitted the default every-3rd-row rhythm applies.
   // align overrides the default end/start/end vertical cycling
@@ -176,12 +185,24 @@ export const projects: Project[] = [
     category: 'komercyjne',
     status: 'in_progress',
     year: 2026,
-    area: '250 m²',
-    scope: ['projekt koncepcyjny', 'dokumentacja wykonawcza'],
-    thumbnail: '/images/fnd.jpg',
+    area: '1140 m²',
+    scope: ['projekt koncepcyjny wnętrz', 'projekty mebli', 'projekt wykonawczy wnętrz', 'nadzór autorski'],
+    thumbnail: '/images/pawilon-fandom/kool_fnd_www_main.webp',
     featured: false,
-    images: ['/images/fnd.jpg', '/images/fnd.jpg', '/images/fnd.jpg', '/images/fnd.jpg', '/images/fnd.jpg'],
-    description: 'Pawilon usługowy o surowej, betonowej estetyce w centrum Wrocławia.',
+    meta: {
+      collaboration: 'Jord Studio, blsk.studio, arch_it',
+    },
+    // Display order (board): hero, [9:16 site reel + status text]
+    images: [
+      '/images/pawilon-fandom/kool_fnd_www_01.webp', // 01 hero – elewacja pawilonu, okrągłe okna (kadr 16:9)
+    ],
+    // Index counts the hero (0); the reel occupies the row-0 slot
+    reel: { src: '/videos/pawilon-fandom-reel.mp4', index: 1, aspect: 'aspect-[2/3]' },
+    textRows: [{ row: 0, side: 'right', align: 'start' }],
+    descriptionBlocks: [
+      'Rewitalizacja modernistycznego pawilonu jest obecnie w realizacji.\nGdy budowa dobiegnie końca, odsłonimy wszystkie detale.',
+    ],
+    description: 'Rewitalizacja modernistycznego pawilonu usługowego w centrum Wrocławia, obecnie w realizacji. Gdy budowa dobiegnie końca, odsłonimy wszystkie detale.',
   },
   {
     id: '5',
@@ -191,12 +212,13 @@ export const projects: Project[] = [
     category: 'komercyjne',
     status: 'in_progress',
     year: 2026,
-    area: '1200 m²',
+    area: '7 100 m²',
     scope: ['projekt koncepcyjny wnętrz', 'projekty mebli', 'projekty oświetlenia', 'projekt wykonawczy wnętrz', 'nadzór autorski'],
     thumbnail: '/images/hotel-belmonte/kool_belmonte_main.webp',
     featured: true,
     meta: {
       title: '4-gwiazdkowy hotel Belmonte',
+      collaboration: 'BUCK.STUDIO',
     },
     // Display order (board): hero, [9:16 site reel + status text]. The reel
     // is the kool.studio Instagram construction reel (first 5s trimmed off).
@@ -328,15 +350,16 @@ export const projects: Project[] = [
       '/images/lazienki-warszawa/kool_l_warszawa_02.webp', // 02 square – łazienka 1 (text left)
       '/images/lazienki-warszawa/kool_l_warszawa_03.webp', // 03 square – prysznic i umywalka, row left
       '/images/lazienki-warszawa/kool_l_warszawa_04.webp', // 04 portrait – prysznic i wc, row right (padded)
-      '/images/lazienki-warszawa/kool_l_warszawa_05.webp', // 05 portrait – aksonometria, row left (padded)
       '/images/lazienki-warszawa/kool_l_warszawa_06.webp', // 06 portrait 2:3 – łazienka 2, row right (flush)
       '/images/lazienki-warszawa/kool_l_warszawa_07.webp', // 07 square – umywalka łazienki 2, row left
       '/images/lazienki-warszawa/kool_l_warszawa_08.webp', // 08 portrait – prysznic łazienki 2, row right (padded)
     ],
+    // The Instagram axonometry reel replaces the static 05 aksonometria
+    // (same pattern as mieszkanie-gdansk); index counts the hero (0)
+    reel: { src: '/videos/lazienki-warszawa-reel.mp4', index: 4 },
     textRows: [{ row: 0, side: 'left' }],
     flipRowParity: true,
     portraitIndices: [5],
-    smallIndices: [4], // 05 aksonometria – small padded, not a full render
     descriptionBlocks: [
       'Łazienki w stylu współczesnym z silnymi wpływami retro i artystycznym podejściem do materiałów. Pierwsze wrażenie we wnętrzu buduje ciepła nasycona kolorystyka. Ceglana mozaika oplata zaobloną wnękę prysznicową jak ceramiczna tkanina, wprowadzając do wnętrza miękkość i głębię. Rezygnacja z wanny pozwoliła odzyskać przestrzeń i stworzyć układ bardziej płynny, podporządkowany rytmowi codziennych rytuałów. Centralnym punktem większej łazienki jest umywalkowa zabudowa w ziemistozielonym odcieniu zestawiona z żółtym onyksowym blatem. Kamień przyciąga uwagę wyraźnym użyleniem i połyskiem, który zmienia się wraz z kątem padania światła. Nad nim kremowe płytki strukturalne subtelnie rozpraszają światło, kontrastując z chłodnym połyskiem chromowanego lustra i granatowych detali armatury. Projekt operuje na wyraźnym zestawieniu surowości i elegancji w dopracowanych detalach. Ich relacja nie jest konfrontacją, lecz spokojnym dialogiem materiałów. Czarno-białe terrazzo wnosi graficzną energię inspirowaną estetyką retro, podczas gdy dębowa zabudowa porządkuje kompozycję i równoważy intensywność użytych materiałów. Druga łazienka rozwija tę samą narrację w jaśniejszej tonacji. Piaskowe płytki, jasne lastryko i wielkoformatowe lustro sprawiają, że niewielka przestrzeń nabiera butikowego, hotelowego klimatu. Nawet ceglana zabudowa skrywająca pralnię staje się częścią kompozycji, a nie tłem.',
     ],
@@ -503,5 +526,92 @@ export const projects: Project[] = [
       'Projekt toalet redefiniuje przestrzeń o czysto użytkowej funkcji, czyniąc z niej integralny element doświadczenia architektonicznego teatru. To miejsce, które nie stanowi jedynie zaplecza budynku, lecz naturalną kontynuację jego narracji – przestrzeń budującą nastrój jeszcze przed wejściem na widownię i pozostającą w pamięci długo po zakończeniu spektaklu.\nInspiracją dla koncepcji stał się język teatralnej scenografii. Wnętrza rozwijają się sekwencyjnie, odsłaniając kolejne plany i perspektywy, w których światło, kolor i proporcje prowadzą użytkownika przez starannie skomponowaną opowieść. Poszczególne strefy zyskują własną tożsamość, a jednocześnie pozostają częścią spójnej kompozycji opartej na rytmie kontrastów i przenikających się przestrzeni.\nPaleta barw została zbudowana wokół ciepłych, naturalnych tonów przełamanych głęboką zielenią oraz ciemnymi akcentami. Miedziane detale subtelnie wprowadzają elegancję i szlachetność, natomiast miękkie tekstylia stanowią nawiązanie do teatralnej kurtyny – symbolicznej granicy pomiędzy rzeczywistością a światem przedstawienia.\nPowściągliwe oświetlenie dopełnia kompozycję, wydobywając głębię przestrzeni i podkreślając jej sceniczny charakter. Dzięki temu toalety stają się czymś więcej niż funkcjonalnym elementem programu budynku – są kolejnym aktem teatralnego doświadczenia, w którym architektura odgrywa rolę cichego scenografa.',
     ],
     description: 'Konkursowy projekt koncepcyjny toalet Teatru Wielkiego Opery Narodowej w Warszawie. Język teatralnej scenografii — głęboka zieleń, miedziane detale i miękkie tekstylia — czyni z przestrzeni użytkowej kolejny akt teatralnego doświadczenia.',
+  },
+  {
+    id: '14',
+    slug: 'foodhall-piazza',
+    title: 'foodhall Piazza',
+    location: 'Wrocław',
+    category: 'komercyjne',
+    status: 'completed',
+    year: 2026,
+    // NOTE: the designer layout says "8 m2" — almost certainly a copy-paste
+    // leftover from the łazienki meta table; confirm the real value
+    area: '8 m²',
+    scope: ['projekt koncepcyjny wnętrz', 'projekty mebli', 'projekt wykonawczy wnętrz', 'nadzór autorski'],
+    thumbnail: '/images/foodhall-piazza/kool_piazza_main.webp',
+    featured: false,
+    // Display order (board): hero, [02 + text], [03 padded + slider 04a/b],
+    // [slider 05a/b + 06 padded], [07 full]. The a/b pairs are two views of
+    // the same zone in square sliders, one slot each.
+    images: [
+      '/images/foodhall-piazza/kool_piazza_01.webp', // 01 hero – bordowa boazeria z okrągłymi lustrami
+      '/images/foodhall-piazza/kool_piazza_02.webp', // 02 square – tablica materiałowa (text right)
+      '/images/foodhall-piazza/kool_piazza_03.webp', // 03 portrait – popiersie na słupku, row left (padded)
+      '/images/foodhall-piazza/kool_piazza_06.webp', // 06 portrait – render neonu PIAZZA, row right (padded)
+      '/images/foodhall-piazza/kool_piazza_07.webp', // 07 full-width – render hali z zielonymi sofami
+    ],
+    // Indices count the hero (0) and each inserted slot (sliders 3 and 4)
+    fullWidthIndices: [6],
+    slider: [
+      {
+        beforeSrc: '/images/foodhall-piazza/kool_piazza_04a.webp', // sala z bordową boazerią – ujęcie 1
+        afterSrc: '/images/foodhall-piazza/kool_piazza_04b.webp',  // sala z bordową boazerią – ujęcie 2
+        index: 3,
+        aspect: 'aspect-square',
+      },
+      {
+        beforeSrc: '/images/foodhall-piazza/kool_piazza_05a.webp', // sala z zieloną boazerią – ujęcie 1
+        afterSrc: '/images/foodhall-piazza/kool_piazza_05b.webp',  // sala z zieloną boazerią – ujęcie 2
+        index: 4,
+        aspect: 'aspect-square',
+      },
+    ],
+    textRows: [{ row: 0, side: 'right', align: 'start' }],
+    descriptionBlocks: [
+      'Punktem wyjścia projektu była rearanżacja zastanej przestrzeni i nadanie jej nowego porządku bez radykalnej ingerencji w istniejącą strukturę. Wnętrze zyskało wyrazistą identyfikację dzięki mocnym plamom bordo i zieleni, które organizują przestrzeń i budują jej charakter. Naturalne drewno ociepla surowy charakter otwartej, industrialnej hali, wprowadzając do wnętrza bardziej kameralną i przyjazną atmosferę. Projekt został pomyślany jako proces rozłożony w czasie – zrealizowany etap stanowi świadomy początek przemiany, której kolejne rozdziały będą stopniowo dopełniać nową tożsamość miejsca.\nNa razie odsłaniamy jedynie pierwszy akt tej metamorfozy. Na pełną opowieść i wszystkie detale przyjdzie czas wraz z zakończeniem kolejnych etapów realizacji.',
+    ],
+    description: 'Rearanżacja industrialnej hali foodhallu Piazza we Wrocławiu. Mocne plamy bordo i zieleni organizują przestrzeń, a naturalne drewno ociepla jej surowy charakter — zrealizowany etap to pierwszy akt rozłożonej w czasie metamorfozy.',
+  },
+  {
+    id: '15',
+    slug: 'mieszkanie-walecznych',
+    title: 'mieszkanie',
+    location: 'Wrocław',
+    category: 'mieszkalne',
+    status: 'completed',
+    year: 2026,
+    area: '84 m²',
+    scope: ['projekt koncepcyjny wnętrz', 'projekty mebli', 'projekt wykonawczy wnętrz', 'nadzór autorski'],
+    thumbnail: '/images/mieszkanie-walecznych/KOOL_m_walecznych_www_main.webp',
+    featured: false,
+    // Display order (board): hero, [02 + text], [03 full], [04 padded + 05],
+    // [06 + 07 padded], [text + 08], [09 full], [10 padded + 11], [12 full]
+    images: [
+      '/images/mieszkanie-walecznych/KOOL_m_walecznych_www_01.webp', // 01 hero – salon z regałem i zieloną posadzką
+      '/images/mieszkanie-walecznych/KOOL_m_walecznych_www_02.webp', // 02 square – kącik śniadaniowy z zielonymi drzwiami (text right)
+      '/images/mieszkanie-walecznych/KOOL_m_walecznych_www_03.webp', // 03 full-width – kuchnia z bordową zabudową
+      '/images/mieszkanie-walecznych/KOOL_m_walecznych_www_04.webp', // 04 portrait – błękitna zasłona, row left (padded)
+      '/images/mieszkanie-walecznych/KOOL_m_walecznych_www_05.webp', // 05 square – hol z błękitnym stołem, row right (flush)
+      '/images/mieszkanie-walecznych/KOOL_m_walecznych_www_06.webp', // 06 square – korytarz łazienki z zieloną posadzką, row left (flush)
+      '/images/mieszkanie-walecznych/KOOL_m_walecznych_www_07.webp', // 07 portrait – szachownica w holu, row right (padded)
+      '/images/mieszkanie-walecznych/KOOL_m_walecznych_www_08.webp', // 08 square – wanna i prysznic (text left)
+      '/images/mieszkanie-walecznych/KOOL_m_walecznych_www_09.webp', // 09 full-width – umywalki z dużym lustrem
+      '/images/mieszkanie-walecznych/KOOL_m_walecznych_www_10.webp', // 10 portrait – łóżko z motywem szachownicy, row left (padded)
+      '/images/mieszkanie-walecznych/KOOL_m_walecznych_www_11.webp', // 11 square – pokój z rowerem, row right (flush)
+      '/images/mieszkanie-walecznych/KOOL_m_walecznych_www_12.webp', // 12 full-width – sypialnia z ciemnym drewnem
+    ],
+    // Indices count the hero (0); no inserted slots
+    fullWidthIndices: [2, 8, 11],
+    flipRowParity: true,
+    textRows: [
+      { row: 0, side: 'right', align: 'start' },
+      { row: 4, side: 'left', align: 'start' },
+    ],
+    descriptionBlocks: [
+      'Projekt mieszkania interpretuje charakter przedwojennej kamienicy we współczesny sposób. Nowy układ funkcjonalny został podporządkowany codziennym potrzebom mieszkańców, tworząc bardziej komfortową i intuicyjną przestrzeń do życia. Równocześnie wnętrze wzbogacono o architektoniczne detale inspirowane historycznymi kamienicami – sztukaterie czy dekoracyjne motywy – które budują atmosferę miejsca, nie będąc dosłowną rekonstrukcją. Ich zestawienie z kolekcją mebli i przedmiotów vintage gromadzonych przez właścicieli oraz współczesnymi elementami wyposażenia tworzy wnętrze, które nie rekonstruuje przeszłości, lecz interpretuje ją na nowo.\nPaleta opiera się na odważnych, nasyconych kolorach zestawionych z ciepłymi, naturalnymi materiałami. Bordo, błękit, maślane odcienie, brzoskwinia i żywa zieleń prowadzą przez kolejne pomieszczenia, nadając każdemu z nich własną atmosferę, a jednocześnie budując spójną narrację całego mieszkania. Już od wejścia uwagę przyciąga drobna szachownica – współczesna interpretacja klasycznych posadzek charakterystycznych dla kamienic.\nKuchnia i salon funkcjonują jako dwa odrębne wnętrza, połączone wspólnym językiem materiałów i detali. W kuchni uwagę przyciąga masywny blat z lastryko wykonany na zamówienie. Okap został zintegrowany z obudową wykończoną ceramicznymi płytkami, dzięki czemu staje się dekoracyjnym elementem wnętrza. Niewielki kącik śniadaniowy przy oknie tworzy miejsce codziennych, niespiesznych rytuałów.',
+      'Salon ma bardziej reprezentacyjny charakter. Główną rolę odgrywa oryginalna zielona posadzka oraz wykonany na wymiar regał, który wypełnia całą ścianę, eksponując bogatą kolekcję książek i albumów. Strefę jadalni definiuje duża szklana lampa o kulistej formie, wyznaczająca centralne miejsce wspólnych spotkań.\nŁazienkę zaprojektowano jako współczesną interpretację domowej łaźni. Naturalne światło przenika do strefy prysznica przez pas luksferów, wzmacniając wrażenie przestronności i nadając wnętrzu atmosferę domowego spa. Za miękką zasłoną ukryto strefę pralni, dzięki czemu przestrzeń zachowuje spokojny i uporządkowany charakter.\nSypialnię zbudowano na kontrastach wyrazistych wzorów i nasyconych kolorów. Błękitny sufit, intensywnie zielona zabudowa oraz dekoracyjna tapeta tworzą atmosferę sprzyjającą wyciszeniu, a tapicerowane łóżko z motywem szachownicy subtelnie nawiązuje do posadzki w holu, domykając spójną narrację całego mieszkania.\nZamiast stylistycznej rekonstrukcji powstało wnętrze oparte na świadomie budowanych kontrastach – pomiędzy historią i współczesnością, kolekcjonowanymi przez lata przedmiotami a nowymi elementami wyposażenia. To właśnie ich wzajemne relacje definiują charakter tego miejsca.',
+    ],
+    description: 'Mieszkanie w przedwojennej kamienicy we Wrocławiu, które interpretuje jej charakter na nowo. Bordo, błękit, maślane odcienie i żywa zieleń spotykają się z kolekcją vintage właścicieli i detalami inspirowanymi historycznymi kamienicami.',
   },
 ];

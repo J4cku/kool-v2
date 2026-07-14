@@ -4,7 +4,7 @@ import { useSyncExternalStore } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay } from 'swiper/modules';
+import { Autoplay, Mousewheel } from 'swiper/modules';
 import { Link } from '@/i18n/navigation';
 import { projects } from '@/data/projects';
 
@@ -49,23 +49,30 @@ export default function ImageStrip() {
       <Swiper
         key={slides === baseSlides ? 'initial' : 'shuffled'}
         className="hero-swiper w-full"
-        modules={[Autoplay]}
+        modules={[Autoplay, Mousewheel]}
         slidesPerView={1}
         spaceBetween={3}
         breakpoints={{ 768: { slidesPerView: 3 } }}
         loop
         speed={900}
-        autoplay={{ delay: 2500, disableOnInteraction: false }}
+        autoplay={{ delay: 2500, disableOnInteraction: false, pauseOnMouseEnter: true }}
+        /* Manual control: swipe on touch, drag on desktop, and horizontal
+           trackpad/wheel — one project per gesture; vertical scrolling
+           passes through untouched (forceToAxis) */
+        grabCursor
+        mousewheel={{ forceToAxis: true, thresholdDelta: 12 }}
       >
         {slides.map((slide, i) => (
           <SwiperSlide key={slide.slug}>
             <Link
               href={`/projekty/${slide.slug}`}
+              draggable={false}
               className="relative block w-full aspect-[3/4] md:aspect-square overflow-hidden"
             >
               <Image
                 src={slide.src}
                 alt={slide.alt}
+                draggable={false}
                 fill
                 className="object-cover transition-transform duration-[600ms] hover:scale-[1.04]"
                 sizes="(max-width: 768px) 100vw, 33vw"
