@@ -24,8 +24,8 @@ export default function LanguageToggle() {
         <span
           className={`w-[26px] h-[26px] flex items-center justify-center rounded-full transition-colors ${
             locale === 'pl'
-              ? 'bg-coral text-dark'
-              : 'bg-transparent text-dark hover:opacity-70'
+              ? 'bg-coral text-beige'
+              : 'bg-transparent text-coral hover:opacity-70'
           }`}
         >
           pl
@@ -39,8 +39,8 @@ export default function LanguageToggle() {
         <span
           className={`w-[26px] h-[26px] flex items-center justify-center rounded-full transition-colors ${
             locale === 'en'
-              ? 'bg-coral text-dark'
-              : 'bg-transparent text-dark hover:opacity-70'
+              ? 'bg-coral text-beige'
+              : 'bg-transparent text-coral hover:opacity-70'
           }`}
         >
           en

@@ -43,7 +43,7 @@ export default function StudioPage() {
       <Navbar />
       <main>
         <div className="relative z-10 bg-beige">
-          <section className="overflow-hidden whitespace-nowrap pt-16 pb-8 md:pt-24 md:pb-12 bg-white">
+          <section className="overflow-hidden whitespace-nowrap pt-16 pb-8 md:pt-24 md:pb-12">
             <h1 className="animate-marquee inline-block motion-reduce:animate-none">
               <span
                 className="font-[400] uppercase text-coral leading-tight mx-8 md:mx-16"

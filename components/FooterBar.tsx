@@ -15,7 +15,7 @@ export default function FooterBar() {
           aria-label="Instagram"
           className="w-11 h-11 flex items-center justify-center"
         >
-          <span className="w-[26px] h-[26px] flex items-center justify-center rounded-full bg-coral text-dark transition-opacity hover:opacity-70">
+          <span className="w-[26px] h-[26px] flex items-center justify-center rounded-full bg-coral text-beige transition-opacity hover:opacity-70">
             <svg
               width="16"
               height="16"

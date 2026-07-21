@@ -53,7 +53,7 @@ export default function ManifestoSection() {
       </section>
 
       {/* Marquee */}
-      <div className="overflow-hidden whitespace-nowrap py-16 md:py-24 bg-white">
+      <div className="overflow-hidden whitespace-nowrap py-16 md:py-24">
         <div className="animate-marquee inline-block">
           {Array.from({ length: 4 }).map((_, i) => (
             <span

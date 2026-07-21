@@ -18,7 +18,7 @@ export default function FooterBanner({ showAddress = false, showMarquee = true }
     <footer className="pb-[calc(43px+env(safe-area-inset-bottom))]">
       {/* Marquee */}
       {showMarquee && (
-        <div className="overflow-hidden whitespace-nowrap pt-8 md:pt-12 pb-2 bg-white">
+        <div className="overflow-hidden whitespace-nowrap pt-8 md:pt-12 pb-2">
           <div className="animate-marquee inline-block">
             {Array.from({ length: 4 }).map((_, i) => (
               <span
