@@ -28,9 +28,9 @@ Social images must be deterministic. Crawlers cache metadata for long periods, s
 | Projects listing | `public/images/dehesa/kool_dehesa_04.webp` (a current listing thumbnail) | `public/images/social/projects-dehesa.jpg` |
 | Studio | `public/images/studio/team.webp` | `public/images/social/studio-team.jpg` |
 | Offer | `public/images/oferta/KOOL_oferta_komercyjne.webp` | `public/images/social/offer-commercial.jpg` |
-| Contact | the material-palette frame at 9.6 seconds in `public/videos/reel.mp4`, which is the page's primary media | `public/images/social/contact-reel.jpg` |
+| Contact | the clean material-palette frame at 10.6 seconds in `public/videos/reel.mp4`, which is the page's primary media | `public/images/social/contact-reel.jpg` |
 
-The four photographs are source-preserving crops: no generated content, retouching, or identity changes. Crops prioritize the page's main subject and use the standard 1200×630 large-card ratio. The contact still uses a centered 360×189 crop from the reel's 360×640 frame at 9.6 seconds, then scales to 1200×630. This is an explicit 3.33× source upscale: it trades some sharpness for a preview genuinely derived from the contact page. At typical social-card display sizes the effective upscale is smaller; visual QA must still reject the asset if compression or softness is distracting.
+The four photographs are source-preserving crops: no generated content, retouching, or identity changes. Crops prioritize the page's main subject and use the standard 1200×630 large-card ratio. The contact still uses a centered 360×189 crop from the reel's 360×640 frame at 10.6 seconds, then scales to 1200×630. This is an explicit 3.33× source upscale: it trades some sharpness for a preview genuinely derived from the contact page. At typical social-card display sizes the effective upscale is smaller; visual QA must still reject the asset if compression or softness is distracting.
 
 Project detail pages continue using their own first project image; they do not inherit a static-page fallback.
 

@@ -96,7 +96,7 @@ public/images/oferta/KOOL_oferta_komercyjne.webp → public/images/social/offer-
 - [ ] **Step 4: Extract the approved contact frame**
 
 ```bash
-ffmpeg -y -v error -ss 9.6 -i public/videos/reel.mp4 -vf "crop=360:189:0:225:exact=1,scale=1200:630:flags=lanczos" -frames:v 1 -c:v mjpeg -q:v 2 public/images/social/contact-reel.jpg
+ffmpeg -y -v error -ss 10.6 -i public/videos/reel.mp4 -vf "crop=360:189:0:225:exact=1,scale=1200:630:flags=lanczos" -frames:v 1 -c:v mjpeg -q:v 2 public/images/social/contact-reel.jpg
 ```
 
 - [ ] **Step 5: Verify physical outputs**
