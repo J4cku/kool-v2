@@ -118,7 +118,7 @@ export function localizeProject(project: Project, locale: string): Project {
   };
 }
 
-export const projects: Project[] = [
+const projectCatalog: Project[] = [
   {
     id: '1',
     slug: 'dom-dobrzykowice',
@@ -831,3 +831,29 @@ export const projects: Project[] = [
     },
   },
 ];
+
+export const projectDisplayOrder = [
+  'dom-dobrzykowice',
+  'delikatesy-dehesa',
+  'mieszkanie-walecznych',
+  'lazienki-warszawa',
+  'pawilon-fandom',
+  'hotel-belmonte',
+  'kancelaria',
+  'biblioteka-gdansk',
+  'winobar-lodz',
+  'mieszkanie-widmo',
+  'mieszkanie-strachowicka',
+  'biuro-dobry-material',
+  'mieszkanie-gdansk',
+  'foodhall-piazza',
+  'toalety-w-teatrze',
+] as const;
+
+const projectsBySlug = new Map(projectCatalog.map((project) => [project.slug, project]));
+
+export const projects: Project[] = projectDisplayOrder.map((slug) => {
+  const project = projectsBySlug.get(slug);
+  if (!project) throw new Error(`Missing project for display order slug: ${slug}`);
+  return project;
+});

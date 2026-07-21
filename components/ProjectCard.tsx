@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import type { Project } from '@/data/projects';
 
@@ -9,6 +10,8 @@ interface ProjectCardProps {
 }
 
 export default function ProjectCard({ project }: ProjectCardProps) {
+  const t = useTranslations('projects');
+
   return (
     <div>
       <Link href={`/projekty/${project.slug}`} className="block group">
@@ -26,7 +29,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                 <div className="animate-marquee flex gap-8 w-max" style={{ animationDuration: '34s' }}>
                   {Array.from({ length: 20 }).map((_, i) => (
                     <span key={i} className="text-coral text-[13px] font-[700] uppercase tracking-[0.15em] shrink-0">
-                      PROJECT IN PROGRESS
+                      {t('inProgress')}
                     </span>
                   ))}
                 </div>
