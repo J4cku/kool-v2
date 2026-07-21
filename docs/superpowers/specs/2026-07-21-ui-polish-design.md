@@ -1,6 +1,6 @@
 # UI Polish Design
 
-**Date:** 2026-07-21  
+**Date:** 2026-07-21
 **Status:** approved for planning
 
 ## Goal
@@ -84,4 +84,3 @@ Use targeted changes in the existing components. Do not introduce a new componen
 - Run `pnpm check` before handoff.
 - Run browser QA for public routes in Polish and English, with focused screenshots at desktop and mobile widths.
 - Specifically verify homepage vertical centering at multiple desktop heights, hero/logo separation on mobile, contact safe areas on a mobile Safari-sized viewport, project order, English project descriptions, cursor behavior, reduced-motion behavior, and social metadata.
-
