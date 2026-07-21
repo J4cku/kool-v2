@@ -6,6 +6,7 @@ import Navbar from '@/components/Navbar';
 import AddressBlock from '@/components/AddressBlock';
 import FooterBar from '@/components/FooterBar';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import LazyAutoplayVideo from '@/components/LazyAutoplayVideo';
 
 export default function KontaktPage() {
   const tContact = useTranslations('contact');
@@ -36,13 +37,9 @@ export default function KontaktPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.18 }}
           >
-            <video
+            <LazyAutoplayVideo
               src="/videos/reel.mp4"
-              autoPlay
-              muted
-              loop
-              playsInline
-              aria-label="Kool Studio showreel"
+              label="Kool Studio showreel"
               className="w-[160px] h-[160px] md:w-[220px] md:h-[220px] object-cover"
             />
             <AddressBlock />
