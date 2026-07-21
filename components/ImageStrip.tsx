@@ -75,26 +75,39 @@ export default function ImageStrip() {
            passes through untouched (forceToAxis) */
         mousewheel={{ forceToAxis: true, thresholdDelta: 12 }}
       >
-        {slides.map((slide, i) => (
-          <SwiperSlide key={slide.slug}>
-            <Link
-              href={`/projekty/${slide.slug}`}
-              draggable={false}
-              className="relative block w-full cursor-pointer aspect-[3/4] md:aspect-square overflow-hidden"
-            >
-              <Image
-                src={slide.src}
-                alt={slideAlt(slide.slug, locale)}
+        {slides.map((slide, i) => {
+          const project = projects.find((candidate) => candidate.slug === slide.slug);
+          const title = project ? localizeProject(project, locale).title : '';
+
+          return (
+            <SwiperSlide key={slide.slug}>
+              <Link
+                href={`/projekty/${slide.slug}`}
                 draggable={false}
-                fill
-                className="object-cover transition-transform duration-[600ms] hover:scale-[1.04]"
-                sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw"
-                priority={i === 0}
-                loading={i === 0 ? undefined : 'eager'}
-              />
-            </Link>
-          </SwiperSlide>
-        ))}
+                className="home-slide-link relative block w-full cursor-pointer aspect-[3/4] md:aspect-square overflow-hidden"
+              >
+                <Image
+                  src={slide.src}
+                  alt={slideAlt(slide.slug, locale)}
+                  draggable={false}
+                  fill
+                  className="object-cover transition-transform duration-[600ms] hover:scale-[1.04]"
+                  sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw"
+                  priority={i === 0}
+                  loading={i === 0 ? undefined : 'eager'}
+                />
+                {title && (
+                  <span
+                    aria-hidden="true"
+                    className="home-slide-caption pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-coral px-4 py-3 text-sm font-[600] uppercase tracking-[0.08em] text-dark"
+                  >
+                    {title}
+                  </span>
+                )}
+              </Link>
+            </SwiperSlide>
+          );
+        })}
       </Swiper>
 
       {/* Scroll indicator — three animated dots */}

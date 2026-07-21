@@ -35,3 +35,35 @@ test('homepage slider uses one, two, then three responsive slides', () => {
     /sizes="\(max-width: 767px\) 100vw, \(max-width: 1279px\) 50vw, 33vw"/
   );
 });
+
+test('homepage slides expose localized captions on hover and focus', () => {
+  assert.match(
+    imageStripSource,
+    /const locale = useLocale\(\);[\s\S]*localizeProject\(project, locale\)\.title/
+  );
+  assert.match(imageStripSource, /className="home-slide-link/);
+  assert.match(imageStripSource, /aria-hidden="true"/);
+  assert.match(imageStripSource, /className="home-slide-caption/);
+  assert.match(imageStripSource, /home-slide-caption pointer-events-none/);
+  assert.match(
+    globalsSource,
+    /\.home-slide-caption \{[\s\S]*opacity: 0;[\s\S]*transform: translateY\(8px\)/
+  );
+  assert.match(
+    globalsSource,
+    /@media \(hover: hover\) and \(pointer: fine\) \{\s*\.home-slide-link:hover \.home-slide-caption \{[^}]*opacity: 1;[^}]*transform: translateY\(0\);[^}]*\}\s*\}/
+  );
+  assert.match(
+    globalsSource,
+    /\.home-slide-link:focus-visible \.home-slide-caption \{[^}]*opacity: 1;[^}]*transform: translateY\(0\);[^}]*\}/
+  );
+  assert.match(
+    globalsSource,
+    /transition: opacity 220ms cubic-bezier\(0\.22, 1, 0\.36, 1\),\s*transform 220ms cubic-bezier\(0\.22, 1, 0\.36, 1\)/
+  );
+  assert.match(globalsSource, /transform: translateY\(8px\)/);
+  assert.match(
+    globalsSource,
+    /@media \(prefers-reduced-motion: reduce\) \{\s*\.home-slide-caption \{\s*transform: none;\s*\}\s*\}/
+  );
+});

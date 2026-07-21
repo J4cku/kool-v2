@@ -65,6 +65,31 @@ body {
   transition-timing-function: cubic-bezier(0.33, 1, 0.68, 1);
 }
 
+.home-slide-caption {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .home-slide-link:hover .home-slide-caption {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.home-slide-link:focus-visible .home-slide-caption {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-slide-caption {
+    transform: none;
+  }
+}
+
 /* Mobile navbar: logo/dot scale tracks scroll position (0-300px).
    Where CSS scroll timelines are supported (Safari 26+, Chrome 115+) the
    animation runs on the compositor, immune to main-thread jank during touch
