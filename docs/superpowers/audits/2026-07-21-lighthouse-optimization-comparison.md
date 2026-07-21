@@ -67,3 +67,35 @@ All reports used Lighthouse `13.4.1` and `Mozilla/5.0 (Macintosh; Intel Mac OS X
 The final Performance score is limited by simulated LCP (`3.304–3.556 s`, score `0.62–0.69`) and a near-perfect simulated FCP score of `0.99`. Achieving a repeatable synthetic 100 would require a more invasive hero/navigation runtime redesign or deliberate metric gaming; neither is justified by the measured 79–119 ms observed LCP in four of five runs.
 
 SEO remains 92 only because the local document correctly declares the production canonical `https://koolstudio.pl/pl`. The deployed origin must be audited separately; weakening production canonical metadata to satisfy localhost would be incorrect.
+
+## Post-visual-restore single run
+
+This follow-up is one mobile-default production run after the visual restoration review fixes. It does not replace or alter the historical five-run comparison above and should not be interpreted as a new median.
+
+- Audited route: `http://localhost:55040/pl`
+- Audited commit: `9f20e8a097545d52324c1f905ab0eb8f8aa4e69f`
+- Lighthouse: `13.4.1`
+- Fetch time: `2026-07-21T18:29:15.500Z`
+- Benchmark index: `2876.5`
+
+| Performance | Accessibility | Best Practices | SEO |
+| ---: | ---: | ---: | ---: |
+| 91 | 96 | 100 | 92 |
+
+### Key audit data
+
+| Measurement | Single-run result |
+| --- | ---: |
+| Simulated Largest Contentful Paint | 3,458.645 ms |
+| Observed Largest Contentful Paint | 98 ms |
+| Total network requests | 35 |
+| Total transfer bytes | 680,907 B |
+| Image requests / transfer | 7 / 335,405 B |
+| Font requests / transfer | 5 / 36,323 B |
+| Media requests / transfer | 0 / 0 B |
+
+All carousel slides now exist in the initial markup so an immediately interactive Swiper cannot reveal placeholder-only slides. Only the first image is eager/high-priority; subsequent images use native lazy loading. This run therefore includes more image requests and bytes than the historical optimized median, while avoiding the previous hidden 3-second eager-image burst that occurred after the earlier Lighthouse trace ended.
+
+### Caveats
+
+The accessibility score is 96 because the contrast audit flags three intentionally restored coral/beige elements: the marquee text and both locale-control labels. The SEO score is 92 because the localhost audit rejects the production canonical URL; production canonical metadata should not be weakened to satisfy a localhost audit. Both caveats require validation on the deployed origin and, for contrast, an explicit design decision rather than silent palette drift.
