@@ -50,9 +50,6 @@ export default function FooterBanner({ showAddress = false, showMarquee = true }
         </div>
       )}
 
-      {/* Coral separator line (in page flow) */}
-      <div className="w-full bg-coral h-px origin-top [transform:scaleY(0.5)]" />
-
       {/* Fixed bottom bar: instagram + language toggle */}
       <FooterBar />
     </footer>

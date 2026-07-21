@@ -14,6 +14,7 @@ export default function PageTransition({ children }: { children: React.ReactNode
   const pathname = usePathname();
   const locale = useLocale();
   const reduceMotion = useReducedMotion();
+  const orbCenter = 'var(--nav-orb-center-x) var(--nav-orb-center-y)';
 
   return (
     <>
@@ -33,10 +34,10 @@ export default function PageTransition({ children }: { children: React.ReactNode
             <motion.div
               key={pathname}
               className="pointer-events-none fixed inset-0 z-[90] bg-coral"
-              initial={{ clipPath: 'circle(150% at 97% 4%)' }}
+              initial={{ clipPath: `circle(150% at ${orbCenter})` }}
               animate={{
-                clipPath: 'circle(0% at 97% 4%)',
-                transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+                clipPath: `circle(0% at ${orbCenter})`,
+                transition: { duration: 0.85, ease: [0.22, 1, 0.36, 1] },
               }}
               exit={{ opacity: 0, transition: { duration: 0 } }}
             />

@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Poppins } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import { NextIntlClientProvider } from 'next-intl';
@@ -16,6 +16,11 @@ const poppins = Poppins({
   style: ['normal', 'italic'],
   variable: '--font-poppins',
 });
+
+export const viewport: Viewport = {
+  themeColor: '#E5DDD0',
+  viewportFit: 'cover',
+};
 
 export async function generateMetadata({
   params,
