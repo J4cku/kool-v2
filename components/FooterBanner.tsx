@@ -14,7 +14,7 @@ export default function FooterBanner({ showAddress = false, showMarquee = true }
   const bannerText = t('banner');
 
   return (
-    <footer className="pb-10">
+    <footer className="pb-[calc(43px+env(safe-area-inset-bottom))]">
       {/* Marquee */}
       {showMarquee && (
         <div className="overflow-hidden whitespace-nowrap pt-8 md:pt-12 pb-2">
