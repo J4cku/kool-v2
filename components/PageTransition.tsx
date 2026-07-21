@@ -15,7 +15,10 @@ export default function PageTransition({ children }: { children: React.ReactNode
   const pathname = usePathname();
   const locale = useLocale();
   const reduceMotion = useReducedMotion();
-  const orbCenter = 'var(--nav-orb-center-x) var(--nav-orb-center-y)';
+  const orbCenter = [
+    'var(--nav-orb-center-x)',
+    'calc(var(--nav-orb-center-y) - env(safe-area-inset-top))',
+  ].join(' ');
 
   return (
     <>
@@ -34,7 +37,7 @@ export default function PageTransition({ children }: { children: React.ReactNode
           {pathname === '/kontakt' && (
             <motion.div
               key={pathname}
-              className="pointer-events-none fixed inset-0 z-[90] bg-coral"
+              className="pointer-events-none fixed inset-x-0 bottom-0 top-[env(safe-area-inset-top)] z-[90] bg-coral"
               initial={{ clipPath: `circle(150% at ${orbCenter})` }}
               animate={{
                 clipPath: `circle(0% at ${orbCenter})`,

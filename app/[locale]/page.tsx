@@ -15,7 +15,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'meta' });
   const socialImage = {
-    url: '/images/social/kool-studio-og.webp',
+    url: '/images/social/home-walecznych.jpg',
     width: 1200,
     height: 630,
     alt: t('home.ogImageAlt'),

@@ -22,6 +22,13 @@ export function localeAlternates(locale: string, path: string): Metadata['altern
 
 type MetaPageKey = 'projekty' | 'studio' | 'oferta' | 'kontakt';
 
+const staticSocialImages = {
+  projekty: '/images/social/projects-dehesa.jpg',
+  studio: '/images/social/studio-team.jpg',
+  oferta: '/images/social/offer-commercial.jpg',
+  kontakt: '/images/social/contact-reel.jpg',
+} as const satisfies Record<MetaPageKey, string>;
+
 /* Localized per-page metadata (title/description from messages `meta.*`,
    self-canonical, hreflang) for the four static subpages */
 export async function pageMetadata(locale: string, key: MetaPageKey): Promise<Metadata> {
@@ -29,6 +36,12 @@ export async function pageMetadata(locale: string, key: MetaPageKey): Promise<Me
   const title = t(`${key}.title`);
   const description = t(`${key}.description`);
   const path = `/${key}`;
+  const socialImage = {
+    url: staticSocialImages[key],
+    width: 1200,
+    height: 630,
+    alt: t(`${key}.ogImageAlt`),
+  };
 
   return {
     title,
@@ -41,6 +54,13 @@ export async function pageMetadata(locale: string, key: MetaPageKey): Promise<Me
       locale: ogLocale(locale),
       alternateLocale: locale === 'en' ? 'pl_PL' : 'en_US',
       url: `${BASE_URL}/${locale}${path}`,
+      images: [socialImage],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${title} | kool studio`,
+      description,
+      images: [socialImage],
     },
     alternates: localeAlternates(locale, path),
   };

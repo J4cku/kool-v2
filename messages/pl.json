@@ -19,23 +19,27 @@
       "title": "kool studio | architektura wnętrz wrocław",
       "description": "Kool Studio — wrocławska pracownia architektury wnętrz. Projektujemy autorskie wnętrza mieszkalne i komercyjne z dbałością o detal. Meble, lampy, identyfikacja wizualna.",
       "ogDescription": "Autorskie wnętrza, które zostają na dłużej. Projektowanie przestrzeni mieszkalnych i komercyjnych.",
-      "ogImageAlt": "Ola Kilińska i Ola Leszczyńska w pracowni Kool Studio"
+      "ogImageAlt": "Wnętrze mieszkania przy ulicy Walecznych zaprojektowane przez Kool Studio"
     },
     "projekty": {
       "title": "projekty — portfolio wnętrz",
-      "description": "Portfolio projektów Kool Studio — mieszkania, domy, restauracje, hotele i wnętrza komercyjne we Wrocławiu, Warszawie i całej Polsce."
+      "description": "Portfolio projektów Kool Studio — mieszkania, domy, restauracje, hotele i wnętrza komercyjne we Wrocławiu, Warszawie i całej Polsce.",
+      "ogImageAlt": "Wnętrze delikatesów Dehesa zaprojektowane przez Kool Studio"
     },
     "studio": {
       "title": "studio — o nas",
-      "description": "Kool Studio tworzą architektki Ola Kilińska i Ola Leszczyńska. Wrocławska pracownia projektuje wnętrza mieszkalne i komercyjne w całej Polsce."
+      "description": "Kool Studio tworzą architektki Ola Kilińska i Ola Leszczyńska. Wrocławska pracownia projektuje wnętrza mieszkalne i komercyjne w całej Polsce.",
+      "ogImageAlt": "Ola Kilińska i Ola Leszczyńska w pracowni Kool Studio"
     },
     "oferta": {
       "title": "oferta — projektowanie wnętrz",
-      "description": "Kompleksowe projektowanie wnętrz komercyjnych i mieszkalnych: koncepcja, dokumentacja wykonawcza, nadzór autorski, meble na wymiar, branding. Wrocław i cała Polska."
+      "description": "Kompleksowe projektowanie wnętrz komercyjnych i mieszkalnych: koncepcja, dokumentacja wykonawcza, nadzór autorski, meble na wymiar, branding. Wrocław i cała Polska.",
+      "ogImageAlt": "Wnętrze restauracji zaprojektowane przez Kool Studio"
     },
     "kontakt": {
       "title": "kontakt",
-      "description": "Skontaktuj się z Kool Studio — pracownią architektury wnętrz z Wrocławia. Studio: Zaporoska 83/15, 53-415 Wrocław. E-mail: hello@koolstudio.pl."
+      "description": "Skontaktuj się z Kool Studio — pracownią architektury wnętrz z Wrocławia. Studio: Zaporoska 83/15, 53-415 Wrocław. E-mail: hello@koolstudio.pl.",
+      "ogImageAlt": "Paleta materiałów i kolorów w pracowni Kool Studio"
     }
   },
   "projects": {
