@@ -20,15 +20,15 @@ This change affects only `PageTransition`. The mobile navigation overlay remains
 
 ## Stable per-page social imagery
 
-Social images must be deterministic. Crawlers cache metadata for long periods, so request-time or random rotation would make previews inconsistent and difficult to invalidate. Each page family receives one stable 1200×630 WebP derived only from imagery already used by that page:
+Social images must be deterministic. Crawlers cache metadata for long periods, so request-time or random rotation would make previews inconsistent and difficult to invalidate. Each page family receives one stable high-quality 1200×630 JPEG derived only from imagery already used by that page. JPEG is used because the repository's available ffmpeg build cannot encode WebP and JPEG remains universally supported by social crawlers:
 
 | Page family | Source | Output |
 |---|---|---|
-| Home | `public/images/mieszkanie-walecznych/KOOL_m_walecznych_www_main.webp` | `public/images/social/home-walecznych.webp` |
-| Projects listing | `public/images/dehesa/kool_dehesa_04.webp` (a current listing thumbnail) | `public/images/social/projects-dehesa.webp` |
-| Studio | `public/images/studio/team.webp` | `public/images/social/studio-team.webp` |
-| Offer | `public/images/oferta/KOOL_oferta_komercyjne.webp` | `public/images/social/offer-commercial.webp` |
-| Contact | the material-palette frame at 9.6 seconds in `public/videos/reel.mp4`, which is the page's primary media | `public/images/social/contact-reel.webp` |
+| Home | `public/images/mieszkanie-walecznych/KOOL_m_walecznych_www_main.webp` | `public/images/social/home-walecznych.jpg` |
+| Projects listing | `public/images/dehesa/kool_dehesa_04.webp` (a current listing thumbnail) | `public/images/social/projects-dehesa.jpg` |
+| Studio | `public/images/studio/team.webp` | `public/images/social/studio-team.jpg` |
+| Offer | `public/images/oferta/KOOL_oferta_komercyjne.webp` | `public/images/social/offer-commercial.jpg` |
+| Contact | the material-palette frame at 9.6 seconds in `public/videos/reel.mp4`, which is the page's primary media | `public/images/social/contact-reel.jpg` |
 
 The four photographs are source-preserving crops: no generated content, retouching, or identity changes. Crops prioritize the page's main subject and use the standard 1200×630 large-card ratio. The contact still uses a centered 360×189 crop from the reel's 360×640 frame at 9.6 seconds, then scales to 1200×630. This is an explicit 3.33× source upscale: it trades some sharpness for a preview genuinely derived from the contact page. At typical social-card display sizes the effective upscale is smaller; visual QA must still reject the asset if compression or softness is distracting.
 
@@ -46,7 +46,7 @@ Project detail metadata remains independent. This change does not add dimensions
 
 - Add a failing metadata contract test covering home, all four static page keys, Twitter large-card fields, 1200×630 dimensions, localized alt, and project-detail independence.
 - Add a failing safe-area contract test proving the beige canvas, the contact transition top inset, and the unchanged full-screen coral mobile menu.
-- Generate/crop the five assets and verify exact dimensions, MIME format, and non-empty file size.
+- Generate/crop the five assets and verify JPEG signatures, exact dimensions, and non-empty file size.
 - Run `pnpm check` and diff hygiene.
 - Verify `/` redirects to `/pl`, then render `/pl`, `/en`, and both locales of projects/studio/offer/contact. On those static pages assert exactly one absolute `og:image`, its width/height/alt, matching Twitter image, canonical URL, and locale. On representative project details assert only that the existing project-specific `og:image` remains independent.
 - Run mobile Chrome QA for direct contact load, navigation into contact during the wipe, and open mobile menu. Confirm the status safe area is beige on contact and coral only while the menu is open; note that physical Mobile Safari remains the final device-level check.
