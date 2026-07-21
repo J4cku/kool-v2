@@ -14,9 +14,11 @@ The menu orb returns from 56×54 px to 36×35 px in both the closed navbar and t
 
 ### Project label interaction
 
-Each homepage slide derives its localized project title from the existing project data. On pointer hover or keyboard focus, a sharp-edged coral caption bar fades and rises into the lower part of the image. Beige uppercase text contains the project title only. The image keeps its existing restrained scale treatment.
+Each homepage slide derives its localized project title from the existing project data. On pointer hover or keyboard focus, a sharp-edged coral caption bar fades and rises into the lower part of the image. Dark `#1A1A1A` uppercase text on coral `#FC3117` provides approximately 4.65:1 contrast and contains the project title only. The image keeps its existing restrained scale treatment.
 
-The caption is hidden by default and does not appear permanently on touch layouts. The project link retains a localized accessible name through the image alternative text, and keyboard focus exposes the same visual caption as hover. Motion is short and uses the site's existing easing; `prefers-reduced-motion` removes the translation while preserving the state change.
+The caption is hidden by default. Pointer hover reveals it only inside `@media (hover: hover) and (pointer: fine)`, so touch interactions cannot leave it stuck. Keyboard users reveal it through `:focus-visible`. The duplicated visual caption is `aria-hidden="true"`; the project link retains its localized accessible name through the image alternative text.
+
+The caption transition is 220 ms from `opacity: 0; transform: translateY(8px)` to `opacity: 1; transform: translateY(0)`, using `cubic-bezier(0.22, 1, 0.36, 1)`. Under `prefers-reduced-motion`, translation is removed while the opacity state change remains.
 
 Rejected alternatives:
 
@@ -35,11 +37,13 @@ The image `sizes` hint mirrors those bands: 100vw, 50vw, and 33vw. Existing loop
 
 ## Component and data flow
 
-`ImageStrip` already owns the project slug, current locale, link, and image. Its slide model will also expose the localized title, avoiding a second data source or new translation keys. `Navbar` remains the owner of orb dimensions and interaction. No new components or dependencies are needed.
+`ImageStrip` already owns the project slug, current locale, link, and image. It resolves the title during render with `localizeProject(project, useLocale())`; the module-cached shuffled slide model continues to contain only locale-neutral slugs and image paths, so switching locales cannot retain a title from the previous locale. This avoids a second data source or new translation keys. `Navbar` remains the owner of orb dimensions and interaction. No new components or dependencies are needed.
+
+The shared contact-transition target changes only on the horizontal axis: `--nav-orb-center-x` becomes `calc(100% - 34px)` below 768 px and `calc(100% - 42px)` from 768 px upward (page padding plus half of the 36 px orb width). `--nav-orb-center-y` remains `calc(var(--nav-top-padding) + 38.5px)` because flex alignment keeps the orb centered against the unchanged 77 px header regardless of orb height.
 
 ## Verification
 
-- Add a failing source/contract test for the 1/2/3 Swiper breakpoints, responsive image sizes, localized caption, hover/focus visibility, and 36×35 orb geometry.
+- Add a failing source/contract test for the 1/2/3 Swiper breakpoints, responsive image sizes, localized `useLocale()` caption resolution, hover-capable and `:focus-visible` visibility, `aria-hidden`, exact motion values, 36×35 orb geometry, and the two `--nav-orb-center-x` values.
 - Run the focused test red, implement the minimum change, then run it green.
 - Run `pnpm check`.
-- Verify desktop screenshots around 1024, 1279, and 1280 px plus keyboard focus and a mobile viewport; confirm no console, hydration, overflow, or reduced-motion regressions.
+- Verify screenshots and computed geometry at 767, 768, 1024, 1279, and 1280 px plus keyboard focus, a touch viewport, and the contact route; confirm no console, hydration, overflow, stuck-caption, target-alignment, or reduced-motion regressions.
