@@ -15,12 +15,13 @@ Portfolio website for Kool Studio, a Wroclaw-based interior architecture practic
 
 ```bash
 pnpm dev       # Start dev server on $CONDUCTOR_PORT, falling back to 8080
+pnpm test      # Run component and interaction contract tests
 pnpm build     # Production build
 pnpm start     # Start production server on $PORT, falling back to 8080
 pnpm lint      # Run ESLint CLI
 pnpm typecheck # Run TypeScript without emitting files
 pnpm check:i18n # Verify pl.json/en.json translation keys match
-pnpm check     # Typecheck, lint, i18n parity, and build
+pnpm check     # Tests, typecheck, lint, i18n parity, and build
 ```
 
 ## Project Structure
@@ -148,7 +149,7 @@ Project skills live in `.claude/skills/`; shared agent permissions in `.claude/s
 
 - Next.js 16 App Router: route `params` is a Promise — type as `params: Promise<{...}>` and `await params` (see `app/[locale]/layout.tsx`)
 - There is intentionally no `tailwind.config.*` — Tailwind v4 design tokens live in `@theme` in `app/globals.css`
-- There are no automated tests — `pnpm check` (typecheck + lint + i18n parity + build) is the verification gate before claiming work done
+- `pnpm test` covers Navbar behavior plus homepage and motion contracts; `pnpm check` runs it before typecheck, lint, i18n parity, and build
 
 ## SEO
 

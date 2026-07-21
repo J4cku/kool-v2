@@ -7,9 +7,10 @@ export function ogLocale(locale: string) {
   return locale === 'en' ? 'en_US' : 'pl_PL';
 }
 
-/* Self-referencing canonical + pl/en/x-default hreflang for a route path
-   ('' for the locale root, '/projekty' for a subpage) */
-export function localeAlternates(locale: string, path: string): Metadata['alternates'] {
+export function localeAlternates(
+  locale: string,
+  path: string,
+): Metadata['alternates'] {
   return {
     canonical: `${BASE_URL}/${locale}${path}`,
     languages: {
@@ -22,9 +23,10 @@ export function localeAlternates(locale: string, path: string): Metadata['altern
 
 type MetaPageKey = 'projekty' | 'studio' | 'oferta' | 'kontakt';
 
-/* Localized per-page metadata (title/description from messages `meta.*`,
-   self-canonical, hreflang) for the four static subpages */
-export async function pageMetadata(locale: string, key: MetaPageKey): Promise<Metadata> {
+export async function pageMetadata(
+  locale: string,
+  key: MetaPageKey,
+): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'meta' });
   const title = t(`${key}.title`);
   const description = t(`${key}.description`);
@@ -46,8 +48,6 @@ export async function pageMetadata(locale: string, key: MetaPageKey): Promise<Me
   };
 }
 
-/* generateMetadata factory for the static subpages:
-   `export const generateMetadata = makePageMetadata('studio')` */
 export function makePageMetadata(key: MetaPageKey) {
   return async function generateMetadata({
     params,
@@ -59,8 +59,6 @@ export function makePageMetadata(key: MetaPageKey) {
   };
 }
 
-/* Escape `<` so user-editable strings (project descriptions etc.) can never
-   terminate the <script> tag that embeds the JSON-LD */
 export function jsonLdScript(data: object): string {
   return JSON.stringify(data).replace(/</g, '\\u003c');
 }

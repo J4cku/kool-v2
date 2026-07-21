@@ -1,10 +1,13 @@
 'use client';
 
-import { useState, useEffect, useSyncExternalStore } from 'react';
-import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { Link, usePathname } from '@/i18n/navigation';
+import { acquireDocumentScrollLock } from '@/lib/document-scroll-lock';
+import { STORY_DESKTOP_QUERY } from '@/lib/portfolio-motion';
+import { usePrefersReducedMotion } from '@/lib/reduced-motion';
 import { INSTAGRAM_URL } from '@/lib/site';
 
 const navLinks = [
@@ -14,47 +17,51 @@ const navLinks = [
   { href: '/kontakt' as const, key: 'kontakt' },
 ];
 
-const mobileQuery = '(max-width: 768px)';
+const focusableSelector =
+  'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
-function subscribeToMobileQuery(onStoreChange: () => void) {
-  const mq = window.matchMedia(mobileQuery);
-  mq.addEventListener('change', onStoreChange);
-  return () => mq.removeEventListener('change', onStoreChange);
-}
-
-function getMobileSnapshot() {
-  return window.matchMedia(mobileQuery).matches;
-}
-
-function getServerMobileSnapshot() {
-  return false;
-}
-
-function NavLinkLabel({ label, isRolloverActive }: { label: string; isRolloverActive: boolean }) {
-  const shouldReduceMotion = useReducedMotion();
+function NavLinkLabel({
+  label,
+  active,
+}: {
+  label: string;
+  active: boolean;
+}) {
+  const reducedMotion = usePrefersReducedMotion();
   const characters = Array.from(label);
 
   return (
-    <span className="relative inline-block overflow-hidden leading-[1.2] align-bottom">
+    <span className="relative inline-block overflow-hidden align-bottom leading-[1.2]">
       <span aria-hidden="true" className="block whitespace-nowrap">
         {characters.map((character, index) => (
           <motion.span
             key={`current-${index}`}
             className="inline-block"
-            animate={{ y: shouldReduceMotion || !isRolloverActive ? '0%' : '-100%' }}
-            transition={{ delay: index * 0.015, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            animate={{ y: reducedMotion || !active ? '0%' : '-100%' }}
+            transition={{
+              delay: index * 0.015,
+              duration: reducedMotion ? 0 : 0.45,
+              ease: [0.22, 1, 0.36, 1],
+            }}
           >
             {character === ' ' ? '\u00A0' : character}
           </motion.span>
         ))}
       </span>
-      <span aria-hidden="true" className="absolute top-0 left-0 block whitespace-nowrap">
+      <span
+        aria-hidden="true"
+        className="absolute left-0 top-0 block whitespace-nowrap"
+      >
         {characters.map((character, index) => (
           <motion.span
             key={`next-${index}`}
             className="inline-block"
-            animate={{ y: shouldReduceMotion || !isRolloverActive ? '100%' : '0%' }}
-            transition={{ delay: index * 0.015, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            animate={{ y: reducedMotion || !active ? '100%' : '0%' }}
+            transition={{
+              delay: index * 0.015,
+              duration: reducedMotion ? 0 : 0.45,
+              ease: [0.22, 1, 0.36, 1],
+            }}
           >
             {character === ' ' ? '\u00A0' : character}
           </motion.span>
@@ -68,234 +75,306 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [focusedLabel, setFocusedLabel] = useState<string | null>(null);
   const [hoveredLabel, setHoveredLabel] = useState<string | null>(null);
-  const isMobile = useSyncExternalStore(
-    subscribeToMobileQuery,
-    getMobileSnapshot,
-    getServerMobileSnapshot
-  );
+  const openerRef = useRef<HTMLButtonElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const shouldReduceMotion = useReducedMotion();
   const t = useTranslations('nav');
   const pathname = usePathname();
+  const isProjectDetail = pathname.startsWith('/projekty/');
+  const [storyTheme, setStoryTheme] = useState({
+    pathname,
+    light: isProjectDetail,
+  });
+  const storyHeroLight =
+    storyTheme.pathname === pathname ? storyTheme.light : isProjectDetail;
+  const usesHeroTreatment = pathname === '/' || storyHeroLight;
+
+  const isActive = (href: string) =>
+    pathname === href || pathname.startsWith(`${href}/`);
+  const isRolloverActive = (label: string) =>
+    hoveredLabel === label || focusedLabel === label;
 
   useEffect(() => {
-    document.body.style.overflow = menuOpen && isMobile ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
-  }, [menuOpen, isMobile]);
+    const desktopQuery = window.matchMedia(STORY_DESKTOP_QUERY);
+    const closeOnDesktop = (event: MediaQueryListEvent) => {
+      if (event.matches) setMenuOpen(false);
+    };
 
-  // Scroll-linked shrink: browsers with CSS scroll timelines animate the
-  // .nav-logo-shrink/.nav-dot-shrink classes on the compositor (globals.css),
-  // which overrides these inline values and stays smooth in Mobile Safari.
-  // Older browsers fall back to the spring-smoothed values below.
-  const { scrollY } = useScroll();
-  const smoothScrollY = useSpring(scrollY, { stiffness: 260, damping: 34, restDelta: 0.5 });
-  const logoScale = useTransform(smoothScrollY, [0, 200], [1, 0.45]);
-  const dotScale = useTransform(smoothScrollY, [0, 200], isMobile ? [1, 0.7] : [1, 1]);
-  const dotY = useTransform(smoothScrollY, [0, 200], isMobile ? [0, -16] : [0, 0]);
+    desktopQuery.addEventListener('change', closeOnDesktop);
+    return () => desktopQuery.removeEventListener('change', closeOnDesktop);
+  }, []);
 
-  const isActive = (href: string) => {
-    if (href === '/') return pathname === '/';
-    return pathname.startsWith(href);
-  };
+  useEffect(() => {
+    const handleStoryTheme = (event: Event) => {
+      const themeEvent = event as CustomEvent<{ light?: boolean }>;
+      if (typeof themeEvent.detail?.light === 'boolean') {
+        setStoryTheme({ pathname, light: themeEvent.detail.light });
+      }
+    };
 
-  const isRolloverActive = (label: string) => hoveredLabel === label || focusedLabel === label;
+    window.addEventListener('kool:nav-theme', handleStoryTheme);
+    return () => window.removeEventListener('kool:nav-theme', handleStoryTheme);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!menuOpen || !menuRef.current) return;
+
+    const menu = menuRef.current;
+    const releaseScrollLock = acquireDocumentScrollLock();
+    const focusFrame = window.requestAnimationFrame(() => {
+      closeButtonRef.current?.focus({ preventScroll: true });
+    });
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setMenuOpen(false);
+        return;
+      }
+
+      if (event.key !== 'Tab') return;
+
+      const focusableElements = Array.from(
+        menu.querySelectorAll<HTMLElement>(focusableSelector)
+      );
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements.at(-1);
+
+      if (!firstElement || !lastElement) {
+        event.preventDefault();
+        return;
+      }
+
+      const activeElement = document.activeElement;
+      if (event.shiftKey && (activeElement === firstElement || !menu.contains(activeElement))) {
+        event.preventDefault();
+        lastElement.focus();
+      } else if (
+        !event.shiftKey &&
+        (activeElement === lastElement || !menu.contains(activeElement))
+      ) {
+        event.preventDefault();
+        firstElement.focus();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.cancelAnimationFrame(focusFrame);
+      document.removeEventListener('keydown', handleKeyDown);
+      releaseScrollLock();
+    };
+  }, [menuOpen]);
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50">
-        <div className="w-full px-4 md:px-6 pt-4 pb-6 flex items-center justify-between">
-          <Link href="/">
-            {/* Desktop: static logo */}
-            <span className="hidden md:block">
-              <Image src="/logo.svg" alt="Kool Studio" width={208} height={77} priority />
-            </span>
-            {/* Mobile: scale tracks scroll position */}
-            <motion.span
-              className="block md:hidden origin-top-left will-change-transform nav-logo-shrink"
-              style={{ scale: logoScale }}
-            >
-              <Image src="/logo.svg" alt="Kool Studio" width={208} height={77} priority />
-            </motion.span>
+      <nav
+        aria-label={t('menu')}
+        className={`fixed inset-x-0 top-0 z-50 h-16 border-b transition-[background-color,border-color] duration-300 motion-reduce:transition-none ${
+          usesHeroTreatment
+            ? 'border-beige/50 bg-transparent'
+            : 'border-coral/30 bg-beige'
+        }`}
+      >
+        <div className="flex h-full items-center justify-between px-5">
+          <Link
+            href="/"
+            aria-label="Kool Studio"
+            className="inline-flex shrink-0 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-coral"
+          >
+            <span
+              aria-hidden="true"
+              className={`block h-10 w-[108px] transition-colors duration-300 motion-reduce:transition-none ${
+                usesHeroTreatment ? 'bg-beige' : 'bg-coral'
+              }`}
+              style={{
+                maskImage: 'url(/logo.svg)',
+                WebkitMaskImage: 'url(/logo.svg)',
+                maskPosition: 'center',
+                WebkitMaskPosition: 'center',
+                maskRepeat: 'no-repeat',
+                WebkitMaskRepeat: 'no-repeat',
+                maskSize: 'contain',
+                WebkitMaskSize: 'contain',
+              }}
+            />
           </Link>
 
-          <div className="flex items-center gap-10">
-            {/* Desktop: menu items appear inline left of the dot. Always
-                mounted (animated by state, not AnimatePresence) so the nav
-                links exist in the server HTML for crawlers. `inert` removes
-                hit-testing, focus and a11y exposure while closed; the
-                delayed visibility flip hides the text from find-in-page
-                after the staggered fade-out completes */}
-            <div
-              className={`hidden md:flex items-center transition-[visibility] duration-[600ms] ${
-                menuOpen ? 'visible' : 'invisible'
-              }`}
-              inert={!menuOpen}
-            >
-              {navLinks.map((link, index) => (
-                <motion.span
-                  key={link.key}
-                  className="inline-flex items-center"
-                  initial={false}
-                  animate={menuOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: -16 }}
-                  transition={{ delay: index * 0.06, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                >
+          <ul className="hidden items-center gap-5 min-[992px]:flex">
+            {navLinks.map((link) => {
+              const active = isActive(link.href);
+
+              return (
+                <li key={link.key}>
                   <Link
                     href={link.href}
                     aria-label={t(link.key)}
+                    aria-current={active ? 'page' : undefined}
                     onBlur={() => setFocusedLabel(null)}
-                    onClick={() => setMenuOpen(false)}
                     onFocus={() => setFocusedLabel(link.key)}
                     onMouseEnter={() => setHoveredLabel(link.key)}
                     onMouseLeave={() => setHoveredLabel(null)}
-                    className={`relative transition-colors duration-200 text-[15px] text-coral hover:opacity-60 ${
-                      isActive(link.href) ? 'font-bold' : 'font-normal'
+                    className={`inline-flex border-b-2 py-1 text-[11px] uppercase tracking-[0.14em] transition-[border-color,color,opacity] duration-300 hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-coral motion-reduce:transition-none ${
+                      usesHeroTreatment ? 'text-beige' : 'text-dark'
+                    } ${
+                      active
+                        ? `${usesHeroTreatment ? 'border-beige' : 'border-coral'} font-[700]`
+                        : 'border-transparent font-[500]'
                     }`}
                   >
-                    <NavLinkLabel label={t(link.key)} isRolloverActive={isRolloverActive(link.key)} />
+                    <NavLinkLabel
+                      label={t(link.key)}
+                      active={isRolloverActive(link.key)}
+                    />
                   </Link>
-                  <span className="text-coral text-[15px] mr-1">,</span>
-                </motion.span>
-              ))}
-              <motion.span
-                key="instagram"
-                className="inline-flex items-center"
-                initial={false}
-                animate={menuOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: -16 }}
-                transition={{ delay: navLinks.length * 0.06, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                </li>
+              );
+            })}
+            <li>
+              <a
+                href={INSTAGRAM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="instagram"
+                onBlur={() => setFocusedLabel(null)}
+                onFocus={() => setFocusedLabel('instagram')}
+                onMouseEnter={() => setHoveredLabel('instagram')}
+                onMouseLeave={() => setHoveredLabel(null)}
+                className={`inline-flex border-b-2 border-transparent py-1 text-[11px] font-[500] uppercase tracking-[0.14em] transition-[border-color,color,opacity] duration-300 hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-coral motion-reduce:transition-none ${
+                  usesHeroTreatment
+                    ? 'text-beige hover:border-beige/60'
+                    : 'text-dark hover:border-dark/40'
+                }`}
               >
-                <a
-                  href={INSTAGRAM_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="instagram"
-                  onBlur={() => setFocusedLabel(null)}
-                  onFocus={() => setFocusedLabel('instagram')}
-                  onMouseEnter={() => setHoveredLabel('instagram')}
-                  onMouseLeave={() => setHoveredLabel(null)}
-                  className="relative transition-colors duration-200 text-[15px] text-coral hover:opacity-60 font-normal"
-                >
-                  <NavLinkLabel label="instagram" isRolloverActive={isRolloverActive('instagram')} />
-                </a>
-              </motion.span>
-            </div>
+                <NavLinkLabel
+                  label="instagram"
+                  active={isRolloverActive('instagram')}
+                />
+              </a>
+            </li>
+          </ul>
 
-            {/* The single dot — always visible, toggles menu */}
-            <motion.button
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="w-[36px] h-[35px] hover:opacity-80 shrink-0 origin-top-right will-change-transform nav-dot-shrink"
-              style={{ scale: dotScale, y: dotY }}
-              aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-            >
-              <motion.div
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{
-                  scale: 1,
-                  opacity: 1,
-                  x: [0, 0, -3, 3, -2, 2, 0, 0],
-                }}
-                transition={{
-                  scale: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
-                  opacity: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
-                  x: { duration: 0.5, delay: 2, repeat: Infinity, repeatDelay: 5, ease: 'easeInOut' },
-                }}
-                className="origin-center"
-              >
-                <Image src="/dot.svg" alt="" width={36} height={35} />
-              </motion.div>
-            </motion.button>
-          </div>
+          <button
+            ref={openerRef}
+            type="button"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
+            aria-haspopup="dialog"
+            onClick={() => setMenuOpen(true)}
+            className={`inline-flex min-h-11 items-center gap-2 rounded-sm px-1 text-[12px] font-[700] uppercase tracking-[0.14em] transition-[color,opacity] duration-300 hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-coral motion-reduce:transition-none min-[992px]:hidden ${
+              usesHeroTreatment ? 'text-beige' : 'text-dark'
+            }`}
+          >
+            {t('menu')}
+            <span
+              aria-hidden="true"
+              className={`h-3 w-3 transition-colors duration-300 motion-reduce:transition-none ${
+                usesHeroTreatment ? 'bg-beige' : 'bg-coral'
+              }`}
+              style={{
+                maskImage: 'url(/dot.svg)',
+                WebkitMaskImage: 'url(/dot.svg)',
+                maskPosition: 'center',
+                WebkitMaskPosition: 'center',
+                maskRepeat: 'no-repeat',
+                WebkitMaskRepeat: 'no-repeat',
+                maskSize: 'contain',
+                WebkitMaskSize: 'contain',
+              }}
+            />
+          </button>
         </div>
       </nav>
 
-      {/* Desktop: invisible backdrop to close menu */}
-      <AnimatePresence>
+      <AnimatePresence
+        initial={false}
+        onExitComplete={() => openerRef.current?.focus({ preventScroll: true })}
+      >
         {menuOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
+            ref={menuRef}
+            id="mobile-navigation"
+            role="dialog"
+            aria-modal="true"
+            aria-label={t('menu')}
+            initial={shouldReduceMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[40] hidden md:block"
-            onClick={() => setMenuOpen(false)}
-          />
-        )}
-      </AnimatePresence>
-
-      {/* Mobile: full-screen overlay. Conditionally mounted is fine for
-          crawlers — the desktop link list above is always in the HTML
-          (hidden on mobile only by CSS).
-          h-dvh (not inset-0) so the menu centers within the VISIBLE
-          viewport on iOS Safari, whose collapsing bars shift the
-          layout-viewport center */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-x-0 top-0 h-dvh z-[100] bg-coral flex flex-col md:hidden"
+            transition={{ duration: shouldReduceMotion ? 0 : 0.2 }}
+            className="fixed inset-x-0 top-0 z-[60] flex h-dvh flex-col bg-beige min-[992px]:hidden"
           >
-            <div className="w-full px-4 pt-4 pb-6 flex items-center justify-between">
-              <motion.span
-                className="origin-top-left will-change-transform nav-logo-shrink"
-                style={{ scale: logoScale }}
-              >
-                <div
-                  className="w-[208px] h-[77px] bg-beige"
-                  style={{ maskImage: 'url(/logo.svg)', maskSize: 'contain', maskRepeat: 'no-repeat' }}
-                />
-              </motion.span>
-              <motion.button
+            <div className="flex h-16 shrink-0 items-center justify-between border-b border-coral/30 px-5">
+              <Link
+                href="/"
+                aria-label="Kool Studio"
                 onClick={() => setMenuOpen(false)}
-                className="w-[36px] h-[35px] hover:opacity-80 shrink-0 origin-top-right will-change-transform nav-dot-shrink"
-                style={{ scale: dotScale, y: dotY }}
-                aria-label="Close menu"
+                className="inline-flex shrink-0 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-coral"
               >
-                <div
-                  className="w-[36px] h-[35px] bg-beige rounded-full"
-                  style={{ maskImage: 'url(/dot.svg)', maskSize: 'contain', maskRepeat: 'no-repeat' }}
-                />
-              </motion.button>
+                <Image src="/logo.svg" alt="" width={108} height={40} priority />
+              </Link>
+              <button
+                ref={closeButtonRef}
+                type="button"
+                onClick={() => setMenuOpen(false)}
+                className="inline-flex min-h-11 items-center rounded-sm px-1 text-[12px] font-[700] uppercase tracking-[0.14em] text-dark transition-opacity duration-200 hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-coral motion-reduce:transition-none"
+              >
+                {t('close')}
+              </button>
             </div>
 
-            {/* In-flow flex-1 (not absolute inset-0): centers the items in
-                the space below the logo header — full-screen centering left
-                far less air above the menu than below it */}
-            <nav className="flex-1 flex flex-col items-center justify-center gap-8 text-center pb-[8vh]">
-              {navLinks.map((link, index) => (
-                <motion.div
-                  key={link.key}
-                  initial={{ opacity: 0, y: 20 }}
+            <nav
+              aria-label={t('menu')}
+              className="flex min-h-0 flex-1 items-center overflow-y-auto px-5 py-8"
+            >
+              <ul className="w-full border-y border-coral/30">
+                {navLinks.map((link, index) => {
+                  const active = isActive(link.href);
+
+                  return (
+                    <motion.li
+                      key={link.key}
+                      initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{
+                        duration: shouldReduceMotion ? 0 : 0.28,
+                        delay: shouldReduceMotion ? 0 : index * 0.04,
+                      }}
+                      className="border-b border-coral/30 last:border-b-0"
+                    >
+                      <Link
+                        href={link.href}
+                        aria-current={active ? 'page' : undefined}
+                        onClick={() => setMenuOpen(false)}
+                        className={`flex w-full items-center justify-between border-l-4 py-3 pl-4 pr-1 text-[clamp(2rem,10vw,3rem)] uppercase leading-none tracking-[-0.035em] text-dark transition-[border-color,opacity] duration-200 hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-coral motion-reduce:transition-none ${
+                          active ? 'border-coral font-[800]' : 'border-transparent font-[600]'
+                        }`}
+                      >
+                        {t(link.key)}
+                      </Link>
+                    </motion.li>
+                  );
+                })}
+                <motion.li
+                  initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="pointer-events-auto"
+                  transition={{
+                    duration: shouldReduceMotion ? 0 : 0.28,
+                    delay: shouldReduceMotion ? 0 : navLinks.length * 0.04,
+                  }}
                 >
-                  <Link
-                    href={link.href}
+                  <a
+                    href={INSTAGRAM_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     onClick={() => setMenuOpen(false)}
-                    className={`text-5xl uppercase tracking-wide transition-opacity hover:opacity-80 ${
-                      isActive(link.href) ? 'text-beige font-[900]' : 'text-beige/80 font-[700]'
-                    }`}
+                    className="flex w-full border-l-4 border-transparent py-3 pl-4 pr-1 text-[clamp(2rem,10vw,3rem)] font-[600] uppercase leading-none tracking-[-0.035em] text-dark transition-opacity duration-200 hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-coral motion-reduce:transition-none"
                   >
-                    {t(link.key)}
-                  </Link>
-                </motion.div>
-              ))}
-              <motion.div
-                key="instagram"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: navLinks.length * 0.1 }}
-                className="pointer-events-auto"
-              >
-                <a
-                  href={INSTAGRAM_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-5xl uppercase tracking-wide transition-opacity hover:opacity-80 text-beige/80 font-[700]"
-                >
-                  instagram
-                </a>
-              </motion.div>
+                    instagram
+                  </a>
+                </motion.li>
+              </ul>
             </nav>
           </motion.div>
         )}

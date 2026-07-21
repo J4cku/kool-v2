@@ -1,17 +1,15 @@
 import Navbar from '@/components/Navbar';
 import ImageStrip from '@/components/ImageStrip';
-import ManifestoSection from '@/components/ManifestoSection';
-import FooterBanner from '@/components/FooterBanner';
+import FooterBar from '@/components/FooterBar';
 
 export default function Home() {
   return (
     <>
       <Navbar />
-      <main className="pt-[160px]">
+      <main>
         <ImageStrip />
-        <ManifestoSection />
       </main>
-      <FooterBanner showAddress showMarquee={false} />
+      <FooterBar />
     </>
   );
 }
