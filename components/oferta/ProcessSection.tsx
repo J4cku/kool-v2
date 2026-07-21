@@ -33,7 +33,7 @@ export default function ProcessSection({
           initial={{ opacity: 0, y: reduceMotion ? 0 : 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.75, ease: EASE }}
+          transition={{ duration: reduceMotion ? 0 : 0.75, ease: EASE }}
         >
           <span
             className="font-[400] uppercase text-dark/60 mb-4 md:mb-6 block"
@@ -53,7 +53,11 @@ export default function ProcessSection({
           initial={{ opacity: 0, y: reduceMotion ? 0 : 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.75, ease: EASE, delay: 0.12 }}
+          transition={{
+            duration: reduceMotion ? 0 : 0.75,
+            ease: EASE,
+            delay: reduceMotion ? 0 : 0.12,
+          }}
           className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-0 mb-16 md:mb-24 items-stretch"
         >
           <ColumnImage
@@ -86,7 +90,7 @@ export default function ProcessSection({
           initial={{ opacity: 0, y: reduceMotion ? 0 : 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.75, ease: EASE }}
+          transition={{ duration: reduceMotion ? 0 : 0.75, ease: EASE }}
         >
           <h2
             className="font-[700] text-dark uppercase mb-6 md:mb-8 leading-[1.02]"
