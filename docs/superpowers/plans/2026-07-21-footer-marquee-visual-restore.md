@@ -2,19 +2,19 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Restore the original beige/coral footer controls and beige marquee surfaces while retaining structural accessibility and performance improvements.
+**Goal:** Restore the original beige/coral footer controls, language-toggle geometry, and beige marquee surfaces while retaining semantic accessibility and performance improvements.
 
-**Architecture:** Make a narrow class-only visual rollback in the existing footer and marquee components. Preserve the expanded interactive wrappers, semantic attributes, component behavior, deferred loading, and all other Lighthouse optimizations.
+**Architecture:** Make a narrow class-only visual rollback in the existing footer and marquee components. Preserve semantic attributes, component behavior, deferred loading, and all other Lighthouse optimizations while restoring the language changer's production geometry.
 
 **Tech Stack:** Next.js 16, React 19, TypeScript, Tailwind CSS 4, pnpm
 
 ## Global Constraints
 
 - Keep coral exactly `#FC3117`.
-- Retain the 44-by-44-pixel interactive hit areas around the 26-pixel footer circles.
+- Retain the 44-by-44-pixel Instagram hit area; restore the language buttons to their original 26-by-26-pixel geometry and 4-pixel gap.
 - Retain `aria-label`, `aria-pressed`, locale switching, Instagram behavior, fixed positioning, and hover states.
 - Retain all image, video, font, transition, and initial-load performance optimizations.
-- Accept the measured Lighthouse contrast regression caused by restoring the original palette.
+- Accept the measured Lighthouse contrast and target-size regressions caused by restoring the production palette and language geometry.
 - Run `pnpm check` before handoff.
 
 ---
@@ -57,7 +57,13 @@ In `components/FooterBar.tsx`, keep the outer 44-pixel anchor unchanged and repl
 
 - [ ] **Step 3: Restore both language-control states**
 
-In both buttons in `components/LanguageToggle.tsx`, keep the outer 44-pixel button and `aria-pressed` unchanged. Use:
+In both buttons in `components/LanguageToggle.tsx`, restore the outer button to `w-[26px] h-[26px]`, keep `aria-pressed`, and remove the `group` class. Use:
+
+```tsx
+className="w-[26px] h-[26px] flex items-center justify-center"
+```
+
+Keep the existing inner circle geometry and use:
 
 ```tsx
 locale === 'pl'
@@ -117,7 +123,8 @@ Run the production server, inspect mobile and desktop widths, and confirm:
 - Instagram and active locale glyphs are beige on coral.
 - Inactive locale glyphs are coral on the inherited page surface.
 - Homepage manifesto, shared footer, and studio marquees inherit beige rather than white.
-- Footer controls retain 44-pixel hit areas and locale switching still works.
+- Instagram retains its 44-pixel hit area; language buttons measure 26 pixels with a 4-pixel gap and match production spacing.
+- Locale switching still works.
 
 Run one mobile Lighthouse audit and record the resulting category scores in the handoff.
 
