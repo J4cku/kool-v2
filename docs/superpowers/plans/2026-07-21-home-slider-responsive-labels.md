@@ -169,14 +169,10 @@ test('homepage slides expose localized captions on hover and focus', () => {
   assert.match(imageStrip, /className="home-slide-link/);
   assert.match(imageStrip, /aria-hidden="true"/);
   assert.match(imageStrip, /className="home-slide-caption/);
+  assert.match(imageStrip, /home-slide-caption pointer-events-none/);
   assert.match(globals, /\.home-slide-caption \{[\s\S]*opacity: 0;[\s\S]*transform: translateY\(8px\)/);
-  const hoverStart = globals.indexOf('@media (hover: hover) and (pointer: fine)');
-  const focusStart = globals.indexOf('.home-slide-link:focus-visible .home-slide-caption');
-  assert.ok(hoverStart >= 0 && focusStart > hoverStart);
-  assert.match(globals.slice(hoverStart, focusStart), /\.home-slide-link:hover \.home-slide-caption[\s\S]*opacity: 1;[\s\S]*transform: translateY\(0\)/);
-  assert.doesNotMatch(globals.slice(0, hoverStart), /\.home-slide-link:hover \.home-slide-caption/);
-  assert.doesNotMatch(globals.slice(focusStart), /\.home-slide-link:hover \.home-slide-caption/);
-  assert.match(globals.slice(focusStart), /\.home-slide-link:focus-visible \.home-slide-caption[\s\S]*opacity: 1;[\s\S]*transform: translateY\(0\)/);
+  assert.match(globals, /@media \(hover: hover\) and \(pointer: fine\) \{\s*\.home-slide-link:hover \.home-slide-caption \{[^}]*opacity: 1;[^}]*transform: translateY\(0\);[^}]*\}\s*\}/);
+  assert.match(globals, /\.home-slide-link:focus-visible \.home-slide-caption \{[^}]*opacity: 1;[^}]*transform: translateY\(0\);[^}]*\}/);
   assert.match(globals, /transition: opacity 220ms cubic-bezier\(0\.22, 1, 0\.36, 1\),\s*transform 220ms cubic-bezier\(0\.22, 1, 0\.36, 1\)/s);
   assert.match(globals, /transform: translateY\(8px\)/);
   assert.match(globals, /@media \(prefers-reduced-motion: reduce\) \{\s*\.home-slide-caption \{\s*transform: none;\s*\}\s*\}/);
@@ -210,7 +206,7 @@ Add `home-slide-link` to the project link. Inside it, after the image, render on
 {title && (
   <span
     aria-hidden="true"
-    className="home-slide-caption absolute inset-x-0 bottom-0 z-10 bg-coral px-4 py-3 text-sm font-[600] uppercase tracking-[0.08em] text-dark"
+    className="home-slide-caption pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-coral px-4 py-3 text-sm font-[600] uppercase tracking-[0.08em] text-dark"
   >
     {title}
   </span>
