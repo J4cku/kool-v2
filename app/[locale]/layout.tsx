@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Poppins } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
@@ -124,6 +125,7 @@ export default async function LocaleLayout({
         {/* Cookieless visit counting — needs Web Analytics enabled in the
             Vercel dashboard to start collecting */}
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
