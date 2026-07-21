@@ -19,13 +19,13 @@ export default function LanguageToggle() {
       <button
         onClick={() => switchTo('pl')}
         aria-pressed={locale === 'pl'}
-        className="w-11 h-11 flex items-center justify-center"
+        className="group w-11 h-11 flex items-center justify-center"
       >
         <span
-          className={`w-[26px] h-[26px] flex items-center justify-center rounded-full transition-colors ${
+          className={`w-[26px] h-[26px] flex items-center justify-center rounded-full transition-colors group-hover:opacity-70 ${
             locale === 'pl'
               ? 'bg-coral text-beige'
-              : 'bg-transparent text-coral hover:opacity-70'
+              : 'bg-transparent text-coral'
           }`}
         >
           pl
@@ -34,13 +34,13 @@ export default function LanguageToggle() {
       <button
         onClick={() => switchTo('en')}
         aria-pressed={locale === 'en'}
-        className="w-11 h-11 flex items-center justify-center"
+        className="group w-11 h-11 flex items-center justify-center"
       >
         <span
-          className={`w-[26px] h-[26px] flex items-center justify-center rounded-full transition-colors ${
+          className={`w-[26px] h-[26px] flex items-center justify-center rounded-full transition-colors group-hover:opacity-70 ${
             locale === 'en'
               ? 'bg-coral text-beige'
-              : 'bg-transparent text-coral hover:opacity-70'
+              : 'bg-transparent text-coral'
           }`}
         >
           en

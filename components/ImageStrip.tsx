@@ -1,6 +1,5 @@
 'use client';
 
-import { useLayoutEffect, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -28,21 +27,8 @@ export default function ImageStrip() {
   const slides = baseSlides;
   const locale = useLocale();
   const reduceMotion = useReducedMotion();
-  const [visibleSlideCount, setVisibleSlideCount] = useState(1);
   const { scrollY } = useScroll();
   const indicatorOpacity = useTransform(scrollY, [0, 80], [1, 0]);
-
-  useLayoutEffect(() => {
-    if (window.matchMedia('(min-width: 768px)').matches) {
-      queueMicrotask(() => setVisibleSlideCount(3));
-    }
-
-    const revealTimer = window.setTimeout(() => {
-      setVisibleSlideCount(slides.length);
-    }, 3000);
-
-    return () => window.clearTimeout(revealTimer);
-  }, [slides.length]);
 
   return (
     <div className="relative flex min-h-[calc(100svh-160px)] w-full items-start md:min-h-[calc(100svh-127px)] md:items-center">
@@ -69,10 +55,7 @@ export default function ImageStrip() {
           const title = project ? localizeProject(project, locale).title : '';
 
           return (
-            <SwiperSlide
-              key={slide.slug}
-              data-swiper-autoplay={i === 0 ? 4500 : undefined}
-            >
+            <SwiperSlide key={slide.slug}>
               <Link
                 href={`/projekty/${slide.slug}`}
                 draggable={false}
@@ -80,7 +63,6 @@ export default function ImageStrip() {
                 aria-label={slideAlt(slide.slug, locale)}
                 className="home-slide-link relative block w-full cursor-pointer aspect-[3/4] md:aspect-square overflow-hidden"
               >
-              {i < visibleSlideCount ? (
                 <Image
                   src={slide.src}
                   alt={slideAlt(slide.slug, locale)}
@@ -88,12 +70,9 @@ export default function ImageStrip() {
                   fill
                   className="object-cover transition-transform duration-[600ms] hover:scale-[1.04]"
                   sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw"
-                  loading="eager"
+                  loading={i === 0 ? 'eager' : 'lazy'}
                   fetchPriority={i === 0 ? 'high' : undefined}
                 />
-              ) : (
-                <div aria-hidden="true" className="absolute inset-0 bg-beige" />
-              )}
                 {title && (
                   <span
                     aria-hidden="true"
