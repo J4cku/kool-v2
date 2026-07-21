@@ -2,22 +2,26 @@
 
 import { useSyncExternalStore } from 'react';
 
-const reducedMotionQuery = '(prefers-reduced-motion: reduce)';
+export const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 
-function subscribe(onStoreChange: () => void) {
-  const mediaQuery = window.matchMedia(reducedMotionQuery);
+export function subscribeToReducedMotion(onStoreChange: () => void) {
+  const mediaQuery = window.matchMedia(REDUCED_MOTION_QUERY);
   mediaQuery.addEventListener('change', onStoreChange);
   return () => mediaQuery.removeEventListener('change', onStoreChange);
 }
 
-function getSnapshot() {
-  return window.matchMedia(reducedMotionQuery).matches;
+export function getReducedMotionSnapshot() {
+  return window.matchMedia(REDUCED_MOTION_QUERY).matches;
 }
 
-function getServerSnapshot() {
+export function getServerReducedMotionSnapshot() {
   return false;
 }
 
 export function useReducedMotion() {
-  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  return useSyncExternalStore(
+    subscribeToReducedMotion,
+    getReducedMotionSnapshot,
+    getServerReducedMotionSnapshot
+  );
 }

@@ -1,8 +1,19 @@
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import test from 'node:test';
+import { createElement } from 'react';
+import { renderToString } from 'react-dom/server';
+import * as reducedMotionModule from '../hooks/useReducedMotion.ts';
 
-const hookPath = 'hooks/useReducedMotion.ts';
+type ReducedMotionStore = {
+  REDUCED_MOTION_QUERY: string;
+  subscribeToReducedMotion: (onStoreChange: () => void) => () => void;
+  getReducedMotionSnapshot: () => boolean;
+  getServerReducedMotionSnapshot: () => false;
+  useReducedMotion: () => boolean;
+};
+
+const store = reducedMotionModule as unknown as ReducedMotionStore;
 const consumers = [
   'components/Reveal.tsx',
   'components/RevealHeading.tsx',
@@ -15,28 +26,92 @@ const consumers = [
   'app/[locale]/kontakt/KontaktPage.tsx',
 ] as const;
 
-test('reduced-motion consumers use one hydration-safe media-query store', () => {
-  assert.ok(existsSync(hookPath), `${hookPath} must provide the shared hook`);
+function sourceFiles(directory: string): string[] {
+  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const path = `${directory}/${entry.name}`;
+    if (entry.isDirectory()) return sourceFiles(path);
+    return /\.[cm]?[jt]sx?$/.test(entry.name) ? [path] : [];
+  });
+}
 
-  const hook = readFileSync(hookPath, 'utf8');
-  assert.match(hook, /useSyncExternalStore/);
-  assert.match(
-    hook,
-    /const reducedMotionQuery = ['"]\(prefers-reduced-motion: reduce\)['"];\s*[\s\S]*matchMedia\(reducedMotionQuery\)/
-  );
-  assert.match(hook, /addEventListener\(['"]change['"]/);
-  assert.match(hook, /removeEventListener\(['"]change['"]/);
-  assert.match(hook, /function getServerSnapshot\(\)\s*{\s*return false;\s*}/);
+test('reduced-motion store uses browser state after a false hydration snapshot', () => {
+  assert.equal(store.REDUCED_MOTION_QUERY, '(prefers-reduced-motion: reduce)');
+  assert.equal(typeof store.subscribeToReducedMotion, 'function');
+  assert.equal(typeof store.getReducedMotionSnapshot, 'function');
+  assert.equal(typeof store.getServerReducedMotionSnapshot, 'function');
 
-  for (const path of consumers) {
+  const queries: string[] = [];
+  let addedListener: EventListener | undefined;
+  let removedListener: EventListener | undefined;
+  const mediaQuery = {
+    matches: true,
+    addEventListener(type: string, listener: EventListener) {
+      assert.equal(type, 'change');
+      addedListener = listener;
+    },
+    removeEventListener(type: string, listener: EventListener) {
+      assert.equal(type, 'change');
+      removedListener = listener;
+    },
+  };
+  const originalWindow = Object.getOwnPropertyDescriptor(globalThis, 'window');
+  Object.defineProperty(globalThis, 'window', {
+    configurable: true,
+    value: {
+      matchMedia(query: string) {
+        queries.push(query);
+        return mediaQuery as unknown as MediaQueryList;
+      },
+    },
+  });
+
+  try {
+    assert.equal(store.getReducedMotionSnapshot(), true);
+    mediaQuery.matches = false;
+    assert.equal(store.getReducedMotionSnapshot(), false);
+    assert.equal(store.getServerReducedMotionSnapshot(), false);
+
+    const onStoreChange = () => {};
+    const unsubscribe = store.subscribeToReducedMotion(onStoreChange);
+    assert.equal(addedListener, onStoreChange);
+    unsubscribe();
+    assert.equal(removedListener, onStoreChange);
+    assert.deepEqual(queries, [
+      store.REDUCED_MOTION_QUERY,
+      store.REDUCED_MOTION_QUERY,
+      store.REDUCED_MOTION_QUERY,
+    ]);
+
+    mediaQuery.matches = true;
+    const Probe = () => {
+      return createElement('span', null, store.useReducedMotion() ? 'reduce' : 'full');
+    };
+    assert.equal(renderToString(createElement(Probe)), '<span>full</span>');
+  } finally {
+    if (originalWindow) Object.defineProperty(globalThis, 'window', originalWindow);
+    else Reflect.deleteProperty(globalThis, 'window');
+  }
+});
+
+test('app and components never import Framer useReducedMotion directly', () => {
+  for (const path of [...sourceFiles('app'), ...sourceFiles('components')]) {
     const source = readFileSync(path, 'utf8');
-    assert.doesNotMatch(
-      source,
-      /import\s*{[^}]*\buseReducedMotion\b[^}]*}[\s\S]*?from ['"]framer-motion['"]/,
-      `${path} must not use Framer's hydration-unsafe hook directly`
-    );
+    const framerImports = /import\s*{([^}]*)}\s*from\s*['"]framer-motion['"]/g;
+    let match: RegExpExecArray | null;
+    while ((match = framerImports.exec(source)) !== null) {
+      assert.doesNotMatch(
+        match[1],
+        /\buseReducedMotion\b/,
+        `${path} must not use Framer's hydration-unsafe hook directly`
+      );
+    }
+  }
+});
+
+test('all existing reduced-motion consumers use the shared hook', () => {
+  for (const path of consumers) {
     assert.match(
-      source,
+      readFileSync(path, 'utf8'),
       /import { useReducedMotion } from ['"]@\/hooks\/useReducedMotion['"]/,
       `${path} must use the shared hydration-safe hook`
     );
