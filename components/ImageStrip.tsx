@@ -54,7 +54,7 @@ export default function ImageStrip() {
   const indicatorOpacity = useTransform(scrollY, [0, 80], [1, 0]);
 
   return (
-    <div className="relative w-full min-h-[calc(100svh-160px)] flex items-start">
+    <div className="relative flex min-h-[calc(100svh-160px)] w-full items-start md:min-h-[calc(100svh-127px)] md:items-center">
       <Swiper
         key={slides === baseSlides ? 'initial' : 'shuffled'}
         className="hero-swiper w-full"

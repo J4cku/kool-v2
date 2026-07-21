@@ -28,13 +28,9 @@ export default function OfertaPage() {
 
   return (
     <>
-      <ProjectHero src="/images/oferta/KOOL_oferta_komercyjne.webp" alt="Restaurant interior" mobileKeepAspect />
+      <ProjectHero src="/images/oferta/KOOL_oferta_komercyjne.webp" alt="Restaurant interior" />
       <Navbar />
       <main>
-        {/* Spacer: lets the fixed hero image show through (native 16:9 on
-            mobile, full screen from md up — mirrors ProjectHero) */}
-        <div className="aspect-video md:aspect-auto md:h-screen" />
-
         {/* Content scrolls over the hero */}
         <div className="relative z-10 bg-beige">
           <ServiceSection

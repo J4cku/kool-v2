@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <main className="pt-[160px]">
+      <main className="pt-[160px] md:pt-[93px]">
         <ImageStrip />
         <ManifestoSection />
       </main>
