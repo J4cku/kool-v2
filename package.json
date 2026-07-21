@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start --port ${PORT:-8080}",
     "lint": "eslint .",
+    "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "check:i18n": "node scripts/check-i18n.mjs",
     "check": "pnpm typecheck && pnpm lint && pnpm check:i18n && pnpm build"
@@ -23,14 +24,17 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.18",
+    "@testing-library/react": "^16.3.2",
     "@types/node": "^25.2.1",
     "@types/react": "^19.2.13",
     "@types/react-dom": "^19.2.3",
     "autoprefixer": "^10.4.24",
     "eslint": "^9.39.4",
     "eslint-config-next": "^16.1.6",
+    "jsdom": "^29.1.1",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.18",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.10"
   }
 }
