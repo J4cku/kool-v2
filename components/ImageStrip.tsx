@@ -62,7 +62,7 @@ export default function ImageStrip() {
         modules={[Autoplay, Mousewheel]}
         slidesPerView={1}
         spaceBetween={3}
-        breakpoints={{ 768: { slidesPerView: 3 } }}
+        breakpoints={{ 768: { slidesPerView: 2 }, 1280: { slidesPerView: 3 } }}
         loop
         speed={900}
         autoplay={
@@ -88,7 +88,7 @@ export default function ImageStrip() {
                 draggable={false}
                 fill
                 className="object-cover transition-transform duration-[600ms] hover:scale-[1.04]"
-                sizes="(max-width: 768px) 100vw, 33vw"
+                sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw"
                 priority={i === 0}
                 loading={i === 0 ? undefined : 'eager'}
               />
