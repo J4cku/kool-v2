@@ -106,6 +106,7 @@ Append:
 
 ```ts
 test('homepage slider uses one, two, then three responsive slides', () => {
+  assert.match(imageStrip, /slidesPerView=\{1\}/);
   assert.match(
     imageStrip,
     /breakpoints=\{\{\s*768: \{ slidesPerView: 2 \},\s*1280: \{ slidesPerView: 3 \}\s*\}\}/s,
@@ -168,12 +169,17 @@ test('homepage slides expose localized captions on hover and focus', () => {
   assert.match(imageStrip, /className="home-slide-link/);
   assert.match(imageStrip, /aria-hidden="true"/);
   assert.match(imageStrip, /className="home-slide-caption/);
-  assert.match(globals, /@media \(hover: hover\) and \(pointer: fine\)/);
-  assert.match(globals, /\.home-slide-link:hover \.home-slide-caption/);
-  assert.match(globals, /\.home-slide-link:focus-visible \.home-slide-caption/);
+  assert.match(globals, /\.home-slide-caption \{[\s\S]*opacity: 0;[\s\S]*transform: translateY\(8px\)/);
+  const hoverStart = globals.indexOf('@media (hover: hover) and (pointer: fine)');
+  const focusStart = globals.indexOf('.home-slide-link:focus-visible .home-slide-caption');
+  assert.ok(hoverStart >= 0 && focusStart > hoverStart);
+  assert.match(globals.slice(hoverStart, focusStart), /\.home-slide-link:hover \.home-slide-caption[\s\S]*opacity: 1;[\s\S]*transform: translateY\(0\)/);
+  assert.doesNotMatch(globals.slice(0, hoverStart), /\.home-slide-link:hover \.home-slide-caption/);
+  assert.doesNotMatch(globals.slice(focusStart), /\.home-slide-link:hover \.home-slide-caption/);
+  assert.match(globals.slice(focusStart), /\.home-slide-link:focus-visible \.home-slide-caption[\s\S]*opacity: 1;[\s\S]*transform: translateY\(0\)/);
   assert.match(globals, /transition: opacity 220ms cubic-bezier\(0\.22, 1, 0\.36, 1\),\s*transform 220ms cubic-bezier\(0\.22, 1, 0\.36, 1\)/s);
   assert.match(globals, /transform: translateY\(8px\)/);
-  assert.match(globals, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.home-slide-caption[\s\S]*transform: none/);
+  assert.match(globals, /@media \(prefers-reduced-motion: reduce\) \{\s*\.home-slide-caption \{\s*transform: none;\s*\}\s*\}/);
 });
 ```
 
@@ -183,11 +189,19 @@ Expected: FAIL because captions and their interaction CSS do not exist.
 
 - [ ] **Step 3: Implement localized caption rendering**
 
-Inside the slide mapping, resolve the project after `const locale = useLocale()` is available:
+Change the expression-body mapping to a block body, resolve the project after `const locale = useLocale()` is available, and explicitly return the slide:
 
 ```tsx
-const project = projects.find((candidate) => candidate.slug === slide.slug);
-const title = project ? localizeProject(project, locale).title : '';
+{slides.map((slide, i) => {
+  const project = projects.find((candidate) => candidate.slug === slide.slug);
+  const title = project ? localizeProject(project, locale).title : '';
+
+  return (
+    <SwiperSlide key={slide.slug}>
+      {/* existing project link, image, and the caption below */}
+    </SwiperSlide>
+  );
+})}
 ```
 
 Add `home-slide-link` to the project link. Inside it, after the image, render only when a title exists:
@@ -264,15 +278,15 @@ Expected: both Vitest and node:test suites pass, typecheck/lint/i18n/build pass,
 
 - [ ] **Step 2: Run desktop breakpoint QA**
 
-Start the dev server with `CONDUCTOR_PORT` and use Chrome CDP to inspect 767, 768, 1024, 1279, and 1280 px widths. Assert visible slide counts of 1, 2, 2, 2, and 3 respectively; capture screenshots under `.context/verify-site/`.
+Start the dev server with `CONDUCTOR_PORT` and use Chrome CDP to inspect 767, 768, 1024, 1279, and 1280 px widths. At every width record the viewport, rendered slide widths, visible-slide count, orb bounding rectangle/center, CSS `--nav-orb-center-x`/`--nav-orb-center-y`, and contact target coordinates. Assert visible slide counts of 1, 2, 2, 2, and 3 respectively, 36×35 orb artwork, and matching orb/contact centers; capture screenshots under `.context/verify-site/`.
 
 - [ ] **Step 3: Verify interaction and accessibility states**
 
 At desktop width, verify hover and keyboard `:focus-visible` each reveal the correct localized title. Emulate touch input and confirm the caption does not remain visible. Emulate reduced motion and confirm the caption has no translation. Confirm the homepage has no overflow, hydration errors, failed requests, or console errors.
 
-- [ ] **Step 4: Verify orb and contact geometry**
+- [ ] **Step 4: Run the full site workflow**
 
-At mobile and desktop widths, assert the orb artwork is 36×35 px and the contact wipe target matches its computed center. Capture the homepage and contact route at mobile width.
+Run the repository's complete verify-site route inventory for both locales: all public pages, all 15 project details per locale, and the private design-system route (42 routes total). Capture one screenshot per route, separate warnings from errors, record load state/overflow/failed resources, and verify navigation, locale switching, project filters, menu open/close, and contact transition. The focused five-width checks from Step 2 supplement rather than replace this site-wide pass.
 
 - [ ] **Step 5: Request independent final review**
 
