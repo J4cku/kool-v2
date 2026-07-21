@@ -42,7 +42,7 @@ export default function RevealHeading({ text, className = '', style, as = 'h2' }
       viewport={{ once: true, amount: 0.3 }}
       variants={{
         hidden: {},
-        visible: { transition: { staggerChildren: 0.035 } },
+        visible: { transition: { staggerChildren: 0.025 } },
       }}
     >
       {text.split('\n').map((line, lineIdx) => (
@@ -55,8 +55,8 @@ export default function RevealHeading({ text, className = '', style, as = 'h2' }
                 <motion.span
                   className="inline-block"
                   variants={{
-                    hidden: { y: '110%' },
-                    visible: { y: '0%', transition: { duration: 0.7, ease: EASE } },
+                    hidden: { y: '65%' },
+                    visible: { y: '0%', transition: { duration: 0.8, ease: EASE } },
                   }}
                 >
                   {word}
