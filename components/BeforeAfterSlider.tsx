@@ -1,7 +1,11 @@
 'use client';
 
 import { useState, useRef, useCallback, useEffect } from 'react';
+import { useReducedMotion } from 'framer-motion';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
+import { getComparisonSliderPosition } from '@/lib/comparison-slider';
+import { createImagePairLoadTracker } from '@/lib/media-ready';
 
 interface BeforeAfterSliderProps {
   beforeSrc: string;
@@ -9,17 +13,44 @@ interface BeforeAfterSliderProps {
   beforeLabel?: string;
   afterLabel?: string;
   aspectClass?: string;
+  fill?: boolean;
+  sizes?: string;
+  onReady?: () => void;
   /** 'overlay' places labels on the image corners (photos); 'above' puts them
       just over the frame (plans/drawings the labels would otherwise cover). */
   labelPosition?: 'overlay' | 'above';
 }
 
-export default function BeforeAfterSlider({ beforeSrc, afterSrc, beforeLabel, afterLabel, aspectClass = 'aspect-[3/2]', labelPosition = 'overlay' }: BeforeAfterSliderProps) {
+export default function BeforeAfterSlider({
+  beforeSrc,
+  afterSrc,
+  beforeLabel,
+  afterLabel,
+  aspectClass = 'aspect-[3/2]',
+  fill = false,
+  sizes = '100vw',
+  labelPosition = 'overlay',
+  onReady,
+}: BeforeAfterSliderProps) {
+  const t = useTranslations('projectDetail');
   const [position, setPosition] = useState(50);
   const [touched, setTouched] = useState(false);
   const [inView, setInView] = useState(false);
+  const sourceKey = `${beforeSrc}\0${afterSrc}`;
+  const [activeSourceKey, setActiveSourceKey] = useState(sourceKey);
+  const shouldReduceMotion = Boolean(useReducedMotion());
   const containerRef = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
+  const imagePairTracker = useRef<{
+    key: string;
+    tracker: ReturnType<typeof createImagePairLoadTracker>;
+  } | null>(null);
+
+  if (activeSourceKey !== sourceKey) {
+    setActiveSourceKey(sourceKey);
+    setPosition(50);
+    setTouched(false);
+  }
 
   useEffect(() => {
     const el = containerRef.current;
@@ -33,8 +64,12 @@ export default function BeforeAfterSlider({ beforeSrc, afterSrc, beforeLabel, af
   }, []);
 
   useEffect(() => {
-    if (touched || !inView) return;
-    let raf: number;
+    dragging.current = false;
+  }, [sourceKey]);
+
+  useEffect(() => {
+    if (shouldReduceMotion || touched || !inView) return;
+    let raf = 0;
     const timeout = setTimeout(() => {
       const start = performance.now();
       const duration = 3000;
@@ -55,7 +90,7 @@ export default function BeforeAfterSlider({ beforeSrc, afterSrc, beforeLabel, af
       clearTimeout(timeout);
       cancelAnimationFrame(raf);
     };
-  }, [touched, inView]);
+  }, [inView, shouldReduceMotion, sourceKey, touched]);
 
   const updatePosition = useCallback((clientX: number) => {
     const container = containerRef.current;
@@ -64,6 +99,18 @@ export default function BeforeAfterSlider({ beforeSrc, afterSrc, beforeLabel, af
     const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
     setPosition((x / rect.width) * 100);
   }, []);
+
+  const handleImageLoad = useCallback((side: 'before' | 'after') => {
+    const key = `${beforeSrc}\0${afterSrc}`;
+    if (imagePairTracker.current?.key !== key) {
+      imagePairTracker.current = {
+        key,
+        tracker: createImagePairLoadTracker(),
+      };
+    }
+
+    if (imagePairTracker.current.tracker.markLoaded(side)) onReady?.();
+  }, [afterSrc, beforeSrc, onReady]);
 
   const onPointerDown = useCallback((e: React.PointerEvent) => {
     e.preventDefault();
@@ -82,8 +129,28 @@ export default function BeforeAfterSlider({ beforeSrc, afterSrc, beforeLabel, af
     dragging.current = false;
   }, []);
 
+  const onPointerCancel = useCallback(() => {
+    dragging.current = false;
+  }, []);
+
+  const onKeyDown = useCallback((event: React.KeyboardEvent) => {
+    const handledKeys = [
+      'ArrowLeft',
+      'ArrowRight',
+      'ArrowUp',
+      'ArrowDown',
+      'Home',
+      'End',
+    ];
+    if (!handledKeys.includes(event.key)) return;
+
+    event.preventDefault();
+    setTouched(true);
+    setPosition((current) => getComparisonSliderPosition(current, event.key));
+  }, []);
+
   return (
-    <div className="w-full">
+    <div className={`w-full ${fill ? 'h-full' : ''}`}>
       {labelPosition === 'above' && (beforeLabel || afterLabel) && (
         <div className="flex justify-between mb-2">
           <p className="text-[13px] font-[500] text-dark">{beforeLabel}</p>
@@ -93,14 +160,30 @@ export default function BeforeAfterSlider({ beforeSrc, afterSrc, beforeLabel, af
       <div
         ref={containerRef}
         className={`relative w-full ${aspectClass} cursor-col-resize select-none overflow-hidden`}
-        style={{ touchAction: 'none' }}
+        style={{ touchAction: 'pan-y pinch-zoom' }}
+        role="slider"
+        tabIndex={0}
+        aria-label={t('comparisonLabel')}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={Math.round(position)}
+        aria-orientation="horizontal"
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
+        onPointerCancel={onPointerCancel}
+        onKeyDown={onKeyDown}
       >
         {/* After (right/full) */}
         <div className="absolute inset-0 bg-beige">
-          <Image src={afterSrc} alt="po" fill className="object-contain" sizes="100vw" />
+          <Image
+            src={afterSrc}
+            alt="po"
+            fill
+            className="object-contain"
+            sizes={sizes}
+            onLoad={() => handleImageLoad('after')}
+          />
         </div>
 
         {/* Before (left, clipped) */}
@@ -108,7 +191,14 @@ export default function BeforeAfterSlider({ beforeSrc, afterSrc, beforeLabel, af
           className="absolute inset-0 bg-beige"
           style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}
         >
-          <Image src={beforeSrc} alt="przed" fill className="object-contain" sizes="100vw" />
+          <Image
+            src={beforeSrc}
+            alt="przed"
+            fill
+            className="object-contain"
+            sizes={sizes}
+            onLoad={() => handleImageLoad('before')}
+          />
         </div>
 
         {/* Labels */}

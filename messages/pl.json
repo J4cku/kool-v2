@@ -3,7 +3,9 @@
     "projekty": "projekty",
     "studio": "studio",
     "oferta": "oferta",
-    "kontakt": "kontakt"
+    "kontakt": "kontakt",
+    "menu": "menu",
+    "close": "zamknij"
   },
   "home": {
     "manifesto": "AUTORSKIE WNĘTRZA, KTÓRE ZOSTAJĄ NA DŁUŻEJ. TWORZYMY WNĘTRZA O WYRAŹNEJ TOŻSAMOŚCI. ŁĄCZYMY WRAŻLIWOŚĆ PROJEKTOWĄ Z PRECYZJĄ I DOŚWIADCZENIEM, TWORZĄC PRZESTRZENIE DOPRACOWANE W DETALU I OSADZONE W REALNYM KONTEKŚCIE.",
@@ -11,7 +13,15 @@
     "section1Heading": "TWORZYMY PONADCZASOWE WNĘTRZA",
     "section1Text": "Projektujemy miejsca, które nie opierają się na trendach. Każdą przestrzeń traktujemy indywidualnie, jako odpowiedź na konkretny kontekst oraz potrzeby. Niezależnie, czy jest to projekt mieszkalny, czy komercyjny, stworzymy wnętrze, które opowie twoją historię.",
     "section2Heading": "PROJEKTUJEMY\nW KAŻDEJ SKALI",
-    "section2Text": "Posiadamy wieloletnie doświadczenie w realizowaniu projektów o różnym charakterze – od detalu mebla, przez mieszkania i domy, po obiekty gastronomiczne, komercyjne i hotele. Prowadzimy proces kompleksowo, z pełną kontrolą nad efektem końcowym. W ten sposób powstają dopracowane przestrzenie, wypełnione autorskimi, unikatowymi elementami. Pracujemy we Wrocławiu, a projekty prowadzimy w całej Polsce – m.in. w Warszawie, Łodzi i Gdańsku."
+    "section2Text": "Posiadamy wieloletnie doświadczenie w realizowaniu projektów o różnym charakterze – od detalu mebla, przez mieszkania i domy, po obiekty gastronomiczne, komercyjne i hotele. Prowadzimy proces kompleksowo, z pełną kontrolą nad efektem końcowym. W ten sposób powstają dopracowane przestrzenie, wypełnione autorskimi, unikatowymi elementami.",
+    "showcaseLabel": "wybrane projekty",
+    "openProject": "zobacz projekt",
+    "scrollHint": "przewijaj, aby odkrywać projekty",
+    "swipeHint": "przesuń w górę lub w dół, aby zmienić projekt",
+    "section1Label": "podejście",
+    "section2Label": "skala",
+    "section1ImageAlt": "Próbki materiałów i kolorów na stole w pracowni Kool Studio",
+    "section2ImageAlt": "Osoba fotografująca detal jasnego wnętrza zaprojektowanego przez Kool Studio"
   },
   "meta": {
     "schemaDescription": "Wrocławska pracownia architektury wnętrz projektująca wnętrza mieszkalne i komercyjne, autorskie meble, oświetlenie i identyfikację wizualną. Projekty w całej Polsce, m.in. w Warszawie.",
@@ -34,7 +44,7 @@
     },
     "kontakt": {
       "title": "kontakt",
-      "description": "Skontaktuj się z Kool Studio — pracownią architektury wnętrz z Wrocławia. Studio: Zaporoska 83/15, 53-415 Wrocław. E-mail: hello@koolstudio.pl."
+      "description": "Skontaktuj się z Kool Studio — pracownią architektury wnętrz z Wrocławia, Polska. Studio: Zaporoska 83/15, 53-415 Wrocław. E-mail: hello@koolstudio.pl."
     }
   },
   "projects": {
@@ -51,7 +61,15 @@
     "zakres": "ZAKRES PROJEKTU",
     "wspolpraca": "WSPÓŁPRACA",
     "wizualizacje": "WIZUALIZACJE",
-    "zdjecia": "ZDJĘCIA"
+    "zdjecia": "ZDJĘCIA",
+    "category": "KATEGORIA",
+    "nextProjectHeading": "NASTĘPNY PROJEKT",
+    "viewProject": "ZOBACZ PROJEKT",
+    "previousProject": "POPRZEDNI PROJEKT",
+    "nextProject": "NASTĘPNY PROJEKT",
+    "contactHeading": "POROZMAWIAJMY O PROJEKCIE",
+    "contactAction": "NAPISZ DO NAS",
+    "comparisonLabel": "PORÓWNANIE PRZED I PO"
   },
   "contact": {
     "cta": "GOTOWI, BY ZACZĄĆ WSPÓLNY PROJEKT?"

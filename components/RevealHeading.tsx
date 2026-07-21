@@ -1,6 +1,7 @@
 'use client';
 
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
+import { usePrefersReducedMotion } from '@/lib/reduced-motion';
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -19,17 +20,7 @@ interface RevealHeadingProps {
    outside their clip boxes and would never intersect on their own.
    Renders a plain heading under prefers-reduced-motion. */
 export default function RevealHeading({ text, className = '', style, as = 'h2' }: RevealHeadingProps) {
-  const reduceMotion = useReducedMotion();
-  const Tag = as;
-
-  if (reduceMotion) {
-    return (
-      <Tag className={className} style={style}>
-        {text}
-      </Tag>
-    );
-  }
-
+  const reduceMotion = usePrefersReducedMotion();
   const MotionTag = MOTION_TAGS[as];
 
   return (
@@ -37,12 +28,15 @@ export default function RevealHeading({ text, className = '', style, as = 'h2' }
       className={className}
       style={style}
       aria-label={text}
-      initial="hidden"
-      whileInView="visible"
+      initial={reduceMotion ? false : 'hidden'}
+      animate={reduceMotion ? 'visible' : undefined}
+      whileInView={reduceMotion ? undefined : 'visible'}
       viewport={{ once: true, amount: 0.3 }}
       variants={{
         hidden: {},
-        visible: { transition: { staggerChildren: 0.035 } },
+        visible: {
+          transition: { staggerChildren: reduceMotion ? 0 : 0.02 },
+        },
       }}
     >
       {text.split('\n').map((line, lineIdx) => (
@@ -53,10 +47,17 @@ export default function RevealHeading({ text, className = '', style, as = 'h2' }
             .map((word, i, words) => (
               <span key={i} className="inline-block overflow-hidden align-bottom">
                 <motion.span
+                  data-reveal-heading-word
                   className="inline-block"
                   variants={{
                     hidden: { y: '110%' },
-                    visible: { y: '0%', transition: { duration: 0.7, ease: EASE } },
+                    visible: {
+                      y: '0%',
+                      transition: {
+                        duration: reduceMotion ? 0 : 0.55,
+                        ease: EASE,
+                      },
+                    },
                   }}
                 >
                   {word}

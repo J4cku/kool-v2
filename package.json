@@ -6,11 +6,11 @@
     "dev": "next dev --port ${CONDUCTOR_PORT:-8080}",
     "build": "next build",
     "start": "next start --port ${PORT:-8080}",
+    "test": "vitest run && rm -rf -- .context/test-build && tsc --pretty false --target es2022 --module nodenext --moduleResolution nodenext --outDir .context/test-build --rootDir . --noEmit false --incremental false --skipLibCheck tests/*.test.mts && node --test .context/test-build/tests/*.test.mjs",
     "lint": "eslint .",
-    "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "check:i18n": "node scripts/check-i18n.mjs",
-    "check": "pnpm typecheck && pnpm lint && pnpm check:i18n && pnpm build"
+    "check": "pnpm test && pnpm typecheck && pnpm lint && pnpm check:i18n && pnpm build"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

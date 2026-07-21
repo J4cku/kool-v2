@@ -3,7 +3,9 @@
     "projekty": "projects",
     "studio": "studio",
     "oferta": "services",
-    "kontakt": "contact"
+    "kontakt": "contact",
+    "menu": "menu",
+    "close": "close"
   },
   "home": {
     "manifesto": "ORIGINAL INTERIORS THAT STAY FOR LONGER. WE CREATE INTERIORS WITH A DISTINCT IDENTITY. WE COMBINE DESIGN SENSITIVITY WITH PRECISION AND EXPERIENCE, CREATING SPACES REFINED IN DETAIL AND GROUNDED IN REAL CONTEXT.",
@@ -11,7 +13,15 @@
     "section1Heading": "WE CREATE TIMELESS INTERIORS",
     "section1Text": "We design spaces that don't rely on trends. We treat each space individually, as an answer to a specific context and needs. Whether it's a residential or commercial project, we'll create an interior that tells your story.",
     "section2Heading": "WE DESIGN AT EVERY SCALE",
-    "section2Text": "We have years of experience in delivering projects of various character — from furniture details, through apartments and houses, to gastronomic, commercial and hotel venues. We manage the process comprehensively, with full control over the final result. This is how refined spaces are created, filled with original, unique elements. We are based in Wrocław and run projects across Poland — including Warsaw, Łódź and Gdańsk."
+    "section2Text": "We have years of experience in delivering projects of various character — from furniture details, through apartments and houses, to gastronomic, commercial and hotel venues. We manage the process comprehensively, with full control over the final result. This is how refined spaces are created, filled with original, unique elements.",
+    "showcaseLabel": "selected projects",
+    "openProject": "view project",
+    "scrollHint": "scroll to explore projects",
+    "swipeHint": "swipe up or down to change project",
+    "section1Label": "approach",
+    "section2Label": "scale",
+    "section1ImageAlt": "Material and colour samples on a table in the Kool Studio workspace",
+    "section2ImageAlt": "A person photographing a detail in a bright interior designed by Kool Studio"
   },
   "meta": {
     "schemaDescription": "Wrocław-based interior architecture practice specializing in residential and commercial interiors, custom furniture, lighting design, and visual identity. Projects across Poland, including Warsaw.",
@@ -51,7 +61,15 @@
     "zakres": "SCOPE",
     "wspolpraca": "COLLABORATION",
     "wizualizacje": "VISUALIZATIONS",
-    "zdjecia": "PHOTOS"
+    "zdjecia": "PHOTOS",
+    "category": "CATEGORY",
+    "nextProjectHeading": "NEXT PROJECT",
+    "viewProject": "VIEW PROJECT",
+    "previousProject": "PREVIOUS PROJECT",
+    "nextProject": "NEXT PROJECT",
+    "contactHeading": "LET'S TALK ABOUT YOUR PROJECT",
+    "contactAction": "CONTACT US",
+    "comparisonLabel": "BEFORE AND AFTER COMPARISON"
   },
   "contact": {
     "cta": "READY TO START A PROJECT TOGETHER?"

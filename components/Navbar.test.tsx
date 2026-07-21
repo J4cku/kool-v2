@@ -30,6 +30,10 @@ vi.mock('@/i18n/navigation', () => ({
   usePathname: () => '/',
 }));
 
+vi.mock('@/lib/reduced-motion', () => ({
+  usePrefersReducedMotion: () => motionState.reducedMotion,
+}));
+
 vi.mock('framer-motion', () => ({
   AnimatePresence: ({ children }: { children: ReactNode }) => children,
   motion: new Proxy({}, {

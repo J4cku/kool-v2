@@ -1,48 +1,81 @@
 'use client';
 
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { useLocale } from 'next-intl';
+import { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { usePathname } from '@/i18n/navigation';
+import { shouldShowRouteCurtains } from '@/lib/portfolio-motion';
+import { usePrefersReducedMotion } from '@/lib/reduced-motion';
 
-/* Route-change choreography:
-   - arriving on the kontakt page plays the coral wipe — it lands under a
-     coral sheet that recedes into the nav dot (top right);
-   - switching locale (same path) soft-fades the content instead.
-   AnimatePresence initial={false} keeps first paint (and direct loads of
-   /kontakt) animation-free, and prefers-reduced-motion drops the wipe. */
-export default function PageTransition({ children }: { children: React.ReactNode }) {
+type RouteTransitionState = {
+  pathname: string | null;
+  curtainPathname: string | null;
+};
+
+const CURTAIN_EASE: [number, number, number, number] = [0.76, 0, 0.24, 1];
+
+export default function PageTransition({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const pathname = usePathname();
-  const locale = useLocale();
-  const reduceMotion = useReducedMotion();
+  const reducedMotion = usePrefersReducedMotion();
+  const [routeState, setRouteState] = useState<RouteTransitionState>({
+    pathname: null,
+    curtainPathname: null,
+  });
+
+  if (routeState.pathname !== pathname) {
+    setRouteState({
+      pathname,
+      curtainPathname: shouldShowRouteCurtains(
+        routeState.pathname,
+        pathname,
+        reducedMotion,
+      )
+        ? pathname
+        : null,
+    });
+  } else if (reducedMotion && routeState.curtainPathname !== null) {
+    setRouteState({ pathname, curtainPathname: null });
+  }
+
+  const curtainPathname = reducedMotion ? null : routeState.curtainPathname;
+  const finishCurtain = () => {
+    setRouteState((current) => current.curtainPathname === curtainPathname
+      ? { ...current, curtainPathname: null }
+      : current);
+  };
 
   return (
     <>
-      {/* Keyed fade (no AnimatePresence: its initial={false} would propagate
-          into the page subtree and disable every whileInView initial state) */}
-      <motion.div
-        key={locale}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1, transition: { duration: 0.25, ease: 'easeOut' } }}
-      >
-        {children}
-      </motion.div>
+      {children}
 
-      {!reduceMotion && (
-        <AnimatePresence initial={false}>
-          {pathname === '/kontakt' && (
+      <AnimatePresence initial={false}>
+        {curtainPathname
+          ? [
             <motion.div
-              key={pathname}
-              className="pointer-events-none fixed inset-0 z-[90] bg-coral"
-              initial={{ clipPath: 'circle(150% at 97% 4%)' }}
-              animate={{
-                clipPath: 'circle(0% at 97% 4%)',
-                transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
-              }}
+              key={`${curtainPathname}:left`}
+              aria-hidden="true"
+              className="pointer-events-none fixed inset-y-0 left-0 z-[90] w-1/2 border-r border-coral bg-dark"
+              initial={{ x: '0%' }}
+              animate={{ x: '-100%' }}
               exit={{ opacity: 0, transition: { duration: 0 } }}
-            />
-          )}
-        </AnimatePresence>
-      )}
+              transition={{ duration: 1, ease: CURTAIN_EASE }}
+            />,
+            <motion.div
+              key={`${curtainPathname}:right`}
+              aria-hidden="true"
+              className="pointer-events-none fixed inset-y-0 right-0 z-[90] w-1/2 bg-dark"
+              initial={{ x: '0%' }}
+              animate={{ x: '100%' }}
+              exit={{ opacity: 0, transition: { duration: 0 } }}
+              transition={{ duration: 1, ease: CURTAIN_EASE }}
+              onAnimationComplete={finishCurtain}
+            />,
+          ]
+          : null}
+      </AnimatePresence>
     </>
   );
 }
