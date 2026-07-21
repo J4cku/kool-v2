@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { projects } from '@/data/projects';
+import { localizeProject, projects } from '@/data/projects';
 import { BASE_URL } from '@/lib/site';
 import { jsonLdScript, localeAlternates, ogLocale } from '@/lib/metadata';
 import Navbar from '@/components/Navbar';
@@ -21,8 +21,9 @@ export async function generateMetadata({
   params: Promise<{ slug: string; locale: string }>;
 }): Promise<Metadata> {
   const { slug, locale } = await params;
-  const project = projects.find((p) => p.slug === slug);
-  if (!project) return {};
+  const found = projects.find((p) => p.slug === slug);
+  if (!found) return {};
+  const project = localizeProject(found, locale);
 
   const title = `${project.title} / ${project.location}`;
   const description = project.description;
@@ -47,11 +48,13 @@ export default async function ProjectDetailPage({
   params: Promise<{ slug: string; locale: string }>;
 }) {
   const { slug, locale } = await params;
-  const project = projects.find((p) => p.slug === slug);
+  const found = projects.find((p) => p.slug === slug);
 
-  if (!project) {
+  if (!found) {
     notFound();
   }
+
+  const project = localizeProject(found, locale);
 
   const displayTitle = project.meta?.title ?? project.title;
   const displayLocation = project.meta?.location ?? project.location;
@@ -82,7 +85,7 @@ export default async function ProjectDetailPage({
         ...(project.meta?.collaboration
           ? { contributor: { '@type': 'Organization', name: project.meta.collaboration } }
           : {}),
-        inLanguage: 'pl',
+        inLanguage: locale,
       },
       {
         '@type': 'BreadcrumbList',

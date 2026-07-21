@@ -125,7 +125,7 @@ Project skills live in `.claude/skills/`; shared agent permissions in `.claude/s
 - **Translations**: Use `useTranslations()` from `next-intl` with keys matching `messages/*.json`
 - **Images**: Use `next/image` with `Image` component. Project photos in `public/images/<slug>/`
 - **Project data**: All project metadata lives in `data/projects.ts` — `Project` type is the source of truth
-- **Content language**: Site content and project descriptions are in Polish; translations in `messages/`
+- **Content language**: Site content and project descriptions are in Polish (canonical); page chrome translations in `messages/`. Project copy is translated via the required `en: ProjectTranslation` block on each entry in `data/projects.ts`, resolved with `localizeProject(project, locale)` — pages must never render a raw project without localizing first
 - **Font**: Poppins via `next/font/google`, exposed as CSS variable `--font-poppins`
 - **Verification**: Before handoff, run `pnpm check` (typecheck + lint + i18n parity + build)
 
@@ -133,8 +133,9 @@ Project skills live in `.claude/skills/`; shared agent permissions in `.claude/s
 
 1. Add project images to `public/images/<slug>/`
 2. Add project entry to `data/projects.ts` following the `Project` type
-3. Add any needed translation keys to `messages/pl.json` and `messages/en.json`
-4. The project automatically appears in listings and sitemap
+3. Fill the entry's required `en` block (English title/scope/description/descriptionBlocks; align terminology with existing entries)
+4. Add any needed translation keys to `messages/pl.json` and `messages/en.json`
+5. The project automatically appears in listings and sitemap
 
 ## i18n
 

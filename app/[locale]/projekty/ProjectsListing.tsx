@@ -1,11 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { projects, type ProjectFilter } from '@/data/projects';
+import { useLocale } from 'next-intl';
+import { localizeProject, projects, type ProjectFilter } from '@/data/projects';
 import FilterTabs from '@/components/FilterTabs';
 import ProjectGrid from '@/components/ProjectGrid';
 
 export default function ProjectsListing({ initialFilter }: { initialFilter: ProjectFilter }) {
+  const locale = useLocale();
   const [activeFilter, setActiveFilter] = useState<ProjectFilter>(initialFilter);
 
   const handleFilterChange = (filter: ProjectFilter) => {
@@ -16,10 +18,11 @@ export default function ProjectsListing({ initialFilter }: { initialFilter: Proj
     window.history.replaceState(null, '', `${window.location.pathname}${query}`);
   };
 
-  const filteredProjects =
+  const filteredProjects = (
     activeFilter === 'wszystkie'
       ? projects
-      : projects.filter((p) => p.category === activeFilter);
+      : projects.filter((p) => p.category === activeFilter)
+  ).map((p) => localizeProject(p, locale));
 
   return (
     <>

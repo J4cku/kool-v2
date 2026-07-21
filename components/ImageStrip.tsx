@@ -5,16 +5,23 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Mousewheel } from 'swiper/modules';
+import { useLocale } from 'next-intl';
 import { Link } from '@/i18n/navigation';
-import { projects } from '@/data/projects';
+import { localizeProject, projects } from '@/data/projects';
 
 import 'swiper/css';
 
 const baseSlides = projects.map((project) => ({
   src: project.thumbnail,
-  alt: `${project.title} ${project.location}`,
   slug: project.slug,
 }));
+
+function slideAlt(slug: string, locale: string): string {
+  const project = projects.find((p) => p.slug === slug);
+  if (!project) return 'Kool Studio project';
+  const localized = localizeProject(project, locale);
+  return `${localized.title} ${localized.location}`;
+}
 
 function shuffle<T>(items: T[]): T[] {
   const result = [...items];
@@ -41,6 +48,7 @@ export default function ImageStrip() {
   // The key remount keeps Swiper's loop clones in sync once the shuffled
   // order replaces the SSR order at hydration.
   const slides = useSyncExternalStore(emptySubscribe, getShuffledSlides, getServerSlides);
+  const locale = useLocale();
   const { scrollY } = useScroll();
   const indicatorOpacity = useTransform(scrollY, [0, 80], [1, 0]);
 
@@ -71,7 +79,7 @@ export default function ImageStrip() {
             >
               <Image
                 src={slide.src}
-                alt={slide.alt}
+                alt={slideAlt(slide.slug, locale)}
                 draggable={false}
                 fill
                 className="object-cover transition-transform duration-[600ms] hover:scale-[1.04]"
