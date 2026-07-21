@@ -1,7 +1,8 @@
 'use client';
 
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import ColumnImage from '@/components/ColumnImage';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 

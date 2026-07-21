@@ -4,7 +4,6 @@ import { useState, useEffect, useSyncExternalStore } from 'react';
 import {
   AnimatePresence,
   motion,
-  useReducedMotion,
   useScroll,
   useSpring,
   useTransform,
@@ -12,6 +11,7 @@ import {
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { Link, usePathname } from '@/i18n/navigation';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { INSTAGRAM_URL } from '@/lib/site';
 
 const navLinks = [

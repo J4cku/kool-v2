@@ -1,13 +1,14 @@
 'use client';
 
 import { useSyncExternalStore } from 'react';
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Mousewheel } from 'swiper/modules';
 import { useLocale } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { localizeProject, projects } from '@/data/projects';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 import 'swiper/css';
 

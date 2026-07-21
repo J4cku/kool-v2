@@ -1,8 +1,9 @@
 'use client';
 
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useLocale } from 'next-intl';
 import { usePathname } from '@/i18n/navigation';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 /* Route-change choreography:
    - arriving on the kontakt page plays the coral wipe — it lands under a

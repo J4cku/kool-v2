@@ -1,12 +1,13 @@
 'use client';
 
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import { Link } from '@/i18n/navigation';
 import ColumnImage from '@/components/ColumnImage';
 import RevealHeading from '@/components/RevealHeading';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 import 'swiper/css';
 

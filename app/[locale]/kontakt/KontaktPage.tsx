@@ -1,10 +1,11 @@
 'use client';
 
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import Navbar from '@/components/Navbar';
 import AddressBlock from '@/components/AddressBlock';
 import FooterBar from '@/components/FooterBar';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 export default function KontaktPage() {
   const tContact = useTranslations('contact');

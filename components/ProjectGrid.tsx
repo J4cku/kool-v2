@@ -1,7 +1,8 @@
 'use client';
 
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import type { Project } from '@/data/projects';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 import ProjectCard from './ProjectCard';
 
 interface ProjectGridProps {
