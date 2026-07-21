@@ -22,10 +22,10 @@ export default function LanguageToggle() {
         className="group w-11 h-11 flex items-center justify-center"
       >
         <span
-          className={`w-[26px] h-[26px] flex items-center justify-center rounded-full transition-colors group-hover:opacity-70 ${
+          className={`w-[26px] h-[26px] flex items-center justify-center rounded-full transition-colors ${
             locale === 'pl'
               ? 'bg-coral text-beige'
-              : 'bg-transparent text-coral'
+              : 'bg-transparent text-coral group-hover:opacity-70'
           }`}
         >
           pl
@@ -37,10 +37,10 @@ export default function LanguageToggle() {
         className="group w-11 h-11 flex items-center justify-center"
       >
         <span
-          className={`w-[26px] h-[26px] flex items-center justify-center rounded-full transition-colors group-hover:opacity-70 ${
+          className={`w-[26px] h-[26px] flex items-center justify-center rounded-full transition-colors ${
             locale === 'en'
               ? 'bg-coral text-beige'
-              : 'bg-transparent text-coral'
+              : 'bg-transparent text-coral group-hover:opacity-70'
           }`}
         >
           en
