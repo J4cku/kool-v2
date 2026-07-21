@@ -8,9 +8,7 @@ import { useTranslations } from 'next-intl';
    big bold email. On mobile the pair fills the content width. */
 function Distributed({ text }: { text: string }) {
   return text.split('').map((ch, i) => (
-    <span key={i} aria-hidden="true">
-      {ch === ' ' ? ' ' : ch}
-    </span>
+    <span key={i}>{ch === ' ' ? ' ' : ch}</span>
   ));
 }
 
@@ -25,8 +23,7 @@ export default function AddressBlock() {
         href="https://maps.app.goo.gl/f3nJEyLJXxKStLvPA"
         target="_blank"
         rel="noopener noreferrer"
-        aria-label={address}
-        className="flex justify-between w-full font-[400] uppercase text-dark hover:opacity-70 transition-opacity text-[clamp(15px,1.5vw,20px)]"
+        className="flex min-h-11 items-center justify-between w-full font-[400] uppercase text-dark hover:opacity-70 transition-opacity text-[clamp(15px,1.5vw,20px)]"
       >
         <Distributed text={address} />
       </a>
@@ -34,8 +31,7 @@ export default function AddressBlock() {
           the address; from md up it renders as normal right-aligned text */}
       <a
         href="mailto:hello@koolstudio.pl"
-        aria-label={email}
-        className="flex justify-between w-full font-[700] uppercase text-dark hover:opacity-70 transition-opacity text-[clamp(18px,6.2vw,55px)] md:block md:whitespace-nowrap md:text-right md:text-[clamp(32px,4.2vw,55px)]"
+        className="flex min-h-11 items-center justify-between w-full font-[700] uppercase text-dark hover:opacity-70 transition-opacity text-[clamp(18px,6.2vw,55px)] md:block md:whitespace-nowrap md:text-right md:text-[clamp(32px,4.2vw,55px)]"
       >
         <Distributed text={email} />
       </a>
