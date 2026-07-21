@@ -188,7 +188,7 @@ export default function Navbar() {
             {/* The single dot — always visible, toggles menu */}
             <motion.button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="w-[56px] h-[54px] cursor-pointer hover:opacity-80 shrink-0 origin-top-right will-change-transform nav-dot-shrink"
+              className="w-[36px] h-[35px] cursor-pointer hover:opacity-80 shrink-0 origin-top-right will-change-transform nav-dot-shrink"
               style={{ scale: dotScale, y: dotY }}
               aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             >
@@ -206,7 +206,7 @@ export default function Navbar() {
                 }}
                 className="origin-center"
               >
-                <Image src="/dot.svg" alt="" width={56} height={54} />
+                <Image src="/dot.svg" alt="" width={36} height={35} />
               </motion.div>
             </motion.button>
           </div>
@@ -254,12 +254,12 @@ export default function Navbar() {
               </motion.span>
               <motion.button
                 onClick={() => setMenuOpen(false)}
-                className="w-[56px] h-[54px] cursor-pointer hover:opacity-80 shrink-0 origin-top-right will-change-transform nav-dot-shrink"
+                className="w-[36px] h-[35px] cursor-pointer hover:opacity-80 shrink-0 origin-top-right will-change-transform nav-dot-shrink"
                 style={{ scale: dotScale, y: dotY }}
                 aria-label="Close menu"
               >
                 <div
-                  className="w-[56px] h-[54px] bg-beige rounded-full"
+                  className="w-[36px] h-[35px] bg-beige rounded-full"
                   style={{ maskImage: 'url(/dot.svg)', maskSize: 'contain', maskRepeat: 'no-repeat' }}
                 />
               </motion.button>

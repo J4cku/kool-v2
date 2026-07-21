@@ -13,13 +13,13 @@
 :root {
   --nav-top-padding: max(16px, env(safe-area-inset-top));
   --nav-header-bottom: calc(var(--nav-top-padding) + 77px);
-  --nav-orb-center-x: calc(100% - 44px);
+  --nav-orb-center-x: calc(100% - 34px);
   --nav-orb-center-y: calc(var(--nav-top-padding) + 38.5px);
 }
 
 @media (width >= 768px) {
   :root {
-    --nav-orb-center-x: calc(100% - 52px);
+    --nav-orb-center-x: calc(100% - 42px);
   }
 }
 
