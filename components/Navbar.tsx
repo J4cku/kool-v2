@@ -1,7 +1,14 @@
 'use client';
 
 import { useState, useEffect, useSyncExternalStore } from 'react';
-import { AnimatePresence, motion, useScroll, useSpring, useTransform } from 'framer-motion';
+import {
+  AnimatePresence,
+  motion,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+} from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { Link, usePathname } from '@/i18n/navigation';
@@ -39,6 +46,7 @@ export default function Navbar() {
   );
   const t = useTranslations('nav');
   const pathname = usePathname();
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
     document.body.style.overflow = menuOpen && isMobile ? 'hidden' : '';
@@ -51,9 +59,9 @@ export default function Navbar() {
   // Older browsers fall back to the spring-smoothed values below.
   const { scrollY } = useScroll();
   const smoothScrollY = useSpring(scrollY, { stiffness: 260, damping: 34, restDelta: 0.5 });
-  const logoScale = useTransform(smoothScrollY, [0, 200], [1, 0.45]);
-  const dotScale = useTransform(smoothScrollY, [0, 200], isMobile ? [1, 0.7] : [1, 1]);
-  const dotY = useTransform(smoothScrollY, [0, 200], isMobile ? [0, -16] : [0, 0]);
+  const logoScale = useTransform(smoothScrollY, [0, 300], [1, 0.6]);
+  const dotScale = useTransform(smoothScrollY, [0, 300], isMobile ? [1, 0.8] : [1, 1]);
+  const dotY = useTransform(smoothScrollY, [0, 300], isMobile ? [0, -10] : [0, 0]);
 
   const isActive = (href: string) => {
     if (href === '/') return pathname === '/';
@@ -63,7 +71,7 @@ export default function Navbar() {
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 z-50">
-        <div className="w-full px-4 md:px-6 pt-4 pb-6 flex items-center justify-between">
+        <div className="w-full px-4 md:px-6 pt-[var(--nav-top-padding)] pb-6 flex items-center justify-between">
           <Link href="/">
             {/* Desktop: static logo */}
             <span className="hidden md:block">
@@ -96,14 +104,14 @@ export default function Navbar() {
                   key={link.key}
                   className="inline-flex items-center"
                   initial={false}
-                  animate={menuOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: -16 }}
-                  transition={{ delay: index * 0.06, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                  animate={menuOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
+                  transition={{ delay: index * 0.06, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                 >
                   <Link
                     href={link.href}
                     onClick={() => setMenuOpen(false)}
                     className={`relative transition-colors duration-200 text-[15px] text-coral hover:opacity-60 ${
-                      isActive(link.href) ? 'font-bold' : 'font-normal'
+                      isActive(link.href) ? 'font-bold' : 'font-[600]'
                     }`}
                   >
                     <span className="relative">
@@ -124,14 +132,14 @@ export default function Navbar() {
                 key="instagram"
                 className="inline-flex items-center"
                 initial={false}
-                animate={menuOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: -16 }}
-                transition={{ delay: navLinks.length * 0.06, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                animate={menuOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
+                transition={{ delay: navLinks.length * 0.06, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
               >
                 <a
                   href={INSTAGRAM_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="relative transition-colors duration-200 text-[15px] text-coral hover:opacity-60 font-normal"
+                  className="relative transition-colors duration-200 text-[15px] text-coral hover:opacity-60 font-[600]"
                 >
                   instagram
                 </a>
@@ -141,7 +149,7 @@ export default function Navbar() {
             {/* The single dot — always visible, toggles menu */}
             <motion.button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="w-[36px] h-[35px] hover:opacity-80 shrink-0 origin-top-right will-change-transform nav-dot-shrink"
+              className="w-[56px] h-[54px] cursor-pointer hover:opacity-80 shrink-0 origin-top-right will-change-transform nav-dot-shrink"
               style={{ scale: dotScale, y: dotY }}
               aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             >
@@ -150,16 +158,16 @@ export default function Navbar() {
                 animate={{
                   scale: 1,
                   opacity: 1,
-                  x: [0, 0, -3, 3, -2, 2, 0, 0],
+                  x: reduceMotion ? 0 : [0, 0, -1.5, 1.5, -1, 1, 0, 0],
                 }}
                 transition={{
-                  scale: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
-                  opacity: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
-                  x: { duration: 0.5, delay: 2, repeat: Infinity, repeatDelay: 5, ease: 'easeInOut' },
+                  scale: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+                  opacity: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+                  x: { duration: 0.6, delay: 2, repeat: Infinity, repeatDelay: 3.4, ease: 'easeInOut' },
                 }}
                 className="origin-center"
               >
-                <Image src="/dot.svg" alt="" width={36} height={35} />
+                <Image src="/dot.svg" alt="" width={56} height={54} />
               </motion.div>
             </motion.button>
           </div>
@@ -195,7 +203,7 @@ export default function Navbar() {
             transition={{ duration: 0.3 }}
             className="fixed inset-x-0 top-0 h-dvh z-[100] bg-coral flex flex-col md:hidden"
           >
-            <div className="w-full px-4 pt-4 pb-6 flex items-center justify-between">
+            <div className="w-full px-4 pt-[var(--nav-top-padding)] pb-6 flex items-center justify-between">
               <motion.span
                 className="origin-top-left will-change-transform nav-logo-shrink"
                 style={{ scale: logoScale }}
@@ -207,12 +215,12 @@ export default function Navbar() {
               </motion.span>
               <motion.button
                 onClick={() => setMenuOpen(false)}
-                className="w-[36px] h-[35px] hover:opacity-80 shrink-0 origin-top-right will-change-transform nav-dot-shrink"
+                className="w-[56px] h-[54px] cursor-pointer hover:opacity-80 shrink-0 origin-top-right will-change-transform nav-dot-shrink"
                 style={{ scale: dotScale, y: dotY }}
                 aria-label="Close menu"
               >
                 <div
-                  className="w-[36px] h-[35px] bg-beige rounded-full"
+                  className="w-[56px] h-[54px] bg-beige rounded-full"
                   style={{ maskImage: 'url(/dot.svg)', maskSize: 'contain', maskRepeat: 'no-repeat' }}
                 />
               </motion.button>
@@ -225,9 +233,9 @@ export default function Navbar() {
               {navLinks.map((link, index) => (
                 <motion.div
                   key={link.key}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
+                  transition={{ delay: index * 0.1, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                   className="pointer-events-auto"
                 >
                   <Link
@@ -243,9 +251,13 @@ export default function Navbar() {
               ))}
               <motion.div
                 key="instagram"
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: navLinks.length * 0.1 }}
+                transition={{
+                  delay: navLinks.length * 0.1,
+                  duration: 0.45,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
                 className="pointer-events-auto"
               >
                 <a

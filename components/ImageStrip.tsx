@@ -1,7 +1,7 @@
 'use client';
 
 import { useSyncExternalStore } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Mousewheel } from 'swiper/modules';
@@ -49,6 +49,7 @@ export default function ImageStrip() {
   // order replaces the SSR order at hydration.
   const slides = useSyncExternalStore(emptySubscribe, getShuffledSlides, getServerSlides);
   const locale = useLocale();
+  const reduceMotion = useReducedMotion();
   const { scrollY } = useScroll();
   const indicatorOpacity = useTransform(scrollY, [0, 80], [1, 0]);
 
@@ -63,11 +64,14 @@ export default function ImageStrip() {
         breakpoints={{ 768: { slidesPerView: 3 } }}
         loop
         speed={900}
-        autoplay={{ delay: 2500, disableOnInteraction: false, pauseOnMouseEnter: true }}
+        autoplay={
+          reduceMotion
+            ? false
+            : { delay: 2500, disableOnInteraction: false, pauseOnMouseEnter: true }
+        }
         /* Manual control: swipe on touch, drag on desktop, and horizontal
            trackpad/wheel — one project per gesture; vertical scrolling
            passes through untouched (forceToAxis) */
-        grabCursor
         mousewheel={{ forceToAxis: true, thresholdDelta: 12 }}
       >
         {slides.map((slide, i) => (
@@ -75,7 +79,7 @@ export default function ImageStrip() {
             <Link
               href={`/projekty/${slide.slug}`}
               draggable={false}
-              className="relative block w-full aspect-[3/4] md:aspect-square overflow-hidden"
+              className="relative block w-full cursor-pointer aspect-[3/4] md:aspect-square overflow-hidden"
             >
               <Image
                 src={slide.src}
@@ -94,19 +98,21 @@ export default function ImageStrip() {
 
       {/* Scroll indicator — three animated dots */}
       {/* z-10 keeps the dots above Swiper's z-index:1 when they overlap the images */}
-      <motion.div
-        style={{ opacity: indicatorOpacity }}
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
-      >
-        {[0, 1, 2].map((i) => (
-          <motion.div
-            key={i}
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut', delay: i * 0.2 }}
-            className="w-1.5 h-1.5 rounded-full bg-coral/60"
-          />
-        ))}
-      </motion.div>
+      {!reduceMotion && (
+        <motion.div
+          style={{ opacity: indicatorOpacity }}
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
+        >
+          {[0, 1, 2].map((i) => (
+            <motion.div
+              key={i}
+              animate={{ y: [0, 8, 0] }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut', delay: i * 0.2 }}
+              className="w-1.5 h-1.5 rounded-full bg-coral/60"
+            />
+          ))}
+        </motion.div>
+      )}
     </div>
   );
 }
