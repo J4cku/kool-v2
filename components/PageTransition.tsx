@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useLocale } from 'next-intl';
 import { usePathname } from '@/i18n/navigation';
@@ -9,8 +10,8 @@ import { useReducedMotion } from '@/hooks/useReducedMotion';
    - arriving on the kontakt page plays the coral wipe — it lands under a
      coral sheet that recedes into the nav dot (top right);
    - switching locale (same path) soft-fades the content instead.
-   AnimatePresence initial={false} keeps first paint (and direct loads of
-   /kontakt) animation-free, and prefers-reduced-motion drops the wipe. */
+   The first page paint is animation-free, while AnimatePresence initial={false}
+   keeps direct /kontakt loads wipe-free and prefers-reduced-motion drops it. */
 export default function PageTransition({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const locale = useLocale();
@@ -19,6 +20,11 @@ export default function PageTransition({ children }: { children: React.ReactNode
     'var(--nav-orb-center-x)',
     'calc(var(--nav-orb-center-y) - env(safe-area-inset-top))',
   ].join(' ');
+  const [enableLocaleFade, setEnableLocaleFade] = useState(false);
+
+  useEffect(() => {
+    queueMicrotask(() => setEnableLocaleFade(true));
+  }, []);
 
   return (
     <>
@@ -26,7 +32,7 @@ export default function PageTransition({ children }: { children: React.ReactNode
           into the page subtree and disable every whileInView initial state) */}
       <motion.div
         key={locale}
-        initial={{ opacity: 0 }}
+        initial={enableLocaleFade ? { opacity: 0 } : false}
         animate={{ opacity: 1, transition: { duration: 0.25, ease: 'easeOut' } }}
       >
         {children}

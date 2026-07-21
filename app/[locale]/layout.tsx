@@ -15,6 +15,7 @@ const poppins = Poppins({
   subsets: ['latin', 'latin-ext'],
   weight: ['300', '400', '500', '600', '700', '800', '900'],
   style: 'normal',
+  preload: false,
   variable: '--font-poppins',
 });
 
