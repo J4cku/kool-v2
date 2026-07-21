@@ -18,7 +18,8 @@
     "home": {
       "title": "kool studio | architektura wnętrz wrocław",
       "description": "Kool Studio — wrocławska pracownia architektury wnętrz. Projektujemy autorskie wnętrza mieszkalne i komercyjne z dbałością o detal. Meble, lampy, identyfikacja wizualna.",
-      "ogDescription": "Autorskie wnętrza, które zostają na dłużej. Projektowanie przestrzeni mieszkalnych i komercyjnych."
+      "ogDescription": "Autorskie wnętrza, które zostają na dłużej. Projektowanie przestrzeni mieszkalnych i komercyjnych.",
+      "ogImageAlt": "Ola Kilińska i Ola Leszczyńska w pracowni Kool Studio"
     },
     "projekty": {
       "title": "projekty — portfolio wnętrz",

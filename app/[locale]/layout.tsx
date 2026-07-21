@@ -29,6 +29,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'meta' });
+  const socialImage = {
+    url: '/images/social/kool-studio-og.webp',
+    width: 1200,
+    height: 630,
+    alt: t('home.ogImageAlt'),
+  };
 
   return {
     metadataBase: new URL(BASE_URL),
@@ -48,6 +54,13 @@ export async function generateMetadata({
       alternateLocale: locale === 'en' ? 'pl_PL' : 'en_US',
       siteName: 'Kool Studio',
       url: `${BASE_URL}/${locale}`,
+      images: [socialImage],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: t('home.title'),
+      description: t('home.ogDescription'),
+      images: [socialImage],
     },
     alternates: localeAlternates(locale, ''),
     robots: {
