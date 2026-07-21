@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useSyncExternalStore } from 'react';
-import { AnimatePresence, motion, useScroll, useSpring, useTransform } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { Link, usePathname } from '@/i18n/navigation';
@@ -30,8 +30,44 @@ function getServerMobileSnapshot() {
   return false;
 }
 
+function NavLinkLabel({ label, isRolloverActive }: { label: string; isRolloverActive: boolean }) {
+  const shouldReduceMotion = useReducedMotion();
+  const characters = Array.from(label);
+
+  return (
+    <span className="relative inline-block overflow-hidden leading-[1.2] align-bottom">
+      <span aria-hidden="true" className="block whitespace-nowrap">
+        {characters.map((character, index) => (
+          <motion.span
+            key={`current-${index}`}
+            className="inline-block"
+            animate={{ y: shouldReduceMotion || !isRolloverActive ? '0%' : '-100%' }}
+            transition={{ delay: index * 0.015, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          >
+            {character === ' ' ? '\u00A0' : character}
+          </motion.span>
+        ))}
+      </span>
+      <span aria-hidden="true" className="absolute top-0 left-0 block whitespace-nowrap">
+        {characters.map((character, index) => (
+          <motion.span
+            key={`next-${index}`}
+            className="inline-block"
+            animate={{ y: shouldReduceMotion || !isRolloverActive ? '100%' : '0%' }}
+            transition={{ delay: index * 0.015, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          >
+            {character === ' ' ? '\u00A0' : character}
+          </motion.span>
+        ))}
+      </span>
+    </span>
+  );
+}
+
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [focusedLabel, setFocusedLabel] = useState<string | null>(null);
+  const [hoveredLabel, setHoveredLabel] = useState<string | null>(null);
   const isMobile = useSyncExternalStore(
     subscribeToMobileQuery,
     getMobileSnapshot,
@@ -59,6 +95,8 @@ export default function Navbar() {
     if (href === '/') return pathname === '/';
     return pathname.startsWith(href);
   };
+
+  const isRolloverActive = (label: string) => hoveredLabel === label || focusedLabel === label;
 
   return (
     <>
@@ -101,21 +139,17 @@ export default function Navbar() {
                 >
                   <Link
                     href={link.href}
+                    aria-label={t(link.key)}
+                    onBlur={() => setFocusedLabel(null)}
                     onClick={() => setMenuOpen(false)}
+                    onFocus={() => setFocusedLabel(link.key)}
+                    onMouseEnter={() => setHoveredLabel(link.key)}
+                    onMouseLeave={() => setHoveredLabel(null)}
                     className={`relative transition-colors duration-200 text-[15px] text-coral hover:opacity-60 ${
                       isActive(link.href) ? 'font-bold' : 'font-normal'
                     }`}
                   >
-                    <span className="relative">
-                      {t(link.key)}
-                      <motion.span
-                        className="absolute left-0 right-0 bottom-[-2px] bg-coral origin-left"
-                        style={{ height: '0.5px' }}
-                        initial={{ scaleX: 0 }}
-                        whileHover={{ scaleX: 1 }}
-                        transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                      />
-                    </span>
+                    <NavLinkLabel label={t(link.key)} isRolloverActive={isRolloverActive(link.key)} />
                   </Link>
                   <span className="text-coral text-[15px] mr-1">,</span>
                 </motion.span>
@@ -131,9 +165,14 @@ export default function Navbar() {
                   href={INSTAGRAM_URL}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label="instagram"
+                  onBlur={() => setFocusedLabel(null)}
+                  onFocus={() => setFocusedLabel('instagram')}
+                  onMouseEnter={() => setHoveredLabel('instagram')}
+                  onMouseLeave={() => setHoveredLabel(null)}
                   className="relative transition-colors duration-200 text-[15px] text-coral hover:opacity-60 font-normal"
                 >
-                  instagram
+                  <NavLinkLabel label="instagram" isRolloverActive={isRolloverActive('instagram')} />
                 </a>
               </motion.span>
             </div>

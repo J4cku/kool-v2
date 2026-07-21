@@ -4,7 +4,7 @@
 
 **Goal:** Add Mersi-inspired, character-by-character hover and focus rollover to Kool Studio’s desktop navigation links.
 
-**Architecture:** Keep the change local to `components/Navbar.tsx`. A small presentational helper renders two `aria-hidden` character rows; each existing link receives an explicit `aria-label`. Local active-label state, driven by native link hover and focus handlers, provides Framer Motion's animation state without changing the typed `next-intl` link. Mobile markup and menu choreography stay intact.
+**Architecture:** Keep the change local to `components/Navbar.tsx`. A small presentational helper renders two `aria-hidden` character rows; each existing link receives an explicit `aria-label`. Independent local hover and focus state provides Framer Motion's animation state without changing the typed `next-intl` link. Mobile markup and menu choreography stay intact.
 
 **Tech Stack:** Next.js 16, React 19, TypeScript, Framer Motion, Tailwind CSS v4.
 
@@ -55,7 +55,7 @@ Accept `label: string` and `isActive: boolean`; map `Array.from(label)` into two
 
 - [ ] **Step 2: Animate the two rows minimally**
 
-Add one nullable active-label key in `Navbar`, set by `onMouseEnter`/`onFocus` on each existing typed link and reset by `onMouseLeave`/`onBlur`. Pass whether its key is active to `NavLinkLabel`. Move the original row to `y: '-100%'` and the duplicate row to `y: '0%'`; use `duration: 0.45`, `delay: index * 0.015`, and `ease: [0.22, 1, 0.36, 1]`. Use `useReducedMotion()` to keep the original row at `0%` and the duplicate row at `100%` for reduced-motion users.
+Add nullable hovered-label and focused-label keys in `Navbar`, set and reset by their corresponding native link handlers. Pass whether either key matches to `NavLinkLabel`. Move the original row to `y: '-100%'` and the duplicate row to `y: '0%'`; use `duration: 0.45`, `delay: index * 0.015`, and `ease: [0.22, 1, 0.36, 1]`. Use `useReducedMotion()` to keep the original row at `0%` and the duplicate row at `100%` for reduced-motion users.
 
 - [ ] **Step 3: Integrate the helper into desktop internal links and Instagram**
 
