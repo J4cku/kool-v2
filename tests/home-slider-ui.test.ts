@@ -34,7 +34,6 @@ test('homepage reel fills the viewport behind the fixed header with content bene
   );
   assert.doesNotMatch(imageStripSource, /fixed inset-0/);
   assert.doesNotMatch(imageStripSource, /DocumentScrollLock/i);
-  assert.doesNotMatch(imageStripSource, /Swiper/);
   assert.match(navbarSource, /<nav className="fixed top-0 left-0 right-0 z-50">/);
   assert.match(homePageSource, /<main>/);
   assert.doesNotMatch(homePageSource, /<main className="pt-/);
@@ -43,86 +42,38 @@ test('homepage reel fills the viewport behind the fixed header with content bene
   assert.doesNotMatch(globalsSource, /\.hero-swiper|\.home-slide-caption/);
 });
 
-test('reel advances on horizontal input while panes reveal vertically', () => {
-  assert.match(imageStripSource, /accumulateHorizontalWheel\(/);
-  assert.match(
-    imageStripSource,
-    /queuedProjectStep\.current = step < 0 \? -1 : 1;/
-  );
-  assert.match(
-    imageStripSource,
-    /if \(queuedStep !== 0\) changeProjectRef\.current\(queuedStep\);/
-  );
-  assert.match(
-    imageStripSource,
-    /addEventListener\('wheel', handleWheel, \{ passive: false \}\)/
-  );
-  assert.match(imageStripSource, /touchAction: 'pan-y pinch-zoom'/);
-  assert.match(imageStripSource, /getHorizontalSwipeStep\(/);
-  assert.match(imageStripSource, /const handlePointerMove/);
-  assert.match(imageStripSource, /setPointerCapture\(event\.pointerId\)/);
-  assert.match(imageStripSource, /releasePointerCapture\(event\.pointerId\)/);
-  assert.match(imageStripSource, /onPointerMove=\{handlePointerMove\}/);
-  assert.match(imageStripSource, /if \(event\.key === 'ArrowLeft'\) step = -1;/);
-  assert.match(imageStripSource, /data-hero-pane=\{side\}/);
-  assert.match(imageStripSource, /pendingFocusSide\.current/);
-  assert.match(imageStripSource, /focus\(\{ preventScroll: true \}\)/);
-  assert.match(
-    imageStripSource,
-    /direction > 0 \? 'inset\(0% 0% 100% 0%\)' : 'inset\(100% 0% 0% 0%\)'/
-  );
-  assert.match(imageStripSource, /animate=\{\{ clipPath: REVEALED_CLIP \}\}/);
-  assert.match(imageStripSource, /const AUTO_ADVANCE_MS = 5000;/);
-  assert.match(imageStripSource, /matches\(':focus-visible'\)/);
-  assert.match(
-    imageStripSource,
-    /reduceMotion \|\| isFocusPaused \|\| !isInView \|\| isPageHidden/
-  );
-  assert.doesNotMatch(imageStripSource, /isHoverPaused/);
+test('homepage uses a looping horizontal Swiper without blocking vertical page scroll', () => {
+  assert.match(imageStripSource, /import \{ Swiper, SwiperSlide \} from 'swiper\/react';/);
+  assert.match(imageStripSource, /modules=\{\[A11y, Autoplay, Keyboard, Mousewheel\]\}/);
+  assert.match(imageStripSource, /slidesPerView=\{1\}/);
+  assert.match(imageStripSource, /breakpoints=\{\{ 992: \{ slidesPerView: 2 \} \}\}/);
+  assert.match(imageStripSource, /slidesPerGroup=\{1\}/);
+  assert.match(imageStripSource, /loop/);
+  assert.match(imageStripSource, /mousewheel=\{\{ forceToAxis: true/);
+  assert.match(imageStripSource, /keyboard=\{\{ enabled: true, onlyInViewport: true, pageUpDown: false \}\}/);
+  assert.match(imageStripSource, /delay: 5000/);
+  assert.match(imageStripSource, /disableOnInteraction: false/);
+  assert.match(imageStripSource, /swiperRef\.current\?\.autoplay\.pause\(\)/);
+  assert.match(imageStripSource, /swiperRef\.current\?\.autoplay\.resume\(\)/);
+  assert.match(imageStripSource, /prevSlideMessage: t\('previousProject'\)/);
+  assert.match(imageStripSource, /nextSlideMessage: t\('nextProject'\)/);
+  assert.doesNotMatch(imageStripSource, /addEventListener\('wheel'/);
+  assert.doesNotMatch(imageStripSource, /onPointerMove=/);
 });
 
-test('adjacent panes link to distinct projects and disable native dragging', () => {
-  assert.match(imageStripSource, /getProjectWindowIndices\(reel\.active, total\)/);
-  assert.match(imageStripSource, /const \[leftIndex, rightIndex\]/);
-  assert.match(imageStripSource, /const leftProject = localizedProjects\[leftIndex\]/);
-  assert.match(imageStripSource, /const rightProject = localizedProjects\[rightIndex\]/);
-  assert.match(imageStripSource, /draggable=\{false\}/);
-  assert.equal(imageStripSource.match(/<ProjectPane/g)?.length ?? 0, 2);
-});
-
-test('mobile shows one project and uses direction-neutral controls above the footer', () => {
-  assert.match(imageStripSource, /relative h-full w-full overflow-hidden/);
-  assert.match(
-    imageStripSource,
-    /hidden w-full overflow-hidden min-\[992px\]:relative min-\[992px\]:block min-\[992px\]:h-full min-\[992px\]:w-1\/2/
-  );
-  assert.match(
-    imageStripSource,
-    /bottom-\[calc\(5rem\+env\(safe-area-inset-bottom\)\)\].*min-\[992px\]:bottom-\[calc\(4rem\+env\(safe-area-inset-bottom\)\)\]/
-  );
-  assert.equal(imageStripSource.match(/aria-live="polite"/g)?.length ?? 0, 2);
-  assert.match(imageStripSource, /sr-only min-\[992px\]:hidden/);
-  assert.match(imageStripSource, /sr-only hidden min-\[992px\]:block/);
-  assert.equal(plMessages.home.scrollHint, 'przewijaj, aby odkrywać projekty');
-  assert.equal(plMessages.home.swipeHint, 'przesuń, aby odkrywać projekty');
-  assert.equal(enMessages.home.scrollHint, 'scroll to discover projects');
-  assert.equal(enMessages.home.swipeHint, 'swipe to discover projects');
-});
-
-test('each project folio is translucent, stable, mirrored, and hover-revealed', () => {
-  assert.match(imageStripSource, /h-\[96px\].*min-\[992px\]:h-\[80px\]/);
-  assert.match(imageStripSource, /bg-beige\/75.*backdrop-blur-md/);
-  assert.match(imageStripSource, /min-\[992px\]:whitespace-nowrap/);
-  assert.doesNotMatch(imageStripSource, /border-x border-dark\/15/);
-  assert.match(
-    imageStripSource,
-    /side === 'left' \? 'min-\[992px\]:right-0' : 'min-\[992px\]:left-0'/
-  );
+test('homepage shows full-width folios and an animated vertical page-scroll cue', () => {
+  assert.match(imageStripSource, /absolute inset-x-0 bottom-1\/3/);
   assert.match(imageStripSource, /min-\[992px\]:opacity-0/);
-  assert.match(imageStripSource, /min-\[992px\]:group-hover:opacity-100/);
-  assert.match(imageStripSource, /min-\[992px\]:group-focus-within:opacity-100/);
-  assert.doesNotMatch(imageStripSource, />\s*kool studio\s*</i);
-  assert.doesNotMatch(imageStripSource, /maskImage: 'url\(\/logo\.svg\)'/);
+  assert.match(imageStripSource, /group-hover:opacity-100/);
+  assert.match(imageStripSource, /group-focus-within:opacity-100/);
+  assert.match(imageStripSource, /\[0, 1, 2\]\.map/);
+  assert.match(imageStripSource, /animate=\{reduceMotion \? undefined : \{ y: \[0, 8, 0\] \}\}/);
+  assert.doesNotMatch(imageStripSource, /t\('scrollHint'\)/);
+  assert.doesNotMatch(imageStripSource, /t\('swipeHint'\)/);
+  assert.equal(plMessages.home.scrollHint, undefined);
+  assert.equal(plMessages.home.swipeHint, undefined);
+  assert.equal(enMessages.home.scrollHint, undefined);
+  assert.equal(enMessages.home.swipeHint, undefined);
 });
 
 test('project title aligns to the right edge of the folio', () => {
