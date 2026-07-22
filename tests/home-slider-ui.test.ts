@@ -54,7 +54,7 @@ test('homepage uses a looping horizontal Swiper without blocking vertical page s
   assert.match(imageStripSource, /delay: 5000/);
   assert.match(imageStripSource, /disableOnInteraction: false/);
   assert.match(imageStripSource, /swiperRef\.current\?\.autoplay\.pause\(\)/);
-  assert.match(imageStripSource, /swiperRef\.current\?\.autoplay\.resume\(\)/);
+  assert.match(imageStripSource, /autoplay\.resume\(\)/);
   assert.match(imageStripSource, /prevSlideMessage: t\('previousProject'\)/);
   assert.match(imageStripSource, /nextSlideMessage: t\('nextProject'\)/);
   assert.doesNotMatch(imageStripSource, /addEventListener\('wheel'/);
@@ -65,6 +65,42 @@ test('homepage disables Swiper autoplay when reduced motion is requested', () =>
   assert.match(
     imageStripSource,
     /autoplay=\{\s*reduceMotion\s*\?\s*false\s*:\s*\{\s*delay: 5000/
+  );
+});
+
+test('homepage binds named DOM focus handlers to the hero section', () => {
+  assert.match(
+    imageStripSource,
+    /const handleFocusCapture = \(\) => \{\s*focusWithinHeroRef\.current = true;\s*swiperRef\.current\?\.autoplay\.pause\(\);\s*\};/
+  );
+  assert.match(
+    imageStripSource,
+    /const handleBlurCapture = \(event: FocusEvent<HTMLElement>\) => \{\s*if \(event\.currentTarget\.contains\(event\.relatedTarget as Node \| null\)\) return;\s*focusWithinHeroRef\.current = false;/
+  );
+  assert.match(
+    imageStripSource,
+    /<section\s+className="relative isolate h-svh overflow-hidden bg-dark"\s+onFocusCapture=\{handleFocusCapture\}\s+onBlurCapture=\{handleBlurCapture\}/
+  );
+});
+
+test('homepage does not pass DOM focus handlers through Swiper event props', () => {
+  const swiperStart = imageStripSource.indexOf('<Swiper\n');
+  const swiperEnd = imageStripSource.indexOf('\n      >', swiperStart);
+  assert.notEqual(swiperStart, -1);
+  assert.notEqual(swiperEnd, -1);
+  const swiperOpeningTag = imageStripSource.slice(swiperStart, swiperEnd);
+
+  assert.doesNotMatch(swiperOpeningTag, /onFocusCapture|onBlurCapture/);
+});
+
+test('homepage synchronizes Swiper autoplay with hydrated reduced motion state', () => {
+  assert.match(
+    imageStripSource,
+    /useEffect\(\(\) => \{\s*const autoplay = swiperRef\.current\?\.autoplay;\s*if \(!autoplay\) return;\s*if \(reduceMotion\) \{\s*autoplay\.stop\(\);\s*return;\s*\}\s*if \(!focusWithinHeroRef\.current && !autoplay\.running\) autoplay\.start\(\);\s*\}, \[reduceMotion\]\);/
+  );
+  assert.match(
+    imageStripSource,
+    /if \(reduceMotion\) return;\s*const autoplay = swiperRef\.current\?\.autoplay;\s*if \(!autoplay\) return;\s*if \(autoplay\.running\) autoplay\.resume\(\);\s*else autoplay\.start\(\);/
   );
 });
 

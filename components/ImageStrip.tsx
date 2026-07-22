@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, type FocusEvent } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
@@ -97,6 +97,7 @@ export default function ImageStrip({ order }: { order: string[] }) {
   const { scrollY } = useScroll();
   const indicatorOpacity = useTransform(scrollY, [0, 80], [1, 0]);
   const swiperRef = useRef<SwiperInstance | null>(null);
+  const focusWithinHeroRef = useRef(false);
 
   const showcaseProjects = useMemo(() => {
     const ordered = order.flatMap((slug) => {
@@ -114,8 +115,42 @@ export default function ImageStrip({ order }: { order: string[] }) {
     [locale, showcaseProjects],
   );
 
+  useEffect(() => {
+    const autoplay = swiperRef.current?.autoplay;
+    if (!autoplay) return;
+
+    if (reduceMotion) {
+      autoplay.stop();
+      return;
+    }
+
+    if (!focusWithinHeroRef.current && !autoplay.running) autoplay.start();
+  }, [reduceMotion]);
+
+  const handleFocusCapture = () => {
+    focusWithinHeroRef.current = true;
+    swiperRef.current?.autoplay.pause();
+  };
+
+  const handleBlurCapture = (event: FocusEvent<HTMLElement>) => {
+    if (event.currentTarget.contains(event.relatedTarget as Node | null)) return;
+
+    focusWithinHeroRef.current = false;
+    if (reduceMotion) return;
+
+    const autoplay = swiperRef.current?.autoplay;
+    if (!autoplay) return;
+
+    if (autoplay.running) autoplay.resume();
+    else autoplay.start();
+  };
+
   return (
-    <section className="relative isolate h-svh overflow-hidden bg-dark">
+    <section
+      className="relative isolate h-svh overflow-hidden bg-dark"
+      onFocusCapture={handleFocusCapture}
+      onBlurCapture={handleBlurCapture}
+    >
       <Swiper
         className="h-full w-full"
         modules={[A11y, Autoplay, Keyboard, Mousewheel]}
@@ -144,12 +179,6 @@ export default function ImageStrip({ order }: { order: string[] }) {
         }}
         onSwiper={(swiper) => {
           swiperRef.current = swiper;
-        }}
-        onFocusCapture={() => swiperRef.current?.autoplay.pause()}
-        onBlurCapture={(event) => {
-          if (event.currentTarget.contains(event.relatedTarget as Node | null))
-            return;
-          swiperRef.current?.autoplay.resume();
         }}
       >
         {localizedProjects.map((project, index) => (
