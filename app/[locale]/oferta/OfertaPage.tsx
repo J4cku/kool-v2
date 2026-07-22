@@ -8,6 +8,7 @@ import ParallaxImage from '@/components/ParallaxImage';
 import ProjectHero from '@/components/ProjectHero';
 import ServiceSection from '@/components/oferta/ServiceSection';
 import ProcessSection from '@/components/oferta/ProcessSection';
+import ServicesHubLinks from '@/components/oferta/ServicesHubLinks';
 
 export default function OfertaPage() {
   const t = useTranslations('oferta');
@@ -90,6 +91,8 @@ export default function OfertaPage() {
             bottomHeading={t('process.bottomHeading')}
             bottomText={t('process.bottomText')}
           />
+
+          <ServicesHubLinks />
 
           <FooterBanner showMarquee={false} />
         </div>

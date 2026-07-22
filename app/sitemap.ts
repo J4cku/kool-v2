@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { projects } from '@/data/projects';
+import { services } from '@/data/services';
 import { BASE_URL } from '@/lib/site';
 
 // No lastModified: the repo has no real per-URL modification timestamp, and
@@ -18,6 +19,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }))
   );
 
+  // Service landing pages (children of /oferta), one per locale.
+  const serviceEntries = locales.flatMap((locale) =>
+    services.map((service) => ({
+      url: `${BASE_URL}/${locale}/oferta/${service.slug}`,
+      priority: 0.8,
+    }))
+  );
+
   const projectEntries = locales.flatMap((locale) =>
     projects.map((project) => ({
       url: `${BASE_URL}/${locale}/projekty/${project.slug}`,
@@ -25,5 +34,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }))
   );
 
-  return [...staticEntries, ...projectEntries];
+  return [...staticEntries, ...serviceEntries, ...projectEntries];
 }

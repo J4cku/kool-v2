@@ -42,6 +42,23 @@
       "title": "kontakt",
       "description": "Skontaktuj się z Kool Studio — pracownią architektury wnętrz z Wrocławia. Studio: Zaporoska 83/15, 53-415 Wrocław. E-mail: hello@koolstudio.pl.",
       "ogImageAlt": "Paleta materiałów i kolorów w pracowni Kool Studio"
+    },
+    "services": {
+      "projekt-mieszkania": {
+        "title": "projekt mieszkania — architektura wnętrz",
+        "description": "Projektujemy apartamenty o podwyższonym standardzie we Wrocławiu i całej Polsce — od układu funkcjonalnego i zmian lokatorskich, przez dokumentację wykonawczą, po nadzór autorski.",
+        "ogImageAlt": "Wnętrze mieszkania zaprojektowane przez Kool Studio"
+      },
+      "projekt-domu": {
+        "title": "projekt domu — architektura wnętrz",
+        "description": "Projekt wnętrz domu o podwyższonym standardzie — od koncepcji i układu funkcjonalnego po dokumentację wykonawczą i nadzór autorski. Wrocław i cała Polska.",
+        "ogImageAlt": "Wnętrze domu jednorodzinnego w Dobrzykowicach zaprojektowane przez Kool Studio"
+      },
+      "wnetrza-komercyjne": {
+        "title": "wnętrza komercyjne — projektowanie lokali",
+        "description": "Projektowanie wnętrz komercyjnych — restauracje, concept store'y, butiki, hotele i lokale usługowe. Koncepcja, dokumentacja wykonawcza, koordynacja branż i nadzór autorski.",
+        "ogImageAlt": "Wnętrze delikatesów Dehesa zaprojektowane przez Kool Studio"
+      }
     }
   },
   "projects": {
@@ -160,6 +177,21 @@
       ],
       "bottomHeading": "Prowadzimy proces kompleksowo od pierwszych założeń po finalny efekt.",
       "bottomText": "Decyzje rozkładamy w czasie, od ogółu do szczegółu, co pozwala uchwycić wszystkie niuanse i uniknąć przypadkowych wyborów. Porządkujemy cały proces eliminując wątpliwości i dzięki naszemu doświadczeniu, ułatwiamy decyzje. Pozwala to na spokojną realizację i efekt zgodny z założeniami. W ramach projektu kompleksowego wspieramy was na każdym jego etapie."
+    }
+  },
+  "services": {
+    "hubHeading": "Poznaj szczegóły oferty",
+    "sections": {
+      "recognition": "Kiedy warto",
+      "scope": "Zakres projektu",
+      "process": "Proces projektowy",
+      "proof": "Wybrane realizacje",
+      "faq": "Najczęstsze pytania"
+    },
+    "viewProject": "Zobacz projekt",
+    "cta": {
+      "heading": "Opowiedz nam o swoim projekcie",
+      "button": "Napisz do nas"
     }
   }
 }

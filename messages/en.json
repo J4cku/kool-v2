@@ -42,6 +42,23 @@
       "title": "contact",
       "description": "Get in touch with Kool Studio — an interior architecture practice from Wrocław, Poland. Studio: Zaporoska 83/15, 53-415 Wrocław. Email: hello@koolstudio.pl.",
       "ogImageAlt": "Material and color palette in the Kool Studio workspace"
+    },
+    "services": {
+      "projekt-mieszkania": {
+        "title": "apartment interior design — wrocław",
+        "description": "We design premium apartments in Wrocław and across Poland — from the functional layout and tenant modifications, through construction documentation, to author's supervision.",
+        "ogImageAlt": "Apartment interior designed by Kool Studio"
+      },
+      "projekt-domu": {
+        "title": "house interior design — wrocław",
+        "description": "Premium house interior design — from concept and functional layout to construction documentation and author's supervision. Wrocław and all of Poland.",
+        "ogImageAlt": "Single-family house interior in Dobrzykowice designed by Kool Studio"
+      },
+      "wnetrza-komercyjne": {
+        "title": "commercial interiors — venue design",
+        "description": "Commercial interior design — restaurants, concept stores, boutiques, hotels and service venues. Concept, construction documentation, coordination of trades and author's supervision.",
+        "ogImageAlt": "Dehesa delicatessen interior designed by Kool Studio"
+      }
     }
   },
   "projects": {
@@ -160,6 +177,21 @@
       ],
       "bottomHeading": "We manage the process comprehensively from initial assumptions to the final result.",
       "bottomText": "We spread decisions over time, from general to specific, which allows us to capture all nuances and avoid random choices. We organize the entire process by eliminating doubts and, thanks to our experience, we facilitate decisions. This allows for a calm realization and a result consistent with the assumptions. As part of a comprehensive project, we support you at every stage."
+    }
+  },
+  "services": {
+    "hubHeading": "Explore the services in detail",
+    "sections": {
+      "recognition": "When it makes sense",
+      "scope": "Project scope",
+      "process": "Design process",
+      "proof": "Selected projects",
+      "faq": "Frequently asked questions"
+    },
+    "viewProject": "View project",
+    "cta": {
+      "heading": "Tell us about your project",
+      "button": "Get in touch"
     }
   }
 }
