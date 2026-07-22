@@ -99,3 +99,50 @@ All carousel slides now exist in the initial markup so an immediately interactiv
 ### Caveats
 
 The accessibility score is 96 because the contrast audit flags three intentionally restored coral/beige elements: the marquee text and both locale-control labels. The SEO score is 92 because the localhost audit rejects the production canonical URL; production canonical metadata should not be weakened to satisfy a localhost audit. Both caveats require validation on the deployed origin and, for contrast, an explicit design decision rather than silent palette drift.
+
+## Post-rebase image-quality gate
+
+This gate evaluated the image-quality policy after the rebase. Navigation imagery targets the implicit Next.js default quality of 75, while project-detail hero and full-width content imagery explicitly use quality 90. `next.config.mjs` permits both tiers, and `tests/image-quality-policy.test.ts` locks the policy without requiring runtime-neutral quality props.
+
+### Required branch-alias gate
+
+The baseline and both candidate attempts used Lighthouse mobile defaults and five sequential runs against `https://kool-v2-bkd0aaxfs-j4ckus-projects.vercel.app/pl`.
+
+| Set | Performance scores | Median Performance | Median LCP | Median transfer | Performance delta | Verdict |
+| --- | --- | ---: | ---: | ---: | ---: | --- |
+| Baseline | `98, 84, 84, 90, 89` | 89 | 3,399.189 ms | 756,427 B | — | Reference |
+| Explicit-75 candidate | `83, 83, 83, 83, 84` | 83 | 4,094.428 ms | 756,415 B | -6 | Fail |
+| Single permitted rerun | `84, 90, 83, 88, 84` | 84 | 4,025.924 ms | 756,410 B | -5 | Fail |
+
+The candidate did not pass the raw five-run zero-regression gate. The baseline was highly variable (`84–98`), but the policy does not permit accepting a negative Performance delta as noise.
+
+### Alternating immutable-deployment diagnosis
+
+To remove branch-alias timing ambiguity, five baseline-then-candidate pairs compared immutable deployments of `af7f68b` and `56591f1`.
+
+| Pair | Baseline Performance | Candidate Performance | Pair delta |
+| --- | ---: | ---: | ---: |
+| 1 | 93 | 95 | +2 |
+| 2 | 83 | 83 | 0 |
+| 3 | 84 | 82 | -2 |
+| 4 | 83 | 83 | 0 |
+| 5 | 84 | 84 | 0 |
+| Median | 84 | 83 | -1 |
+
+The per-pair deltas were `+2, 0, -2, 0, 0`, with a median of 0. Independently calculated five-run medians remained 84 and 83, so the strict median-difference gate was still negative. Median LCP was 4,108.168 ms versus 4,124.870 ms (`+16.702 ms`), and median transfer was 769,110 B versus 769,141 B (`+31 B`).
+
+Every normalized image request URL was identical across the paired deployments, including width and `q=75`. Every corresponding image resource size was also identical; only HTTP transfer framing varied by tens of bytes. This confirms that the explicit `quality={75}` props were equivalent to Next.js's existing default output on the audited route.
+
+### Contingency result
+
+Commit `e0cf249` removed the runtime-equivalent explicit 75 props while retaining the test-only 75/90 policy contract. The production diff from the pre-policy base is empty:
+
+```bash
+git diff --exit-code 45cda12..e0cf249 -- components app next.config.mjs
+```
+
+The command exits 0. The final policy therefore has no production performance or image-rendering tradeoff by construction: it preserves the approved runtime exactly and rejects the failed explicit-prop candidate rather than relabeling a negative audit delta as a pass.
+
+### Available visual evidence
+
+The paired Lighthouse final screenshots show the same mobile hero image, matching crop and apparent sharpness, with no blank hero or broken image. They capture different transient navbar animation positions, so they are not sufficient to prove interactive navigation behavior. The in-app browser had no available backend, and the existing Lighthouse artifacts do not cover desktop, project-card, project-detail, caption, or carousel-interaction states. Those limitations are non-blocking for this contingency because the final production runtime is identical to the already reviewed pre-policy base; no broader visual pass is claimed here.
