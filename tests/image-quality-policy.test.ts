@@ -24,11 +24,13 @@ test('image quality tiers preserve fidelity without inflating navigation imagery
   );
   assert.match(
     imageStripSource,
-    /sizes="\(max-width: 767px\) 100vw, \(max-width: 1279px\) 50vw, 33vw"\s+loading=\{i === 0 \? 'eager' : 'lazy'\}/
+    /PROJECT_IMAGE_SIZES = '\(max-width: 991px\) 100vw, 50vw'/
   );
+  assert.match(imageStripSource, /sizes=\{PROJECT_IMAGE_SIZES\}/);
+  assert.match(imageStripSource, /priority=\{prioritizeInitialWindow\}/);
   assert.match(
     imageStripSource,
-    /fetchPriority=\{i === 0 \? 'high' : undefined\}/
+    /shouldPrioritizeInitialProject\(\s*isInitialPriorityRender,\s*reel\.active,\s*\)/
   );
   assert.match(
     projectCardSource,
