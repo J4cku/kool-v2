@@ -48,7 +48,7 @@ test('homepage uses a looping horizontal Swiper without blocking vertical page s
   assert.match(imageStripSource, /slidesPerView=\{1\}/);
   assert.match(imageStripSource, /breakpoints=\{\{ 992: \{ slidesPerView: 2 \} \}\}/);
   assert.match(imageStripSource, /slidesPerGroup=\{1\}/);
-  assert.match(imageStripSource, /loop/);
+  assert.match(imageStripSource, /<Swiper\b[^>]*\n\s+loop\s*\n[^>]*>/);
   assert.match(imageStripSource, /mousewheel=\{\{ forceToAxis: true/);
   assert.match(imageStripSource, /keyboard=\{\{ enabled: true, onlyInViewport: true, pageUpDown: false \}\}/);
   assert.match(imageStripSource, /delay: 5000/);
@@ -61,8 +61,28 @@ test('homepage uses a looping horizontal Swiper without blocking vertical page s
   assert.doesNotMatch(imageStripSource, /onPointerMove=/);
 });
 
+test('homepage disables Swiper autoplay when reduced motion is requested', () => {
+  assert.match(
+    imageStripSource,
+    /autoplay=\{\s*reduceMotion\s*\?\s*false\s*:\s*\{\s*delay: 5000/
+  );
+});
+
+test('homepage renders localized projects in the server-provided order', () => {
+  assert.match(
+    imageStripSource,
+    /\{localizedProjects\.map\(\(project, index\) => \(/
+  );
+  assert.doesNotMatch(
+    imageStripSource,
+    /localizedProjects\.(?:sort|reverse|toSorted|toReversed)\(|(?:shuffle|randomize)\(\s*localizedProjects/
+  );
+});
+
 test('homepage shows full-width folios and an animated vertical page-scroll cue', () => {
   assert.match(imageStripSource, /absolute inset-x-0 bottom-1\/3/);
+  assert.match(imageStripSource, /bg-beige\/75/);
+  assert.match(imageStripSource, /backdrop-blur-md/);
   assert.match(imageStripSource, /min-\[992px\]:opacity-0/);
   assert.match(imageStripSource, /group-hover:opacity-100/);
   assert.match(imageStripSource, /group-focus-within:opacity-100/);
