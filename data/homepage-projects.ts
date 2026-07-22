@@ -30,22 +30,3 @@ export function curateHomepageProjects<T extends CuratableProject>(
     return { ...project, heroImage: project.thumbnail };
   });
 }
-
-export function getWrappedProjectIndex(index: number, step: number, count: number) {
-  if (count <= 0) {
-    throw new RangeError('Project count must be positive');
-  }
-
-  return ((index + step) % count + count) % count;
-}
-
-export function getProjectWindowIndices(
-  activeIndex: number,
-  count: number,
-): [number, number] {
-  if (count < 2) {
-    throw new RangeError('Homepage reel needs at least two projects');
-  }
-
-  return [activeIndex, getWrappedProjectIndex(activeIndex, 1, count)];
-}
