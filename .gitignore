@@ -44,3 +44,4 @@ next-env.d.ts
 # Agent/tooling artifacts
 .omc/
 .playwright-mcp/
+.context/
