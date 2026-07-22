@@ -103,10 +103,10 @@ test('mobile shows one project and uses direction-neutral controls above the foo
   assert.equal(imageStripSource.match(/aria-live="polite"/g)?.length ?? 0, 2);
   assert.match(imageStripSource, /sr-only min-\[992px\]:hidden/);
   assert.match(imageStripSource, /sr-only hidden min-\[992px\]:block/);
-  assert.equal(plMessages.home.scrollHint, 'scroll');
-  assert.equal(plMessages.home.swipeHint, 'swipe');
-  assert.equal(enMessages.home.scrollHint, 'scroll');
-  assert.equal(enMessages.home.swipeHint, 'swipe');
+  assert.equal(plMessages.home.scrollHint, 'przewijaj, aby odkrywać projekty');
+  assert.equal(plMessages.home.swipeHint, 'przesuń, aby odkrywać projekty');
+  assert.equal(enMessages.home.scrollHint, 'scroll to discover projects');
+  assert.equal(enMessages.home.swipeHint, 'swipe to discover projects');
 });
 
 test('each project folio is translucent, stable, mirrored, and hover-revealed', () => {
