@@ -27,6 +27,10 @@ test('image quality tiers preserve fidelity without inflating navigation imagery
     /sizes="\(max-width: 767px\) 100vw, \(max-width: 1279px\) 50vw, 33vw"\s+loading=\{i === 0 \? 'eager' : 'lazy'\}/
   );
   assert.match(
+    imageStripSource,
+    /fetchPriority=\{i === 0 \? 'high' : undefined\}/
+  );
+  assert.match(
     projectCardSource,
     /sizes="\(max-width: 768px\) 100vw, \(max-width: 1024px\) 50vw, 33vw"/
   );
