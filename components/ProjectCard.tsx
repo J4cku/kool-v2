@@ -23,6 +23,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
               fill
               className="object-cover transition-transform duration-[600ms] group-hover:scale-[1.04]"
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              quality={75}
             />
             {project.status === 'in_progress' && (
               <div className="absolute left-0 right-0 top-[78%] -translate-y-1/2 overflow-hidden pointer-events-none py-2">
