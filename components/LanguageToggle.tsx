@@ -19,7 +19,7 @@ export default function LanguageToggle() {
       <button
         onClick={() => switchTo('pl')}
         aria-pressed={locale === 'pl'}
-        className="w-[26px] h-[26px] flex items-center justify-center"
+        className="w-11 h-11 md:w-[26px] md:h-[26px] flex items-center justify-center"
       >
         <span
           className={`w-[26px] h-[26px] flex items-center justify-center rounded-full transition-colors ${
@@ -34,7 +34,7 @@ export default function LanguageToggle() {
       <button
         onClick={() => switchTo('en')}
         aria-pressed={locale === 'en'}
-        className="w-[26px] h-[26px] flex items-center justify-center"
+        className="w-11 h-11 md:w-[26px] md:h-[26px] flex items-center justify-center"
       >
         <span
           className={`w-[26px] h-[26px] flex items-center justify-center rounded-full transition-colors ${

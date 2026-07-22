@@ -13,7 +13,7 @@ export default function FooterBar() {
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Instagram"
-          className="group w-11 h-11 flex items-center justify-center"
+          className="group w-11 h-11 md:w-[26px] md:h-[26px] flex items-center justify-center"
         >
           <span className="w-[26px] h-[26px] flex items-center justify-center rounded-full bg-coral text-beige transition-opacity group-hover:opacity-70">
             <svg
