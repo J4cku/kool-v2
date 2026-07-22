@@ -209,8 +209,10 @@ test('homepage renders localized projects in the server-provided order', () => {
 test('homepage shows full-width folios and an animated vertical page-scroll cue', () => {
   assert.match(
     imageStripSource,
-    /className="project-folio[^"]*absolute inset-x-0 bottom-1\/3[^"]*bg-beige\/75[^"]*backdrop-blur-md[^"]*"/
+    /className="project-folio[^"]*absolute inset-x-0 bottom-\[calc\(69px\+env\(safe-area-inset-bottom\)\)\][^"]*md:bottom-\[calc\(51px\+env\(safe-area-inset-bottom\)\)\][^"]*bg-beige\/75[^"]*backdrop-blur-md[^"]*"/
   );
+  assert.doesNotMatch(imageStripSource, /project-folio[^"]*bottom-1\/3/);
+  assert.doesNotMatch(imageStripSource, /project-folio[^"]*translate-y-1\/2/);
   assert.doesNotMatch(imageStripSource, /min-\[992px\]:opacity-0/);
   assert.match(
     globalsSource,

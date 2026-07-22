@@ -82,7 +82,7 @@ function ProjectPane({
         sizes="(max-width: 991px) 100vw, 50vw"
       />
       <div
-        className="project-folio pointer-events-none absolute inset-x-0 bottom-1/3 h-[96px] translate-y-1/2 overflow-hidden bg-beige/75 backdrop-blur-md transition-opacity duration-300 min-[992px]:h-[80px]"
+        className="project-folio pointer-events-none absolute inset-x-0 bottom-[calc(69px+env(safe-area-inset-bottom))] md:bottom-[calc(51px+env(safe-area-inset-bottom))] h-[96px] overflow-hidden bg-beige/75 backdrop-blur-md transition-opacity duration-300 min-[992px]:h-[80px]"
         aria-hidden="true"
       >
         <ProjectFolio project={project} category={category} />
