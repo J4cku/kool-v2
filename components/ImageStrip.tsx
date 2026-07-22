@@ -129,7 +129,7 @@ export default function ImageStrip({ order }: { order: string[] }) {
 
   const handleFocusCapture = () => {
     focusWithinHeroRef.current = true;
-    swiperRef.current?.autoplay.pause();
+    swiperRef.current?.autoplay.stop();
   };
 
   const handleBlurCapture = (event: FocusEvent<HTMLElement>) => {
@@ -137,12 +137,7 @@ export default function ImageStrip({ order }: { order: string[] }) {
 
     focusWithinHeroRef.current = false;
     if (reduceMotion) return;
-
-    const autoplay = swiperRef.current?.autoplay;
-    if (!autoplay) return;
-
-    if (autoplay.running) autoplay.resume();
-    else autoplay.start();
+    swiperRef.current?.autoplay.start();
   };
 
   return (

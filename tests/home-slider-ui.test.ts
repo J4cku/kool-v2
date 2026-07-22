@@ -53,8 +53,8 @@ test('homepage uses a looping horizontal Swiper without blocking vertical page s
   assert.match(imageStripSource, /keyboard=\{\{ enabled: true, onlyInViewport: true, pageUpDown: false \}\}/);
   assert.match(imageStripSource, /delay: 5000/);
   assert.match(imageStripSource, /disableOnInteraction: false/);
-  assert.match(imageStripSource, /swiperRef\.current\?\.autoplay\.pause\(\)/);
-  assert.match(imageStripSource, /autoplay\.resume\(\)/);
+  assert.match(imageStripSource, /swiperRef\.current\?\.autoplay\.stop\(\)/);
+  assert.match(imageStripSource, /swiperRef\.current\?\.autoplay\.start\(\)/);
   assert.match(imageStripSource, /prevSlideMessage: t\('previousProject'\)/);
   assert.match(imageStripSource, /nextSlideMessage: t\('nextProject'\)/);
   assert.doesNotMatch(imageStripSource, /addEventListener\('wheel'/);
@@ -71,7 +71,7 @@ test('homepage disables Swiper autoplay when reduced motion is requested', () =>
 test('homepage binds named DOM focus handlers to the hero section', () => {
   assert.match(
     imageStripSource,
-    /const handleFocusCapture = \(\) => \{\s*focusWithinHeroRef\.current = true;\s*swiperRef\.current\?\.autoplay\.pause\(\);\s*\};/
+    /const handleFocusCapture = \(\) => \{\s*focusWithinHeroRef\.current = true;\s*swiperRef\.current\?\.autoplay\.stop\(\);\s*\};/
   );
   assert.match(
     imageStripSource,
@@ -93,6 +93,10 @@ test('homepage does not pass DOM focus handlers through Swiper event props', () 
   assert.doesNotMatch(swiperOpeningTag, /onFocusCapture|onBlurCapture/);
 });
 
+test('homepage never uses transitional Swiper autoplay pause or resume', () => {
+  assert.doesNotMatch(imageStripSource, /autoplay\.(?:pause|resume)\(\)/);
+});
+
 test('homepage synchronizes Swiper autoplay with hydrated reduced motion state', () => {
   assert.match(
     imageStripSource,
@@ -100,7 +104,7 @@ test('homepage synchronizes Swiper autoplay with hydrated reduced motion state',
   );
   assert.match(
     imageStripSource,
-    /if \(reduceMotion\) return;\s*const autoplay = swiperRef\.current\?\.autoplay;\s*if \(!autoplay\) return;\s*if \(autoplay\.running\) autoplay\.resume\(\);\s*else autoplay\.start\(\);/
+    /const handleBlurCapture = \(event: FocusEvent<HTMLElement>\) => \{\s*if \(event\.currentTarget\.contains\(event\.relatedTarget as Node \| null\)\) return;\s*focusWithinHeroRef\.current = false;\s*if \(reduceMotion\) return;\s*swiperRef\.current\?\.autoplay\.start\(\);\s*\};/
   );
 });
 
