@@ -20,7 +20,9 @@ function slideAlt(slug: string, locale: string): string {
   const project = projects.find((p) => p.slug === slug);
   if (!project) return 'Kool Studio project';
   const localized = localizeProject(project, locale);
-  return `${localized.title} ${localized.location}`;
+  return locale === 'en'
+    ? `Interior of ${localized.title}, ${localized.location}`
+    : `Wnętrze projektu ${localized.title}, ${localized.location}`;
 }
 
 /* Slide order comes from the server (shuffled per ISR regeneration in the

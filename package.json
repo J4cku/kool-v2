@@ -1,6 +1,7 @@
 {
   "name": "kool-v2",
   "version": "1.0.0",
+  "packageManager": "pnpm@10.33.0",
   "private": true,
   "scripts": {
     "dev": "next dev --port ${CONDUCTOR_PORT:-8080}",

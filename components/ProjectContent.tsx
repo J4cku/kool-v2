@@ -1,18 +1,22 @@
 'use client';
 
 import Image from 'next/image';
+import { useLocale } from 'next-intl';
 import BeforeAfterSlider from './BeforeAfterSlider';
 import ColumnImage from './ColumnImage';
 import ParallaxImage from './ParallaxImage';
 
 type SliderData = { beforeSrc: string; afterSrc: string; labels?: [string, string]; aspect?: string };
 type Item =
-  | { kind: 'image'; src: string }
-  | { kind: 'reel'; src: string; aspect?: string }
-  | ({ kind: 'slider' } & SliderData);
+  | { kind: 'image'; src: string; alt: string }
+  | { kind: 'reel'; src: string; aspect?: string; alt: string }
+  | ({ kind: 'slider' } & SliderData & { beforeAlt: string; afterAlt: string });
 
 interface ProjectContentProps {
   images: string[];
+  // Localized project title/location — used to build descriptive image alts
+  title: string;
+  location: string;
   description: string;
   descriptionBlocks?: string[];
   fullWidthIndices?: number[];
@@ -30,12 +34,12 @@ interface ProjectContentProps {
   smallIndices?: number[];
 }
 
-function PaddedImage({ src, small }: { src: string; small?: boolean }) {
+function PaddedImage({ src, alt, small }: { src: string; alt: string; small?: boolean }) {
   if (small) {
     return (
       <ColumnImage
         src={src}
-        alt="Kool Studio project"
+        alt={alt}
         aspect="aspect-[9/16]"
         width="w-[72%] md:w-[60%]"
         fit="contain"
@@ -48,21 +52,21 @@ function PaddedImage({ src, small }: { src: string; small?: boolean }) {
   return (
     <div className="w-full md:w-1/2 p-6 md:p-10 lg:p-14 xl:p-20">
       <div className="relative w-full h-full aspect-[3/4] md:aspect-auto">
-        <Image src={src} alt="Kool Studio project" fill className="object-contain" sizes="(max-width: 768px) 100vw, 40vw" />
+        <Image src={src} alt={alt} fill className="object-contain" sizes="(max-width: 768px) 100vw, 40vw" />
       </div>
     </div>
   );
 }
 
-function FullImage({ src, portrait }: { src: string; portrait?: boolean }) {
+function FullImage({ src, alt, portrait }: { src: string; alt: string; portrait?: boolean }) {
   return (
     <div className={`w-full md:w-1/2 ${portrait ? 'aspect-[2/3]' : 'aspect-square'} relative`}>
-      <Image src={src} alt="Kool Studio project" fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" quality={90} />
+      <Image src={src} alt={alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" quality={90} />
     </div>
   );
 }
 
-function ReelVideo({ src, aspect = 'aspect-[9/16]' }: { src: string; aspect?: string }) {
+function ReelVideo({ src, alt, aspect = 'aspect-[9/16]' }: { src: string; alt: string; aspect?: string }) {
   return (
     <div className="w-full md:w-1/2 p-6 md:p-10 lg:p-14 xl:p-20 flex items-center">
       <video
@@ -71,14 +75,14 @@ function ReelVideo({ src, aspect = 'aspect-[9/16]' }: { src: string; aspect?: st
         muted
         loop
         playsInline
-        aria-label="Kool Studio project video"
+        aria-label={alt}
         className={`mx-auto w-full max-w-[360px] ${aspect} object-cover`}
       />
     </div>
   );
 }
 
-function SliderCell({ item }: { item: SliderData }) {
+function SliderCell({ item }: { item: SliderData & { beforeAlt: string; afterAlt: string } }) {
   return (
     <div className="w-full md:w-1/2">
       <BeforeAfterSlider
@@ -86,7 +90,10 @@ function SliderCell({ item }: { item: SliderData }) {
         afterSrc={item.afterSrc}
         beforeLabel={item.labels?.[0]}
         afterLabel={item.labels?.[1]}
+        beforeAlt={item.beforeAlt}
+        afterAlt={item.afterAlt}
         aspectClass={item.aspect ?? 'aspect-[2/3]'}
+        sizes="(max-width: 768px) 100vw, 50vw"
       />
     </div>
   );
@@ -94,12 +101,12 @@ function SliderCell({ item }: { item: SliderData }) {
 
 function FullSlot({ item, portrait }: { item: Item; portrait?: boolean }) {
   if (item.kind === 'slider') return <SliderCell item={item} />;
-  return item.kind === 'image' ? <FullImage src={item.src} portrait={portrait} /> : <ReelVideo src={item.src} aspect={item.aspect} />;
+  return item.kind === 'image' ? <FullImage src={item.src} alt={item.alt} portrait={portrait} /> : <ReelVideo src={item.src} alt={item.alt} aspect={item.aspect} />;
 }
 
 function PaddedSlot({ item, small }: { item: Item; small?: boolean }) {
   if (item.kind === 'slider') return <SliderCell item={item} />;
-  return item.kind === 'image' ? <PaddedImage src={item.src} small={small} /> : <ReelVideo src={item.src} aspect={item.aspect} />;
+  return item.kind === 'image' ? <PaddedImage src={item.src} alt={item.alt} small={small} /> : <ReelVideo src={item.src} alt={item.alt} aspect={item.aspect} />;
 }
 
 function TextBlock({ text, align = 'end' }: { text: string; align?: 'start' | 'end' }) {
@@ -114,7 +121,21 @@ function TextBlock({ text, align = 'end' }: { text: string; align?: 'start' | 'e
   );
 }
 
-export default function ProjectContent({ images, description, descriptionBlocks, fullWidthIndices, containedPairs, reverseLastRow, reel, slider, textRows, flipRowParity, portraitIndices, smallIndices }: ProjectContentProps) {
+export default function ProjectContent({ images, title, location, description, descriptionBlocks, fullWidthIndices, containedPairs, reverseLastRow, reel, slider, textRows, flipRowParity, portraitIndices, smallIndices }: ProjectContentProps) {
+  const locale = useLocale();
+
+  // Descriptive, localized alt text derived from real project data. Per-photo
+  // description is impossible, so photos use a truthful contextual pattern
+  // numbered from the hero (photograph 1) onward.
+  const isEn = locale === 'en';
+  const projectContext = isEn
+    ? `Interior of ${title}, ${location}`
+    : `Wnętrze projektu ${title}, ${location}`;
+  const photoAlt = (n: number) =>
+    isEn ? `${projectContext} — photograph ${n}` : `${projectContext} — fotografia ${n}`;
+  const reelAlt = isEn ? `Video of ${title}, ${location}` : `Film z projektu ${title}, ${location}`;
+  const sliderFrameAlt = (label?: string) => (label ? `${projectContext} — ${label}` : projectContext);
+
   if (images.length === 0 && !reel && !slider) return null;
 
   const texts = descriptionBlocks ?? [description];
@@ -128,13 +149,15 @@ export default function ProjectContent({ images, description, descriptionBlocks,
   }
   const textRowMap = new Map((textRows ?? []).map((r) => [r.row, r]));
 
-  const items: Item[] = images.map((src) => ({ kind: 'image', src }));
+  // `images` is the gallery (hero removed by the page), so gallery index i is
+  // the (i + 2)th photograph of the project (the hero is photograph 1).
+  const items: Item[] = images.map((src, i) => ({ kind: 'image', src, alt: photoAlt(i + 2) }));
   // Insert reel/slider items by ascending display index (each index is
   // measured in the final array, so inserting low-to-high keeps them aligned)
   const inserts: { index: number; item: Item }[] = [];
-  if (reel) inserts.push({ index: reel.index, item: { kind: 'reel', src: reel.src, aspect: reel.aspect } });
+  if (reel) inserts.push({ index: reel.index, item: { kind: 'reel', src: reel.src, aspect: reel.aspect, alt: reelAlt } });
   for (const s of slider ? (Array.isArray(slider) ? slider : [slider]) : []) {
-    inserts.push({ index: s.index, item: { kind: 'slider', beforeSrc: s.beforeSrc, afterSrc: s.afterSrc, labels: s.labels, aspect: s.aspect } });
+    inserts.push({ index: s.index, item: { kind: 'slider', beforeSrc: s.beforeSrc, afterSrc: s.afterSrc, labels: s.labels, aspect: s.aspect, beforeAlt: sliderFrameAlt(s.labels?.[0]), afterAlt: sliderFrameAlt(s.labels?.[1]) } });
   }
   inserts.sort((a, b) => a.index - b.index);
   for (const ins of inserts) {
@@ -154,7 +177,7 @@ export default function ProjectContent({ images, description, descriptionBlocks,
     // Full-width row
     if (fullWidthSet.has(itemIdx) && current.kind === 'image') {
       rows.push(
-        <ParallaxImage key={`row-${rowIdx}`} src={current.src} alt="Kool Studio project" sizes="100vw" quality={90} />
+        <ParallaxImage key={`row-${rowIdx}`} src={current.src} alt={current.alt} sizes="100vw" quality={90} />
       );
       itemIdx++;
       rowIdx++;
@@ -177,8 +200,11 @@ export default function ProjectContent({ images, description, descriptionBlocks,
             afterSrc={next.src}
             beforeLabel={labels?.[0]}
             afterLabel={labels?.[1]}
+            beforeAlt={sliderFrameAlt(labels?.[0])}
+            afterAlt={sliderFrameAlt(labels?.[1])}
             aspectClass={pairInfo.aspect}
             labelPosition="above"
+            sizes={pairInfo.scale ? `${Math.round(pairInfo.scale * 100)}vw` : '100vw'}
           />
         </div>
       );

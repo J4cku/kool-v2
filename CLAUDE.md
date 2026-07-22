@@ -20,7 +20,8 @@ pnpm start     # Start production server on $PORT, falling back to 8080
 pnpm lint      # Run ESLint CLI
 pnpm typecheck # Run TypeScript without emitting files
 pnpm check:i18n # Verify pl.json/en.json translation keys match
-pnpm check     # Typecheck, lint, i18n parity, and build
+pnpm test      # Vitest suites + node --test (tests/*.test.ts)
+pnpm check     # Tests, typecheck, lint, i18n parity, and build
 ```
 
 ## Project Structure
@@ -34,19 +35,24 @@ app/
   [locale]/                # All pages nested under locale segment
     layout.tsx             # Root layout, Poppins font, JSON-LD, NextIntlClientProvider
     page.tsx               # Homepage (Navbar, ImageStrip, ManifestoSection, FooterBanner)
-    projekty/              # Projects listing + [slug] detail pages
+    projekty/              # Projects listing + [slug] detail pages (case-study blocks, breadcrumbs)
     studio/                # Studio/about page
-    oferta/                # Services page
-    kontakt/               # Contact page
+    oferta/                # Services hub + [service]/ landing pages (projekt-mieszkania, projekt-domu, wnetrza-komercyjne)
+    kontakt/               # Contact page + project-brief form (actions.ts server action, brief-state.ts)
     design-system/         # Private styleguide (dev-only, 404s in production)
     [...rest]/             # Catch-all route -> notFound()
     not-found.tsx          # Custom 404 page
 components/                # Shared UI components (PascalCase)
-  oferta/                  # Page-scoped components (ServiceSection, ProcessSection)
-data/projects.ts           # Project data + types (Project type)
+  oferta/                  # Page-scoped components (ServiceSection, ProcessSection, ServiceLandingPage, FaqAccordion, ServicesHubLinks)
+  kontakt/                 # BriefForm (client form for the project brief)
+data/projects.ts           # Project data + types (Project type, caseStudy blocks, relatedService)
+data/services.ts           # Service landing-page content (PL canonical + en, localizeService)
 data/press.ts              # Press features (studio page + llms.txt)
 lib/site.ts                # BASE_URL, INSTAGRAM_URL (client-safe constants)
 lib/metadata.ts            # localeAlternates + pageMetadata helpers (server-only)
+lib/schema.ts              # JSON-LD entity graph builders (stable @ids: #organization, #website, Person, WebPage, BreadcrumbList)
+lib/brief.ts               # Brief-form validation/spam/mailto logic (dependency-free, tested)
+lib/analytics.ts           # Env-gated GA4 event helpers (no-PII event dictionary, consent helpers)
 i18n/
   request.ts               # Locale config, getRequestConfig
   navigation.ts            # Typed Link, redirect, usePathname, useRouter
@@ -58,6 +64,8 @@ public/
   videos/                  # Video assets (reel.mp4)
   logo.svg, dot.svg        # Brand assets
 docs/superpowers/          # Design spec + implementation plan (historical records)
+docs/playbook/             # SEO/lead-gen ops docs: decision-log.md (unconfirmed business facts - check before adding claims), NAP sheet, AI-audit prompts, press kits, backlog, analytics-events.md
+tests/                     # node --test suites (brief validation); vitest colocated as components/*.test.ts(x)
 .claude/                   # Agent settings + project skills (verify-site, add-project, build-from-design)
 design/                    # Gitignored inbox for designer PDF/.ai mockups
 scripts/check-i18n.mjs     # pl/en translation key parity check
@@ -148,12 +156,13 @@ Project skills live in `.claude/skills/`; shared agent permissions in `.claude/s
 
 - Next.js 16 App Router: route `params` is a Promise — type as `params: Promise<{...}>` and `await params` (see `app/[locale]/layout.tsx`)
 - There is intentionally no `tailwind.config.*` — Tailwind v4 design tokens live in `@theme` in `app/globals.css`
-- There are no automated tests — `pnpm check` (typecheck + lint + i18n parity + build) is the verification gate before claiming work done
+- `pnpm check` (tests + typecheck + lint + i18n parity + build) is the verification gate before claiming work done; tests are vitest (colocated `components/*.test.ts(x)`) plus `node --test` suites in `tests/`
+- Business facts (prices, hours, phone, SLAs, service claims) must never be added to site copy or JSON-LD unless confirmed — open items live in `docs/playbook/decision-log.md`
 
 ## SEO
 
 - Locale-aware metadata via `generateMetadata` in `app/[locale]/layout.tsx`; each static subpage sets its own title/description/canonical via `pageMetadata()` from `lib/metadata.ts` (strings live in `messages/*.json` under `meta.*` — keep pl/en parity)
-- JSON-LD `ProfessionalService` schema in layout `<head>`; per-project `CreativeWork` + `BreadcrumbList` in `app/[locale]/projekty/[slug]/page.tsx`
+- JSON-LD entity graph from `lib/schema.ts` (stable `@id`s shared across locales): `LocalBusiness` + founder `Person`s + `WebSite` in layout `<head>`; per-project `CreativeWork` + `WebPage` + `BreadcrumbList` in `app/[locale]/projekty/[slug]/page.tsx`; per-service `Service` + `WebPage` + `BreadcrumbList` in `app/[locale]/oferta/[service]/page.tsx` — markup must always match visible, confirmed content (never `ProfessionalService`, `Offer`, ratings, or unconfirmed facts)
 - Dynamic sitemap at `app/sitemap.ts` covers all locale + page + project combinations
 - `/llms.txt` for LLM discovery — generated from `data/projects.ts` + `data/press.ts` in `app/llms.txt/route.ts` (never hand-edit project facts)
 - Crawlability invariants: nav links stay in the server HTML (Navbar animates visibility by state, no conditional mounting) and the projects listing grid is server-rendered from `searchParams`

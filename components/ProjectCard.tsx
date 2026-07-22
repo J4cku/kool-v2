@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import type { Project } from '@/data/projects';
 
@@ -11,6 +11,11 @@ interface ProjectCardProps {
 
 export default function ProjectCard({ project }: ProjectCardProps) {
   const t = useTranslations('projects');
+  const locale = useLocale();
+  const thumbnailAlt =
+    locale === 'en'
+      ? `Interior of ${project.title}, ${project.location}`
+      : `Wnętrze projektu ${project.title}, ${project.location}`;
 
   return (
     <div>
@@ -19,7 +24,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           <div className="relative aspect-square">
             <Image
               src={project.thumbnail}
-              alt={project.title}
+              alt={thumbnailAlt}
               fill
               className="object-cover transition-transform duration-[600ms] group-hover:scale-[1.04]"
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"

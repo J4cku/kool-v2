@@ -11,7 +11,9 @@
     "section1Heading": "TWORZYMY PONADCZASOWE WNĘTRZA",
     "section1Text": "Projektujemy miejsca, które nie opierają się na trendach. Każdą przestrzeń traktujemy indywidualnie, jako odpowiedź na konkretny kontekst oraz potrzeby. Niezależnie, czy jest to projekt mieszkalny, czy komercyjny, stworzymy wnętrze, które opowie twoją historię.",
     "section2Heading": "PROJEKTUJEMY\nW KAŻDEJ SKALI",
-    "section2Text": "Posiadamy wieloletnie doświadczenie w realizowaniu projektów o różnym charakterze – od detalu mebla, przez mieszkania i domy, po obiekty gastronomiczne, komercyjne i hotele. Prowadzimy proces kompleksowo, z pełną kontrolą nad efektem końcowym. W ten sposób powstają dopracowane przestrzenie, wypełnione autorskimi, unikatowymi elementami. Pracujemy we Wrocławiu, a projekty prowadzimy w całej Polsce – m.in. w Warszawie, Łodzi i Gdańsku."
+    "section2Text": "Posiadamy wieloletnie doświadczenie w realizowaniu projektów o różnym charakterze – od detalu mebla, przez mieszkania i domy, po obiekty gastronomiczne, komercyjne i hotele. Prowadzimy proces kompleksowo, z pełną kontrolą nad efektem końcowym. W ten sposób powstają dopracowane przestrzenie, wypełnione autorskimi, unikatowymi elementami. Pracujemy we Wrocławiu, a projekty prowadzimy w całej Polsce – m.in. w Warszawie, Łodzi i Gdańsku.",
+    "section1ImageAlt": "Moodboard materiałów i próbek wykończeń w pracowni Kool Studio",
+    "section2ImageAlt": "Fotografia wnętrza zaprojektowanego przez Kool Studio"
   },
   "meta": {
     "schemaDescription": "Wrocławska pracownia architektury wnętrz projektująca wnętrza mieszkalne i komercyjne, autorskie meble, oświetlenie i identyfikację wizualną. Projekty w całej Polsce, m.in. w Warszawie.",
@@ -40,6 +42,23 @@
       "title": "kontakt",
       "description": "Skontaktuj się z Kool Studio — pracownią architektury wnętrz z Wrocławia. Studio: Zaporoska 83/15, 53-415 Wrocław. E-mail: hello@koolstudio.pl.",
       "ogImageAlt": "Paleta materiałów i kolorów w pracowni Kool Studio"
+    },
+    "services": {
+      "projekt-mieszkania": {
+        "title": "projekt mieszkania — architektura wnętrz",
+        "description": "Projektujemy apartamenty o podwyższonym standardzie we Wrocławiu i całej Polsce — od układu funkcjonalnego i zmian lokatorskich, przez dokumentację wykonawczą, po nadzór autorski.",
+        "ogImageAlt": "Wnętrze mieszkania zaprojektowane przez Kool Studio"
+      },
+      "projekt-domu": {
+        "title": "projekt domu — architektura wnętrz",
+        "description": "Projekt wnętrz domu o podwyższonym standardzie — od koncepcji i układu funkcjonalnego po dokumentację wykonawczą i nadzór autorski. Wrocław i cała Polska.",
+        "ogImageAlt": "Wnętrze domu jednorodzinnego w Dobrzykowicach zaprojektowane przez Kool Studio"
+      },
+      "wnetrza-komercyjne": {
+        "title": "wnętrza komercyjne — projektowanie lokali",
+        "description": "Projektowanie wnętrz komercyjnych — restauracje, concept store'y, butiki, hotele i lokale usługowe. Koncepcja, dokumentacja wykonawcza, koordynacja branż i nadzór autorski.",
+        "ogImageAlt": "Wnętrze delikatesów Dehesa zaprojektowane przez Kool Studio"
+      }
     }
   },
   "projects": {
@@ -58,8 +77,122 @@
     "wizualizacje": "WIZUALIZACJE",
     "zdjecia": "ZDJĘCIA"
   },
+  "caseStudy": {
+    "sectionLabel": "Studium przypadku",
+    "challenge": "Wyzwanie",
+    "decisions": "Decyzje projektowe",
+    "result": "Efekt",
+    "ctaText": "Masz podobne wyzwanie? Opowiedz nam o swoim projekcie.",
+    "ctaButton": "Wypełnij brief projektowy",
+    "serviceLinks": {
+      "projekt-mieszkania": "Zobacz, jak projektujemy mieszkania",
+      "projekt-domu": "Zobacz, jak projektujemy wnętrza domów",
+      "wnetrza-komercyjne": "Zobacz, jak projektujemy wnętrza komercyjne",
+      "oferta": "Poznaj naszą ofertę projektową"
+    }
+  },
   "contact": {
     "cta": "GOTOWI, BY ZACZĄĆ WSPÓLNY PROJEKT?"
+  },
+  "brief": {
+    "heading": "OPOWIEDZ NAM O SWOIM PROJEKCIE",
+    "intro": "Krótki brief pomoże nam przygotować się do rozmowy. Wypełnij tyle, ile możesz — im więcej wiemy, tym trafniej odpowiemy.",
+    "requiredHint": "Pola oznaczone gwiazdką (*) są wymagane.",
+    "optionalTag": "opcjonalnie",
+    "fields": {
+      "name": {
+        "label": "Imię",
+        "help": "Wystarczy imię."
+      },
+      "email": {
+        "label": "E-mail",
+        "help": "Na ten adres odpiszemy."
+      },
+      "projectType": {
+        "label": "Typ projektu",
+        "placeholder": "Wybierz…"
+      },
+      "location": {
+        "label": "Lokalizacja",
+        "placeholder": "np. Wrocław",
+        "help": "Wystarczy miasto."
+      },
+      "stage": {
+        "label": "Etap projektu",
+        "placeholder": "Wybierz…"
+      },
+      "area": {
+        "label": "Przybliżona powierzchnia (m²)",
+        "placeholder": "np. 85"
+      },
+      "startDate": {
+        "label": "Pożądany start",
+        "placeholder": "np. wrzesień 2026"
+      },
+      "completionDate": {
+        "label": "Pożądane zakończenie",
+        "placeholder": "np. wiosna 2027"
+      },
+      "scope": {
+        "label": "Oczekiwany zakres",
+        "help": "Zaznacz, co Cię interesuje."
+      },
+      "budget": {
+        "label": "Przybliżony budżet realizacji (opcjonalnie)",
+        "help": "Jeśli chcesz, podaj orientacyjną kwotę."
+      },
+      "priorities": {
+        "label": "Priorytety",
+        "help": "Co powinno działać lepiej niż dziś? Maks. 3 punkty."
+      },
+      "plansUrl": {
+        "label": "Link do rzutów lub zdjęć",
+        "placeholder": "https://…",
+        "help": "Link do folderu w chmurze. Bez przesyłania plików."
+      }
+    },
+    "projectTypeOptions": {
+      "mieszkanie": "mieszkanie",
+      "dom": "dom",
+      "komercyjne": "wnętrze komercyjne",
+      "inne": "inne"
+    },
+    "stageOptions": {
+      "zakup": "planuję zakup",
+      "przed-zmianami": "przed zmianami lokatorskimi",
+      "w-budowie": "w budowie",
+      "po-odbiorze": "po odbiorze kluczy",
+      "remont": "remont istniejącego wnętrza"
+    },
+    "scopeOptions": {
+      "uklad-funkcjonalny": "układ funkcjonalny",
+      "projekt-koncepcyjny": "projekt koncepcyjny",
+      "dokumentacja-wykonawcza": "dokumentacja wykonawcza",
+      "zabudowy-na-wymiar": "zabudowy na wymiar",
+      "zestawienia-wyceny": "zestawienia i wyceny",
+      "nadzor-autorski": "nadzór autorski"
+    },
+    "honeypotLabel": "Zostaw to pole puste",
+    "submit": "Wyślij brief",
+    "sending": "Wysyłanie…",
+    "privacy": "Twoje dane trafiają wyłącznie na hello@koolstudio.pl i służą jedynie do odpowiedzi na to zapytanie.",
+    "errors": {
+      "required": "To pole jest wymagane.",
+      "email": "Podaj poprawny adres e-mail.",
+      "url": "Podaj poprawny adres URL (zaczynający się od http:// lub https://).",
+      "tooLong": "Wpisano zbyt długą wartość — skróć ją.",
+      "option": "Wybierz jedną z dostępnych opcji.",
+      "summary": "Popraw zaznaczone pola i wyślij ponownie."
+    },
+    "status": {
+      "sending": "Wysyłanie briefu…",
+      "successTitle": "Dziękujemy — brief został wysłany.",
+      "successNote": "Odpowiedź wyślemy z adresu hello@koolstudio.pl.",
+      "submittedHeading": "Przesłane informacje",
+      "generic": "Nie udało się wysłać formularza. Spróbuj ponownie za chwilę lub napisz bezpośrednio na hello@koolstudio.pl.",
+      "fallbackNote": "Otworzy się Twój program pocztowy z gotowym briefem — wyślij wiadomość, aby dokończyć zgłoszenie.",
+      "fallbackButton": "Otwórz program pocztowy"
+    }
   },
   "footer": {
     "banner": "WE ARE KOOL AND WE DESIGN KOOL THINGS!",
@@ -99,6 +232,12 @@
     "learnMore": "Dowiedz się więcej",
     "portfolio": "Zobacz nasze portfolio",
     "scopeTitle": "Zakres współpracy:",
+    "commercialImageAlt": "Wnętrze restauracji zaprojektowane przez Kool Studio",
+    "commercialScopeImageAlt": "Witryna lokalu komercyjnego zaprojektowanego przez Kool Studio",
+    "residentialImageAlt": "Salon w projekcie mieszkalnym Kool Studio",
+    "residentialScopeImageAlt": "Kuchnia w projekcie mieszkalnym Kool Studio",
+    "materialsImageAlt": "Dobór materiałów wykończeniowych w projekcie Kool Studio",
+    "processImageAlt": "Nadzór autorski na budowie prowadzony przez Kool Studio",
     "commercial": {
       "label": "Wnętrza komercyjne",
       "heading": "Restauracje, concept store'y, butiki, hotele, usługi",
@@ -152,6 +291,21 @@
       ],
       "bottomHeading": "Prowadzimy proces kompleksowo od pierwszych założeń po finalny efekt.",
       "bottomText": "Decyzje rozkładamy w czasie, od ogółu do szczegółu, co pozwala uchwycić wszystkie niuanse i uniknąć przypadkowych wyborów. Porządkujemy cały proces eliminując wątpliwości i dzięki naszemu doświadczeniu, ułatwiamy decyzje. Pozwala to na spokojną realizację i efekt zgodny z założeniami. W ramach projektu kompleksowego wspieramy was na każdym jego etapie."
+    }
+  },
+  "services": {
+    "hubHeading": "Poznaj szczegóły oferty",
+    "sections": {
+      "recognition": "Kiedy warto",
+      "scope": "Zakres projektu",
+      "process": "Proces projektowy",
+      "proof": "Wybrane realizacje",
+      "faq": "Najczęstsze pytania"
+    },
+    "viewProject": "Zobacz projekt",
+    "cta": {
+      "heading": "Opowiedz nam o swoim projekcie",
+      "button": "Napisz do nas"
     }
   }
 }

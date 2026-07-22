@@ -8,6 +8,7 @@ import ParallaxImage from '@/components/ParallaxImage';
 import ProjectHero from '@/components/ProjectHero';
 import ServiceSection from '@/components/oferta/ServiceSection';
 import ProcessSection from '@/components/oferta/ProcessSection';
+import ServicesHubLinks from '@/components/oferta/ServicesHubLinks';
 
 export default function OfertaPage() {
   const t = useTranslations('oferta');
@@ -28,7 +29,7 @@ export default function OfertaPage() {
 
   return (
     <>
-      <ProjectHero src="/images/oferta/KOOL_oferta_komercyjne.webp" alt="Restaurant interior" />
+      <ProjectHero src="/images/oferta/KOOL_oferta_komercyjne.webp" alt={t('commercialImageAlt')} />
       <Navbar />
       <main>
         {/* Content scrolls over the hero */}
@@ -45,7 +46,7 @@ export default function OfertaPage() {
             scopeTitle={t('scopeTitle')}
             scopeItems={commercialScope}
             scopeImageSrc="/images/oferta/KOOL_oferta_komercyjne_small.webp"
-            scopeImageAlt="Restaurant storefront"
+            scopeImageAlt={t('commercialScopeImageAlt')}
             sloganHeading={t('commercial.sloganHeading')}
             sloganText={t('commercial.sloganText')}
             trustedByLabel={t('commercial.trustedBy')}
@@ -54,7 +55,7 @@ export default function OfertaPage() {
 
           <ParallaxImage
             src="/images/oferta/KOOL_oferta_prywatne.webp"
-            alt="Living room"
+            alt={t('residentialImageAlt')}
             aspect="aspect-[16/9]"
           />
 
@@ -70,14 +71,14 @@ export default function OfertaPage() {
             scopeTitle={t('scopeTitle')}
             scopeItems={residentialScope}
             scopeImageSrc="/images/oferta/KOOL_oferta_prywatne_small.webp"
-            scopeImageAlt="Kitchen interior"
+            scopeImageAlt={t('residentialScopeImageAlt')}
             sloganHeading={t('residential.sloganHeading')}
             sloganText={t('residential.sloganText')}
           />
 
           <ParallaxImage
             src="/images/oferta/KOOL_oferta_finish.webp"
-            alt="Material selection"
+            alt={t('materialsImageAlt')}
             aspect="aspect-[16/9]"
           />
 
@@ -86,10 +87,12 @@ export default function OfertaPage() {
             heading={t('process.heading')}
             steps={processSteps}
             imageSrc="/images/oferta/KOOL_oferta_finish_small.webp"
-            imageAlt="Construction supervision"
+            imageAlt={t('processImageAlt')}
             bottomHeading={t('process.bottomHeading')}
             bottomText={t('process.bottomText')}
           />
+
+          <ServicesHubLinks />
 
           <FooterBanner showMarquee={false} />
         </div>
