@@ -80,6 +80,106 @@
   "contact": {
     "cta": "READY TO START A PROJECT TOGETHER?"
   },
+  "brief": {
+    "heading": "TELL US ABOUT YOUR PROJECT",
+    "intro": "A short brief helps us prepare for the conversation. Fill in as much as you can — the more we know, the better we can respond.",
+    "requiredHint": "Fields marked with an asterisk (*) are required.",
+    "optionalTag": "optional",
+    "fields": {
+      "name": {
+        "label": "Name",
+        "help": "A first name is enough."
+      },
+      "email": {
+        "label": "Email",
+        "help": "We'll reply to this address."
+      },
+      "projectType": {
+        "label": "Project type",
+        "placeholder": "Choose…"
+      },
+      "location": {
+        "label": "Location",
+        "placeholder": "e.g. Wrocław",
+        "help": "The city is enough."
+      },
+      "stage": {
+        "label": "Project stage",
+        "placeholder": "Choose…"
+      },
+      "area": {
+        "label": "Approximate area (m²)",
+        "placeholder": "e.g. 85"
+      },
+      "startDate": {
+        "label": "Desired start",
+        "placeholder": "e.g. September 2026"
+      },
+      "completionDate": {
+        "label": "Desired completion",
+        "placeholder": "e.g. spring 2027"
+      },
+      "scope": {
+        "label": "Expected scope",
+        "help": "Tick what you're interested in."
+      },
+      "budget": {
+        "label": "Approximate implementation budget (optional)",
+        "help": "If you'd like, give a rough figure."
+      },
+      "priorities": {
+        "label": "Priorities",
+        "help": "What should work better than it does today? Max. 3 points."
+      },
+      "plansUrl": {
+        "label": "Link to plans or photos",
+        "placeholder": "https://…",
+        "help": "A link to a cloud folder. No file upload."
+      }
+    },
+    "projectTypeOptions": {
+      "mieszkanie": "apartment",
+      "dom": "house",
+      "komercyjne": "commercial interior",
+      "inne": "other"
+    },
+    "stageOptions": {
+      "zakup": "planning to buy",
+      "przed-zmianami": "before tenant modifications",
+      "w-budowie": "under construction",
+      "po-odbiorze": "after keys handover",
+      "remont": "renovation of an existing interior"
+    },
+    "scopeOptions": {
+      "uklad-funkcjonalny": "functional layout",
+      "projekt-koncepcyjny": "conceptual design",
+      "dokumentacja-wykonawcza": "construction documentation",
+      "zabudowy-na-wymiar": "custom cabinetry",
+      "zestawienia-wyceny": "specifications and quotes",
+      "nadzor-autorski": "author's supervision"
+    },
+    "honeypotLabel": "Leave this field empty",
+    "submit": "Send brief",
+    "sending": "Sending…",
+    "privacy": "Your details go solely to hello@koolstudio.pl and are used only to reply to this enquiry.",
+    "errors": {
+      "required": "This field is required.",
+      "email": "Enter a valid email address.",
+      "url": "Enter a valid URL (starting with http:// or https://).",
+      "tooLong": "This value is too long — please shorten it.",
+      "option": "Choose one of the available options.",
+      "summary": "Please fix the highlighted fields and submit again."
+    },
+    "status": {
+      "sending": "Sending the brief…",
+      "successTitle": "Thank you — your brief has been sent.",
+      "successNote": "We'll reply from hello@koolstudio.pl.",
+      "submittedHeading": "What you submitted",
+      "generic": "The form couldn't be sent. Please try again in a moment, or email hello@koolstudio.pl directly.",
+      "fallbackNote": "Your email app will open with the brief ready — send the message to complete your enquiry.",
+      "fallbackButton": "Open email app"
+    }
+  },
   "footer": {
     "banner": "WE ARE KOOL AND WE DESIGN KOOL THINGS!",
     "address": "STUDIO: ZAPOROSKA 83/15, WROCŁAW",

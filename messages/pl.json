@@ -80,6 +80,106 @@
   "contact": {
     "cta": "GOTOWI, BY ZACZĄĆ WSPÓLNY PROJEKT?"
   },
+  "brief": {
+    "heading": "OPOWIEDZ NAM O SWOIM PROJEKCIE",
+    "intro": "Krótki brief pomoże nam przygotować się do rozmowy. Wypełnij tyle, ile możesz — im więcej wiemy, tym trafniej odpowiemy.",
+    "requiredHint": "Pola oznaczone gwiazdką (*) są wymagane.",
+    "optionalTag": "opcjonalnie",
+    "fields": {
+      "name": {
+        "label": "Imię",
+        "help": "Wystarczy imię."
+      },
+      "email": {
+        "label": "E-mail",
+        "help": "Na ten adres odpiszemy."
+      },
+      "projectType": {
+        "label": "Typ projektu",
+        "placeholder": "Wybierz…"
+      },
+      "location": {
+        "label": "Lokalizacja",
+        "placeholder": "np. Wrocław",
+        "help": "Wystarczy miasto."
+      },
+      "stage": {
+        "label": "Etap projektu",
+        "placeholder": "Wybierz…"
+      },
+      "area": {
+        "label": "Przybliżona powierzchnia (m²)",
+        "placeholder": "np. 85"
+      },
+      "startDate": {
+        "label": "Pożądany start",
+        "placeholder": "np. wrzesień 2026"
+      },
+      "completionDate": {
+        "label": "Pożądane zakończenie",
+        "placeholder": "np. wiosna 2027"
+      },
+      "scope": {
+        "label": "Oczekiwany zakres",
+        "help": "Zaznacz, co Cię interesuje."
+      },
+      "budget": {
+        "label": "Przybliżony budżet realizacji (opcjonalnie)",
+        "help": "Jeśli chcesz, podaj orientacyjną kwotę."
+      },
+      "priorities": {
+        "label": "Priorytety",
+        "help": "Co powinno działać lepiej niż dziś? Maks. 3 punkty."
+      },
+      "plansUrl": {
+        "label": "Link do rzutów lub zdjęć",
+        "placeholder": "https://…",
+        "help": "Link do folderu w chmurze. Bez przesyłania plików."
+      }
+    },
+    "projectTypeOptions": {
+      "mieszkanie": "mieszkanie",
+      "dom": "dom",
+      "komercyjne": "wnętrze komercyjne",
+      "inne": "inne"
+    },
+    "stageOptions": {
+      "zakup": "planuję zakup",
+      "przed-zmianami": "przed zmianami lokatorskimi",
+      "w-budowie": "w budowie",
+      "po-odbiorze": "po odbiorze kluczy",
+      "remont": "remont istniejącego wnętrza"
+    },
+    "scopeOptions": {
+      "uklad-funkcjonalny": "układ funkcjonalny",
+      "projekt-koncepcyjny": "projekt koncepcyjny",
+      "dokumentacja-wykonawcza": "dokumentacja wykonawcza",
+      "zabudowy-na-wymiar": "zabudowy na wymiar",
+      "zestawienia-wyceny": "zestawienia i wyceny",
+      "nadzor-autorski": "nadzór autorski"
+    },
+    "honeypotLabel": "Zostaw to pole puste",
+    "submit": "Wyślij brief",
+    "sending": "Wysyłanie…",
+    "privacy": "Twoje dane trafiają wyłącznie na hello@koolstudio.pl i służą jedynie do odpowiedzi na to zapytanie.",
+    "errors": {
+      "required": "To pole jest wymagane.",
+      "email": "Podaj poprawny adres e-mail.",
+      "url": "Podaj poprawny adres URL (zaczynający się od http:// lub https://).",
+      "tooLong": "Wpisano zbyt długą wartość — skróć ją.",
+      "option": "Wybierz jedną z dostępnych opcji.",
+      "summary": "Popraw zaznaczone pola i wyślij ponownie."
+    },
+    "status": {
+      "sending": "Wysyłanie briefu…",
+      "successTitle": "Dziękujemy — brief został wysłany.",
+      "successNote": "Odpowiedź wyślemy z adresu hello@koolstudio.pl.",
+      "submittedHeading": "Przesłane informacje",
+      "generic": "Nie udało się wysłać formularza. Spróbuj ponownie za chwilę lub napisz bezpośrednio na hello@koolstudio.pl.",
+      "fallbackNote": "Otworzy się Twój program pocztowy z gotowym briefem — wyślij wiadomość, aby dokończyć zgłoszenie.",
+      "fallbackButton": "Otwórz program pocztowy"
+    }
+  },
   "footer": {
     "banner": "WE ARE KOOL AND WE DESIGN KOOL THINGS!",
     "address": "STUDIO: ZAPOROSKA 83/15, WROCŁAW",

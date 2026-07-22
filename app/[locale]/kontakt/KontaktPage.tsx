@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import Navbar from '@/components/Navbar';
 import AddressBlock from '@/components/AddressBlock';
 import FooterBar from '@/components/FooterBar';
+import BriefForm from '@/components/kontakt/BriefForm';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 export default function KontaktPage() {
@@ -15,7 +16,10 @@ export default function KontaktPage() {
     <>
       <Navbar />
       <main className="min-h-dvh pt-[80px] flex flex-col relative">
-        <div className="flex-1 max-w-[1400px] mx-auto px-5 md:px-10 lg:px-12 w-full flex flex-col justify-between pb-[calc(5rem+env(safe-area-inset-bottom))]">
+        {/* Hero block keeps its first-screen layout: heading pinned to the top,
+            showreel + address to the bottom of the viewport. min-h (instead of
+            flex-1) lets the brief form flow below without collapsing it. */}
+        <div className="min-h-[calc(100dvh-80px)] max-w-[1400px] mx-auto px-5 md:px-10 lg:px-12 w-full flex flex-col justify-between pb-[calc(5rem+env(safe-area-inset-bottom))]">
           <motion.div
             className="pt-[20vh] md:pt-[25vh]"
             initial={{ opacity: 0, x: reduceMotion ? 0 : -18 }}
@@ -48,6 +52,15 @@ export default function KontaktPage() {
             <AddressBlock />
           </motion.div>
         </div>
+
+        {/* Qualifying project brief — a second section below the hero */}
+        <section id="brief" className="border-t border-dark/15">
+          <div className="max-w-[1400px] mx-auto px-5 md:px-10 lg:px-12 w-full pt-16 md:pt-24 pb-[calc(6rem+env(safe-area-inset-bottom))]">
+            <div className="max-w-[820px]">
+              <BriefForm />
+            </div>
+          </div>
+        </section>
 
         {/* Fixed bottom bar: instagram + language toggle */}
         <FooterBar />
