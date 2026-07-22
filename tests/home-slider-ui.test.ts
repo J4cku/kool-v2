@@ -71,6 +71,10 @@ test('homepage disables Swiper autoplay when reduced motion is requested', () =>
 test('homepage renders localized projects in the server-provided order', () => {
   assert.match(
     imageStripSource,
+    /const showcaseProjects = useMemo\(\(\) => \{\s*const ordered = order\.flatMap\(\(slug\) => \{\s*const match = curatedProjects\.find\(\(project\) => project\.slug === slug\);\s*return match \? \[match\] : \[\];\s*\}\);\s*return ordered\.length > 1 \? ordered : curatedProjects;\s*\}, \[order\]\);\s*const localizedProjects = useMemo\(\s*\(\) =>\s*showcaseProjects\.map/
+  );
+  assert.match(
+    imageStripSource,
     /\{localizedProjects\.map\(\(project, index\) => \(/
   );
   assert.doesNotMatch(
@@ -80,12 +84,10 @@ test('homepage renders localized projects in the server-provided order', () => {
 });
 
 test('homepage shows full-width folios and an animated vertical page-scroll cue', () => {
-  assert.match(imageStripSource, /absolute inset-x-0 bottom-1\/3/);
-  assert.match(imageStripSource, /bg-beige\/75/);
-  assert.match(imageStripSource, /backdrop-blur-md/);
-  assert.match(imageStripSource, /min-\[992px\]:opacity-0/);
-  assert.match(imageStripSource, /group-hover:opacity-100/);
-  assert.match(imageStripSource, /group-focus-within:opacity-100/);
+  assert.match(
+    imageStripSource,
+    /className="[^"]*absolute inset-x-0 bottom-1\/3[^"]*bg-beige\/75[^"]*backdrop-blur-md[^"]*min-\[992px\]:opacity-0[^"]*min-\[992px\]:group-hover:opacity-100[^"]*min-\[992px\]:group-focus-within:opacity-100[^"]*"/
+  );
   assert.match(imageStripSource, /\[0, 1, 2\]\.map/);
   assert.match(imageStripSource, /animate=\{reduceMotion \? undefined : \{ y: \[0, 8, 0\] \}\}/);
   assert.doesNotMatch(imageStripSource, /t\('scrollHint'\)/);
