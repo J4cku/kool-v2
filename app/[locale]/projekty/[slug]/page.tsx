@@ -179,14 +179,6 @@ export default async function ProjectDetailPage({
 
           <ProjectMeta project={project} />
 
-          {project.caseStudy && (
-            <CaseStudySection
-              caseStudy={project.caseStudy}
-              caseId={slug}
-              service={relatedService === 'oferta' ? undefined : relatedService}
-            />
-          )}
-
           <ProjectContent
             images={project.images.slice(1)}
             title={project.title}
@@ -209,6 +201,14 @@ export default async function ProjectDetailPage({
             portraitIndices={project.portraitIndices?.map((i) => i - 1).filter((i) => i >= 0)}
             smallIndices={project.smallIndices?.map((i) => i - 1).filter((i) => i >= 0)}
           />
+
+          {project.caseStudy && (
+            <CaseStudySection
+              caseStudy={project.caseStudy}
+              caseId={slug}
+              service={relatedService === 'oferta' ? undefined : relatedService}
+            />
+          )}
 
           {project.caseStudy && (
             <ProjectServiceCta serviceKey={relatedService} serviceHref={serviceHref} />
