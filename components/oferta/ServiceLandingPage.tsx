@@ -27,6 +27,8 @@ export type ProofCard = {
 
 interface ServiceLandingPageProps {
   line: ServiceLine;
+  // Service page slug, used only as the non-PII `service` analytics dimension.
+  serviceSlug: string;
   heroName: string;
   heroLead: string;
   heroImage: string;
@@ -61,6 +63,7 @@ function SectionHeading({ text }: { text: string }) {
 
 export default function ServiceLandingPage({
   line,
+  serviceSlug,
   heroName,
   heroLead,
   heroImage,
@@ -266,6 +269,10 @@ export default function ServiceLandingPage({
                 </h2>
                 <Link
                   href="/kontakt"
+                  data-analytics="cta_click"
+                  data-analytics-service={serviceSlug}
+                  data-analytics-position="service-cta"
+                  data-analytics-cta-text={t('cta.button')}
                   className="inline-flex items-center gap-2 text-coral font-[700] uppercase tracking-[0.06em] hover:opacity-60 transition-opacity"
                   style={{ fontSize: 'clamp(16px, 1.8vw, 24px)' }}
                 >

@@ -40,6 +40,10 @@ export default function ProjectServiceCta({ serviceKey, serviceHref }: ProjectSe
         <div className="mt-8 md:mt-10 flex flex-col gap-4 md:gap-5">
           <Link
             href="/kontakt#brief"
+            data-analytics="cta_click"
+            data-analytics-service={serviceKey === 'oferta' ? undefined : serviceKey}
+            data-analytics-position="project-cta"
+            data-analytics-cta-text={t('ctaButton')}
             className="inline-flex items-center gap-2 text-coral font-[700] uppercase tracking-[0.06em] hover:opacity-60 transition-opacity"
             style={{ fontSize: 'clamp(15px, 1.5vw, 20px)' }}
           >

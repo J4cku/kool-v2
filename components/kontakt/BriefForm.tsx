@@ -4,6 +4,12 @@ import { useActionState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import {
+  analyticsEnabled,
+  trackBriefStart,
+  trackBriefSubmit,
+  trackBriefMailtoFallback,
+} from '@/lib/analytics';
 import { submitBrief } from '@/app/[locale]/kontakt/actions';
 import {
   initialBriefState,
@@ -41,6 +47,18 @@ export default function BriefForm() {
   const mountTime = useRef<number | null>(null);
   const resultRef = useRef<HTMLDivElement>(null);
   const formErrorRef = useRef<HTMLParagraphElement>(null);
+  // brief_start guard — first meaningful interaction, once per page view.
+  const briefStartedRef = useRef(false);
+
+  // Fire brief_start on the first real focus/input (honeypot + anti-spam field
+  // excluded). Inert unless GA4 is configured.
+  const handleBriefStart = (event: React.SyntheticEvent) => {
+    if (briefStartedRef.current || !analyticsEnabled) return;
+    const name = (event.target as HTMLElement & { name?: string }).name;
+    if (name === 'company' || name === 'ts') return;
+    briefStartedRef.current = true;
+    trackBriefStart({ page_path: window.location.pathname });
+  };
 
   const values = state.values;
   const errors = state.status === 'invalid' ? state.errors : undefined;
@@ -86,6 +104,20 @@ export default function BriefForm() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.submittedAt]);
 
+  // Analytics: report the terminal outcome exactly once per submission, keeping
+  // confirmed server delivery (brief_submit) and the mailto path
+  // (brief_mailto_fallback) as distinct events so they are never conflated.
+  // The helpers no-op when GA4 is not loaded and never carry any field value.
+  useEffect(() => {
+    if (!analyticsEnabled) return;
+    if (state.status === 'success') {
+      trackBriefSubmit();
+    } else if (state.status === 'fallback') {
+      trackBriefMailtoFallback();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.submittedAt]);
+
   const describedBy = (field: BriefField, hasHelp: boolean): string | undefined => {
     const ids: string[] = [];
     if (hasHelp) ids.push(`brief-${field}-help`);
@@ -119,6 +151,7 @@ export default function BriefForm() {
         {state.fallback && (
           <a
             href={state.fallback.mailtoHref}
+            data-analytics-skip
             className="inline-flex items-center gap-2 mt-5 mb-8 border border-dark px-6 py-3 min-h-[48px] font-[600] uppercase tracking-[0.06em] text-dark hover:bg-coral hover:border-coral hover:text-white transition-colors"
           >
             {t('status.fallbackButton')} <span aria-hidden="true">→</span>
@@ -157,6 +190,8 @@ export default function BriefForm() {
         id="brief-form"
         action={formAction}
         noValidate
+        onFocusCapture={handleBriefStart}
+        onInput={handleBriefStart}
         className="mt-10 md:mt-12"
       >
         {/* Honeypot: off-screen, hidden from assistive tech, out of tab order. */}

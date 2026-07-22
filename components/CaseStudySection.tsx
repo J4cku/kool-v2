@@ -1,23 +1,60 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
+import { usePathname } from '@/i18n/navigation';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { analyticsEnabled, trackCaseEngaged } from '@/lib/analytics';
 import type { CaseStudy } from '@/data/projects';
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 interface CaseStudySectionProps {
   caseStudy: CaseStudy;
+  // Non-PII case identifier (the project slug) + optional related service slug,
+  // used for the `case_engaged` analytics event only.
+  caseId: string;
+  service?: string;
 }
 
 /* Structured case block for a project detail page: a real problem → design
    decisions → result arc, restated from the project's own published copy.
    Editorial dark type on beige, small coral labels, subtle fade-in. Rendered
    only when a project carries a caseStudy, so pages without one are unchanged. */
-export default function CaseStudySection({ caseStudy }: CaseStudySectionProps) {
+export default function CaseStudySection({ caseStudy, caseId, service }: CaseStudySectionProps) {
   const t = useTranslations('caseStudy');
   const reduceMotion = useReducedMotion();
+  const pathname = usePathname();
+  const rootRef = useRef<HTMLElement>(null);
+  // Once-per-page-view guard, keyed by route so a client navigation to another
+  // project re-arms the observer.
+  const firedForPath = useRef<string | null>(null);
+
+  // case_engaged: fire when the case block actually enters the viewport
+  // (threshold ~0.4), at most once per page view. Inert unless GA4 is
+  // configured, so the un-instrumented site attaches no observer.
+  useEffect(() => {
+    if (!analyticsEnabled) return;
+    const el = rootRef.current;
+    if (!el || typeof IntersectionObserver === 'undefined') return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting && firedForPath.current !== pathname) {
+            firedForPath.current = pathname;
+            trackCaseEngaged({ case_id: caseId, service });
+            observer.disconnect();
+          }
+        }
+      },
+      { threshold: 0.4 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [pathname, caseId, service]);
 
   const fade = {
     initial: { opacity: 0, y: reduceMotion ? 0 : 16 },
@@ -27,7 +64,7 @@ export default function CaseStudySection({ caseStudy }: CaseStudySectionProps) {
   };
 
   return (
-    <section className="border-t border-coral/40">
+    <section ref={rootRef} className="border-t border-coral/40">
       <div className="max-w-content mx-auto px-5 md:px-10 lg:px-12 py-14 md:py-20">
         <span
           className="font-[600] uppercase text-coral tracking-[0.14em] block"

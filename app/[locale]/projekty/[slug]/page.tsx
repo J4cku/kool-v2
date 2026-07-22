@@ -179,7 +179,13 @@ export default async function ProjectDetailPage({
 
           <ProjectMeta project={project} />
 
-          {project.caseStudy && <CaseStudySection caseStudy={project.caseStudy} />}
+          {project.caseStudy && (
+            <CaseStudySection
+              caseStudy={project.caseStudy}
+              caseId={slug}
+              service={relatedService === 'oferta' ? undefined : relatedService}
+            />
+          )}
 
           <ProjectContent
             images={project.images.slice(1)}

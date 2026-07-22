@@ -39,6 +39,10 @@ export default function ServicesHubLinks() {
             >
               <Link
                 href={`/oferta/${service.slug}`}
+                data-analytics="cta_click"
+                data-analytics-service={service.slug}
+                data-analytics-position="hub"
+                data-analytics-cta-text={service.heroName}
                 className="group flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-10 py-8 md:py-10"
               >
                 <span className="md:flex-1">

@@ -35,6 +35,7 @@ export default function AddressBlock() {
       <a
         href="mailto:hello@koolstudio.pl"
         aria-label={email}
+        data-analytics-position="footer"
         className="flex justify-between w-full font-[700] uppercase text-dark hover:opacity-70 transition-opacity text-[clamp(18px,6.2vw,55px)] md:block md:whitespace-nowrap md:text-right md:text-[clamp(32px,4.2vw,55px)]"
       >
         <Distributed text={email} />

@@ -10,6 +10,8 @@ import { BASE_URL } from '@/lib/site';
 import { jsonLdScript } from '@/lib/metadata';
 import { siteGraph } from '@/lib/schema';
 import PageTransition from '@/components/PageTransition';
+import GoogleAnalytics from '@/components/GoogleAnalytics';
+import AnalyticsListener from '@/components/AnalyticsListener';
 import '../globals.css';
 
 const poppins = Poppins({
@@ -67,6 +69,10 @@ export default async function LocaleLayout({
   const messages = await getMessages(locale);
   const tMeta = await getTranslations({ locale, namespace: 'meta' });
 
+  // Analytics is inert until a GA4 property id is configured. With no env var
+  // set (current state) nothing below renders and the HTML carries no gtag.
+  const gaId = process.env.NEXT_PUBLIC_GA4_ID;
+
   return (
     <html lang={locale} className={poppins.variable}>
       <head>
@@ -81,6 +87,16 @@ export default async function LocaleLayout({
         <NextIntlClientProvider locale={locale} messages={messages}>
           <PageTransition>{children}</PageTransition>
         </NextIntlClientProvider>
+        {/* GA4 event scaffold — only loads when NEXT_PUBLIC_GA4_ID is set, with
+            Consent Mode v2 defaults denied (cookieless pings until a CMP grants
+            consent; decision-log G4). The click delegate mounts alongside it so
+            it never runs without a gtag to dispatch to. */}
+        {gaId ? (
+          <>
+            <GoogleAnalytics gaId={gaId} />
+            <AnalyticsListener />
+          </>
+        ) : null}
         {/* Cookieless visit counting — needs Web Analytics enabled in the
             Vercel dashboard to start collecting */}
         <Analytics />

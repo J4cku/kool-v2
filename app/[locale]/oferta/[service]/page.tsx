@@ -141,6 +141,7 @@ export default async function ServiceDetailPage({
       />
       <ServiceLandingPage
         line={service.line}
+        serviceSlug={service.slug}
         heroName={service.heroName}
         heroLead={service.heroLead}
         heroImage={service.heroImage}
