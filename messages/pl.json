@@ -77,6 +77,20 @@
     "wizualizacje": "WIZUALIZACJE",
     "zdjecia": "ZDJĘCIA"
   },
+  "caseStudy": {
+    "sectionLabel": "Studium przypadku",
+    "challenge": "Wyzwanie",
+    "decisions": "Decyzje projektowe",
+    "result": "Efekt",
+    "ctaText": "Masz podobne wyzwanie? Opowiedz nam o swoim projekcie.",
+    "ctaButton": "Wypełnij brief projektowy",
+    "serviceLinks": {
+      "projekt-mieszkania": "Zobacz, jak projektujemy mieszkania",
+      "projekt-domu": "Zobacz, jak projektujemy wnętrza domów",
+      "wnetrza-komercyjne": "Zobacz, jak projektujemy wnętrza komercyjne",
+      "oferta": "Poznaj naszą ofertę projektową"
+    }
+  },
   "contact": {
     "cta": "GOTOWI, BY ZACZĄĆ WSPÓLNY PROJEKT?"
   },

@@ -77,6 +77,20 @@
     "wizualizacje": "VISUALIZATIONS",
     "zdjecia": "PHOTOS"
   },
+  "caseStudy": {
+    "sectionLabel": "Case study",
+    "challenge": "The challenge",
+    "decisions": "Design decisions",
+    "result": "The outcome",
+    "ctaText": "Facing a similar challenge? Tell us about your project.",
+    "ctaButton": "Fill in the project brief",
+    "serviceLinks": {
+      "projekt-mieszkania": "See how we design apartments",
+      "projekt-domu": "See how we design house interiors",
+      "wnetrza-komercyjne": "See how we design commercial interiors",
+      "oferta": "Explore our design services"
+    }
+  },
   "contact": {
     "cta": "READY TO START A PROJECT TOGETHER?"
   },

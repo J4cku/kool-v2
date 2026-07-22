@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
-import { localizeProject, projects } from '@/data/projects';
+import { localizeProject, projects, relatedServiceSlug } from '@/data/projects';
 import { BASE_URL } from '@/lib/site';
 import { jsonLdScript, localeAlternates, ogLocale } from '@/lib/metadata';
 import { ORG_ID, breadcrumbList, webPageNode } from '@/lib/schema';
@@ -11,6 +11,8 @@ import FooterBanner from '@/components/FooterBanner';
 import ProjectHero from '@/components/ProjectHero';
 import ProjectMeta from '@/components/ProjectMeta';
 import ProjectContent from '@/components/ProjectContent';
+import CaseStudySection from '@/components/CaseStudySection';
+import ProjectServiceCta from '@/components/ProjectServiceCta';
 
 export function generateStaticParams() {
   return projects.map((project) => ({
@@ -85,6 +87,10 @@ export default async function ProjectDetailPage({
   const primaryImageId = `${canonical}#primaryimage`;
   const breadcrumbId = `${canonical}#breadcrumb`;
 
+  // Case → service cross-link target (category heuristic + explicit overrides).
+  const relatedService = relatedServiceSlug(found);
+  const serviceHref = relatedService === 'oferta' ? '/oferta' : `/oferta/${relatedService}`;
+
   // Single source for the trail: the visible <Breadcrumbs> and the
   // BreadcrumbList markup below both derive from it, so they always mirror.
   const projektyLabel = tNav('projekty');
@@ -108,6 +114,9 @@ export default async function ProjectDetailPage({
     dateCreated: String(project.year),
     genre: project.scope,
     inLanguage: locale,
+    // The published problem statement, only when a case block restates it —
+    // no invented facts (SEO playbook iron rule).
+    ...(project.caseStudy ? { abstract: project.caseStudy.problem } : {}),
     ...(heroImage ? { image: { '@id': primaryImageId } } : {}),
     ...(project.meta?.collaboration
       ? { contributor: { '@type': 'Organization', name: project.meta.collaboration } }
@@ -170,6 +179,8 @@ export default async function ProjectDetailPage({
 
           <ProjectMeta project={project} />
 
+          {project.caseStudy && <CaseStudySection caseStudy={project.caseStudy} />}
+
           <ProjectContent
             images={project.images.slice(1)}
             title={project.title}
@@ -192,6 +203,10 @@ export default async function ProjectDetailPage({
             portraitIndices={project.portraitIndices?.map((i) => i - 1).filter((i) => i >= 0)}
             smallIndices={project.smallIndices?.map((i) => i - 1).filter((i) => i >= 0)}
           />
+
+          {project.caseStudy && (
+            <ProjectServiceCta serviceKey={relatedService} serviceHref={serviceHref} />
+          )}
 
           <FooterBanner showMarquee={false} />
         </div>
