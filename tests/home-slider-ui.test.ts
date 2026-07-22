@@ -83,6 +83,67 @@ test('homepage carousel exposes localized region semantics and announces only ma
   assert.equal(enMessages.home.nextProject, undefined);
 });
 
+test('homepage live status resets around every manual announcement and cancels scheduled work', () => {
+  assert.match(
+    imageStripSource,
+    /const announcementFrameRef = useRef<number \| null>\(null\);/
+  );
+  assert.match(
+    imageStripSource,
+    /const announcementClearTimeoutRef = useRef<number \| null>\(null\);/
+  );
+  assert.match(
+    imageStripSource,
+    /const cancelPendingAnnouncement = useCallback\(\(\) => \{[\s\S]*?window\.cancelAnimationFrame\(announcementFrameRef\.current\)[\s\S]*?window\.clearTimeout\(announcementClearTimeoutRef\.current\)[\s\S]*?\}, \[\]\);/
+  );
+
+  const announceStart = imageStripSource.indexOf('const handleManualChange =');
+  const announceEnd = imageStripSource.indexOf('\n  const handleTouchStart =', announceStart);
+  assert.notEqual(announceStart, -1);
+  assert.notEqual(announceEnd, -1);
+  const announceSource = imageStripSource.slice(announceStart, announceEnd);
+  const cancelIndex = announceSource.indexOf('cancelPendingAnnouncement();');
+  const firstClearIndex = announceSource.indexOf("setProjectStatus('');");
+  const frameIndex = announceSource.indexOf(
+    'announcementFrameRef.current = window.requestAnimationFrame('
+  );
+  const insertIndex = announceSource.indexOf('setProjectStatus(nextStatus);');
+  const timeoutIndex = announceSource.indexOf(
+    'announcementClearTimeoutRef.current = window.setTimeout('
+  );
+  const finalClearIndex = announceSource.indexOf(
+    "setProjectStatus('');",
+    firstClearIndex + 1
+  );
+
+  assert.ok(cancelIndex >= 0);
+  assert.ok(cancelIndex < firstClearIndex);
+  assert.ok(firstClearIndex < frameIndex);
+  assert.ok(frameIndex < insertIndex);
+  assert.ok(insertIndex < timeoutIndex);
+  assert.ok(timeoutIndex < finalClearIndex);
+  assert.match(
+    imageStripSource,
+    /useEffect\(\(\) => \(\) => \{\s*cancelPendingAnnouncement\(\);[\s\S]*?\}, \[cancelPendingAnnouncement\]\);/
+  );
+});
+
+test('homepage announces keyboard input only when its captured real index changed', () => {
+  assert.match(
+    imageStripSource,
+    /const keyboardStartIndexRef = useRef<number \| null>\(null\);/
+  );
+  assert.match(
+    imageStripSource,
+    /const handleKeyDownCapture = \(event: KeyboardEvent<HTMLElement>\) => \{\s*if \(event\.key !== 'ArrowLeft' && event\.key !== 'ArrowRight'\) \{\s*keyboardStartIndexRef\.current = null;\s*return;\s*\}\s*keyboardStartIndexRef\.current = swiperRef\.current\?\.realIndex \?\? null;\s*\};/
+  );
+  assert.match(
+    imageStripSource,
+    /const handleKeyPress = \(swiper: SwiperInstance, keyCode: string\) => \{\s*const keyboardStartIndex = keyboardStartIndexRef\.current;\s*keyboardStartIndexRef\.current = null;\s*if \(!\['37', '39'\]\.includes\(String\(keyCode\)\)\) return;\s*if \(keyboardStartIndex === null \|\| keyboardStartIndex === swiper\.realIndex\) return;\s*handleManualChange\(swiper\);\s*\};/
+  );
+  assert.match(imageStripSource, /onKeyDownCapture=\{handleKeyDownCapture\}/);
+});
+
 test('homepage disables Swiper autoplay when reduced motion is requested', () => {
   assert.match(
     imageStripSource,
@@ -101,7 +162,7 @@ test('homepage binds named DOM focus handlers to the hero section', () => {
   );
   assert.match(
     imageStripSource,
-    /<section\s+className="relative isolate h-svh overflow-hidden bg-dark"\s+onFocusCapture=\{handleFocusCapture\}\s+onBlurCapture=\{handleBlurCapture\}/
+    /<section\s+className="relative isolate h-svh overflow-hidden bg-dark"\s+onFocusCapture=\{handleFocusCapture\}\s+onBlurCapture=\{handleBlurCapture\}\s+onKeyDownCapture=\{handleKeyDownCapture\}/
   );
 });
 

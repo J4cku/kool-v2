@@ -1,6 +1,14 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState, type FocusEvent } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type FocusEvent,
+  type KeyboardEvent,
+} from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
@@ -99,6 +107,10 @@ export default function ImageStrip({ order }: { order: string[] }) {
   const swiperRef = useRef<SwiperInstance | null>(null);
   const focusWithinHeroRef = useRef(false);
   const dragStartIndexRef = useRef<number | null>(null);
+  const keyboardStartIndexRef = useRef<number | null>(null);
+  const touchEndFrameRef = useRef<number | null>(null);
+  const announcementFrameRef = useRef<number | null>(null);
+  const announcementClearTimeoutRef = useRef<number | null>(null);
   const [projectStatus, setProjectStatus] = useState('');
 
   const showcaseProjects = useMemo(() => {
@@ -117,6 +129,17 @@ export default function ImageStrip({ order }: { order: string[] }) {
     [locale, showcaseProjects],
   );
 
+  const cancelPendingAnnouncement = useCallback(() => {
+    if (announcementFrameRef.current !== null) {
+      window.cancelAnimationFrame(announcementFrameRef.current);
+      announcementFrameRef.current = null;
+    }
+    if (announcementClearTimeoutRef.current !== null) {
+      window.clearTimeout(announcementClearTimeoutRef.current);
+      announcementClearTimeoutRef.current = null;
+    }
+  }, []);
+
   useEffect(() => {
     const autoplay = swiperRef.current?.autoplay;
     if (!autoplay) return;
@@ -128,6 +151,13 @@ export default function ImageStrip({ order }: { order: string[] }) {
 
     if (!focusWithinHeroRef.current && !autoplay.running) autoplay.start();
   }, [reduceMotion]);
+
+  useEffect(() => () => {
+    cancelPendingAnnouncement();
+    if (touchEndFrameRef.current !== null) {
+      window.cancelAnimationFrame(touchEndFrameRef.current);
+    }
+  }, [cancelPendingAnnouncement]);
 
   const handleFocusCapture = () => {
     focusWithinHeroRef.current = true;
@@ -146,13 +176,22 @@ export default function ImageStrip({ order }: { order: string[] }) {
     const project = localizedProjects[swiper.realIndex];
     if (!project) return;
 
-    setProjectStatus(
-      t('projectStatus', {
-        position: swiper.realIndex + 1,
-        total: localizedProjects.length,
-        title: project.title,
-      }),
-    );
+    const nextStatus = t('projectStatus', {
+      position: swiper.realIndex + 1,
+      total: localizedProjects.length,
+      title: project.title,
+    });
+
+    cancelPendingAnnouncement();
+    setProjectStatus('');
+    announcementFrameRef.current = window.requestAnimationFrame(() => {
+      announcementFrameRef.current = null;
+      setProjectStatus(nextStatus);
+      announcementClearTimeoutRef.current = window.setTimeout(() => {
+        setProjectStatus('');
+        announcementClearTimeoutRef.current = null;
+      }, 1500);
+    });
   };
 
   const handleTouchStart = (swiper: SwiperInstance) => {
@@ -163,14 +202,29 @@ export default function ImageStrip({ order }: { order: string[] }) {
     const dragStartIndex = dragStartIndexRef.current;
     dragStartIndexRef.current = null;
 
-    window.requestAnimationFrame(() => {
+    if (touchEndFrameRef.current !== null) {
+      window.cancelAnimationFrame(touchEndFrameRef.current);
+    }
+    touchEndFrameRef.current = window.requestAnimationFrame(() => {
+      touchEndFrameRef.current = null;
       if (dragStartIndex === null || dragStartIndex === swiper.realIndex) return;
       handleManualChange(swiper);
     });
   };
 
+  const handleKeyDownCapture = (event: KeyboardEvent<HTMLElement>) => {
+    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') {
+      keyboardStartIndexRef.current = null;
+      return;
+    }
+    keyboardStartIndexRef.current = swiperRef.current?.realIndex ?? null;
+  };
+
   const handleKeyPress = (swiper: SwiperInstance, keyCode: string) => {
+    const keyboardStartIndex = keyboardStartIndexRef.current;
+    keyboardStartIndexRef.current = null;
     if (!['37', '39'].includes(String(keyCode))) return;
+    if (keyboardStartIndex === null || keyboardStartIndex === swiper.realIndex) return;
     handleManualChange(swiper);
   };
 
@@ -179,6 +233,7 @@ export default function ImageStrip({ order }: { order: string[] }) {
       className="relative isolate h-svh overflow-hidden bg-dark"
       onFocusCapture={handleFocusCapture}
       onBlurCapture={handleBlurCapture}
+      onKeyDownCapture={handleKeyDownCapture}
     >
       <Swiper
         className="h-full w-full"
