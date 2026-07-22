@@ -209,7 +209,7 @@ test('homepage renders localized projects in the server-provided order', () => {
 test('homepage shows full-width folios and an animated vertical page-scroll cue', () => {
   assert.match(
     imageStripSource,
-    /className="project-folio[^"]*absolute inset-x-0 bottom-\[calc\(69px\+env\(safe-area-inset-bottom\)\)\][^"]*md:bottom-\[calc\(51px\+env\(safe-area-inset-bottom\)\)\][^"]*bg-beige\/75[^"]*backdrop-blur-md[^"]*"/
+    /className="project-folio[^"]*absolute inset-x-0 bottom-\[calc\(77px\+env\(safe-area-inset-bottom\)\)\][^"]*min-\[992px\]:bottom-\[calc\(59px\+env\(safe-area-inset-bottom\)\)\][^"]*bg-beige\/75[^"]*backdrop-blur-md[^"]*"/
   );
   assert.doesNotMatch(imageStripSource, /project-folio[^"]*bottom-1\/3/);
   assert.doesNotMatch(imageStripSource, /project-folio[^"]*translate-y-1\/2/);
@@ -219,6 +219,12 @@ test('homepage shows full-width folios and an animated vertical page-scroll cue'
     /@media \(min-width: 992px\) and \(hover: hover\) and \(pointer: fine\) \{\s*\.project-folio \{\s*opacity: 0;\s*\}\s*\.group:hover \.project-folio,\s*\.group:focus-within \.project-folio \{\s*opacity: 1;\s*\}\s*\}/
   );
   assert.match(imageStripSource, /\[0, 1, 2\]\.map/);
+  assert.match(
+    imageStripSource,
+    /className="pointer-events-none absolute bottom-\[calc\(189px\+env\(safe-area-inset-bottom\)\)\][^"]*min-\[992px\]:bottom-\[calc\(155px\+env\(safe-area-inset-bottom\)\)\][^"]*"/
+  );
+  assert.doesNotMatch(imageStripSource, /md:bottom-\[calc\((?:59|155)px/);
+  assert.doesNotMatch(imageStripSource, /absolute bottom-6 left-1\/2/);
   assert.match(imageStripSource, /animate=\{reduceMotion \? undefined : \{ y: \[0, 8, 0\] \}\}/);
   assert.doesNotMatch(imageStripSource, /t\('scrollHint'\)/);
   assert.doesNotMatch(imageStripSource, /t\('swipeHint'\)/);

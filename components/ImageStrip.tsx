@@ -82,7 +82,7 @@ function ProjectPane({
         sizes="(max-width: 991px) 100vw, 50vw"
       />
       <div
-        className="project-folio pointer-events-none absolute inset-x-0 bottom-[calc(69px+env(safe-area-inset-bottom))] md:bottom-[calc(51px+env(safe-area-inset-bottom))] h-[96px] overflow-hidden bg-beige/75 backdrop-blur-md transition-opacity duration-300 min-[992px]:h-[80px]"
+        className="project-folio pointer-events-none absolute inset-x-0 bottom-[calc(77px+env(safe-area-inset-bottom))] min-[992px]:bottom-[calc(59px+env(safe-area-inset-bottom))] h-[96px] overflow-hidden bg-beige/75 backdrop-blur-md transition-opacity duration-300 min-[992px]:h-[80px]"
         aria-hidden="true"
       >
         <ProjectFolio project={project} category={category} />
@@ -287,7 +287,7 @@ export default function ImageStrip({ order }: { order: string[] }) {
 
       <motion.div
         style={{ opacity: indicatorOpacity }}
-        className="pointer-events-none absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 flex-col items-center gap-2"
+        className="pointer-events-none absolute bottom-[calc(189px+env(safe-area-inset-bottom))] min-[992px]:bottom-[calc(155px+env(safe-area-inset-bottom))] left-1/2 z-20 flex -translate-x-1/2 flex-col items-center gap-2"
         aria-hidden="true"
       >
         {[0, 1, 2].map((index) => (
