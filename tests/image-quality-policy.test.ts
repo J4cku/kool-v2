@@ -22,7 +22,7 @@ test('image quality tiers preserve fidelity without inflating navigation imagery
     projectContentSource,
     /<ParallaxImage[\s\S]*?sizes="100vw" quality=\{90\}/
   );
-  assert.match(imageStripSource, /priority=\{index < 2\}/);
+  assert.match(imageStripSource, /priority=\{index === 0\}/);
   assert.match(imageStripSource, /sizes="\(max-width: 991px\) 100vw, 50vw"/);
   assert.match(
     projectCardSource,

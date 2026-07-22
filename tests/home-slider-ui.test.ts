@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import test from 'node:test';
 
 const navbarSource = readFileSync(new URL('../components/Navbar.tsx', import.meta.url), 'utf8');
@@ -55,10 +55,32 @@ test('homepage uses a looping horizontal Swiper without blocking vertical page s
   assert.match(imageStripSource, /disableOnInteraction: false/);
   assert.match(imageStripSource, /swiperRef\.current\?\.autoplay\.stop\(\)/);
   assert.match(imageStripSource, /swiperRef\.current\?\.autoplay\.start\(\)/);
-  assert.match(imageStripSource, /prevSlideMessage: t\('previousProject'\)/);
-  assert.match(imageStripSource, /nextSlideMessage: t\('nextProject'\)/);
   assert.doesNotMatch(imageStripSource, /addEventListener\('wheel'/);
   assert.doesNotMatch(imageStripSource, /onPointerMove=/);
+});
+
+test('homepage carousel exposes localized region semantics and announces only manual changes', () => {
+  assert.match(imageStripSource, /containerMessage: t\('showcaseLabel'\)/);
+  assert.match(imageStripSource, /containerRole: 'region'/);
+  assert.match(
+    imageStripSource,
+    /containerRoleDescriptionMessage: t\('showcaseRole'\)/
+  );
+  assert.doesNotMatch(imageStripSource, /prevSlideMessage|nextSlideMessage/);
+  assert.match(imageStripSource, /aria-live="polite"/);
+  assert.match(imageStripSource, /aria-atomic="true"/);
+  assert.match(imageStripSource, /t\('projectStatus', \{\s*position:/);
+  assert.match(imageStripSource, /onTouchEnd=\{handleTouchEnd\}/);
+  assert.match(imageStripSource, /onKeyPress=\{handleKeyPress\}/);
+  assert.match(imageStripSource, /onScroll=\{handleManualChange\}/);
+  assert.doesNotMatch(imageStripSource, /onSlideChange=|onAutoplay=/);
+
+  assert.equal(plMessages.home.projectStatus, 'projekt {position} z {total}: {title}');
+  assert.equal(enMessages.home.projectStatus, 'project {position} of {total}: {title}');
+  assert.equal(plMessages.home.previousProject, undefined);
+  assert.equal(plMessages.home.nextProject, undefined);
+  assert.equal(enMessages.home.previousProject, undefined);
+  assert.equal(enMessages.home.nextProject, undefined);
 });
 
 test('homepage disables Swiper autoplay when reduced motion is requested', () => {
@@ -126,7 +148,12 @@ test('homepage renders localized projects in the server-provided order', () => {
 test('homepage shows full-width folios and an animated vertical page-scroll cue', () => {
   assert.match(
     imageStripSource,
-    /className="[^"]*absolute inset-x-0 bottom-1\/3[^"]*bg-beige\/75[^"]*backdrop-blur-md[^"]*min-\[992px\]:opacity-0[^"]*min-\[992px\]:group-hover:opacity-100[^"]*min-\[992px\]:group-focus-within:opacity-100[^"]*"/
+    /className="project-folio[^"]*absolute inset-x-0 bottom-1\/3[^"]*bg-beige\/75[^"]*backdrop-blur-md[^"]*"/
+  );
+  assert.doesNotMatch(imageStripSource, /min-\[992px\]:opacity-0/);
+  assert.match(
+    globalsSource,
+    /@media \(min-width: 992px\) and \(hover: hover\) and \(pointer: fine\) \{\s*\.project-folio \{\s*opacity: 0;\s*\}\s*\.group:hover \.project-folio,\s*\.group:focus-within \.project-folio \{\s*opacity: 1;\s*\}\s*\}/
   );
   assert.match(imageStripSource, /\[0, 1, 2\]\.map/);
   assert.match(imageStripSource, /animate=\{reduceMotion \? undefined : \{ y: \[0, 8, 0\] \}\}/);
@@ -143,4 +170,8 @@ test('project title aligns to the right edge of the folio', () => {
     imageStripSource,
     /<p className="[^"]*right-3[^"]*text-right[^"]*">\s*\{project\.title\}/
   );
+});
+
+test('obsolete image preload helper remains deleted', () => {
+  assert.equal(existsSync(new URL('../lib/image-preload.ts', import.meta.url)), false);
 });

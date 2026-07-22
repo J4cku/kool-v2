@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, type FocusEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type FocusEvent } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
@@ -74,7 +74,7 @@ function ProjectPane({
         sizes="(max-width: 991px) 100vw, 50vw"
       />
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-1/3 h-[96px] translate-y-1/2 overflow-hidden bg-beige/75 opacity-100 backdrop-blur-md transition-opacity duration-300 min-[992px]:h-[80px] min-[992px]:opacity-0 min-[992px]:group-hover:opacity-100 min-[992px]:group-focus-within:opacity-100"
+        className="project-folio pointer-events-none absolute inset-x-0 bottom-1/3 h-[96px] translate-y-1/2 overflow-hidden bg-beige/75 backdrop-blur-md transition-opacity duration-300 min-[992px]:h-[80px]"
         aria-hidden="true"
       >
         <ProjectFolio project={project} category={category} />
@@ -98,6 +98,8 @@ export default function ImageStrip({ order }: { order: string[] }) {
   const indicatorOpacity = useTransform(scrollY, [0, 80], [1, 0]);
   const swiperRef = useRef<SwiperInstance | null>(null);
   const focusWithinHeroRef = useRef(false);
+  const dragStartIndexRef = useRef<number | null>(null);
+  const [projectStatus, setProjectStatus] = useState('');
 
   const showcaseProjects = useMemo(() => {
     const ordered = order.flatMap((slug) => {
@@ -140,6 +142,38 @@ export default function ImageStrip({ order }: { order: string[] }) {
     swiperRef.current?.autoplay.start();
   };
 
+  const handleManualChange = (swiper: SwiperInstance) => {
+    const project = localizedProjects[swiper.realIndex];
+    if (!project) return;
+
+    setProjectStatus(
+      t('projectStatus', {
+        position: swiper.realIndex + 1,
+        total: localizedProjects.length,
+        title: project.title,
+      }),
+    );
+  };
+
+  const handleTouchStart = (swiper: SwiperInstance) => {
+    dragStartIndexRef.current = swiper.realIndex;
+  };
+
+  const handleTouchEnd = (swiper: SwiperInstance) => {
+    const dragStartIndex = dragStartIndexRef.current;
+    dragStartIndexRef.current = null;
+
+    window.requestAnimationFrame(() => {
+      if (dragStartIndex === null || dragStartIndex === swiper.realIndex) return;
+      handleManualChange(swiper);
+    });
+  };
+
+  const handleKeyPress = (swiper: SwiperInstance, keyCode: string) => {
+    if (!['37', '39'].includes(String(keyCode))) return;
+    handleManualChange(swiper);
+  };
+
   return (
     <section
       className="relative isolate h-svh overflow-hidden bg-dark"
@@ -169,9 +203,13 @@ export default function ImageStrip({ order }: { order: string[] }) {
         }
         a11y={{
           containerMessage: t('showcaseLabel'),
-          prevSlideMessage: t('previousProject'),
-          nextSlideMessage: t('nextProject'),
+          containerRole: 'region',
+          containerRoleDescriptionMessage: t('showcaseRole'),
         }}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        onKeyPress={handleKeyPress}
+        onScroll={handleManualChange}
         onSwiper={(swiper) => {
           swiperRef.current = swiper;
         }}
@@ -180,13 +218,17 @@ export default function ImageStrip({ order }: { order: string[] }) {
           <SwiperSlide key={project.slug} className="h-full bg-dark">
             <ProjectPane
               project={project}
-              priority={index < 2}
+              priority={index === 0}
               category={tProjects(project.category)}
               openProjectLabel={t('openProject')}
             />
           </SwiperSlide>
         ))}
       </Swiper>
+
+      <p className="sr-only" aria-live="polite" aria-atomic="true">
+        {projectStatus}
+      </p>
 
       <motion.div
         style={{ opacity: indicatorOpacity }}

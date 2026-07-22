@@ -53,6 +53,16 @@ body {
   animation: marquee 15s linear infinite;
 }
 
+@media (min-width: 992px) and (hover: hover) and (pointer: fine) {
+  .project-folio {
+    opacity: 0;
+  }
+  .group:hover .project-folio,
+  .group:focus-within .project-folio {
+    opacity: 1;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee,
   .animate-marquee-diagonal {
