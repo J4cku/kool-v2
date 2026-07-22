@@ -7,6 +7,7 @@ import { Autoplay } from 'swiper/modules';
 import { Link } from '@/i18n/navigation';
 import ColumnImage from '@/components/ColumnImage';
 import RevealHeading from '@/components/RevealHeading';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 import 'swiper/css';
 
@@ -49,6 +50,8 @@ export default function ServiceSection({
   trustedByLabel,
   trustedByLogos,
 }: ServiceSectionProps) {
+  const reduceMotion = useReducedMotion();
+
   return (
     <section className="px-5 md:px-10 lg:px-[68px] py-12 md:pt-24 md:pb-20">
       <div className="max-w-[1400px] mx-auto">
@@ -94,8 +97,16 @@ export default function ServiceSection({
           {expanded && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1, transition: { duration: 0.5, ease: easeOutExpo, opacity: { delay: 0.1 } } }}
-              exit={{ opacity: 0, height: 0, transition: { duration: 0.4, ease: easeOutExpo, height: { delay: 0.15 } } }}
+              animate={{
+                height: 'auto',
+                opacity: 1,
+                transition: { duration: reduceMotion ? 0 : 0.6, ease: easeOutExpo },
+              }}
+              exit={{
+                opacity: 0,
+                height: 0,
+                transition: { duration: reduceMotion ? 0 : 0.5, ease: easeOutExpo },
+              }}
               className="overflow-hidden"
             >
               {/* Scope: image + list — split 50/50 down the page middle,
@@ -163,7 +174,7 @@ export default function ServiceSection({
                       breakpoints={{ 768: { slidesPerView: 4, spaceBetween: 64 } }}
                       loop
                       speed={800}
-                      autoplay={{ delay: 2000, disableOnInteraction: false }}
+                      autoplay={reduceMotion ? false : { delay: 2000, disableOnInteraction: false }}
                     >
                       {[...trustedByLogos, ...trustedByLogos].map((logo, i) => (
                         <SwiperSlide key={i}>

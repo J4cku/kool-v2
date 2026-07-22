@@ -7,10 +7,10 @@
     "build": "next build",
     "start": "next start --port ${PORT:-8080}",
     "lint": "eslint .",
-    "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "check:i18n": "node scripts/check-i18n.mjs",
-    "check": "pnpm typecheck && pnpm lint && pnpm check:i18n && pnpm build"
+    "test": "vitest run && node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test tests/*.test.ts",
+    "check": "pnpm test && pnpm typecheck && pnpm lint && pnpm check:i18n && pnpm build"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

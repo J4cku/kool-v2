@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Poppins } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
@@ -7,7 +7,7 @@ import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { locales, type Locale } from '@/i18n/request';
 import { BASE_URL, INSTAGRAM_URL } from '@/lib/site';
-import { jsonLdScript, localeAlternates, ogLocale } from '@/lib/metadata';
+import { jsonLdScript } from '@/lib/metadata';
 import PageTransition from '@/components/PageTransition';
 import '../globals.css';
 
@@ -18,40 +18,25 @@ const poppins = Poppins({
   variable: '--font-poppins',
 });
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
-  const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: 'meta' });
+export const viewport: Viewport = {
+  themeColor: '#E5DDD0',
+  viewportFit: 'cover',
+};
 
-  return {
-    metadataBase: new URL(BASE_URL),
-    title: {
-      default: t('home.title'),
-      template: '%s | kool studio',
-    },
-    description: t('home.description'),
-    keywords: 'architektura wnętrz, projektowanie wnętrz, Wrocław, Warszawa, interior design, architekt wnętrz, projekt wnętrz, meble na wymiar, design',
-    authors: [{ name: 'Kool Studio' }],
-    creator: 'Kool Studio',
-    openGraph: {
-      title: t('home.title'),
-      description: t('home.ogDescription'),
-      type: 'website',
-      locale: ogLocale(locale),
-      alternateLocale: locale === 'en' ? 'pl_PL' : 'en_US',
-      siteName: 'Kool Studio',
-      url: `${BASE_URL}/${locale}`,
-    },
-    alternates: localeAlternates(locale, ''),
-    robots: {
-      index: true,
-      follow: true,
-    },
-  };
-}
+export const metadata: Metadata = {
+  metadataBase: new URL(BASE_URL),
+  title: {
+    default: 'Kool Studio',
+    template: '%s | kool studio',
+  },
+  keywords: 'architektura wnętrz, projektowanie wnętrz, Wrocław, Warszawa, interior design, architekt wnętrz, projekt wnętrz, meble na wymiar, design',
+  authors: [{ name: 'Kool Studio' }],
+  creator: 'Kool Studio',
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));

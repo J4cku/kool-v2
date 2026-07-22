@@ -110,14 +110,10 @@ export default async function ProjectDetailPage({
         dangerouslySetInnerHTML={{ __html: jsonLdScript(jsonLd) }}
       />
       {project.images[0] && (
-        <ProjectHero src={project.images[0]} alt={project.title} mobileKeepAspect />
+        <ProjectHero src={project.images[0]} alt={project.title} />
       )}
       <Navbar />
       <main>
-        {/* Spacer: lets the fixed hero image show through (native 16:9 on
-            mobile, full screen from md up — mirrors ProjectHero) */}
-        <div className="aspect-video md:aspect-auto md:h-screen" />
-
         {/* Content scrolls over the hero */}
         <div className="relative z-10 bg-beige">
           <ProjectMeta project={project} />

@@ -1,7 +1,8 @@
 'use client';
 
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import type { Project } from '@/data/projects';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 import ProjectCard from './ProjectCard';
 
 interface ProjectGridProps {
@@ -12,17 +13,17 @@ const containerVariants = {
   hidden: {},
   visible: {
     transition: {
-      staggerChildren: 0.08,
+      staggerChildren: 0.05,
     },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 14 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.5, ease: 'easeOut' as const },
+    transition: { duration: 0.65, ease: 'easeOut' as const },
   },
 };
 
@@ -32,8 +33,8 @@ export default function ProjectGrid({ projects }: ProjectGridProps) {
   return (
     <motion.div
       className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-12 md:gap-x-5 md:gap-y-16"
-      variants={containerVariants}
-      initial="hidden"
+      variants={reduceMotion ? undefined : containerVariants}
+      initial={reduceMotion ? false : 'hidden'}
       animate="visible"
     >
       {/* popLayout lets surviving cards FLIP into place while filtered-out
@@ -43,9 +44,13 @@ export default function ProjectGrid({ projects }: ProjectGridProps) {
           <motion.div
             key={project.id}
             layout={!reduceMotion}
-            variants={itemVariants}
-            exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.25, ease: 'easeIn' } }}
-            transition={{ layout: { duration: 0.45, ease: [0.22, 1, 0.36, 1] } }}
+            variants={reduceMotion ? undefined : itemVariants}
+            exit={
+              reduceMotion
+                ? { opacity: 0, transition: { duration: 0 } }
+                : { opacity: 0, scale: 0.985, transition: { duration: 0.25, ease: 'easeIn' } }
+            }
+            transition={{ layout: { duration: reduceMotion ? 0 : 0.55, ease: [0.22, 1, 0.36, 1] } }}
           >
             <ProjectCard project={project} />
           </motion.div>

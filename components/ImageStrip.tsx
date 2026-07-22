@@ -8,6 +8,7 @@ import { Autoplay, Mousewheel } from 'swiper/modules';
 import { useLocale } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { localizeProject, projects } from '@/data/projects';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 import 'swiper/css';
 
@@ -49,64 +50,83 @@ export default function ImageStrip() {
   // order replaces the SSR order at hydration.
   const slides = useSyncExternalStore(emptySubscribe, getShuffledSlides, getServerSlides);
   const locale = useLocale();
+  const reduceMotion = useReducedMotion();
   const { scrollY } = useScroll();
   const indicatorOpacity = useTransform(scrollY, [0, 80], [1, 0]);
 
   return (
-    <div className="relative w-full min-h-[calc(100svh-160px)] flex items-start">
+    <div className="relative flex min-h-[calc(100svh-160px)] w-full items-start md:min-h-[calc(100svh-127px)] md:items-center">
       <Swiper
         key={slides === baseSlides ? 'initial' : 'shuffled'}
         className="hero-swiper w-full"
         modules={[Autoplay, Mousewheel]}
         slidesPerView={1}
         spaceBetween={3}
-        breakpoints={{ 768: { slidesPerView: 3 } }}
+        breakpoints={{ 768: { slidesPerView: 2 }, 1280: { slidesPerView: 3 } }}
         loop
         speed={900}
-        autoplay={{ delay: 2500, disableOnInteraction: false, pauseOnMouseEnter: true }}
+        autoplay={
+          reduceMotion
+            ? false
+            : { delay: 2500, disableOnInteraction: false, pauseOnMouseEnter: true }
+        }
         /* Manual control: swipe on touch, drag on desktop, and horizontal
            trackpad/wheel — one project per gesture; vertical scrolling
            passes through untouched (forceToAxis) */
-        grabCursor
         mousewheel={{ forceToAxis: true, thresholdDelta: 12 }}
       >
-        {slides.map((slide, i) => (
-          <SwiperSlide key={slide.slug}>
-            <Link
-              href={`/projekty/${slide.slug}`}
-              draggable={false}
-              className="relative block w-full aspect-[3/4] md:aspect-square overflow-hidden"
-            >
-              <Image
-                src={slide.src}
-                alt={slideAlt(slide.slug, locale)}
+        {slides.map((slide, i) => {
+          const project = projects.find((candidate) => candidate.slug === slide.slug);
+          const title = project ? localizeProject(project, locale).title : '';
+
+          return (
+            <SwiperSlide key={slide.slug}>
+              <Link
+                href={`/projekty/${slide.slug}`}
                 draggable={false}
-                fill
-                className="object-cover transition-transform duration-[600ms] hover:scale-[1.04]"
-                sizes="(max-width: 768px) 100vw, 33vw"
-                priority={i === 0}
-                loading={i === 0 ? undefined : 'eager'}
-              />
-            </Link>
-          </SwiperSlide>
-        ))}
+                className="home-slide-link relative block w-full cursor-pointer aspect-[3/4] md:aspect-square overflow-hidden"
+              >
+                <Image
+                  src={slide.src}
+                  alt={slideAlt(slide.slug, locale)}
+                  draggable={false}
+                  fill
+                  className="object-cover transition-transform duration-[600ms] hover:scale-[1.04]"
+                  sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw"
+                  priority={i === 0}
+                  loading={i === 0 ? undefined : 'eager'}
+                />
+                {title && (
+                  <span
+                    aria-hidden="true"
+                    className="home-slide-caption pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-coral px-4 py-3 text-sm font-[600] uppercase tracking-[0.08em] text-dark"
+                  >
+                    {title}
+                  </span>
+                )}
+              </Link>
+            </SwiperSlide>
+          );
+        })}
       </Swiper>
 
       {/* Scroll indicator — three animated dots */}
       {/* z-10 keeps the dots above Swiper's z-index:1 when they overlap the images */}
-      <motion.div
-        style={{ opacity: indicatorOpacity }}
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
-      >
-        {[0, 1, 2].map((i) => (
-          <motion.div
-            key={i}
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut', delay: i * 0.2 }}
-            className="w-1.5 h-1.5 rounded-full bg-coral/60"
-          />
-        ))}
-      </motion.div>
+      {!reduceMotion && (
+        <motion.div
+          style={{ opacity: indicatorOpacity }}
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
+        >
+          {[0, 1, 2].map((i) => (
+            <motion.div
+              key={i}
+              animate={{ y: [0, 8, 0] }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut', delay: i * 0.2 }}
+              className="w-1.5 h-1.5 rounded-full bg-coral/60"
+            />
+          ))}
+        </motion.div>
+      )}
     </div>
   );
 }

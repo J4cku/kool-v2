@@ -1,6 +1,7 @@
 'use client';
 
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -37,15 +38,15 @@ export default function Reveal({ children, className = '', delay = 0 }: RevealPr
           hidden: { clipPath: 'inset(100% 0% 0% 0%)' },
           visible: {
             clipPath: 'inset(0% 0% 0% 0%)',
-            transition: { duration: 0.9, ease: EASE, delay },
+            transition: { duration: 1.0, ease: EASE, delay },
           },
         }}
       >
         <motion.div
           className="relative h-full w-full"
           variants={{
-            hidden: { scale: 1.06 },
-            visible: { scale: 1, transition: { duration: 1.1, ease: EASE, delay } },
+            hidden: { scale: 1.025 },
+            visible: { scale: 1, transition: { duration: 1.15, ease: EASE, delay } },
           }}
         >
           {children}

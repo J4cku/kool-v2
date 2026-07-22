@@ -1,8 +1,9 @@
 'use client';
 
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useLocale } from 'next-intl';
 import { usePathname } from '@/i18n/navigation';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 /* Route-change choreography:
    - arriving on the kontakt page plays the coral wipe — it lands under a
@@ -14,6 +15,10 @@ export default function PageTransition({ children }: { children: React.ReactNode
   const pathname = usePathname();
   const locale = useLocale();
   const reduceMotion = useReducedMotion();
+  const orbCenter = [
+    'var(--nav-orb-center-x)',
+    'calc(var(--nav-orb-center-y) - env(safe-area-inset-top))',
+  ].join(' ');
 
   return (
     <>
@@ -32,11 +37,11 @@ export default function PageTransition({ children }: { children: React.ReactNode
           {pathname === '/kontakt' && (
             <motion.div
               key={pathname}
-              className="pointer-events-none fixed inset-0 z-[90] bg-coral"
-              initial={{ clipPath: 'circle(150% at 97% 4%)' }}
+              className="pointer-events-none fixed inset-x-0 bottom-0 top-[env(safe-area-inset-top)] z-[90] bg-coral"
+              initial={{ clipPath: `circle(150% at ${orbCenter})` }}
               animate={{
-                clipPath: 'circle(0% at 97% 4%)',
-                transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+                clipPath: `circle(0% at ${orbCenter})`,
+                transition: { duration: 0.85, ease: [0.22, 1, 0.36, 1] },
               }}
               exit={{ opacity: 0, transition: { duration: 0 } }}
             />

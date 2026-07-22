@@ -30,6 +30,10 @@ vi.mock('@/i18n/navigation', () => ({
   usePathname: () => '/',
 }));
 
+vi.mock('@/hooks/useReducedMotion', () => ({
+  useReducedMotion: () => motionState.reducedMotion,
+}));
+
 vi.mock('framer-motion', () => ({
   AnimatePresence: ({ children }: { children: ReactNode }) => children,
   motion: new Proxy({}, {
@@ -49,7 +53,6 @@ vi.mock('framer-motion', () => ({
     },
   }),
   useScroll: () => ({ scrollY: 0 }),
-  useReducedMotion: () => motionState.reducedMotion,
   useSpring: (value: number) => value,
   useTransform: () => 1,
 }));

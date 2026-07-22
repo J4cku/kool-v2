@@ -2,6 +2,9 @@
 
 import { motion } from 'framer-motion';
 import ColumnImage from '@/components/ColumnImage';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
+
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 interface ProcessSectionProps {
   label: string;
@@ -22,14 +25,16 @@ export default function ProcessSection({
   bottomHeading,
   bottomText,
 }: ProcessSectionProps) {
+  const reduceMotion = useReducedMotion();
+
   return (
     <section className="px-5 md:px-10 lg:px-[68px] py-16 md:py-24">
       <div className="max-w-[1400px] mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: reduceMotion ? 0 : 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: reduceMotion ? 0 : 0.75, ease: EASE }}
         >
           <span
             className="font-[400] uppercase text-dark/60 mb-4 md:mb-6 block"
@@ -46,10 +51,14 @@ export default function ProcessSection({
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: reduceMotion ? 0 : 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          transition={{
+            duration: reduceMotion ? 0 : 0.75,
+            ease: EASE,
+            delay: reduceMotion ? 0 : 0.12,
+          }}
           className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-0 mb-16 md:mb-24 items-stretch"
         >
           <ColumnImage
@@ -79,10 +88,10 @@ export default function ProcessSection({
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: reduceMotion ? 0 : 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: reduceMotion ? 0 : 0.75, ease: EASE }}
         >
           <h2
             className="font-[700] text-dark uppercase mb-6 md:mb-8 leading-[1.02]"
