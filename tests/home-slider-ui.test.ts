@@ -44,7 +44,18 @@ test('homepage slides expose localized captions on hover and focus', () => {
   assert.match(imageStripSource, /className="home-slide-link/);
   assert.match(imageStripSource, /aria-hidden="true"/);
   assert.match(imageStripSource, /className="home-slide-caption/);
-  assert.match(imageStripSource, /home-slide-caption pointer-events-none/);
+  assert.match(
+    imageStripSource,
+    /home-slide-caption pointer-events-none absolute inset-0 z-10 flex items-center justify-center px-4/
+  );
+  assert.match(
+    imageStripSource,
+    /max-w-\[85%\] bg-dark\/45 px-4 py-\[10px\] text-center text-sm font-\[600\] uppercase tracking-\[0\.08em\] text-beige backdrop-blur-\[2px\]/
+  );
+  assert.doesNotMatch(
+    imageStripSource,
+    /home-slide-caption[^"\n]*(?:bottom-0|bg-coral)/
+  );
   assert.match(
     globalsSource,
     /\.home-slide-caption \{[\s\S]*opacity: 0;[\s\S]*transform: translateY\(8px\)/
