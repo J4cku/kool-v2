@@ -212,8 +212,7 @@ export default function Navbar() {
                   <Image
                     src="/dot.svg"
                     alt=""
-                    width={36}
-                    height={35}
+                    width={36} height={35}
                     loading="eager"
                     fetchPriority="high"
                   />
