@@ -40,17 +40,6 @@ interface ServiceLandingPageProps {
   faqs: ServiceFaq[];
 }
 
-function SectionLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <span
-      className="font-[600] uppercase text-coral tracking-[0.14em] mb-4 md:mb-5 block"
-      style={{ fontSize: 'clamp(12px, 1.1vw, 14px)' }}
-    >
-      {children}
-    </span>
-  );
-}
-
 function SectionHeading({ text }: { text: string }) {
   return (
     <RevealHeading
@@ -121,7 +110,6 @@ export default function ServiceLandingPage({
           {/* Recognition — situations grounded in the published scope */}
           <section id="kiedy-warto" className="px-5 md:px-10 lg:px-[68px] py-14 md:py-20 border-t border-coral/40">
             <div className="max-w-[1400px] mx-auto">
-              <SectionLabel>{t('sections.recognition')}</SectionLabel>
               <SectionHeading text={t('sections.recognition')} />
               <ul className="border-t border-dark/15">
                 {situations.map((situation, i) => (
@@ -152,7 +140,6 @@ export default function ServiceLandingPage({
           {/* Scope — the exact published scope list for this service line */}
           <section id="zakres" className="px-5 md:px-10 lg:px-[68px] py-14 md:py-20 border-t border-coral/40">
             <div className="max-w-[1400px] mx-auto">
-              <SectionLabel>{t('sections.scope')}</SectionLabel>
               <SectionHeading text={t('sections.scope')} />
               <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-12 lg:gap-x-20 gap-y-3.5 md:gap-y-[18px]">
                 {scopeItems.map((item, i) => (
@@ -172,7 +159,6 @@ export default function ServiceLandingPage({
           {/* Process — the published 7 steps */}
           <section id="proces" className="px-5 md:px-10 lg:px-[68px] py-14 md:py-20 border-t border-coral/40">
             <div className="max-w-[1400px] mx-auto">
-              <SectionLabel>{t('sections.process')}</SectionLabel>
               <SectionHeading text={t('sections.process')} />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-0 items-stretch">
                 <ColumnImage
@@ -205,7 +191,6 @@ export default function ServiceLandingPage({
           {/* Proof — relevant projects with published facts */}
           <section id="realizacje" className="px-5 md:px-10 lg:px-[68px] py-14 md:py-20 border-t border-coral/40">
             <div className="max-w-[1400px] mx-auto">
-              <SectionLabel>{t('sections.proof')}</SectionLabel>
               <SectionHeading text={t('sections.proof')} />
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12 md:gap-y-16">
                 {proof.map((p, i) => {
@@ -251,7 +236,6 @@ export default function ServiceLandingPage({
           {/* FAQ — accessible accordion, answers grounded in published facts */}
           <section id="faq" className="px-5 md:px-10 lg:px-[68px] py-14 md:py-20 border-t border-coral/40">
             <div className="max-w-[1400px] mx-auto">
-              <SectionLabel>{t('sections.faq')}</SectionLabel>
               <SectionHeading text={t('sections.faq')} />
               <FaqAccordion items={faqs} />
             </div>

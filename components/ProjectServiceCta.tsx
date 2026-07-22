@@ -29,7 +29,7 @@ export default function ProjectServiceCta({ serviceKey, serviceHref }: ProjectSe
   };
 
   return (
-    <section className="border-t border-coral/40 px-5 md:px-10 lg:px-12 py-14 md:py-20">
+    <section className="border-t border-dark/10 px-5 md:px-10 lg:px-12 py-14 md:py-20">
       <motion.div {...fade} className="max-w-content mx-auto">
         <h2
           className="font-[700] text-dark uppercase leading-[1.08] max-w-[900px]"
