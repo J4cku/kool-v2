@@ -11,7 +11,9 @@
     "section1Heading": "TWORZYMY PONADCZASOWE WNĘTRZA",
     "section1Text": "Projektujemy miejsca, które nie opierają się na trendach. Każdą przestrzeń traktujemy indywidualnie, jako odpowiedź na konkretny kontekst oraz potrzeby. Niezależnie, czy jest to projekt mieszkalny, czy komercyjny, stworzymy wnętrze, które opowie twoją historię.",
     "section2Heading": "PROJEKTUJEMY\nW KAŻDEJ SKALI",
-    "section2Text": "Posiadamy wieloletnie doświadczenie w realizowaniu projektów o różnym charakterze – od detalu mebla, przez mieszkania i domy, po obiekty gastronomiczne, komercyjne i hotele. Prowadzimy proces kompleksowo, z pełną kontrolą nad efektem końcowym. W ten sposób powstają dopracowane przestrzenie, wypełnione autorskimi, unikatowymi elementami. Pracujemy we Wrocławiu, a projekty prowadzimy w całej Polsce – m.in. w Warszawie, Łodzi i Gdańsku."
+    "section2Text": "Posiadamy wieloletnie doświadczenie w realizowaniu projektów o różnym charakterze – od detalu mebla, przez mieszkania i domy, po obiekty gastronomiczne, komercyjne i hotele. Prowadzimy proces kompleksowo, z pełną kontrolą nad efektem końcowym. W ten sposób powstają dopracowane przestrzenie, wypełnione autorskimi, unikatowymi elementami. Pracujemy we Wrocławiu, a projekty prowadzimy w całej Polsce – m.in. w Warszawie, Łodzi i Gdańsku.",
+    "section1ImageAlt": "Moodboard materiałów i próbek wykończeń w pracowni Kool Studio",
+    "section2ImageAlt": "Fotografia wnętrza zaprojektowanego przez Kool Studio"
   },
   "meta": {
     "schemaDescription": "Wrocławska pracownia architektury wnętrz projektująca wnętrza mieszkalne i komercyjne, autorskie meble, oświetlenie i identyfikację wizualną. Projekty w całej Polsce, m.in. w Warszawie.",
@@ -99,6 +101,12 @@
     "learnMore": "Dowiedz się więcej",
     "portfolio": "Zobacz nasze portfolio",
     "scopeTitle": "Zakres współpracy:",
+    "commercialImageAlt": "Wnętrze restauracji zaprojektowane przez Kool Studio",
+    "commercialScopeImageAlt": "Witryna lokalu komercyjnego zaprojektowanego przez Kool Studio",
+    "residentialImageAlt": "Salon w projekcie mieszkalnym Kool Studio",
+    "residentialScopeImageAlt": "Kuchnia w projekcie mieszkalnym Kool Studio",
+    "materialsImageAlt": "Dobór materiałów wykończeniowych w projekcie Kool Studio",
+    "processImageAlt": "Nadzór autorski na budowie prowadzony przez Kool Studio",
     "commercial": {
       "label": "Wnętrza komercyjne",
       "heading": "Restauracje, concept store'y, butiki, hotele, usługi",

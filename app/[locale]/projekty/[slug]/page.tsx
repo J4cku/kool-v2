@@ -27,6 +27,9 @@ export async function generateMetadata({
 
   const title = `${project.title} / ${project.location}`;
   const description = project.description;
+  const ogImages = project.images[0]
+    ? [{ url: project.images[0], alt: `${project.title}, ${project.location} — kool studio` }]
+    : undefined;
 
   return {
     title,
@@ -35,8 +38,17 @@ export async function generateMetadata({
       title: `${title} | kool studio`,
       description,
       type: 'article',
+      siteName: 'Kool Studio',
       locale: ogLocale(locale),
-      images: project.images[0] ? [{ url: project.images[0] }] : undefined,
+      alternateLocale: locale === 'en' ? 'pl_PL' : 'en_US',
+      url: `${BASE_URL}/${locale}/projekty/${slug}`,
+      images: ogImages,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${title} | kool studio`,
+      description,
+      images: project.images[0] ? [project.images[0]] : undefined,
     },
     alternates: localeAlternates(locale, `/projekty/${slug}`),
   };
@@ -59,6 +71,10 @@ export default async function ProjectDetailPage({
   const displayTitle = project.meta?.title ?? project.title;
   const displayLocation = project.meta?.location ?? project.location;
   const pageUrl = `${BASE_URL}/${locale}/projekty/${slug}`;
+  const heroAlt =
+    locale === 'en'
+      ? `Interior of ${project.title}, ${project.location}`
+      : `Wnętrze projektu ${project.title}, ${project.location}`;
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -110,7 +126,7 @@ export default async function ProjectDetailPage({
         dangerouslySetInnerHTML={{ __html: jsonLdScript(jsonLd) }}
       />
       {project.images[0] && (
-        <ProjectHero src={project.images[0]} alt={project.title} />
+        <ProjectHero src={project.images[0]} alt={heroAlt} />
       )}
       <Navbar />
       <main>
@@ -120,6 +136,8 @@ export default async function ProjectDetailPage({
 
           <ProjectContent
             images={project.images.slice(1)}
+            title={project.title}
+            location={project.location}
             description={project.description}
             descriptionBlocks={project.descriptionBlocks}
             fullWidthIndices={project.fullWidthIndices?.map((i) => i - 1).filter((i) => i >= 0)}

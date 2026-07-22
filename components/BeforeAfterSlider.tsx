@@ -12,9 +12,15 @@ interface BeforeAfterSliderProps {
   /** 'overlay' places labels on the image corners (photos); 'above' puts them
       just over the frame (plans/drawings the labels would otherwise cover). */
   labelPosition?: 'overlay' | 'above';
+  /** Descriptive alt text for the two frames (falls back to the labels). */
+  beforeAlt?: string;
+  afterAlt?: string;
+  /** Rendered-width hint for the frames (default "100vw"). Pass the real
+      width when the slider sits in a narrower slot (e.g. a 50/50 row). */
+  sizes?: string;
 }
 
-export default function BeforeAfterSlider({ beforeSrc, afterSrc, beforeLabel, afterLabel, aspectClass = 'aspect-[3/2]', labelPosition = 'overlay' }: BeforeAfterSliderProps) {
+export default function BeforeAfterSlider({ beforeSrc, afterSrc, beforeLabel, afterLabel, aspectClass = 'aspect-[3/2]', labelPosition = 'overlay', beforeAlt, afterAlt, sizes = '100vw' }: BeforeAfterSliderProps) {
   const [position, setPosition] = useState(50);
   const [touched, setTouched] = useState(false);
   const [inView, setInView] = useState(false);
@@ -100,7 +106,7 @@ export default function BeforeAfterSlider({ beforeSrc, afterSrc, beforeLabel, af
       >
         {/* After (right/full) */}
         <div className="absolute inset-0 bg-beige">
-          <Image src={afterSrc} alt="po" fill className="object-contain" sizes="100vw" />
+          <Image src={afterSrc} alt={afterAlt ?? afterLabel ?? ''} fill className="object-contain" sizes={sizes} />
         </div>
 
         {/* Before (left, clipped) */}
@@ -108,7 +114,7 @@ export default function BeforeAfterSlider({ beforeSrc, afterSrc, beforeLabel, af
           className="absolute inset-0 bg-beige"
           style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}
         >
-          <Image src={beforeSrc} alt="przed" fill className="object-contain" sizes="100vw" />
+          <Image src={beforeSrc} alt={beforeAlt ?? beforeLabel ?? ''} fill className="object-contain" sizes={sizes} />
         </div>
 
         {/* Labels */}

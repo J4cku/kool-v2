@@ -11,7 +11,9 @@
     "section1Heading": "WE CREATE TIMELESS INTERIORS",
     "section1Text": "We design spaces that don't rely on trends. We treat each space individually, as an answer to a specific context and needs. Whether it's a residential or commercial project, we'll create an interior that tells your story.",
     "section2Heading": "WE DESIGN AT EVERY SCALE",
-    "section2Text": "We have years of experience in delivering projects of various character — from furniture details, through apartments and houses, to gastronomic, commercial and hotel venues. We manage the process comprehensively, with full control over the final result. This is how refined spaces are created, filled with original, unique elements. We are based in Wrocław and run projects across Poland — including Warsaw, Łódź and Gdańsk."
+    "section2Text": "We have years of experience in delivering projects of various character — from furniture details, through apartments and houses, to gastronomic, commercial and hotel venues. We manage the process comprehensively, with full control over the final result. This is how refined spaces are created, filled with original, unique elements. We are based in Wrocław and run projects across Poland — including Warsaw, Łódź and Gdańsk.",
+    "section1ImageAlt": "Moodboard of materials and finish samples in the Kool Studio workspace",
+    "section2ImageAlt": "Photograph of an interior designed by Kool Studio"
   },
   "meta": {
     "schemaDescription": "Wrocław-based interior architecture practice specializing in residential and commercial interiors, custom furniture, lighting design, and visual identity. Projects across Poland, including Warsaw.",
@@ -99,6 +101,12 @@
     "learnMore": "Learn more",
     "portfolio": "See our portfolio",
     "scopeTitle": "Scope of cooperation:",
+    "commercialImageAlt": "Restaurant interior designed by Kool Studio",
+    "commercialScopeImageAlt": "Storefront of a commercial space designed by Kool Studio",
+    "residentialImageAlt": "Living room in a Kool Studio residential project",
+    "residentialScopeImageAlt": "Kitchen in a Kool Studio residential project",
+    "materialsImageAlt": "Selection of finishing materials in a Kool Studio project",
+    "processImageAlt": "On-site author's supervision by Kool Studio",
     "commercial": {
       "label": "Commercial interiors",
       "heading": "Restaurants, concept stores, boutiques, hotels, services",

@@ -47,7 +47,7 @@ export default function ManifestoSection() {
       <section className="mt-[60px] md:mt-[80px]">
         <div className="flex flex-col md:flex-row">
           <ManifestoText heading={t('section1Heading')} text={t('section1Text')} />
-          <ManifestoImage src="/images/home/kool_main_01.webp" alt="Material moodboard" />
+          <ManifestoImage src="/images/home/kool_main_01.webp" alt={t('section1ImageAlt')} />
         </div>
       </section>
 
@@ -69,7 +69,7 @@ export default function ManifestoSection() {
       {/* Section 2: image left, text right — project-page 50/50 row */}
       <section className="mb-[80px] md:mb-[120px]">
         <div className="flex flex-col md:flex-row">
-          <ManifestoImage src="/images/home/kool_main_02.webp" alt="Interior photography" />
+          <ManifestoImage src="/images/home/kool_main_02.webp" alt={t('section2ImageAlt')} />
           <ManifestoText heading={t('section2Heading')} text={t('section2Text')} />
         </div>
       </section>
