@@ -1,6 +1,5 @@
 'use client';
 
-import { useSyncExternalStore } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -12,10 +11,10 @@ import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 import 'swiper/css';
 
-const baseSlides = projects.map((project) => ({
-  src: project.thumbnail,
-  slug: project.slug,
-}));
+export interface HeroSlide {
+  src: string;
+  slug: string;
+}
 
 function slideAlt(slug: string, locale: string): string {
   const project = projects.find((p) => p.slug === slug);
@@ -26,31 +25,10 @@ function slideAlt(slug: string, locale: string): string {
     : `Wnętrze projektu ${localized.title}, ${localized.location}`;
 }
 
-function shuffle<T>(items: T[]): T[] {
-  const result = [...items];
-  for (let i = result.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [result[i], result[j]] = [result[j], result[i]];
-  }
-  return result;
-}
-
-// Client-only random order: the server snapshot keeps the data order so SSR
-// markup is deterministic, the client snapshot shuffles once per page load.
-let shuffledSlides: typeof baseSlides | null = null;
-const emptySubscribe = () => () => {};
-function getShuffledSlides() {
-  shuffledSlides ??= shuffle(baseSlides);
-  return shuffledSlides;
-}
-function getServerSlides() {
-  return baseSlides;
-}
-
-export default function ImageStrip() {
-  // The key remount keeps Swiper's loop clones in sync once the shuffled
-  // order replaces the SSR order at hydration.
-  const slides = useSyncExternalStore(emptySubscribe, getShuffledSlides, getServerSlides);
+/* Slide order comes from the server (shuffled per ISR regeneration in the
+   homepage route) so SSR markup, hydration, and the LCP preload all agree on
+   the same first slide — never reorder client-side. */
+export default function ImageStrip({ slides }: { slides: HeroSlide[] }) {
   const locale = useLocale();
   const reduceMotion = useReducedMotion();
   const { scrollY } = useScroll();
@@ -59,7 +37,6 @@ export default function ImageStrip() {
   return (
     <div className="relative flex min-h-[calc(100svh-160px)] w-full items-start md:min-h-[calc(100svh-127px)] md:items-center">
       <Swiper
-        key={slides === baseSlides ? 'initial' : 'shuffled'}
         className="hero-swiper w-full"
         modules={[Autoplay, Mousewheel]}
         slidesPerView={1}
@@ -86,6 +63,8 @@ export default function ImageStrip() {
               <Link
                 href={`/projekty/${slide.slug}`}
                 draggable={false}
+                prefetch={false}
+                aria-label={slideAlt(slide.slug, locale)}
                 className="home-slide-link relative block w-full cursor-pointer aspect-[3/4] md:aspect-square overflow-hidden"
               >
                 <Image
@@ -95,8 +74,8 @@ export default function ImageStrip() {
                   fill
                   className="object-cover transition-transform duration-[600ms] hover:scale-[1.04]"
                   sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw"
-                  priority={i === 0}
-                  loading={i === 0 ? undefined : 'eager'}
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                  fetchPriority={i === 0 ? 'high' : undefined}
                 />
                 {title && (
                   <span

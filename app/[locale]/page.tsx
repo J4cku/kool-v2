@@ -3,9 +3,24 @@ import { getTranslations } from 'next-intl/server';
 import { BASE_URL } from '@/lib/site';
 import { localeAlternates, ogLocale } from '@/lib/metadata';
 import Navbar from '@/components/Navbar';
-import ImageStrip from '@/components/ImageStrip';
+import ImageStrip, { type HeroSlide } from '@/components/ImageStrip';
+import { projects } from '@/data/projects';
 import ManifestoSection from '@/components/ManifestoSection';
 import FooterBanner from '@/components/FooterBanner';
+
+/* The hero order is shuffled per regeneration, not per deploy: a short
+   revalidate keeps the page statically cached (stale-while-revalidate) while
+   every request kicks off a background rebuild with a fresh order. */
+export const revalidate = 1;
+
+function shuffle<T>(items: T[]): T[] {
+  const result = [...items];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
 
 export async function generateMetadata({
   params,
@@ -45,11 +60,15 @@ export async function generateMetadata({
 }
 
 export default function Home() {
+  const heroSlides: HeroSlide[] = shuffle(
+    projects.map((project) => ({ src: project.thumbnail, slug: project.slug }))
+  );
+
   return (
     <>
       <Navbar />
       <main className="pt-[160px] md:pt-[93px]">
-        <ImageStrip />
+        <ImageStrip slides={heroSlides} />
         <ManifestoSection />
       </main>
       <FooterBanner showAddress showMarquee={false} />

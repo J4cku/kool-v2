@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Reveal from './Reveal';
 
@@ -26,6 +27,8 @@ interface ColumnImageProps {
   priority?: boolean;
   /** Scroll-in un-mask animation (default true); false renders statically. */
   reveal?: boolean;
+  /** Defer the image request until its column is near the viewport. */
+  deferUntilVisible?: boolean;
 }
 
 const JUSTIFY: Record<Align, string> = {
@@ -51,8 +54,36 @@ export default function ColumnImage({
   sizes = '(min-width: 768px) 30vw, 70vw',
   priority,
   reveal = true,
+  deferUntilVisible = false,
 }: ColumnImageProps) {
-  const image = (
+  const columnRef = useRef<HTMLDivElement>(null);
+  const [isNearViewport, setIsNearViewport] = useState(false);
+  const shouldLoad = !deferUntilVisible || isNearViewport;
+
+  useEffect(() => {
+    if (!deferUntilVisible || isNearViewport) return;
+
+    const column = columnRef.current;
+    if (!column || !('IntersectionObserver' in window)) {
+      const loadTimer = window.setTimeout(() => setIsNearViewport(true), 0);
+      return () => window.clearTimeout(loadTimer);
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          setIsNearViewport(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '100px' }
+    );
+
+    observer.observe(column);
+    return () => observer.disconnect();
+  }, [deferUntilVisible, isNearViewport]);
+
+  const image = shouldLoad ? (
     <Image
       src={src}
       alt={alt}
@@ -61,11 +92,21 @@ export default function ColumnImage({
       sizes={sizes}
       priority={priority}
     />
+  ) : (
+    <div
+      role={alt ? 'img' : undefined}
+      aria-label={alt || undefined}
+      aria-hidden={alt ? undefined : true}
+      className="absolute inset-0 bg-beige"
+    />
   );
   const frame = `relative ${width} ${aspect}`;
 
   return (
-    <div className={`flex ${JUSTIFY[align]} ${valign === 'center' ? 'items-center' : 'items-start'} ${className}`}>
+    <div
+      ref={columnRef}
+      className={`flex ${JUSTIFY[align]} ${valign === 'center' ? 'items-center' : 'items-start'} ${className}`}
+    >
       {reveal ? (
         <Reveal className={frame}>{image}</Reveal>
       ) : (

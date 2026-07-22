@@ -18,23 +18,33 @@ export default function LanguageToggle() {
     <div className="flex items-center gap-1 text-xs font-semibold">
       <button
         onClick={() => switchTo('pl')}
-        className={`w-[26px] h-[26px] cursor-pointer flex items-center justify-center rounded-full transition-colors ${
-          locale === 'pl'
-            ? 'bg-coral text-beige'
-            : 'bg-transparent text-coral hover:opacity-70'
-        }`}
+        aria-pressed={locale === 'pl'}
+        className="w-[26px] h-[26px] flex items-center justify-center"
       >
-        pl
+        <span
+          className={`w-[26px] h-[26px] flex items-center justify-center rounded-full transition-colors ${
+            locale === 'pl'
+              ? 'bg-coral text-beige'
+              : 'bg-transparent text-coral hover:opacity-70'
+          }`}
+        >
+          pl
+        </span>
       </button>
       <button
         onClick={() => switchTo('en')}
-        className={`w-[26px] h-[26px] cursor-pointer flex items-center justify-center rounded-full transition-colors ${
-          locale === 'en'
-            ? 'bg-coral text-beige'
-            : 'bg-transparent text-coral hover:opacity-70'
-        }`}
+        aria-pressed={locale === 'en'}
+        className="w-[26px] h-[26px] flex items-center justify-center"
       >
-        en
+        <span
+          className={`w-[26px] h-[26px] flex items-center justify-center rounded-full transition-colors ${
+            locale === 'en'
+              ? 'bg-coral text-beige'
+              : 'bg-transparent text-coral hover:opacity-70'
+          }`}
+        >
+          en
+        </span>
       </button>
     </div>
   );

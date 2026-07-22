@@ -295,7 +295,7 @@ const projectCatalog: Project[] = [
   },
   {
     id: '7',
-    slug: 'mieszkanie-widmo',
+    slug: 'mieszkanie-midcentury',
     title: 'mieszkanie',
     location: 'Wrocław',
     category: 'mieszkalne',
@@ -1100,7 +1100,7 @@ export const projectDisplayOrder = [
   'kancelaria',
   'biblioteka-gdansk',
   'winobar-lodz',
-  'mieszkanie-widmo',
+  'mieszkanie-midcentury',
   'mieszkanie-strachowicka',
   'biuro-dobry-material',
   'mieszkanie-gdansk',

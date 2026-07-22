@@ -12,7 +12,7 @@ const expectedOrder = [
   'kancelaria',
   'biblioteka-gdansk',
   'winobar-lodz',
-  'mieszkanie-widmo',
+  'mieszkanie-midcentury',
   'mieszkanie-strachowicka',
   'biuro-dobry-material',
   'mieszkanie-gdansk',

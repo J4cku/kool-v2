@@ -4,6 +4,15 @@ const withNextIntl = createNextIntlPlugin();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async redirects() {
+    return [
+      {
+        source: '/:locale(pl|en)/projekty/mieszkanie-widmo',
+        destination: '/:locale/projekty/mieszkanie-midcentury',
+        permanent: true,
+      },
+    ];
+  },
   images: {
     qualities: [75, 90],
     remotePatterns: [

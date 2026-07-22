@@ -209,7 +209,13 @@ export default function Navbar() {
                   }}
                   className="origin-center"
                 >
-                  <Image src="/dot.svg" alt="" width={36} height={35} />
+                  <Image
+                    src="/dot.svg"
+                    alt=""
+                    width={36} height={35}
+                    loading="eager"
+                    fetchPriority="high"
+                  />
                 </motion.div>
               </motion.div>
             </motion.button>

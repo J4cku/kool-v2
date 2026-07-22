@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 import AddressBlock from './AddressBlock';
 import FooterBar from './FooterBar';
+import LazyAutoplayVideo from './LazyAutoplayVideo';
 
 interface FooterBannerProps {
   showAddress?: boolean;
@@ -36,13 +37,9 @@ export default function FooterBanner({ showAddress = false, showMarquee = true }
       {showAddress && (
         <div className="px-5 md:px-10 lg:px-12">
           <div className="max-w-content mx-auto flex flex-col md:flex-row md:items-end md:justify-between gap-8 py-12">
-            <video
+            <LazyAutoplayVideo
               src="/videos/reel.mp4"
-              autoPlay
-              muted
-              loop
-              playsInline
-              aria-label="Kool Studio showreel"
+              label="Kool Studio showreel"
               className="w-[140px] h-[140px] md:w-[200px] md:h-[200px] object-cover"
             />
             <AddressBlock />

@@ -31,6 +31,7 @@ function ManifestoImage({ src, alt }: { src: string; alt: string }) {
     <ColumnImage
       src={src}
       alt={alt}
+      deferUntilVisible
       valign="center"
       className="w-full md:w-1/2 p-6 md:p-10"
     />

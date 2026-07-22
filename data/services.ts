@@ -77,7 +77,7 @@ const serviceCatalog: Service[] = [
       'Zależy ci na nadzorze autorskim, aby projekt został zrealizowany zgodnie z założeniami.',
     ],
     proofSlugs: [
-      'mieszkanie-widmo',
+      'mieszkanie-midcentury',
       'mieszkanie-walecznych',
       'mieszkanie-strachowicka',
       'mieszkanie-gdansk',

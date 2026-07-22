@@ -17,7 +17,8 @@ import '../globals.css';
 const poppins = Poppins({
   subsets: ['latin', 'latin-ext'],
   weight: ['300', '400', '500', '600', '700', '800', '900'],
-  style: ['normal', 'italic'],
+  style: 'normal',
+  preload: false,
   variable: '--font-poppins',
 });
 
@@ -25,6 +26,8 @@ export const viewport: Viewport = {
   themeColor: '#E5DDD0',
   viewportFit: 'cover',
 };
+
+const isVercelDeployment = process.env.VERCEL === '1';
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
@@ -97,10 +100,12 @@ export default async function LocaleLayout({
             <AnalyticsListener />
           </>
         ) : null}
-        {/* Cookieless visit counting — needs Web Analytics enabled in the
-            Vercel dashboard to start collecting */}
-        <Analytics />
-        <SpeedInsights />
+        {isVercelDeployment && (
+          <>
+            <Analytics />
+            <SpeedInsights />
+          </>
+        )}
       </body>
     </html>
   );
