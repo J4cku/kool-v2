@@ -99,9 +99,11 @@ export default function ImageStrip() {
                 {title && (
                   <span
                     aria-hidden="true"
-                    className="home-slide-caption pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-coral px-4 py-3 text-sm font-[600] uppercase tracking-[0.08em] text-dark"
+                    className="home-slide-caption pointer-events-none absolute inset-0 z-10 flex items-center justify-center px-4"
                   >
-                    {title}
+                    <span className="max-w-[85%] bg-dark/45 px-4 py-[10px] text-center text-sm font-[600] uppercase tracking-[0.08em] text-beige backdrop-blur-[2px]">
+                      {title}
+                    </span>
                   </span>
                 )}
               </Link>
