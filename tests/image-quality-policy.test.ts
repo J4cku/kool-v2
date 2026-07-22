@@ -24,9 +24,13 @@ test('image quality tiers preserve fidelity without inflating navigation imagery
   );
   assert.match(
     imageStripSource,
-    /sizes="\(max-width: 767px\) 100vw, \(max-width: 1279px\) 50vw, 33vw"\s+quality=\{75\}\s+loading=\{i === 0 \? 'eager' : 'lazy'\}/
+    /sizes="\(max-width: 767px\) 100vw, \(max-width: 1279px\) 50vw, 33vw"\s+loading=\{i === 0 \? 'eager' : 'lazy'\}/
   );
-  assert.match(projectCardSource, /quality=\{75\}/);
-  assert.doesNotMatch(imageStripSource, /quality=\{90\}/);
-  assert.doesNotMatch(projectCardSource, /quality=\{90\}/);
+  assert.match(
+    projectCardSource,
+    /sizes="\(max-width: 768px\) 100vw, \(max-width: 1024px\) 50vw, 33vw"/
+  );
+  assert.doesNotMatch(projectCardSource, /\bloading\s*=/);
+  assert.doesNotMatch(imageStripSource, /\bquality\s*=/);
+  assert.doesNotMatch(projectCardSource, /\bquality\s*=/);
 });

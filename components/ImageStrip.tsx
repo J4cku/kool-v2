@@ -70,7 +70,6 @@ export default function ImageStrip() {
                   fill
                   className="object-cover transition-transform duration-[600ms] hover:scale-[1.04]"
                   sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw"
-                  quality={75}
                   loading={i === 0 ? 'eager' : 'lazy'}
                   fetchPriority={i === 0 ? 'high' : undefined}
                 />
