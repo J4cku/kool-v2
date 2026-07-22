@@ -11,10 +11,10 @@ import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 import 'swiper/css';
 
-const baseSlides = projects.map((project) => ({
-  src: project.thumbnail,
-  slug: project.slug,
-}));
+export interface HeroSlide {
+  src: string;
+  slug: string;
+}
 
 function slideAlt(slug: string, locale: string): string {
   const project = projects.find((p) => p.slug === slug);
@@ -23,8 +23,10 @@ function slideAlt(slug: string, locale: string): string {
   return `${localized.title} ${localized.location}`;
 }
 
-export default function ImageStrip() {
-  const slides = baseSlides;
+/* Slide order comes from the server (shuffled per ISR regeneration in the
+   homepage route) so SSR markup, hydration, and the LCP preload all agree on
+   the same first slide — never reorder client-side. */
+export default function ImageStrip({ slides }: { slides: HeroSlide[] }) {
   const locale = useLocale();
   const reduceMotion = useReducedMotion();
   const { scrollY } = useScroll();
