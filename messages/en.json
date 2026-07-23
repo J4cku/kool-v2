@@ -6,6 +6,10 @@
     "kontakt": "contact"
   },
   "home": {
+    "showcaseLabel": "selected projects",
+    "showcaseRole": "project carousel",
+    "openProject": "open project",
+    "projectStatus": "project {position} of {total}: {title}",
     "manifesto": "ORIGINAL INTERIORS THAT STAY FOR LONGER. WE CREATE INTERIORS WITH A DISTINCT IDENTITY. WE COMBINE DESIGN SENSITIVITY WITH PRECISION AND EXPERIENCE, CREATING SPACES REFINED IN DETAIL AND GROUNDED IN REAL CONTEXT.",
     "tagline": "ORIGINAL INTERIORS THAT STAY FOR LONGER.",
     "section1Heading": "WE CREATE TIMELESS INTERIORS",

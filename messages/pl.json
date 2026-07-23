@@ -6,6 +6,10 @@
     "kontakt": "kontakt"
   },
   "home": {
+    "showcaseLabel": "wybrane projekty",
+    "showcaseRole": "karuzela projektów",
+    "openProject": "otwórz projekt",
+    "projectStatus": "projekt {position} z {total}: {title}",
     "manifesto": "AUTORSKIE WNĘTRZA, KTÓRE ZOSTAJĄ NA DŁUŻEJ. TWORZYMY WNĘTRZA O WYRAŹNEJ TOŻSAMOŚCI. ŁĄCZYMY WRAŻLIWOŚĆ PROJEKTOWĄ Z PRECYZJĄ I DOŚWIADCZENIEM, TWORZĄC PRZESTRZENIE DOPRACOWANE W DETALU I OSADZONE W REALNYM KONTEKŚCIE.",
     "tagline": "AUTORSKIE WNĘTRZA, KTÓRE ZOSTAJĄ NA DŁUŻEJ.",
     "section1Heading": "TWORZYMY PONADCZASOWE WNĘTRZA",

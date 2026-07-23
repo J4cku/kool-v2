@@ -53,41 +53,20 @@ body {
   animation: marquee 15s linear infinite;
 }
 
+@media (min-width: 992px) and (hover: hover) and (pointer: fine) {
+  .project-folio {
+    opacity: 0;
+  }
+  .group:hover .project-folio,
+  .group:focus-within .project-folio {
+    opacity: 1;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee,
   .animate-marquee-diagonal {
     animation: none;
-  }
-}
-
-/* Homepage hero slider: ease-out with a short settle tail, so the incoming
-   slide doesn't visibly crawl through its last few pixels */
-.hero-swiper .swiper-wrapper {
-  transition-timing-function: cubic-bezier(0.33, 1, 0.68, 1);
-}
-
-.home-slide-caption {
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 220ms cubic-bezier(0.22, 1, 0.36, 1),
-    transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .home-slide-link:hover .home-slide-caption {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.home-slide-link:focus-visible .home-slide-caption {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .home-slide-caption {
-    transform: none;
   }
 }
 
