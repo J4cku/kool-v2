@@ -66,6 +66,26 @@ body {
   transition-timing-function: cubic-bezier(0.33, 1, 0.68, 1);
 }
 
+/* Pre-init slide sizing must mirror slidesPerView/spaceBetween in
+   ImageStrip.tsx, so Swiper's JS init doesn't reflow the strip (CLS) */
+.hero-swiper:not(.swiper-initialized) .swiper-slide {
+  width: 100%;
+  margin-right: 3px;
+  flex-shrink: 0;
+}
+
+@media (min-width: 768px) {
+  .hero-swiper:not(.swiper-initialized) .swiper-slide {
+    width: calc((100% - 3px) / 2);
+  }
+}
+
+@media (min-width: 1280px) {
+  .hero-swiper:not(.swiper-initialized) .swiper-slide {
+    width: calc((100% - 6px) / 3);
+  }
+}
+
 .home-slide-caption {
   opacity: 0;
   transform: translateY(8px);
