@@ -164,7 +164,7 @@ Project skills live in `.claude/skills/`; shared agent permissions in `.claude/s
 - Vercel Analytics + Speed Insights remain in `app/[locale]/layout.tsx` alongside PostHog
 - `skipTrailingSlashRedirect` removes Next's sitewide slash normalization, so `proxy.ts` restores the trailing-slash 308 for page routes itself
 - The `kool-posthog` MCP server (`.mcp.json`) needs a PostHog *personal* API key (phx_…) exported as `KOOL_POSTHOG_PERSONAL_API_KEY` in the shell environment (not `.env.local` — MCP reads the process env)
-- Main dashboard: ["Kool Studio — witryna"](https://eu.posthog.com/project/230717/dashboard/843909) (project 230717, EU) — visitors, channels/referrers (Instagram vs rest), top projects, contact clicks, consent split, and the wejście → projekt → kontakt funnel; insights respect the internal-traffic filter (`internal` person property)
+- Main dashboard: ["Kool Studio — witryna"](https://eu.posthog.com/project/230717/dashboard/843909) (project 230717, EU) — visitors, channels/referrers (Instagram vs rest), top projects, contact clicks, consent split, and the wejście → projekt → kontakt funnel; insights respect the internal-traffic filter (`internal` person property is not set AND `$host` = koolstudio.pl — excludes founders, localhost, and Vercel previews)
 
 ## SEO
 
