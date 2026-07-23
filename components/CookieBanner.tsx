@@ -89,9 +89,10 @@ export default function CookieBanner() {
                 >
                   {t('accept')}
                 </button>
-                <span aria-hidden="true" className="text-coral text-[19px] leading-none">
-                  ·
-                </span>
+                <span
+                  aria-hidden="true"
+                  className="mx-0.5 h-[7px] w-[7px] rounded-full bg-coral"
+                />
                 <button
                   onClick={() => choose(false)}
                   className="flex min-h-11 md:min-h-[26px] items-center text-[13px] font-[600] text-coral hover:opacity-60 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
