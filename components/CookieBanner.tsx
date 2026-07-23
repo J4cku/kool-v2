@@ -91,7 +91,7 @@ export default function CookieBanner() {
                 </button>
                 <span
                   aria-hidden="true"
-                  className="mx-0.5 h-[7px] w-[7px] rounded-full bg-coral"
+                  className="mx-0.5 h-1 w-1 rounded-full bg-coral"
                 />
                 <button
                   onClick={() => choose(false)}
