@@ -22,10 +22,11 @@ import {
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
-// Shared control styling: white fields on the beige panel for clear
-// figure-ground contrast, dark/muted borders, coral only as the focus accent.
+// Shared control styling: half-white fields on the beige panel — enough
+// figure-ground contrast without going full paper-white; coral only as the
+// focus accent.
 const CONTROL =
-  'w-full min-h-[48px] bg-white border border-dark/15 rounded-none px-4 py-3 text-dark text-[16px] leading-normal ' +
+  'w-full min-h-[48px] bg-white/50 border border-dark/15 rounded-none px-4 py-3 text-dark text-[16px] leading-normal ' +
   'placeholder:text-muted focus:outline-none focus:border-coral focus:ring-1 focus:ring-coral transition-colors';
 
 // Fields that carry a per-field error code (scope has no error path).
@@ -409,7 +410,7 @@ export default function BriefForm() {
                     name="scope"
                     value={key}
                     defaultChecked={values?.scope?.includes(key) ?? false}
-                    className="h-5 w-5 shrink-0 accent-coral"
+                    className="h-5 w-5 shrink-0 cursor-pointer appearance-none border border-dark/15 bg-white/50 checked:border-coral checked:bg-coral transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
                   />
                   <span>{t(`scopeOptions.${key}`)}</span>
                 </label>
