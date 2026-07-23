@@ -1,10 +1,13 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { INSTAGRAM_URL } from '@/lib/site';
-import { track } from '@/lib/analytics';
+import { openCookieSettings, track } from '@/lib/analytics';
 import LanguageToggle from './LanguageToggle';
 
 export default function FooterBar() {
+  const t = useTranslations('cookies');
+
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 bg-transparent pb-[env(safe-area-inset-bottom)]">
       <div className="h-px w-full origin-top bg-coral [transform:scaleY(0.5)]" />
@@ -36,7 +39,15 @@ export default function FooterBar() {
             </svg>
           </span>
         </a>
-        <LanguageToggle />
+        <div className="flex items-center gap-2 md:gap-3">
+          <button
+            onClick={openCookieSettings}
+            className="flex min-h-11 md:min-h-[26px] items-center text-[11px] font-[600] lowercase text-coral hover:opacity-70 transition-opacity"
+          >
+            {t('settings')}
+          </button>
+          <LanguageToggle />
+        </div>
       </div>
     </div>
   );
