@@ -47,6 +47,8 @@ data/projects.ts           # Project data + types (Project type)
 data/press.ts              # Press features (studio page + llms.txt)
 lib/site.ts                # BASE_URL, INSTAGRAM_URL (client-safe constants)
 lib/metadata.ts            # localeAlternates + pageMetadata helpers (server-only)
+lib/analytics.ts           # track() helper for PostHog custom events
+instrumentation-client.ts  # PostHog init (EU, cookieless, proxied via /dot)
 i18n/
   request.ts               # Locale config, getRequestConfig
   navigation.ts            # Typed Link, redirect, usePathname, useRouter
@@ -62,7 +64,7 @@ docs/superpowers/          # Design spec + implementation plan (historical recor
 design/                    # Gitignored inbox for designer PDF/.ai mockups
 scripts/check-i18n.mjs     # pl/en translation key parity check
 proxy.ts                   # next-intl locale proxy (Next.js 16 proxy convention)
-next.config.mjs            # next-intl plugin + image remotePatterns
+next.config.mjs            # next-intl plugin + image remotePatterns + PostHog /dot rewrites
 eslint.config.mjs          # ESLint flat config (next/core-web-vitals + typescript)
 AGENTS.md                  # Cross-agent instructions (Codex, Conductor)
 ```
@@ -149,6 +151,16 @@ Project skills live in `.claude/skills/`; shared agent permissions in `.claude/s
 - Next.js 16 App Router: route `params` is a Promise — type as `params: Promise<{...}>` and `await params` (see `app/[locale]/layout.tsx`)
 - There is intentionally no `tailwind.config.*` — Tailwind v4 design tokens live in `@theme` in `app/globals.css`
 - There are no automated tests — `pnpm check` (typecheck + lint + i18n parity + build) is the verification gate before claiming work done
+
+## Analytics
+
+- PostHog EU in `cookieless_mode: 'always'` — no cookies/storage, no consent banner, `identify()` is forbidden; "Cookieless server hash mode" must stay enabled in the PostHog project settings (Settings → Web analytics) or events are silently dropped
+- Init lives in `instrumentation-client.ts`, gated on `NEXT_PUBLIC_POSTHOG_KEY` (no-op when unset, e.g. local dev)
+- Events proxied first-party through `/dot/*` (rewrites in `next.config.mjs`) to bypass ad blockers; `/dot` is excluded from the next-intl matcher in `proxy.ts` and `skipTrailingSlashRedirect` is required — keep all three in sync
+- Custom events go through `track()` in `lib/analytics.ts` (never import `posthog-js` in components directly); current events: `contact_email_click`, `instagram_click` (with `placement`)
+- Vercel Analytics + Speed Insights remain in `app/[locale]/layout.tsx` alongside PostHog
+- `skipTrailingSlashRedirect` removes Next's sitewide slash normalization, so `proxy.ts` restores the trailing-slash 308 for page routes itself
+- The `kool-posthog` MCP server (`.mcp.json`) needs a PostHog *personal* API key (phx_…) exported as `KOOL_POSTHOG_PERSONAL_API_KEY` in the shell environment (not `.env.local` — MCP reads the process env)
 
 ## SEO
 

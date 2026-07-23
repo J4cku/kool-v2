@@ -1,6 +1,7 @@
 'use client';
 
 import { INSTAGRAM_URL } from '@/lib/site';
+import { track } from '@/lib/analytics';
 import LanguageToggle from './LanguageToggle';
 
 export default function FooterBar() {
@@ -13,6 +14,7 @@ export default function FooterBar() {
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Instagram"
+          onClick={() => track('instagram_click', { placement: 'footer' })}
           className="group w-11 h-11 md:w-[26px] md:h-[26px] flex items-center justify-center"
         >
           <span className="w-[26px] h-[26px] flex items-center justify-center rounded-full bg-coral text-beige transition-opacity group-hover:opacity-70">

@@ -13,6 +13,7 @@ import Image from 'next/image';
 import { Link, usePathname } from '@/i18n/navigation';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { INSTAGRAM_URL } from '@/lib/site';
+import { track } from '@/lib/analytics';
 
 const navLinks = [
   { href: '/projekty' as const, key: 'projekty' },
@@ -175,6 +176,7 @@ export default function Navbar() {
                   rel="noopener noreferrer"
                   aria-label="instagram"
                   onBlur={() => setFocusedLabel(null)}
+                  onClick={() => track('instagram_click', { placement: 'navbar' })}
                   onFocus={() => setFocusedLabel('instagram')}
                   onMouseEnter={() => setHoveredLabel('instagram')}
                   onMouseLeave={() => setHoveredLabel(null)}
@@ -317,6 +319,7 @@ export default function Navbar() {
                   href={INSTAGRAM_URL}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => track('instagram_click', { placement: 'mobile_menu' })}
                   className="text-5xl uppercase tracking-wide transition-opacity hover:opacity-80 text-beige/80 font-[700]"
                 >
                   instagram
