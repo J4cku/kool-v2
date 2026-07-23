@@ -44,6 +44,11 @@
       "title": "kontakt",
       "description": "Skontaktuj się z Kool Studio — pracownią architektury wnętrz z Wrocławia. Studio: Zaporoska 83/15, 53-415 Wrocław. E-mail: hello@koolstudio.pl.",
       "ogImageAlt": "Paleta materiałów i kolorów w pracowni Kool Studio"
+    },
+    "polityka-prywatnosci": {
+      "title": "Polityka prywatności",
+      "description": "Zasady przetwarzania danych osobowych i plików cookie na stronie Kool Studio.",
+      "ogImageAlt": "Paleta materiałów i kolorów w pracowni Kool Studio"
     }
   },
   "projects": {
@@ -157,5 +162,28 @@
       "bottomHeading": "Prowadzimy proces kompleksowo od pierwszych założeń po finalny efekt.",
       "bottomText": "Decyzje rozkładamy w czasie, od ogółu do szczegółu, co pozwala uchwycić wszystkie niuanse i uniknąć przypadkowych wyborów. Porządkujemy cały proces eliminując wątpliwości i dzięki naszemu doświadczeniu, ułatwiamy decyzje. Pozwala to na spokojną realizację i efekt zgodny z założeniami. W ramach projektu kompleksowego wspieramy was na każdym jego etapie."
     }
+  },
+  "cookies": {
+    "ariaLabel": "Zgoda na pliki cookie",
+    "message": "Używamy cookies do statystyk i reklam.",
+    "accept": "akceptuję",
+    "decline": "odrzucam",
+    "settings": "cookies",
+    "privacy": "polityka prywatności"
+  },
+  "privacy": {
+    "title": "Polityka prywatności",
+    "intro": "Administratorem Twoich danych osobowych jest Kool Studio, ul. Zaporoska 83/15, Wrocław. W sprawach dotyczących danych osobowych napisz na hello@koolstudio.pl.",
+    "contactLabel": "Kontakt e-mail",
+    "contactBody": "Gdy piszesz na hello@koolstudio.pl, przetwarzamy Twój adres e-mail i treść wiadomości wyłącznie po to, aby odpowiedzieć i poprowadzić rozmowę o współpracy. Korespondencję przechowujemy tak długo, jak wymaga tego prowadzona sprawa.",
+    "analyticsLabel": "Statystyki odwiedzin",
+    "analyticsBody": "Za Twoją zgodą używamy narzędzia PostHog (dane przetwarzane w UE), aby rozumieć, jak odwiedzający korzystają ze strony — które projekty oglądają, skąd do nas trafiają, a także jak poruszają się po stronie (nagranie sesji: ruch kursora i przewijanie, bez treści wpisywanych w pola tekstowe). Bez Twojej zgody mierzymy ruch wyłącznie anonimowo: bez plików cookie i bez zapisywania czegokolwiek na Twoim urządzeniu.",
+    "adsLabel": "Reklama",
+    "adsBody": "Jeśli prowadzimy kampanie reklamowe (np. na Instagramie), za Twoją zgodą możemy używać plików cookie mierzących ich skuteczność (np. Meta Pixel). Bez zgody te narzędzia nie są uruchamiane.",
+    "rightsLabel": "Twoje prawa",
+    "rightsBody": "Masz prawo dostępu do swoich danych, ich sprostowania, usunięcia, ograniczenia przetwarzania, przenoszenia oraz sprzeciwu wobec przetwarzania. Możesz też złożyć skargę do Prezesa Urzędu Ochrony Danych Osobowych.",
+    "cookiesLabel": "Pliki cookie",
+    "cookiesBody": "Decyzję dotyczącą plików cookie możesz zmienić w każdej chwili — tutaj lub przez link „cookies\" na dole strony:",
+    "cookiesButton": "zmień ustawienia cookies"
   }
 }

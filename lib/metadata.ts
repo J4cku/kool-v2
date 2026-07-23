@@ -20,13 +20,14 @@ export function localeAlternates(locale: string, path: string): Metadata['altern
   };
 }
 
-type MetaPageKey = 'projekty' | 'studio' | 'oferta' | 'kontakt';
+type MetaPageKey = 'projekty' | 'studio' | 'oferta' | 'kontakt' | 'polityka-prywatnosci';
 
 const staticSocialImages = {
   projekty: '/images/social/projects-dehesa.jpg',
   studio: '/images/social/studio-team.jpg',
   oferta: '/images/social/offer-commercial.jpg',
   kontakt: '/images/social/contact-reel.jpg',
+  'polityka-prywatnosci': '/images/social/contact-reel.jpg',
 } as const satisfies Record<MetaPageKey, string>;
 
 /* Localized per-page metadata (title/description from messages `meta.*`,

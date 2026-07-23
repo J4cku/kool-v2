@@ -44,6 +44,11 @@
       "title": "contact",
       "description": "Get in touch with Kool Studio — an interior architecture practice from Wrocław, Poland. Studio: Zaporoska 83/15, 53-415 Wrocław. Email: hello@koolstudio.pl.",
       "ogImageAlt": "Material and color palette in the Kool Studio workspace"
+    },
+    "polityka-prywatnosci": {
+      "title": "Privacy policy",
+      "description": "How Kool Studio handles personal data and cookies.",
+      "ogImageAlt": "Material and color palette in the Kool Studio workspace"
     }
   },
   "projects": {
@@ -157,5 +162,28 @@
       "bottomHeading": "We manage the process comprehensively from initial assumptions to the final result.",
       "bottomText": "We spread decisions over time, from general to specific, which allows us to capture all nuances and avoid random choices. We organize the entire process by eliminating doubts and, thanks to our experience, we facilitate decisions. This allows for a calm realization and a result consistent with the assumptions. As part of a comprehensive project, we support you at every stage."
     }
+  },
+  "cookies": {
+    "ariaLabel": "Cookie consent",
+    "message": "We use cookies for stats and ads.",
+    "accept": "accept",
+    "decline": "decline",
+    "settings": "cookies",
+    "privacy": "privacy policy"
+  },
+  "privacy": {
+    "title": "Privacy policy",
+    "intro": "The controller of your personal data is Kool Studio, Zaporoska 83/15, Wrocław, Poland. For any data-related matters, write to hello@koolstudio.pl.",
+    "contactLabel": "Email contact",
+    "contactBody": "When you write to hello@koolstudio.pl, we process your email address and the content of your message solely to reply and discuss a potential collaboration. We keep correspondence for as long as the matter requires.",
+    "analyticsLabel": "Visit statistics",
+    "analyticsBody": "With your consent we use PostHog (data processed in the EU) to understand how visitors use the site — which projects they view, how they find us, and how they move around the site (session recording: cursor movement and scrolling, never the content of text inputs). Without your consent we measure traffic anonymously only: no cookies and nothing stored on your device.",
+    "adsLabel": "Advertising",
+    "adsBody": "If we run ad campaigns (e.g. on Instagram), with your consent we may use cookies that measure their effectiveness (e.g. Meta Pixel). Without consent these tools are never loaded.",
+    "rightsLabel": "Your rights",
+    "rightsBody": "You have the right to access, rectify, erase, restrict, port, and object to the processing of your data. You can also lodge a complaint with the Polish supervisory authority (UODO).",
+    "cookiesLabel": "Cookies",
+    "cookiesBody": "You can change your cookie decision at any time — here or via the \"cookies\" link at the bottom of the page:",
+    "cookiesButton": "change cookie settings"
   }
 }
