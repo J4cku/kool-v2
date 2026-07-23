@@ -82,14 +82,14 @@ export default function CookieBanner() {
               >
                 {t('privacy')}
               </Link>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
                 <button
                   onClick={() => choose(true)}
                   className="flex min-h-11 md:min-h-[26px] items-center text-[13px] font-[600] text-coral hover:opacity-60 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
                 >
                   {t('accept')}
                 </button>
-                <span aria-hidden="true" className="text-coral text-[13px]">
+                <span aria-hidden="true" className="text-coral text-[19px] leading-none">
                   ·
                 </span>
                 <button

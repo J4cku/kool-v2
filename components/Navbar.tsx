@@ -113,15 +113,18 @@ export default function Navbar() {
         <div className="w-full px-4 md:px-6 pt-[var(--nav-top-padding)] pb-6 flex items-center justify-between">
           <Link href="/">
             {/* Desktop: static logo */}
+            {/* fetchPriority is explicit because Next 16's `priority` prop
+                emits the preload without fetchpriority=high, leaving the logo
+                (the mobile LCP element) queued behind script downloads */}
             <span className="hidden md:block">
-              <Image src="/logo.svg" alt="Kool Studio" width={208} height={77} priority />
+              <Image src="/logo.svg" alt="Kool Studio" width={208} height={77} priority fetchPriority="high" />
             </span>
             {/* Mobile: scale tracks scroll position */}
             <motion.span
               className="block md:hidden origin-top-left will-change-transform nav-logo-shrink"
               style={{ scale: logoScale }}
             >
-              <Image src="/logo.svg" alt="Kool Studio" width={208} height={77} priority />
+              <Image src="/logo.svg" alt="Kool Studio" width={208} height={77} priority fetchPriority="high" />
             </motion.span>
           </Link>
 

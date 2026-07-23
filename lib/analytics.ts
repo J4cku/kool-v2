@@ -1,20 +1,32 @@
-import posthog from 'posthog-js';
+import type { PostHog } from 'posthog-js';
 
-/* Client-side event capture. posthog is only initialized when
-   NEXT_PUBLIC_POSTHOG_KEY is set (instrumentation-client.ts), so guard to
-   keep local dev and preview builds silent. */
-export function track(event: string, properties?: Record<string, unknown>) {
-  if (posthog.__loaded) {
-    posthog.capture(event, properties);
+declare global {
+  interface Window {
+    /* Set by instrumentation-client.ts after its deferred posthog init;
+       the type-only import above keeps posthog-js out of this chunk. */
+    __koolPosthog?: PostHog;
   }
 }
 
+function posthogInstance(): PostHog | null {
+  return typeof window === 'undefined' ? null : (window.__koolPosthog ?? null);
+}
+
+/* Client-side event capture. posthog-js is dynamically imported and
+   initialized by instrumentation-client.ts only when NEXT_PUBLIC_POSTHOG_KEY
+   is set — until then (local dev, or clicks before the deferred init
+   completes) this is a silent no-op. */
+export function track(event: string, properties?: Record<string, unknown>) {
+  posthogInstance()?.capture(event, properties);
+}
+
 /* Consent API for cookieless_mode 'on_reject' (CookieBanner.tsx).
-   'pending' = no choice yet and nothing is captured; accept enables cookies,
-   replay and (future) ad pixels; decline falls back to the anonymous
-   server-side hash. null = posthog not running (no key), so no banner. */
+   'pending' = no choice yet (counted anonymously via
+   opt_out_capturing_by_default); accept enables cookies, replay and (future)
+   ad pixels; decline keeps the anonymous server-side hash. null = posthog
+   not initialized (no key, or deferred init still pending), so no banner. */
 export function consentStatus(): 'granted' | 'denied' | 'pending' | null {
-  return posthog.__loaded ? posthog.get_explicit_consent_status() : null;
+  return posthogInstance()?.get_explicit_consent_status() ?? null;
 }
 
 const consentListeners = new Set<() => void>();
@@ -25,45 +37,30 @@ function notifyConsentChange() {
 
 /* useSyncExternalStore subscription for consentStatus(). Notifies on
    accept/decline in this tab, on the storage event (choice made in another
-   tab), and once posthog finishes initializing — instrumentation-client.ts
-   and React hydration race each other, so the first snapshot may be null;
-   the init poll gives up after 10s for keyless environments. */
+   tab), and on kool:posthog-ready — the event instrumentation-client.ts
+   fires once its deferred init has published window.__koolPosthog. */
 export function subscribeConsentStatus(onChange: () => void): () => void {
   consentListeners.add(onChange);
   window.addEventListener('storage', onChange);
-  let id: ReturnType<typeof setInterval> | null = null;
-  if (!posthog.__loaded) {
-    let ticks = 0;
-    id = setInterval(() => {
-      if (posthog.__loaded || ++ticks > 100) {
-        if (id) {
-          clearInterval(id);
-          id = null;
-        }
-        if (posthog.__loaded) {
-          onChange();
-        }
-      }
-    }, 100);
-  }
+  window.addEventListener('kool:posthog-ready', onChange);
   return () => {
     consentListeners.delete(onChange);
     window.removeEventListener('storage', onChange);
-    if (id) {
-      clearInterval(id);
-    }
+    window.removeEventListener('kool:posthog-ready', onChange);
   };
 }
 
 export function acceptCookies() {
-  if (posthog.__loaded) {
+  const posthog = posthogInstance();
+  if (posthog) {
     posthog.opt_in_capturing();
     notifyConsentChange();
   }
 }
 
 export function declineCookies() {
-  if (posthog.__loaded) {
+  const posthog = posthogInstance();
+  if (posthog) {
     posthog.opt_out_capturing();
     notifyConsentChange();
   }
