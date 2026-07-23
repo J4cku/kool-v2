@@ -1,6 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { track } from '@/lib/analytics';
 
 /* Address + email pair used on the homepage footer and kontakt page:
    the studio address is set at body-copy size and letter-distributed to
@@ -31,6 +32,7 @@ export default function AddressBlock() {
           the address; from md up it renders as normal right-aligned text */}
       <a
         href="mailto:hello@koolstudio.pl"
+        onClick={() => track('contact_email_click')}
         className="flex min-h-11 items-center justify-between w-full font-[700] uppercase text-dark hover:opacity-70 transition-opacity text-[clamp(18px,6.2vw,55px)] md:block md:whitespace-nowrap md:text-right md:text-[clamp(32px,4.2vw,55px)]"
       >
         <Distributed text={email} />
