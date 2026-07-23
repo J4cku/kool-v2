@@ -284,6 +284,8 @@
       "generic": "The form couldn't be sent. Please try again in a moment, or email hello@koolstudio.pl directly.",
       "fallbackNote": "Your email app will open with the brief ready — send the message to complete your enquiry.",
       "fallbackButton": "Open email app"
-    }
+    },
+    "openCta": "tell us about your project",
+    "close": "Close the form"
   }
 }

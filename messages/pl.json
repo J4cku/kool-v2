@@ -284,6 +284,8 @@
       "generic": "Nie udało się wysłać formularza. Spróbuj ponownie za chwilę lub napisz bezpośrednio na hello@koolstudio.pl.",
       "fallbackNote": "Otworzy się Twój program pocztowy z gotowym briefem — wyślij wiadomość, aby dokończyć zgłoszenie.",
       "fallbackButton": "Otwórz program pocztowy"
-    }
+    },
+    "openCta": "opowiedz nam o projekcie",
+    "close": "Zamknij formularz"
   }
 }
