@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { INSTAGRAM_URL } from '@/lib/site';
 import { openCookieSettings, track } from '@/lib/analytics';
+import CookieBanner from './CookieBanner';
 import LanguageToggle from './LanguageToggle';
 
 export default function FooterBar() {
@@ -39,7 +40,8 @@ export default function FooterBar() {
             </svg>
           </span>
         </a>
-        <div className="flex items-center gap-2 md:gap-3">
+        <div className="relative flex items-center gap-2 md:gap-3">
+          <CookieBanner />
           <button
             onClick={openCookieSettings}
             className="flex min-h-11 md:min-h-[26px] items-center text-[11px] font-[600] lowercase text-coral hover:opacity-70 transition-opacity"
