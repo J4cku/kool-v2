@@ -6,6 +6,7 @@ import {
   useMemo,
   useRef,
   useState,
+  useSyncExternalStore,
   type FocusEvent,
   type KeyboardEvent,
 } from 'react';
@@ -22,6 +23,18 @@ import { curateHomepageProjects } from '@/data/homepage-projects';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 const curatedProjects = curateHomepageProjects(projects);
+
+// Hydration detector for useSyncExternalStore: false during SSR/first paint,
+// true on the client, and never re-notifies.
+function subscribeNever() {
+  return () => {};
+}
+function getClientSnapshot() {
+  return true;
+}
+function getServerSnapshot() {
+  return false;
+}
 
 type ShowcaseProject = (typeof curatedProjects)[number];
 
@@ -57,11 +70,13 @@ function ProjectFolio({
 function ProjectPane({
   project,
   priority,
+  renderImage,
   category,
   openProjectLabel,
 }: {
   project: ShowcaseProject;
   priority: boolean;
+  renderImage: boolean;
   category: string;
   openProjectLabel: string;
 }) {
@@ -72,15 +87,28 @@ function ProjectPane({
       aria-label={`${openProjectLabel}: ${project.title}, ${project.location}`}
       draggable={false}
     >
-      <Image
-        src={project.heroImage}
-        alt=""
-        fill
-        priority={priority}
-        draggable={false}
-        className="object-cover"
-        sizes="(max-width: 991px) 100vw, 50vw"
-      />
+      {/* bottom-px keeps the image 1px short of the viewport: Chrome
+          excludes viewport-filling images from LCP candidates (treats them
+          as backgrounds), which would shift LCP to the tiny navbar logo and
+          tank the mobile Lighthouse score. The 1px line is invisible against
+          the slide's dark background. */}
+      <div className="absolute inset-x-0 top-0 bottom-px">
+        {renderImage && (
+          <Image
+            src={project.heroImage}
+            alt=""
+            fill
+            priority={priority}
+            /* Explicit because Next 16's `priority` emits the hero preload
+               without fetchpriority=high, so it downloads behind the JS bundle
+               on throttled mobile connections */
+            fetchPriority={priority ? 'high' : undefined}
+            draggable={false}
+            className="object-cover"
+            sizes="(max-width: 991px) 100vw, 50vw"
+          />
+        )}
+      </div>
       <div
         className="project-folio pointer-events-none absolute inset-x-0 bottom-[calc(135px+env(safe-area-inset-bottom))] min-[992px]:bottom-[calc(117px+env(safe-area-inset-bottom))] h-[96px] overflow-hidden bg-beige/75 backdrop-blur-md transition-opacity duration-300 min-[992px]:h-[80px]"
         aria-hidden="true"
@@ -112,6 +140,15 @@ export default function ImageStrip({ order }: { order: string[] }) {
   const announcementFrameRef = useRef<number | null>(null);
   const announcementClearTimeoutRef = useRef<number | null>(null);
   const [projectStatus, setProjectStatus] = useState('');
+  /* Slides beyond the initially visible pair (one on mobile, two on desktop)
+     render their image only after hydration: even with loading=lazy the
+     browser fetches horizontally-nearby slide images immediately, and those
+     ~300KB compete with the LCP hero image on throttled mobile connections. */
+  const mounted = useSyncExternalStore(
+    subscribeNever,
+    getClientSnapshot,
+    getServerSnapshot,
+  );
 
   const showcaseProjects = useMemo(() => {
     const ordered = order.flatMap((slug) => {
@@ -274,6 +311,7 @@ export default function ImageStrip({ order }: { order: string[] }) {
             <ProjectPane
               project={project}
               priority={index === 0}
+              renderImage={index < 2 || mounted}
               category={tProjects(project.category)}
               openProjectLabel={t('openProject')}
             />
