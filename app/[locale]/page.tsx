@@ -45,7 +45,7 @@ export async function generateMetadata({
       type: 'website',
       locale: ogLocale(locale),
       alternateLocale: locale === 'en' ? 'pl_PL' : 'en_US',
-      siteName: 'Kool Studio',
+      siteName: 'kool studio',
       url: `${BASE_URL}/${locale}`,
       images: [socialImage],
     },

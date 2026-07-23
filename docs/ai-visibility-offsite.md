@@ -1,6 +1,6 @@
 # Off-site AI visibility — action list
 
-Goal: when someone asks Claude, ChatGPT or Perplexity for "architekt wnętrz Wrocław" / "interior designer Warsaw", Kool Studio should be findable and citable. The on-site work (metadata, canonicals, crawlable nav/listing, JSON-LD, llms.txt) shipped in July 2026; everything below happens **outside the repo** and only the studio can do it (accounts, verification, outreach).
+Goal: when someone asks Claude, ChatGPT or Perplexity for "architekt wnętrz Wrocław" / "interior designer Warsaw", kool studio should be findable and citable. The on-site work (metadata, canonicals, crawlable nav/listing, JSON-LD, llms.txt) shipped in July 2026; everything below happens **outside the repo** and only the studio can do it (accounts, verification, outreach).
 
 How the engines actually source local businesses (mid-2026):
 
@@ -17,12 +17,12 @@ How the engines actually source local businesses (mid-2026):
 
 ## 2. Business listings (the "entity" layer)
 
-Keep NAP (name, address, phone) **byte-identical** everywhere: `Kool Studio, Zaporoska 83/15, 53-415 Wrocław` + hello@koolstudio.pl. Mention **both Wrocław (base) and Warsaw (service area)** in every description.
+Keep NAP (name, address, phone) **byte-identical** everywhere: `kool studio, Zaporoska 83/15, 53-415 Wrocław` + hello@koolstudio.pl (name lowercase — matches GBP and brand usage). Mention **both Wrocław (base) and Warsaw (service area)** in every description.
 
-- [ ] **Google Business Profile** — a "kool studio" place already exists on Google Maps (the pin the site's kontakt page links to). Claim/verify it at https://business.google.com, set category *Architekt wnętrz / Interior designer*, add services, photos per project, website link, and Warsaw as a service area. Then **ask past clients for reviews that name the service and city** ("projekt wnętrza mieszkania we Wrocławiu") — review text gets quoted in AI answers.
-- [ ] **Foursquare** — create/claim the listing at https://location.foursquare.com (or the Foursquare app), category Interior Designer / Design Studio, full NAP, description naming Wrocław + Warsaw, photos. *ChatGPT's primary local-name source; effect typically visible in 2–4 weeks.*
-- [ ] **Bing Places** — https://www.bingplaces.com (can import from Google Business Profile).
-- [ ] **Apple Business** — https://businessconnect.apple.com. Feeds Apple Maps, Siri and Apple Intelligence; most businesses still haven't claimed theirs, so it's cheap differentiation.
+- [x] **Google Business Profile** — claimed 2026-07-23 (place: https://maps.google.com/?cid=12276542814275745116, now in the site's `sameAs`). Still to do on the profile: category *Architekt wnętrz / Interior designer*, services, photos per project, website link (with UTM), Warsaw as a service area. Then **ask past clients for reviews that name the service and city** ("projekt wnętrza mieszkania we Wrocławiu") — review text gets quoted in AI answers.
+- [ ] **Foursquare** — the claim flow (https://business.foursquare.com/claim/?new_search=true; old location.foursquare.com link is dead) would not surface non-US places when tried 2026-07-23. Workaround: create the venue via the **Swarm app** (venue creation is global and free) with full NAP `kool studio, Zaporoska 83/15, Wrocław`, category Design Studio — *existence in Foursquare's Places data is what ChatGPT consumes; the paid claim (~$20) is only for management and can wait.* Retry the claim flow occasionally.
+- [x] **Bing Places** — created 2026-07-23 (Bing Webmaster Tools verified the same day). Public Bing Maps listing not yet visible — new listings take up to ~a week to publish; once live, capture the listing URL for `sameAs`.
+- [ ] **Apple Business** — https://businessconnect.apple.com. *Postponed (decision 2026-07-23).* Feeds Apple Maps, Siri and Apple Intelligence; cheap differentiation whenever picked back up.
 
 ## 3. Industry directories & portfolio platforms
 
@@ -38,7 +38,7 @@ Branded mentions in trusted media correlate ~3× stronger with AI-answer inclusi
 - [ ] For each completed project: professional photos + a short Polish press kit (story, city, metraż, materials, collaboration credits), pitched to **whitemad.pl, Label Magazine, Magazif, Domosfera, Czas na Wnętrze, Elle Decoration Polska**. Target 2–4 placements/year.
 - [ ] Submit the annual **Homebook Design** album entry.
 - [ ] For the strongest internationally photogenic project: **ArchDaily** (https://www.archdaily.com/submit-a-project — min. 15 photos at 2880px+, English narrative) and a **Dezeen** pitch. One acceptance = a permanent high-authority mention.
-- [ ] Ask journalists to name the studio as "Kool Studio" **with city context** in the article body.
+- [ ] Ask journalists to name the studio as "kool studio" **with city context** in the article body.
 
 ## 5. Social as an AI-crawlable surface
 
@@ -47,13 +47,13 @@ Branded mentions in trusted media correlate ~3× stronger with AI-answer inclusi
 
 ## 6. Later (after 2–3 press placements)
 
-- [ ] **Wikidata item** for Kool Studio (instance of: interior design firm; HQ: Wrocław; official website; references: press URLs). Feeds Google's Knowledge Graph and LLM entity layers; typical knowledge-panel lag is 2–6 months.
-- [ ] Add every claimed profile URL (Google Maps, Foursquare, Homebook, Archello, Architonic, Pinterest, Wikidata) to the site's JSON-LD `sameAs` array in `app/[locale]/layout.tsx` — currently it lists only Instagram.
+- [ ] **Wikidata item** for kool studio (instance of: interior design firm; HQ: Wrocław; official website; references: press URLs). Feeds Google's Knowledge Graph and LLM entity layers; typical knowledge-panel lag is 2–6 months.
+- [ ] Add every claimed profile URL (Foursquare, Homebook, Archello, Architonic, Pinterest, Wikidata, Bing Maps once published) to the site's JSON-LD `sameAs` array in `app/[locale]/layout.tsx` — Instagram + Facebook (https://www.facebook.com/its.kool.studio) + Google Maps added 2026-07-23.
 - [ ] Consider the deferred **FAQ section** (oferta/kontakt) with FAQPage schema — FAQ + rich schema showed ~44% higher AI-citation rates; the questions people ask assistants are "ile kosztuje projekt wnętrz we Wrocławiu", "czy pracujecie w Warszawie", "jak długo trwa projekt".
 
 ## 7. Measure (monthly, 15 min)
 
-- [ ] Ask Claude, ChatGPT and Perplexity (Polish + English): "architekt wnętrz Wrocław", "polecany projektant wnętrz Wrocław", "interior designer Warsaw Poland" — note whether Kool Studio appears and **which sources are cited**; put the next month's effort into whatever sources those are.
+- [ ] Ask Claude, ChatGPT and Perplexity (Polish + English): "architekt wnętrz Wrocław", "polecany projektant wnętrz Wrocław", "interior designer Warsaw Poland" — note whether kool studio appears and **which sources are cited**; put the next month's effort into whatever sources those are.
 - [ ] Check Bing Webmaster **AI Performance** and `site:koolstudio.pl` on Brave.
 
 ### Notes

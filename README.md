@@ -1,6 +1,6 @@
-# Kool Studio Website
+# kool studio Website
 
-Portfolio website for [Kool Studio](https://koolstudio.pl), a Wroclaw-based interior architecture practice.
+Portfolio website for [kool studio](https://koolstudio.pl), a Wroclaw-based interior architecture practice.
 
 ## Stack
 

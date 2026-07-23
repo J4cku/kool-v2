@@ -39,7 +39,7 @@ export default function FooterBanner({ showAddress = false, showMarquee = true }
           <div className="max-w-content mx-auto flex flex-col md:flex-row md:items-end md:justify-between gap-8 py-12">
             <LazyAutoplayVideo
               src="/videos/reel.mp4"
-              label="Kool Studio showreel"
+              label="kool studio showreel"
               className="w-[140px] h-[140px] md:w-[200px] md:h-[200px] object-cover"
             />
             <AddressBlock />

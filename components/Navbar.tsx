@@ -117,14 +117,14 @@ export default function Navbar() {
                 emits the preload without fetchpriority=high, leaving the logo
                 (the mobile LCP element) queued behind script downloads */}
             <span className="hidden md:block">
-              <Image src="/logo.svg" alt="Kool Studio" width={208} height={77} priority fetchPriority="high" />
+              <Image src="/logo.svg" alt="kool studio" width={208} height={77} priority fetchPriority="high" />
             </span>
             {/* Mobile: scale tracks scroll position */}
             <motion.span
               className="block md:hidden origin-top-left will-change-transform nav-logo-shrink"
               style={{ scale: logoScale }}
             >
-              <Image src="/logo.svg" alt="Kool Studio" width={208} height={77} priority fetchPriority="high" />
+              <Image src="/logo.svg" alt="kool studio" width={208} height={77} priority fetchPriority="high" />
             </motion.span>
           </Link>
 

@@ -29,12 +29,12 @@ const isVercelDeployment = process.env.VERCEL === '1';
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: 'Kool Studio',
+    default: 'kool studio',
     template: '%s | kool studio',
   },
   keywords: 'architektura wnętrz, projektowanie wnętrz, Wrocław, Warszawa, interior design, architekt wnętrz, projekt wnętrz, meble na wymiar, design',
-  authors: [{ name: 'Kool Studio' }],
-  creator: 'Kool Studio',
+  authors: [{ name: 'kool studio' }],
+  creator: 'kool studio',
   robots: {
     index: true,
     follow: true,
@@ -79,13 +79,17 @@ export default async function LocaleLayout({
               '@context': 'https://schema.org',
               '@type': 'ProfessionalService',
               '@id': `${BASE_URL}/#studio`,
-              name: 'Kool Studio',
+              name: 'kool studio',
               description: tMeta('schemaDescription'),
               url: BASE_URL,
               email: 'hello@koolstudio.pl',
               image: `${BASE_URL}/images/studio/team.webp`,
               logo: `${BASE_URL}/logo.svg`,
-              sameAs: [INSTAGRAM_URL],
+              sameAs: [
+                INSTAGRAM_URL,
+                'https://www.facebook.com/its.kool.studio',
+                'https://maps.google.com/?cid=12276542814275745116',
+              ],
               founder: [
                 { '@type': 'Person', name: 'Ola Kilińska' },
                 { '@type': 'Person', name: 'Ola Leszczyńska' },
