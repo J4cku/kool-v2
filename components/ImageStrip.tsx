@@ -236,7 +236,7 @@ export default function ImageStrip({ order }: { order: string[] }) {
       onKeyDownCapture={handleKeyDownCapture}
     >
       <Swiper
-        className="h-full w-full"
+        className="hero-swiper h-full w-full"
         modules={[A11y, Autoplay, Keyboard, Mousewheel]}
         slidesPerView={1}
         breakpoints={{ 992: { slidesPerView: 2 } }}

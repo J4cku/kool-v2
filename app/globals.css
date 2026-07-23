@@ -70,6 +70,20 @@ body {
   }
 }
 
+/* Pre-init slide sizing must mirror slidesPerView/spaceBetween in
+   ImageStrip.tsx (1 per view, 2 from 992px, 1px gap), so Swiper's JS init
+   doesn't reflow the hero in one large layout shift (CLS) */
+.hero-swiper:not(.swiper-initialized) .swiper-slide {
+  width: 100%;
+  margin-right: 1px;
+}
+
+@media (min-width: 992px) {
+  .hero-swiper:not(.swiper-initialized) .swiper-slide {
+    width: calc((100% - 1px) / 2);
+  }
+}
+
 /* Mobile navbar: logo/dot scale tracks scroll position (0-300px).
    Where CSS scroll timelines are supported (Safari 26+, Chrome 115+) the
    animation runs on the compositor, immune to main-thread jank during touch
