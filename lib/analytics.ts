@@ -66,6 +66,35 @@ export function declineCookies() {
   }
 }
 
+/* Feature-flag store for useSyncExternalStore consumers (BriefModal gates
+   the kontakt form on the 'brief-form' flag). Flags arrive with the /flags
+   response after the deferred init, so subscribers are notified via
+   posthog's own onFeatureFlags once the instance is ready. Fail-closed by
+   design: until flags load (or when posthog is off), flags read as false. */
+export function featureFlagEnabled(flag: string): boolean {
+  return posthogInstance()?.isFeatureEnabled(flag) === true;
+}
+
+export function subscribeFeatureFlags(onChange: () => void): () => void {
+  let unsubFlags: (() => void) | null = null;
+  const attach = () => {
+    const posthog = posthogInstance();
+    if (posthog && !unsubFlags) {
+      unsubFlags = posthog.onFeatureFlags(onChange);
+    }
+  };
+  const onReady = () => {
+    attach();
+    onChange();
+  };
+  attach();
+  window.addEventListener('kool:posthog-ready', onReady);
+  return () => {
+    window.removeEventListener('kool:posthog-ready', onReady);
+    unsubFlags?.();
+  };
+}
+
 /* Re-opens the consent banner (GDPR: withdrawing consent must be as easy as
    giving it). Fired by the FooterBar "cookies" link and the privacy page;
    CookieBanner listens via onCookieSettingsOpen. */

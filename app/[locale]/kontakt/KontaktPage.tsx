@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import Navbar from '@/components/Navbar';
 import AddressBlock from '@/components/AddressBlock';
 import FooterBar from '@/components/FooterBar';
+import BriefModal from '@/components/kontakt/BriefModal';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import LazyAutoplayVideo from '@/components/LazyAutoplayVideo';
 
@@ -29,6 +30,7 @@ export default function KontaktPage() {
             >
               {tContact('cta')}
             </h1>
+            <BriefModal />
           </motion.div>
 
           <motion.div
