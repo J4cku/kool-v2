@@ -53,6 +53,16 @@ body {
   animation: marquee 15s linear infinite;
 }
 
+@media (min-width: 992px) and (hover: hover) and (pointer: fine) {
+  .project-folio {
+    opacity: 0;
+  }
+  .group:hover .project-folio,
+  .group:focus-within .project-folio {
+    opacity: 1;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee,
   .animate-marquee-diagonal {
@@ -60,54 +70,17 @@ body {
   }
 }
 
-/* Homepage hero slider: ease-out with a short settle tail, so the incoming
-   slide doesn't visibly crawl through its last few pixels */
-.hero-swiper .swiper-wrapper {
-  transition-timing-function: cubic-bezier(0.33, 1, 0.68, 1);
-}
-
 /* Pre-init slide sizing must mirror slidesPerView/spaceBetween in
-   ImageStrip.tsx, so Swiper's JS init doesn't reflow the strip (CLS) */
+   ImageStrip.tsx (1 per view, 2 from 992px, 1px gap), so Swiper's JS init
+   doesn't reflow the hero in one large layout shift (CLS) */
 .hero-swiper:not(.swiper-initialized) .swiper-slide {
   width: 100%;
-  margin-right: 3px;
-  flex-shrink: 0;
+  margin-right: 1px;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 992px) {
   .hero-swiper:not(.swiper-initialized) .swiper-slide {
-    width: calc((100% - 3px) / 2);
-  }
-}
-
-@media (min-width: 1280px) {
-  .hero-swiper:not(.swiper-initialized) .swiper-slide {
-    width: calc((100% - 6px) / 3);
-  }
-}
-
-.home-slide-caption {
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 220ms cubic-bezier(0.22, 1, 0.36, 1),
-    transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .home-slide-link:hover .home-slide-caption {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.home-slide-link:focus-visible .home-slide-caption {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .home-slide-caption {
-    transform: none;
+    width: calc((100% - 1px) / 2);
   }
 }
 

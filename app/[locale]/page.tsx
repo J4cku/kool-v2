@@ -3,8 +3,8 @@ import { getTranslations } from 'next-intl/server';
 import { BASE_URL } from '@/lib/site';
 import { localeAlternates, ogLocale } from '@/lib/metadata';
 import Navbar from '@/components/Navbar';
-import ImageStrip, { type HeroSlide } from '@/components/ImageStrip';
-import { projects } from '@/data/projects';
+import ImageStrip from '@/components/ImageStrip';
+import { homepageProjectSlugs } from '@/data/homepage-projects';
 import ManifestoSection from '@/components/ManifestoSection';
 import FooterBanner from '@/components/FooterBanner';
 
@@ -60,15 +60,13 @@ export async function generateMetadata({
 }
 
 export default function Home() {
-  const heroSlides: HeroSlide[] = shuffle(
-    projects.map((project) => ({ src: project.thumbnail, slug: project.slug }))
-  );
+  const heroOrder = shuffle([...homepageProjectSlugs]);
 
   return (
     <>
       <Navbar />
-      <main className="pt-[160px] md:pt-[93px]">
-        <ImageStrip slides={heroSlides} />
+      <main>
+        <ImageStrip order={heroOrder} />
         <ManifestoSection />
       </main>
       <FooterBanner showAddress showMarquee={false} />
