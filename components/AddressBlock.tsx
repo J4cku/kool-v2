@@ -24,6 +24,7 @@ export default function AddressBlock() {
         href="https://maps.app.goo.gl/f3nJEyLJXxKStLvPA"
         target="_blank"
         rel="noopener noreferrer"
+        onClick={() => track('map_address_click')}
         className="flex min-h-11 items-center justify-between w-full font-[400] uppercase text-dark hover:opacity-70 transition-opacity text-[clamp(15px,1.5vw,20px)]"
       >
         <Distributed text={address} />

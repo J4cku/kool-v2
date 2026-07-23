@@ -2,6 +2,7 @@
 
 import { useLocale } from 'next-intl';
 import { usePathname, useRouter } from '@/i18n/navigation';
+import { track } from '@/lib/analytics';
 
 export default function LanguageToggle() {
   const locale = useLocale();
@@ -10,6 +11,7 @@ export default function LanguageToggle() {
 
   const switchTo = (newLocale: 'pl' | 'en') => {
     if (newLocale !== locale) {
+      track('language_switch', { to: newLocale });
       router.replace(pathname, { locale: newLocale });
     }
   };

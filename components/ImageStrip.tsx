@@ -18,6 +18,7 @@ import { A11y, Autoplay, Keyboard, Mousewheel } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import { Link } from '@/i18n/navigation';
+import { track } from '@/lib/analytics';
 import { localizeProject, projects } from '@/data/projects';
 import { curateHomepageProjects } from '@/data/homepage-projects';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
@@ -86,6 +87,7 @@ function ProjectPane({
       className="group absolute inset-0 block outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-coral"
       aria-label={`${openProjectLabel}: ${project.title}, ${project.location}`}
       draggable={false}
+      onClick={() => track('hero_project_click', { project: project.slug })}
     >
       {/* bottom-px keeps the image 1px short of the viewport: Chrome
           excludes viewport-filling images from LCP candidates (treats them
@@ -212,6 +214,10 @@ export default function ImageStrip({ order }: { order: string[] }) {
   const handleManualChange = (swiper: SwiperInstance) => {
     const project = localizedProjects[swiper.realIndex];
     if (!project) return;
+
+    /* Only manual navigation reaches this handler (touch/keyboard/wheel),
+       never autoplay — so this measures deliberate hero engagement */
+    track('hero_slide_change', { project: project.slug });
 
     const nextStatus = t('projectStatus', {
       position: swiper.realIndex + 1,

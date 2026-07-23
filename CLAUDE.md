@@ -160,7 +160,7 @@ Project skills live in `.claude/skills/`; shared agent permissions in `.claude/s
 - Founder/internal traffic: open any page with `?kool=<name>` once per device → auto-opts-in and identifies as `team-<name>` with person property `internal: true`; the PostHog project's "Filter out internal and test users" filter (`internal` is not set) excludes those persons from insights — this is the only place `identify()` is allowed
 - Init lives in `instrumentation-client.ts`, gated on `NEXT_PUBLIC_POSTHOG_KEY` (no-op when unset, e.g. local dev)
 - Events proxied first-party through `/dot/*` (rewrites in `next.config.mjs`) to bypass ad blockers; `/dot` is excluded from the next-intl matcher in `proxy.ts` and `skipTrailingSlashRedirect` is required — keep all three in sync
-- Custom events go through `track()` in `lib/analytics.ts` (never import `posthog-js` in components directly); current events: `contact_email_click`, `instagram_click` (with `placement`)
+- Custom events go through `track()` in `lib/analytics.ts` (never import `posthog-js` in components directly); current events: `contact_email_click`, `instagram_click` (`placement`), `hero_slide_change`/`hero_project_click` (`project`), `map_address_click`, `language_switch` (`to`)
 - Vercel Analytics + Speed Insights remain in `app/[locale]/layout.tsx` alongside PostHog
 - `skipTrailingSlashRedirect` removes Next's sitewide slash normalization, so `proxy.ts` restores the trailing-slash 308 for page routes itself
 - The `kool-posthog` MCP server (`.mcp.json`) needs a PostHog *personal* API key (phx_…) exported as `KOOL_POSTHOG_PERSONAL_API_KEY` in the shell environment (not `.env.local` — MCP reads the process env)
