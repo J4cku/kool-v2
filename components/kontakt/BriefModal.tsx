@@ -1,10 +1,16 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import BriefForm from './BriefForm';
-import { track } from '@/lib/analytics';
+import { featureFlagEnabled, subscribeFeatureFlags, track } from '@/lib/analytics';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 /* Trigger button + modal shell for the project-brief form on the kontakt
@@ -15,6 +21,14 @@ import { useReducedMotion } from '@/hooks/useReducedMotion';
 export default function BriefModal() {
   const t = useTranslations('brief');
   const reduceMotion = useReducedMotion();
+  /* Launch gate: the whole CTA + dialog stays hidden until the 'brief-form'
+     feature flag is enabled in PostHog. Deliberately fail-closed while the
+     form awaits approval — flip the flag to launch, no deploy needed. */
+  const formEnabled = useSyncExternalStore(
+    subscribeFeatureFlags,
+    () => featureFlagEnabled('brief-form'),
+    () => false,
+  );
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -56,6 +70,10 @@ export default function BriefModal() {
       document.documentElement.style.overflow = previousOverflow;
     };
   }, [open, close]);
+
+  if (!formEnabled) {
+    return null;
+  }
 
   return (
     <>
