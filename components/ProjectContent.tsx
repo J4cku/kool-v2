@@ -35,7 +35,7 @@ function PaddedImage({ src, small }: { src: string; small?: boolean }) {
     return (
       <ColumnImage
         src={src}
-        alt="Kool Studio project"
+        alt="kool studio project"
         aspect="aspect-[9/16]"
         width="w-[72%] md:w-[60%]"
         fit="contain"
@@ -48,7 +48,7 @@ function PaddedImage({ src, small }: { src: string; small?: boolean }) {
   return (
     <div className="w-full md:w-1/2 p-6 md:p-10 lg:p-14 xl:p-20">
       <div className="relative w-full h-full aspect-[3/4] md:aspect-auto">
-        <Image src={src} alt="Kool Studio project" fill className="object-contain" sizes="(max-width: 768px) 100vw, 40vw" />
+        <Image src={src} alt="kool studio project" fill className="object-contain" sizes="(max-width: 768px) 100vw, 40vw" />
       </div>
     </div>
   );
@@ -57,7 +57,7 @@ function PaddedImage({ src, small }: { src: string; small?: boolean }) {
 function FullImage({ src, portrait }: { src: string; portrait?: boolean }) {
   return (
     <div className={`w-full md:w-1/2 ${portrait ? 'aspect-[2/3]' : 'aspect-square'} relative`}>
-      <Image src={src} alt="Kool Studio project" fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" quality={90} />
+      <Image src={src} alt="kool studio project" fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" quality={90} />
     </div>
   );
 }
@@ -71,7 +71,7 @@ function ReelVideo({ src, aspect = 'aspect-[9/16]' }: { src: string; aspect?: st
         muted
         loop
         playsInline
-        aria-label="Kool Studio project video"
+        aria-label="kool studio project video"
         className={`mx-auto w-full max-w-[360px] ${aspect} object-cover`}
       />
     </div>
@@ -154,7 +154,7 @@ export default function ProjectContent({ images, description, descriptionBlocks,
     // Full-width row
     if (fullWidthSet.has(itemIdx) && current.kind === 'image') {
       rows.push(
-        <ParallaxImage key={`row-${rowIdx}`} src={current.src} alt="Kool Studio project" sizes="100vw" quality={90} />
+        <ParallaxImage key={`row-${rowIdx}`} src={current.src} alt="kool studio project" sizes="100vw" quality={90} />
       );
       itemIdx++;
       rowIdx++;

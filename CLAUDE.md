@@ -1,6 +1,6 @@
-# Kool Studio Website (kool-v2)
+# kool studio website (kool-v2)
 
-Portfolio website for Kool Studio, a Wroclaw-based interior architecture practice.
+Portfolio website for kool studio, a Wroclaw-based interior architecture practice.
 
 ## Quick Reference
 

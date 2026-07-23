@@ -36,7 +36,7 @@ export default function NotFound() {
         transition={{ delay: 1.6, duration: 0.6 }}
         className="mb-12"
       >
-        <Image src="/logo.svg" alt="Kool Studio" width={120} height={40} />
+        <Image src="/logo.svg" alt="kool studio" width={120} height={40} />
       </motion.div>
 
       {/* "oops!" letter by letter */}

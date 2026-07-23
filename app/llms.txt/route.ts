@@ -19,9 +19,9 @@ export function GET() {
       `- [${item.publication} — ${plMessages.studio.press.items[item.key].title}](${item.href})`
   );
 
-  const body = `# Kool Studio — Architektura Wnętrz / Interior Architecture & Design
+  const body = `# kool studio — Architektura Wnętrz / Interior Architecture & Design
 
-> Kool Studio is a Wrocław-based interior architecture practice led by architects Ola Kilińska and Ola Leszczyńska. The studio designs distinctive residential and commercial interiors, working from Wrocław on projects across Poland — including Warsaw, Łódź and Gdańsk. Project descriptions below are in Polish.
+> kool studio is a Wrocław-based interior architecture practice led by architects Ola Kilińska and Ola Leszczyńska. The studio designs distinctive residential and commercial interiors, working from Wrocław on projects across Poland — including Warsaw, Łódź and Gdańsk. Project descriptions below are in Polish.
 
 ## Pages
 - [Projekty / Projects](${BASE_URL}/pl/projekty): portfolio of residential and commercial interiors

@@ -79,7 +79,7 @@ export default async function ProjectDetailPage({
         creator: {
           '@type': 'ProfessionalService',
           '@id': `${BASE_URL}/#studio`,
-          name: 'Kool Studio',
+          name: 'kool studio',
           url: BASE_URL,
         },
         ...(project.meta?.collaboration

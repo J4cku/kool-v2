@@ -1,6 +1,6 @@
 # Widoczność w wyszukiwarkach AI — działania poza stroną
 
-Cel: gdy ktoś pyta Claude'a, ChatGPT albo Perplexity o „architekt wnętrz Wrocław" / „interior designer Warsaw", Kool Studio ma być znajdowalne i cytowalne. Prace na samej stronie (metadane, canonicale, indeksowalna nawigacja i lista projektów, JSON-LD, llms.txt) zostały wdrożone w lipcu 2026; wszystko poniżej dzieje się **poza repozytorium** i może to zrobić tylko studio (konta, weryfikacje, kontakt z mediami).
+Cel: gdy ktoś pyta Claude'a, ChatGPT albo Perplexity o „architekt wnętrz Wrocław" / „interior designer Warsaw", kool studio ma być znajdowalne i cytowalne. Prace na samej stronie (metadane, canonicale, indeksowalna nawigacja i lista projektów, JSON-LD, llms.txt) zostały wdrożone w lipcu 2026; wszystko poniżej dzieje się **poza repozytorium** i może to zrobić tylko studio (konta, weryfikacje, kontakt z mediami).
 
 Jak silniki AI naprawdę znajdują lokalne firmy (stan na połowę 2026):
 
@@ -17,12 +17,12 @@ Jak silniki AI naprawdę znajdują lokalne firmy (stan na połowę 2026):
 
 ## 2. Wizytówki firmowe (warstwa „encji")
 
-NAP (nazwa, adres, telefon) **identyczny co do znaku** wszędzie: `Kool Studio, Zaporoska 83/15, 53-415 Wrocław` + hello@koolstudio.pl. W każdym opisie wymieniaj **Wrocław (siedziba) i Warszawę (obszar działania)**.
+NAP (nazwa, adres, telefon) **identyczny co do znaku** wszędzie: `kool studio, Zaporoska 83/15, 53-415 Wrocław` + hello@koolstudio.pl. W każdym opisie wymieniaj **Wrocław (siedziba) i Warszawę (obszar działania)**.
 
-- [ ] **Profil Firmy w Google** — miejsce „kool studio" już istnieje w Google Maps (pinezka, do której linkuje strona kontaktu). Przejmij/zweryfikuj je na https://business.google.com, ustaw kategorię *Architekt wnętrz*, dodaj usługi, zdjęcia projektów, link do strony i Warszawę jako obszar obsługi. Potem **proś byłych klientów o opinie, które wymieniają usługę i miasto** („projekt wnętrza mieszkania we Wrocławiu") — treść opinii bywa cytowana w odpowiedziach AI.
-- [ ] **Foursquare** — załóż/przejmij wizytówkę na https://location.foursquare.com (albo w aplikacji), kategoria Interior Designer / Design Studio, pełny NAP, opis z Wrocławiem + Warszawą, zdjęcia. *Główne źródło lokalnych nazw dla ChatGPT; efekt zwykle widoczny w 2–4 tygodnie.*
-- [ ] **Bing Places** — https://www.bingplaces.com (można zaimportować z Profilu Firmy w Google).
-- [ ] **Apple Business** — https://businessconnect.apple.com. Zasila Apple Maps, Siri i Apple Intelligence; większość firm wciąż nie przejęła swoich wizytówek, więc to tania przewaga.
+- [x] **Profil Firmy w Google** — przejęty 23.07.2026 (wizytówka: https://maps.google.com/?cid=12276542814275745116, dodana do `sameAs` na stronie). Do zrobienia w profilu: kategoria *Architekt wnętrz*, usługi, zdjęcia projektów, link do strony (z UTM), Warszawa jako obszar obsługi. Potem **proś byłych klientów o opinie, które wymieniają usługę i miasto** („projekt wnętrza mieszkania we Wrocławiu") — treść opinii bywa cytowana w odpowiedziach AI.
+- [ ] **Foursquare** — formularz przejęcia (https://business.foursquare.com/claim/?new_search=true; stary link location.foursquare.com nie działa) nie znajdował miejsc spoza USA przy próbie 23.07.2026. Obejście: utwórz miejsce przez aplikację **Swarm** (dodawanie miejsc działa globalnie i jest darmowe) z pełnym NAP `kool studio, Zaporoska 83/15, Wrocław`, kategoria Design Studio — *dla ChatGPT liczy się samo istnienie miejsca w danych Foursquare; płatne przejęcie (~20 USD) służy tylko do zarządzania i może poczekać.* Co jakiś czas ponów próbę przejęcia.
+- [x] **Bing Places** — założone 23.07.2026 (Bing Webmaster Tools zweryfikowany tego samego dnia). Publiczna wizytówka w Bing Maps jeszcze niewidoczna — nowe wpisy publikują się do ok. tygodnia; gdy się pojawi, zapisz jej adres do `sameAs`.
+- [ ] **Apple Business** — https://businessconnect.apple.com. *Odłożone (decyzja 23.07.2026).* Zasila Apple Maps, Siri i Apple Intelligence; tania przewaga, gdy temat wróci.
 
 ## 3. Katalogi branżowe i platformy portfolio
 
@@ -38,7 +38,7 @@ Wzmianki o marce w zaufanych mediach korelują z obecnością w odpowiedziach AI
 - [ ] Dla każdego ukończonego projektu: profesjonalne zdjęcia + krótki polski press kit (historia, miasto, metraż, materiały, współprace), wysyłany do **whitemad.pl, Label Magazine, Magazif, Domosfera, Czas na Wnętrze, Elle Decoration Polska**. Cel: 2–4 publikacje rocznie.
 - [ ] Zgłoszenie do dorocznego albumu **Homebook Design**.
 - [ ] Najmocniejszy, najlepiej sfotografowany projekt: **ArchDaily** (https://www.archdaily.com/submit-a-project — min. 15 zdjęć 2880px+, narracja po angielsku) i pitch do **Dezeen**. Jedna akceptacja = trwała wzmianka o wysokim autorytecie.
-- [ ] Proś dziennikarzy, by w treści artykułu padała nazwa „Kool Studio" **wraz z miastem**.
+- [ ] Proś dziennikarzy, by w treści artykułu padała nazwa „kool studio" **wraz z miastem**.
 
 ## 5. Social media jako powierzchnia dla crawlerów AI
 
@@ -47,13 +47,13 @@ Wzmianki o marce w zaufanych mediach korelują z obecnością w odpowiedziach AI
 
 ## 6. Później (po 2–3 publikacjach prasowych)
 
-- [ ] **Rekord w Wikidata** dla Kool Studio (instancja: pracownia projektowania wnętrz; siedziba: Wrocław; oficjalna strona; źródła: adresy publikacji prasowych). Zasila Google Knowledge Graph i warstwy encji LLM-ów; typowe opóźnienie panelu wiedzy to 2–6 miesięcy.
-- [ ] Dodaj adres każdego przejętego profilu (Google Maps, Foursquare, Homebook, Archello, Architonic, Pinterest, Wikidata) do tablicy `sameAs` w JSON-LD strony w `app/[locale]/layout.tsx` — dziś jest tam tylko Instagram.
+- [ ] **Rekord w Wikidata** dla kool studio (instancja: pracownia projektowania wnętrz; siedziba: Wrocław; oficjalna strona; źródła: adresy publikacji prasowych). Zasila Google Knowledge Graph i warstwy encji LLM-ów; typowe opóźnienie panelu wiedzy to 2–6 miesięcy.
+- [ ] Dodaj adres każdego przejętego profilu (Foursquare, Homebook, Archello, Architonic, Pinterest, Wikidata, Bing Maps po publikacji) do tablicy `sameAs` w JSON-LD strony w `app/[locale]/layout.tsx` — Instagram + Facebook (https://www.facebook.com/its.kool.studio) + Google Maps dodane 23.07.2026.
 - [ ] Rozważ odłożoną na później **sekcję FAQ** (oferta/kontakt) ze schematem FAQPage — FAQ + rozbudowany schema dawały ~44% więcej cytowań AI; ludzie pytają asystentów o „ile kosztuje projekt wnętrz we Wrocławiu", „czy pracujecie w Warszawie", „jak długo trwa projekt".
 
 ## 7. Pomiar (co miesiąc, 15 minut)
 
-- [ ] Zapytaj Claude'a, ChatGPT i Perplexity (po polsku i angielsku): „architekt wnętrz Wrocław", „polecany projektant wnętrz Wrocław", „interior designer Warsaw Poland" — zanotuj, czy Kool Studio się pojawia i **jakie źródła są cytowane**; wysiłek kolejnego miesiąca kieruj w te źródła.
+- [ ] Zapytaj Claude'a, ChatGPT i Perplexity (po polsku i angielsku): „architekt wnętrz Wrocław", „polecany projektant wnętrz Wrocław", „interior designer Warsaw Poland" — zanotuj, czy kool studio się pojawia i **jakie źródła są cytowane**; wysiłek kolejnego miesiąca kieruj w te źródła.
 - [ ] Sprawdź raport **AI Performance** w Bing Webmaster i `site:koolstudio.pl` w Brave.
 
 ### Uwagi

@@ -41,7 +41,7 @@ export default function KontaktPage() {
           >
             <LazyAutoplayVideo
               src="/videos/reel.mp4"
-              label="Kool Studio showreel"
+              label="kool studio showreel"
               className="w-[160px] h-[160px] md:w-[220px] md:h-[220px] object-cover"
             />
             <AddressBlock />

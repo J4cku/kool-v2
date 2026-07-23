@@ -21,34 +21,34 @@
     "schemaDescription": "Wrocławska pracownia architektury wnętrz projektująca wnętrza mieszkalne i komercyjne, autorskie meble, oświetlenie i identyfikację wizualną. Projekty w całej Polsce, m.in. w Warszawie.",
     "home": {
       "title": "kool studio | architektura wnętrz wrocław",
-      "description": "Kool Studio — wrocławska pracownia architektury wnętrz. Projektujemy autorskie wnętrza mieszkalne i komercyjne z dbałością o detal. Meble, lampy, identyfikacja wizualna.",
+      "description": "kool studio — wrocławska pracownia architektury wnętrz. Projektujemy autorskie wnętrza mieszkalne i komercyjne z dbałością o detal. Meble, lampy, identyfikacja wizualna.",
       "ogDescription": "Autorskie wnętrza, które zostają na dłużej. Projektowanie przestrzeni mieszkalnych i komercyjnych.",
-      "ogImageAlt": "Wnętrze mieszkania przy ulicy Walecznych zaprojektowane przez Kool Studio"
+      "ogImageAlt": "Wnętrze mieszkania przy ulicy Walecznych zaprojektowane przez kool studio"
     },
     "projekty": {
       "title": "projekty — portfolio wnętrz",
-      "description": "Portfolio projektów Kool Studio — mieszkania, domy, restauracje, hotele i wnętrza komercyjne we Wrocławiu, Warszawie i całej Polsce.",
-      "ogImageAlt": "Wnętrze delikatesów Dehesa zaprojektowane przez Kool Studio"
+      "description": "Portfolio projektów kool studio — mieszkania, domy, restauracje, hotele i wnętrza komercyjne we Wrocławiu, Warszawie i całej Polsce.",
+      "ogImageAlt": "Wnętrze delikatesów Dehesa zaprojektowane przez kool studio"
     },
     "studio": {
       "title": "studio — o nas",
-      "description": "Kool Studio tworzą architektki Ola Kilińska i Ola Leszczyńska. Wrocławska pracownia projektuje wnętrza mieszkalne i komercyjne w całej Polsce.",
-      "ogImageAlt": "Ola Kilińska i Ola Leszczyńska w pracowni Kool Studio"
+      "description": "kool studio tworzą architektki Ola Kilińska i Ola Leszczyńska. Wrocławska pracownia projektuje wnętrza mieszkalne i komercyjne w całej Polsce.",
+      "ogImageAlt": "Ola Kilińska i Ola Leszczyńska w pracowni kool studio"
     },
     "oferta": {
       "title": "oferta — projektowanie wnętrz",
       "description": "Kompleksowe projektowanie wnętrz komercyjnych i mieszkalnych: koncepcja, dokumentacja wykonawcza, nadzór autorski, meble na wymiar, branding. Wrocław i cała Polska.",
-      "ogImageAlt": "Wnętrze restauracji zaprojektowane przez Kool Studio"
+      "ogImageAlt": "Wnętrze restauracji zaprojektowane przez kool studio"
     },
     "kontakt": {
       "title": "kontakt",
-      "description": "Skontaktuj się z Kool Studio — pracownią architektury wnętrz z Wrocławia. Studio: Zaporoska 83/15, 53-415 Wrocław. E-mail: hello@koolstudio.pl.",
-      "ogImageAlt": "Paleta materiałów i kolorów w pracowni Kool Studio"
+      "description": "Skontaktuj się z kool studio — pracownią architektury wnętrz z Wrocławia. Studio: Zaporoska 83/15, 53-415 Wrocław. E-mail: hello@koolstudio.pl.",
+      "ogImageAlt": "Paleta materiałów i kolorów w pracowni kool studio"
     },
     "polityka-prywatnosci": {
       "title": "Polityka prywatności",
-      "description": "Zasady przetwarzania danych osobowych i plików cookie na stronie Kool Studio.",
-      "ogImageAlt": "Paleta materiałów i kolorów w pracowni Kool Studio"
+      "description": "Zasady przetwarzania danych osobowych i plików cookie na stronie kool studio.",
+      "ogImageAlt": "Paleta materiałów i kolorów w pracowni kool studio"
     }
   },
   "projects": {
@@ -79,8 +79,8 @@
     "title": "Studio",
     "manifesto": "WE ARE KOOL AND WE DESIGN KOOL THINGS!",
     "intro": "Wrocławskie studio projektowe założone przez dynamiczny duet architektek – Olę Kilińską i Olę Leszczyńską. Tworzymy wyjątkowe wnętrza i przestrzenie komercyjne, które są równie funkcjonalne, co inspirujące. Łącząc różne dyscypliny, od projektowania wnętrz i strategii, po rozwój produktu i identyfikację wizualną, tworzymy koncepcje, które włączą praktyczność z pięknem. Nasze przestrzenie nie tylko działają – one rezonują, wywołują emocje i pozostawiają trwałe wrażenie.",
-    "heroImageAlt": "Ola Kilińska i Ola Leszczyńska w pracowni Kool Studio",
-    "detailImageAlt": "Materiały i próbki w pracowni Kool Studio",
+    "heroImageAlt": "Ola Kilińska i Ola Leszczyńska w pracowni kool studio",
+    "detailImageAlt": "Materiały i próbki w pracowni kool studio",
     "pressHeading": "Napisali o nas",
     "press": {
       "items": {
@@ -173,7 +173,7 @@
   },
   "privacy": {
     "title": "Polityka prywatności",
-    "intro": "Administratorem Twoich danych osobowych jest Kool Studio, ul. Zaporoska 83/15, Wrocław. W sprawach dotyczących danych osobowych napisz na hello@koolstudio.pl.",
+    "intro": "Administratorem Twoich danych osobowych jest kool studio, ul. Zaporoska 83/15, Wrocław. W sprawach dotyczących danych osobowych napisz na hello@koolstudio.pl.",
     "contactLabel": "Kontakt e-mail",
     "contactBody": "Gdy piszesz na hello@koolstudio.pl lub wysyłasz brief przez formularz na stronie kontaktowej, przetwarzamy podane dane (imię, adres e-mail, informacje o projekcie) wyłącznie po to, aby odpowiedzieć i poprowadzić rozmowę o współpracy; po wysłaniu briefu otrzymasz e-mailowe potwierdzenie. Korespondencję przechowujemy tak długo, jak wymaga tego prowadzona sprawa.",
     "analyticsLabel": "Statystyki odwiedzin",

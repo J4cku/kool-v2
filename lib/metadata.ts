@@ -51,7 +51,7 @@ export async function pageMetadata(locale: string, key: MetaPageKey): Promise<Me
       title: `${title} | kool studio`,
       description,
       type: 'website',
-      siteName: 'Kool Studio',
+      siteName: 'kool studio',
       locale: ogLocale(locale),
       alternateLocale: locale === 'en' ? 'pl_PL' : 'en_US',
       url: `${BASE_URL}/${locale}${path}`,
