@@ -13,15 +13,19 @@ import RevealHeading from '@/components/RevealHeading';
 
 const SWIPE_THRESHOLD = 60;
 /* Active card width as % of the section — MUST stay in sync with the
-   w-[85%] md:w-[78%] slide classes. The strip is LEFT-ALIGNED (no ml) and
-   translates one card-width per step, so the active card fills most of the
-   width while the next card peeks on the right as a preview; the previous
-   card scrolls off the left. */
-const SLIDE_W_MOBILE = 85;
-const SLIDE_W_DESKTOP = 78;
-/* Only the right edge fades — the active card stays fully legible on the
-   left while the upcoming preview dissolves toward the border. */
-const EDGE_MASK = 'linear-gradient(to right, rgb(0 0 0) 86%, transparent)';
+   w-[82%] md:w-[76%] slide classes. The strip is CENTRED: it is offset by
+   half the leftover width ((100 - slideW)/2) and translates one card-width
+   per step, so the active card sits in the middle with a symmetric peek of
+   the previous card on the left and the next card on the right. */
+const SLIDE_W_MOBILE = 82;
+const SLIDE_W_DESKTOP = 76;
+/* Both edges dissolve to transparent over the peek zone ((100 - slideW)/2 per
+   side), so the exiting stage disappears toward the left border and the
+   entering stage toward the right, while the centred active card stays solid. */
+const edgeMask = (slideW: number) => {
+  const peek = (100 - slideW) / 2;
+  return `linear-gradient(to right, transparent 0%, rgb(0 0 0) ${peek}%, rgb(0 0 0) ${100 - peek}%, transparent 100%)`;
+};
 /* Scroll distance (vh) the pin holds per stage — total pin height is
    stages × this. Higher = more scroll per slide. */
 const VH_PER_SLIDE = 62;
@@ -51,7 +55,7 @@ function StageSlides({ stages, active }: { stages: TimelineStage[]; active: numb
             aria-hidden={!isActive}
             /* relative scopes the sr-only span so it can't escape the masked
                container and add horizontal page overflow */
-            className={`relative shrink-0 w-[85%] md:w-[78%] pr-8 md:pr-12 select-none transition-opacity duration-500 ${
+            className={`relative shrink-0 w-[82%] md:w-[76%] pr-8 md:pr-12 select-none transition-opacity duration-500 ${
               isActive ? 'opacity-100' : 'opacity-30'
             }`}
           >
@@ -155,6 +159,7 @@ function CarouselTimeline({
     if (info.offset.x < -SWIPE_THRESHOLD) goTo(active + 1);
     else if (info.offset.x > SWIPE_THRESHOLD) goTo(active - 1);
   };
+  const mask = edgeMask(slideW);
 
   return (
     <div>
@@ -164,7 +169,7 @@ function CarouselTimeline({
       </p>
       <div
         className="overflow-hidden"
-        style={{ maskImage: EDGE_MASK, WebkitMaskImage: EDGE_MASK }}
+        style={{ maskImage: mask, WebkitMaskImage: mask }}
       >
         <motion.div
           drag="x"
@@ -172,7 +177,7 @@ function CarouselTimeline({
           dragElastic={0.15}
           onDragEnd={onDragEnd}
           className="flex items-start cursor-grab active:cursor-grabbing"
-          style={{ transform: `translateX(${-active * slideW}%)` }}
+          style={{ transform: `translateX(${(100 - slideW) / 2 - active * slideW}%)` }}
         >
           <StageSlides stages={stages} active={active} />
         </motion.div>
@@ -202,7 +207,8 @@ function ScrollPinnedTimeline({
     target: wrapRef,
     offset: ['start start', 'end end'],
   });
-  const x = useTransform(scrollYProgress, (v) => `${-v * lastIndex * slideW}%`);
+  const x = useTransform(scrollYProgress, (v) => `${(100 - slideW) / 2 - v * lastIndex * slideW}%`);
+  const mask = edgeMask(slideW);
 
   useMotionValueEvent(scrollYProgress, 'change', (v) => {
     const idx = Math.max(0, Math.min(lastIndex, Math.round(v * lastIndex)));
@@ -232,7 +238,7 @@ function ScrollPinnedTimeline({
         <div className="flex-1 flex flex-col justify-center">
           <div
             className="overflow-hidden"
-            style={{ maskImage: EDGE_MASK, WebkitMaskImage: EDGE_MASK }}
+            style={{ maskImage: mask, WebkitMaskImage: mask }}
           >
             <motion.div className="flex items-start" style={{ x }}>
               <StageSlides stages={stages} active={active} />
