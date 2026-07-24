@@ -1,7 +1,7 @@
 'use client';
 
 import { Link } from '@/i18n/navigation';
-import ScrollWeightHeading from './ScrollWeightHeading';
+import RevealHeading from '@/components/RevealHeading';
 
 /* Closing call-to-action — the final section of the commercial subpage.
    Deep-links to /kontakt#brief, which opens the brief modal on the kontakt
@@ -15,11 +15,10 @@ export default function ContactBriefCta({
 }) {
   return (
     <div className="mt-20 md:mt-28">
-      <ScrollWeightHeading
-        id="contact"
+      <RevealHeading
         as="h2"
         text={heading}
-        className="text-dark uppercase mb-6 md:mb-8 leading-[1.02]"
+        className="font-[700] text-dark uppercase mb-6 md:mb-8 leading-[1.02]"
         style={{ fontSize: 'clamp(28px, 4.2vw, 60px)' }}
       />
       <Link

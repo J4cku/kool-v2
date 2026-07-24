@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import ColumnImage from '@/components/ColumnImage';
+import RevealHeading from '@/components/RevealHeading';
 import ScrollWeightHeading, { ScrollWeightHeadings } from './ScrollWeightHeading';
 import StagesTimeline, { type TimelineStage } from './StagesTimeline';
 import FaqAccordion, { type FaqItem } from './FaqAccordion';
@@ -44,11 +45,10 @@ export default function CommercialDetails() {
     <ScrollWeightHeadings>
       {/* Projekt wnętrza komercyjnego */}
       <div>
-        <ScrollWeightHeading
-          id="project"
+        <RevealHeading
           as="h3"
           text={t('projectHeading')}
-          className="text-dark uppercase mb-4 md:mb-5 leading-[1.02]"
+          className="font-[700] text-dark uppercase mb-4 md:mb-5 leading-[1.02]"
           style={{ fontSize: 'clamp(28px, 4.2vw, 60px)' }}
         />
         <p
@@ -127,28 +127,28 @@ export default function CommercialDetails() {
 
       {/* Etapy projektu */}
       <div className="mt-14 md:mt-20">
-        <StagesTimeline headingId="stages" heading={t('stagesHeading')} stages={stages} />
+        <StagesTimeline heading={t('stagesHeading')} stages={stages} />
       </div>
 
       {/* Co zyskujesz */}
       <div className="mt-14 md:mt-20">
-        <ScrollWeightHeading
-          id="benefits"
+        <RevealHeading
           as="h3"
           text={t('benefitsHeading')}
-          className="text-dark uppercase mb-4 md:mb-5 leading-[1.02]"
+          className="font-[700] text-dark uppercase mb-4 md:mb-5 leading-[1.02]"
           style={{ fontSize: 'clamp(28px, 4.2vw, 60px)' }}
         />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-0 items-start">
           <div className="space-y-8 md:space-y-10 md:pr-8 lg:pr-12">
             {benefits.map((benefit, i) => (
               <div key={i}>
-                <h4
-                  className="font-[700] text-dark uppercase mb-3 md:mb-4"
+                <ScrollWeightHeading
+                  id={`benefit-${i}`}
+                  as="h4"
+                  text={benefit.title}
+                  className="text-dark uppercase mb-3 md:mb-4"
                   style={{ fontSize: 'clamp(16px, 1.6vw, 22px)' }}
-                >
-                  {benefit.title}
-                </h4>
+                />
                 <p
                   className="text-dark/80 font-[400] leading-[1.5] max-w-[560px]"
                   style={{ fontSize: 'clamp(15px, 1.5vw, 20px)' }}
@@ -172,11 +172,10 @@ export default function CommercialDetails() {
 
       {/* Wybrane realizacje */}
       <div className="mt-14 md:mt-20">
-        <ScrollWeightHeading
-          id="works"
+        <RevealHeading
           as="h3"
           text={t('worksHeading')}
-          className="text-dark uppercase mb-4 md:mb-5 leading-[1.02]"
+          className="font-[700] text-dark uppercase mb-4 md:mb-5 leading-[1.02]"
           style={{ fontSize: 'clamp(28px, 4.2vw, 60px)' }}
         />
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-x-6 lg:gap-x-8 gap-y-12 items-stretch">
@@ -224,11 +223,10 @@ export default function CommercialDetails() {
 
       {/* FAQ */}
       <div className="mt-14 md:mt-20">
-        <ScrollWeightHeading
-          id="faq"
+        <RevealHeading
           as="h3"
           text={t('faqHeading')}
-          className="text-dark uppercase mb-4 md:mb-5 leading-[1.02]"
+          className="font-[700] text-dark uppercase mb-4 md:mb-5 leading-[1.02]"
           style={{ fontSize: 'clamp(28px, 4.2vw, 60px)' }}
         />
         <FaqAccordion items={faqItems} />

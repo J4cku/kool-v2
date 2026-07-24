@@ -9,21 +9,19 @@ import {
   type PanInfo,
 } from 'framer-motion';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
-import ScrollWeightHeading from './ScrollWeightHeading';
+import RevealHeading from '@/components/RevealHeading';
 
 const SWIPE_THRESHOLD = 60;
-/* Slide width as % of the section — MUST stay in sync with the
-   w-[86%] md:w-[72%] 2xl:w-[62%] classes and the ml-[..] track offset
-   (offset = (100 - width) / 2). The strip translates one slide-width per
-   step. Laptop widths (768–1535) use a wider 72% slide so long stages —
-   step 4 especially — wrap to fewer lines and fit the pinned viewport;
-   large desktop keeps the original 62%. */
-const SLIDE_W_MOBILE = 86;
-const SLIDE_W_LAPTOP = 72;
-const SLIDE_W_DESKTOP = 62;
-/* Neighbouring slides dissolve toward both borders. */
-const EDGE_MASK =
-  'linear-gradient(to right, transparent, rgb(0 0 0) 6%, rgb(0 0 0) 94%, transparent)';
+/* Active card width as % of the section — MUST stay in sync with the
+   w-[85%] md:w-[78%] slide classes. The strip is LEFT-ALIGNED (no ml) and
+   translates one card-width per step, so the active card fills most of the
+   width while the next card peeks on the right as a preview; the previous
+   card scrolls off the left. */
+const SLIDE_W_MOBILE = 85;
+const SLIDE_W_DESKTOP = 78;
+/* Only the right edge fades — the active card stays fully legible on the
+   left while the upcoming preview dissolves toward the border. */
+const EDGE_MASK = 'linear-gradient(to right, rgb(0 0 0) 86%, transparent)';
 /* Scroll distance (vh) the pin holds per stage — total pin height is
    stages × this. Higher = more scroll per slide. */
 const VH_PER_SLIDE = 62;
@@ -36,7 +34,6 @@ export interface TimelineStage {
 interface StagesTimelineProps {
   heading: string;
   stages: TimelineStage[];
-  headingId?: string;
 }
 
 const pad = (i: number) => String(i + 1).padStart(2, '0');
@@ -54,7 +51,7 @@ function StageSlides({ stages, active }: { stages: TimelineStage[]; active: numb
             aria-hidden={!isActive}
             /* relative scopes the sr-only span so it can't escape the masked
                container and add horizontal page overflow */
-            className={`relative shrink-0 w-[86%] md:w-[72%] 2xl:w-[62%] pr-8 md:pr-12 select-none transition-opacity duration-500 ${
+            className={`relative shrink-0 w-[85%] md:w-[78%] pr-8 md:pr-12 select-none transition-opacity duration-500 ${
               isActive ? 'opacity-100' : 'opacity-30'
             }`}
           >
@@ -129,12 +126,11 @@ function DotTrack({
   );
 }
 
-function TimelineHeading({ id, heading }: { id: string; heading: string }) {
+function TimelineHeading({ heading }: { heading: string }) {
   return (
-    <ScrollWeightHeading
-      id={id}
+    <RevealHeading
       text={heading}
-      className="text-dark uppercase mb-6 md:mb-10 leading-[1.02]"
+      className="font-[700] text-dark uppercase mb-6 md:mb-10 leading-[1.02]"
       style={{ fontSize: 'clamp(28px, 4.2vw, 60px)' }}
     />
   );
@@ -144,12 +140,10 @@ function TimelineHeading({ id, heading }: { id: string; heading: string }) {
    swipe — no scroll pinning. */
 function CarouselTimeline({
   heading,
-  headingId,
   stages,
   slideW,
 }: {
   heading: string;
-  headingId: string;
   stages: TimelineStage[];
   slideW: number;
 }) {
@@ -164,7 +158,7 @@ function CarouselTimeline({
 
   return (
     <div>
-      <TimelineHeading id={headingId} heading={heading} />
+      <TimelineHeading heading={heading} />
       <p className="sr-only" aria-live="polite" aria-atomic="true">
         {pad(active)} — {stages[active].title}
       </p>
@@ -177,7 +171,7 @@ function CarouselTimeline({
           dragConstraints={{ left: 0, right: 0 }}
           dragElastic={0.15}
           onDragEnd={onDragEnd}
-          className="flex items-start ml-[7%] md:ml-[14%] 2xl:ml-[19%] cursor-grab active:cursor-grabbing"
+          className="flex items-start cursor-grab active:cursor-grabbing"
           style={{ transform: `translateX(${-active * slideW}%)` }}
         >
           <StageSlides stages={stages} active={active} />
@@ -193,12 +187,10 @@ function CarouselTimeline({
    sticky-scroll (no wheel hijacking) — works on desktop and touch alike. */
 function ScrollPinnedTimeline({
   heading,
-  headingId,
   stages,
   slideW,
 }: {
   heading: string;
-  headingId: string;
   stages: TimelineStage[];
   slideW: number;
 }) {
@@ -229,7 +221,7 @@ function ScrollPinnedTimeline({
   return (
     <div ref={wrapRef} style={{ height: `${stages.length * VH_PER_SLIDE}vh` }}>
       <div className="sticky top-0 min-h-screen flex flex-col justify-center py-12 lg:py-16">
-        <TimelineHeading id={headingId} heading={heading} />
+        <TimelineHeading heading={heading} />
         <p className="sr-only" aria-live="polite" aria-atomic="true">
           {pad(active)} — {stages[active].title}
         </p>
@@ -237,7 +229,7 @@ function ScrollPinnedTimeline({
           className="overflow-hidden"
           style={{ maskImage: EDGE_MASK, WebkitMaskImage: EDGE_MASK }}
         >
-          <motion.div className="flex items-start ml-[7%] md:ml-[14%] 2xl:ml-[19%]" style={{ x }}>
+          <motion.div className="flex items-start" style={{ x }}>
             <StageSlides stages={stages} active={active} />
           </motion.div>
         </div>
@@ -252,33 +244,22 @@ function ScrollPinnedTimeline({
 export default function StagesTimeline({
   heading,
   stages,
-  headingId = 'stages',
 }: StagesTimelineProps) {
   const reduceMotion = useReducedMotion();
-  const [slideW, setSlideW] = useState(SLIDE_W_LAPTOP);
+  const [slideW, setSlideW] = useState(SLIDE_W_DESKTOP);
 
   useEffect(() => {
-    const desktop = window.matchMedia('(min-width: 1536px)');
-    const tablet = window.matchMedia('(min-width: 768px)');
-    const apply = () => {
-      if (desktop.matches) setSlideW(SLIDE_W_DESKTOP);
-      else if (tablet.matches) setSlideW(SLIDE_W_LAPTOP);
-      else setSlideW(SLIDE_W_MOBILE);
-    };
+    const query = window.matchMedia('(min-width: 768px)');
+    const apply = () => setSlideW(query.matches ? SLIDE_W_DESKTOP : SLIDE_W_MOBILE);
     apply();
-    desktop.addEventListener('change', apply);
-    tablet.addEventListener('change', apply);
-    return () => {
-      desktop.removeEventListener('change', apply);
-      tablet.removeEventListener('change', apply);
-    };
+    query.addEventListener('change', apply);
+    return () => query.removeEventListener('change', apply);
   }, []);
 
   if (reduceMotion) {
     return (
       <CarouselTimeline
         heading={heading}
-        headingId={headingId}
         stages={stages}
         slideW={slideW}
       />
@@ -288,7 +269,6 @@ export default function StagesTimeline({
   return (
     <ScrollPinnedTimeline
       heading={heading}
-      headingId={headingId}
       stages={stages}
       slideW={slideW}
     />

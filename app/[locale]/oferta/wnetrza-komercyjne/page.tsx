@@ -1,10 +1,13 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import { getTranslations } from 'next-intl/server';
 import { BASE_URL } from '@/lib/site';
 import { jsonLdScript, localeAlternates, ogLocale } from '@/lib/metadata';
 import Navbar from '@/components/Navbar';
 import FooterBanner from '@/components/FooterBanner';
 import CommercialDetails from '@/components/oferta/CommercialDetails';
+
+const HERO_IMAGE = '/images/foodhall-piazza/kool_piazza_01.webp';
 
 const SOCIAL_IMAGE = '/images/social/offer-commercial.jpg';
 const PATH = '/oferta/wnetrza-komercyjne';
@@ -99,8 +102,24 @@ export default async function WnetrzaKomercyjnePage({
       {/* overflow-x-clip contains the full-bleed types marquee without the
           100vw+scrollbar horizontal scroll; clip (not hidden) keeps the
           timeline's sticky pin working */}
-      <main className="pt-[200px] overflow-x-clip">
-        <div className="px-5 md:px-10 lg:px-[68px]">
+      <main className="overflow-x-clip">
+        {/* Hero band — the fixed navbar overlays its top */}
+        <div className="relative w-full h-[50vh] md:h-[62vh]">
+          <Image
+            src={HERO_IMAGE}
+            alt={
+              locale === 'en'
+                ? 'Commercial interior designed by kool studio'
+                : 'Wnętrze komercyjne zaprojektowane przez kool studio'
+            }
+            fill
+            priority
+            fetchPriority="high"
+            className="object-cover"
+            sizes="100vw"
+          />
+        </div>
+        <div className="px-5 md:px-10 lg:px-[68px] pt-12 md:pt-20">
           <div className="max-w-[1400px] mx-auto">
             <CommercialDetails />
           </div>
