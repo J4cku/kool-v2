@@ -12,9 +12,14 @@ import { useReducedMotion } from '@/hooks/useReducedMotion';
 import ScrollWeightHeading from './ScrollWeightHeading';
 
 const SWIPE_THRESHOLD = 60;
-/* Slide width as % of the section — must match the w-[86%] md:w-[62%] on the
-   slides; the strip translates by one slide-width per step. */
+/* Slide width as % of the section — MUST stay in sync with the
+   w-[86%] md:w-[72%] 2xl:w-[62%] classes and the ml-[..] track offset
+   (offset = (100 - width) / 2). The strip translates one slide-width per
+   step. Laptop widths (768–1535) use a wider 72% slide so long stages —
+   step 4 especially — wrap to fewer lines and fit the pinned viewport;
+   large desktop keeps the original 62%. */
 const SLIDE_W_MOBILE = 86;
+const SLIDE_W_LAPTOP = 72;
 const SLIDE_W_DESKTOP = 62;
 /* Neighbouring slides dissolve toward both borders. */
 const EDGE_MASK =
@@ -49,21 +54,24 @@ function StageSlides({ stages, active }: { stages: TimelineStage[]; active: numb
             aria-hidden={!isActive}
             /* relative scopes the sr-only span so it can't escape the masked
                container and add horizontal page overflow */
-            className={`relative shrink-0 w-[86%] md:w-[62%] pr-10 md:pr-20 select-none transition-opacity duration-500 ${
+            className={`relative shrink-0 w-[86%] md:w-[72%] 2xl:w-[62%] pr-8 md:pr-12 select-none transition-opacity duration-500 ${
               isActive ? 'opacity-100' : 'opacity-30'
             }`}
           >
+            {/* auto number column kept narrow so the text column stays wide
+                enough to show long stages (e.g. step 4) in full at laptop
+                widths without shrinking the body text */}
             <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-4 md:gap-0">
               <span
                 aria-hidden="true"
-                className="font-[700] text-coral leading-[0.8] tabular-nums md:pr-12 lg:pr-16"
-                style={{ fontSize: 'clamp(80px, 10vw, 150px)' }}
+                className="font-[700] text-coral leading-[0.8] tabular-nums md:pr-6 lg:pr-10"
+                style={{ fontSize: 'clamp(64px, 7vw, 120px)' }}
               >
                 {pad(i)}
               </span>
-              <div className="md:pt-2">
+              <div className="md:pt-1">
                 <h4
-                  className="font-[700] text-dark uppercase mb-4 md:mb-6"
+                  className="font-[700] text-dark uppercase mb-3 md:mb-4"
                   style={{ fontSize: 'clamp(16px, 1.6vw, 22px)' }}
                 >
                   <span className="sr-only">{pad(i)} </span>
@@ -126,7 +134,7 @@ function TimelineHeading({ id, heading }: { id: string; heading: string }) {
     <ScrollWeightHeading
       id={id}
       text={heading}
-      className="text-dark uppercase mb-10 md:mb-14 leading-[1.02]"
+      className="text-dark uppercase mb-6 md:mb-10 leading-[1.02]"
       style={{ fontSize: 'clamp(28px, 4.2vw, 60px)' }}
     />
   );
@@ -169,7 +177,7 @@ function CarouselTimeline({
           dragConstraints={{ left: 0, right: 0 }}
           dragElastic={0.15}
           onDragEnd={onDragEnd}
-          className="flex items-start ml-[7%] md:ml-[19%] cursor-grab active:cursor-grabbing"
+          className="flex items-start ml-[7%] md:ml-[14%] 2xl:ml-[19%] cursor-grab active:cursor-grabbing"
           style={{ transform: `translateX(${-active * slideW}%)` }}
         >
           <StageSlides stages={stages} active={active} />
@@ -220,7 +228,7 @@ function ScrollPinnedTimeline({
 
   return (
     <div ref={wrapRef} style={{ height: `${stages.length * VH_PER_SLIDE}vh` }}>
-      <div className="sticky top-0 min-h-screen flex flex-col justify-center py-24">
+      <div className="sticky top-0 min-h-screen flex flex-col justify-center py-12 lg:py-16">
         <TimelineHeading id={headingId} heading={heading} />
         <p className="sr-only" aria-live="polite" aria-atomic="true">
           {pad(active)} — {stages[active].title}
@@ -229,7 +237,7 @@ function ScrollPinnedTimeline({
           className="overflow-hidden"
           style={{ maskImage: EDGE_MASK, WebkitMaskImage: EDGE_MASK }}
         >
-          <motion.div className="flex items-start ml-[7%] md:ml-[19%]" style={{ x }}>
+          <motion.div className="flex items-start ml-[7%] md:ml-[14%] 2xl:ml-[19%]" style={{ x }}>
             <StageSlides stages={stages} active={active} />
           </motion.div>
         </div>
@@ -247,14 +255,23 @@ export default function StagesTimeline({
   headingId = 'stages',
 }: StagesTimelineProps) {
   const reduceMotion = useReducedMotion();
-  const [slideW, setSlideW] = useState(SLIDE_W_DESKTOP);
+  const [slideW, setSlideW] = useState(SLIDE_W_LAPTOP);
 
   useEffect(() => {
-    const query = window.matchMedia('(min-width: 768px)');
-    const apply = () => setSlideW(query.matches ? SLIDE_W_DESKTOP : SLIDE_W_MOBILE);
+    const desktop = window.matchMedia('(min-width: 1536px)');
+    const tablet = window.matchMedia('(min-width: 768px)');
+    const apply = () => {
+      if (desktop.matches) setSlideW(SLIDE_W_DESKTOP);
+      else if (tablet.matches) setSlideW(SLIDE_W_LAPTOP);
+      else setSlideW(SLIDE_W_MOBILE);
+    };
     apply();
-    query.addEventListener('change', apply);
-    return () => query.removeEventListener('change', apply);
+    desktop.addEventListener('change', apply);
+    tablet.addEventListener('change', apply);
+    return () => {
+      desktop.removeEventListener('change', apply);
+      tablet.removeEventListener('change', apply);
+    };
   }, []);
 
   if (reduceMotion) {

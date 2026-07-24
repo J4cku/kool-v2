@@ -1,14 +1,11 @@
 'use client';
 
-import { useSyncExternalStore } from 'react';
 import { Link } from '@/i18n/navigation';
-import { featureFlagEnabled, subscribeFeatureFlags } from '@/lib/analytics';
 import ScrollWeightHeading from './ScrollWeightHeading';
 
-/* Closing brief CTA on the commercial subpage. Fail-closed on the same
-   'brief-form' flag as the kontakt modal: the whole block stays hidden until
-   the flag is on, then the link deep-links to /kontakt#brief, which opens the
-   brief modal there. */
+/* Closing call-to-action — the final section of the commercial subpage.
+   Deep-links to /kontakt#brief, which opens the brief modal on the kontakt
+   page when the 'brief-form' flag is on (otherwise it just lands on kontakt). */
 export default function ContactBriefCta({
   heading,
   cta,
@@ -16,16 +13,8 @@ export default function ContactBriefCta({
   heading: string;
   cta: string;
 }) {
-  const enabled = useSyncExternalStore(
-    subscribeFeatureFlags,
-    () => featureFlagEnabled('brief-form'),
-    () => false,
-  );
-
-  if (!enabled) return null;
-
   return (
-    <div className="mt-24 md:mt-32">
+    <div className="mt-20 md:mt-28">
       <ScrollWeightHeading
         id="contact"
         as="h2"

@@ -10,7 +10,7 @@ import FaqAccordion, { type FaqItem } from './FaqAccordion';
 import ContactBriefCta from './ContactBriefCta';
 import { projects, localizeProject } from '@/data/projects';
 
-const WORK_SLUGS = ['delikatesy-dehesa', 'biuro-dobry-material', 'winobar-lodz'];
+const WORK_SLUGS = ['delikatesy-dehesa', 'biuro-dobry-material', 'winobar-lodz', 'foodhall-piazza'];
 
 /* Expanded body of the commercial offer: what the project covers, when it
    fits, the stage timeline, benefits, selected works and FAQ — the mockup's
@@ -31,6 +31,15 @@ export default function CommercialDetails() {
     return project ? [localizeProject(project, locale)] : [];
   });
 
+  // Venue types → " • "-separated categories; trailing separator keeps the
+  // marquee seamless across the loop point
+  const marqueeText =
+    t('types')
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean)
+      .join(' • ') + ' • ';
+
   return (
     <ScrollWeightHeadings>
       {/* Projekt wnętrza komercyjnego */}
@@ -39,7 +48,7 @@ export default function CommercialDetails() {
           id="project"
           as="h3"
           text={t('projectHeading')}
-          className="text-dark uppercase mb-3 md:mb-4 leading-[1.02]"
+          className="text-dark uppercase mb-4 md:mb-5 leading-[1.02]"
           style={{ fontSize: 'clamp(28px, 4.2vw, 60px)' }}
         />
         <p
@@ -54,21 +63,25 @@ export default function CommercialDetails() {
         >
           {t('typesLabel')}
         </p>
-        {/* Venue types as a full-bleed coral marquee — like the "we are kool"
-            footer band; breaks out of the content column to the viewport edges */}
+        {/* Venue types as a full-bleed coral marquee — bullet-separated,
+            slowed for readability; breaks out of the content column to the
+            viewport edges. Four identical units → the 50% loop lands on a
+            unit boundary, so there is no visible jump. */}
         <div
           className="w-screen relative left-1/2 -translate-x-1/2 overflow-hidden whitespace-nowrap"
           aria-hidden="true"
         >
-          <div className="animate-marquee inline-block motion-reduce:animate-none">
+          <div
+            className="animate-marquee inline-block motion-reduce:animate-none"
+            style={{ animationDuration: '48s' }}
+          >
             {Array.from({ length: 4 }).map((_, i) => (
               <span
                 key={i}
                 className="font-[600] uppercase text-coral"
                 style={{ fontSize: 'clamp(26px, 4.5vw, 60px)' }}
               >
-                {t('types')}
-                <span className="mx-4 md:mx-8">•</span>
+                {marqueeText}
               </span>
             ))}
           </div>
@@ -77,7 +90,7 @@ export default function CommercialDetails() {
       </div>
 
       {/* Ten projekt będzie odpowiedni gdy */}
-      <div className="mt-20 md:mt-28 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-0 items-start md:items-center">
+      <div className="mt-14 md:mt-20 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-0 items-start md:items-center">
         <ColumnImage
           src="/images/oferta/KOOL_oferta_komercyjne_budowa.webp"
           alt={locale === 'en' ? 'Site visit during construction' : 'Wizyta na budowie'}
@@ -113,17 +126,17 @@ export default function CommercialDetails() {
       </div>
 
       {/* Etapy projektu */}
-      <div className="mt-20 md:mt-28">
+      <div className="mt-14 md:mt-20">
         <StagesTimeline headingId="stages" heading={t('stagesHeading')} stages={stages} />
       </div>
 
       {/* Co zyskujesz */}
-      <div className="mt-20 md:mt-28">
+      <div className="mt-14 md:mt-20">
         <ScrollWeightHeading
           id="benefits"
           as="h3"
           text={t('benefitsHeading')}
-          className="text-dark uppercase mb-6 md:mb-8 leading-[1.02]"
+          className="text-dark uppercase mb-4 md:mb-5 leading-[1.02]"
           style={{ fontSize: 'clamp(28px, 4.2vw, 60px)' }}
         />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-0 items-start">
@@ -158,17 +171,17 @@ export default function CommercialDetails() {
       </div>
 
       {/* Wybrane realizacje */}
-      <div className="mt-20 md:mt-28">
+      <div className="mt-14 md:mt-20">
         <ScrollWeightHeading
           id="works"
           as="h3"
           text={t('worksHeading')}
-          className="text-dark uppercase mb-6 md:mb-8 leading-[1.02]"
+          className="text-dark uppercase mb-4 md:mb-5 leading-[1.02]"
           style={{ fontSize: 'clamp(28px, 4.2vw, 60px)' }}
         />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 lg:gap-x-10 gap-y-12 items-stretch border-b border-coral">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-x-6 lg:gap-x-8 gap-y-12 items-stretch">
           {works.map((project) => (
-            <div key={project.slug} className="flex flex-col pb-4">
+            <div key={project.slug} className="flex flex-col">
               <Link href={`/projekty/${project.slug}`} className="block group">
                 <div className="relative aspect-square overflow-hidden">
                   <Image
@@ -176,7 +189,7 @@ export default function CommercialDetails() {
                     alt={project.title}
                     fill
                     className="object-cover transition-transform duration-[600ms] group-hover:scale-[1.04]"
-                    sizes="(max-width: 768px) 100vw, 33vw"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 25vw"
                   />
                 </div>
               </Link>
@@ -190,7 +203,7 @@ export default function CommercialDetails() {
                 className="mt-3 text-dark/80 font-[400] leading-[1.5]"
                 style={{ fontSize: 'clamp(14px, 1.2vw, 16px)' }}
               >
-                {workBlurbs[project.slug]}
+                {workBlurbs[project.slug] ?? project.description}
               </p>
               <Link
                 href={`/projekty/${project.slug}`}
@@ -210,12 +223,12 @@ export default function CommercialDetails() {
       </div>
 
       {/* FAQ */}
-      <div className="mt-20 md:mt-28">
+      <div className="mt-14 md:mt-20">
         <ScrollWeightHeading
           id="faq"
           as="h3"
           text={t('faqHeading')}
-          className="text-dark uppercase mb-4 md:mb-6 leading-[1.02]"
+          className="text-dark uppercase mb-4 md:mb-5 leading-[1.02]"
           style={{ fontSize: 'clamp(28px, 4.2vw, 60px)' }}
         />
         <FaqAccordion items={faqItems} />

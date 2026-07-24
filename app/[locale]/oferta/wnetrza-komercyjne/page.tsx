@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { BASE_URL } from '@/lib/site';
 import { jsonLdScript, localeAlternates, ogLocale } from '@/lib/metadata';
-import { Link } from '@/i18n/navigation';
 import Navbar from '@/components/Navbar';
 import FooterBanner from '@/components/FooterBanner';
 import CommercialDetails from '@/components/oferta/CommercialDetails';
@@ -60,10 +59,6 @@ export default async function WnetrzaKomercyjnePage({
   const projectHeading = t('projectHeading');
 
   const pageUrl = `${BASE_URL}/${locale}${PATH}`;
-  const crumb =
-    locale === 'en'
-      ? { parent: 'services', current: 'commercial interiors' }
-      : { parent: 'oferta', current: 'wnętrza komercyjne' };
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -105,23 +100,13 @@ export default async function WnetrzaKomercyjnePage({
           100vw+scrollbar horizontal scroll; clip (not hidden) keeps the
           timeline's sticky pin working */}
       <main className="pt-[200px] overflow-x-clip">
-        <div className="px-5 md:px-10 lg:px-[68px] mb-10 md:mb-14">
-          <div className="max-w-[1400px] mx-auto">
-            <nav className="text-[11px] md:text-[12px] font-[500] uppercase tracking-[0.08em] text-dark/60">
-              <Link href="/oferta" className="hover:opacity-60 transition-opacity">
-                {crumb.parent}
-              </Link>
-              <span aria-hidden="true"> / </span>
-              <span>{crumb.current}</span>
-            </nav>
-          </div>
-        </div>
         <div className="px-5 md:px-10 lg:px-[68px]">
           <div className="max-w-[1400px] mx-auto">
             <CommercialDetails />
           </div>
         </div>
-        <FooterBanner />
+        {/* Page ends on the contact CTA (inside CommercialDetails); no marquee */}
+        <FooterBanner showMarquee={false} />
       </main>
     </>
   );
