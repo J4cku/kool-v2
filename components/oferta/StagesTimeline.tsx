@@ -220,18 +220,23 @@ function ScrollPinnedTimeline({
 
   return (
     <div ref={wrapRef} style={{ height: `${stages.length * VH_PER_SLIDE}vh` }}>
-      <div className="sticky top-0 min-h-screen flex flex-col justify-center py-12 lg:py-16">
-        <TimelineHeading heading={heading} />
-        <p className="sr-only" aria-live="polite" aria-atomic="true">
-          {pad(active)} — {stages[active].title}
-        </p>
-        <div
-          className="overflow-hidden"
-          style={{ maskImage: EDGE_MASK, WebkitMaskImage: EDGE_MASK }}
-        >
-          <motion.div className="flex items-start" style={{ x }}>
-            <StageSlides stages={stages} active={active} />
-          </motion.div>
+      {/* justify-between: heading + active card sit at the top (right after
+          the section above — no big centred gap), the axis pins to the
+          bottom, matching the mockup */}
+      <div className="sticky top-0 min-h-screen flex flex-col justify-between pt-24 md:pt-28 pb-10 md:pb-14">
+        <div>
+          <TimelineHeading heading={heading} />
+          <p className="sr-only" aria-live="polite" aria-atomic="true">
+            {pad(active)} — {stages[active].title}
+          </p>
+          <div
+            className="overflow-hidden"
+            style={{ maskImage: EDGE_MASK, WebkitMaskImage: EDGE_MASK }}
+          >
+            <motion.div className="flex items-start" style={{ x }}>
+              <StageSlides stages={stages} active={active} />
+            </motion.div>
+          </div>
         </div>
         <DotTrack stages={stages} active={active} onDot={onDot} />
       </div>

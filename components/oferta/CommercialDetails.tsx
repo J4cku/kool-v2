@@ -125,8 +125,10 @@ export default function CommercialDetails() {
         </div>
       </div>
 
-      {/* Etapy projektu */}
-      <div className="mt-14 md:mt-20">
+      {/* Etapy projektu — tighter top gap; the pinned timeline anchors its
+          own heading near the top, so this block sits close to the section
+          above */}
+      <div className="mt-6 md:mt-8">
         <StagesTimeline heading={t('stagesHeading')} stages={stages} />
       </div>
 
