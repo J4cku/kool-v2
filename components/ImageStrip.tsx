@@ -272,10 +272,8 @@ export default function ImageStrip({ order }: { order: string[] }) {
   };
 
   return (
-    /* px matches the navbar's px-4 md:px-6, so the slide edges align with
-       the kool logo's left edge and the dot's right edge */
     <section
-      className="relative isolate h-svh overflow-hidden bg-beige px-4 md:px-6"
+      className="relative isolate h-svh overflow-hidden bg-dark"
       onFocusCapture={handleFocusCapture}
       onBlurCapture={handleBlurCapture}
       onKeyDownCapture={handleKeyDownCapture}
