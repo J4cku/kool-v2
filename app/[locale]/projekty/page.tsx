@@ -24,7 +24,9 @@ export default async function ProjektyPage({
     <>
       <Navbar />
       <main className="pt-[200px]">
-        <div className="px-5 md:px-10 lg:px-12 pb-32 md:pb-48">
+        {/* px matches the navbar's px-4 md:px-6, so the grid edges align
+            with the kool logo's left edge and the dot's right edge */}
+        <div className="px-4 md:px-6 pb-32 md:pb-48">
           {/* key: real navigations that change the filter (nav link, deep
               link) remount the listing so state matches the URL */}
           <ProjectsListing key={initialFilter} initialFilter={initialFilter} />
