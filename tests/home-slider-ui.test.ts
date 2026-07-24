@@ -30,7 +30,7 @@ test('navbar uses the compact orb and contact transition targets its center', ()
 test('homepage reel fills the viewport behind the fixed header with content beneath', () => {
   assert.match(
     imageStripSource,
-    /className="relative isolate h-svh .*overflow-hidden bg-dark/
+    /className="relative isolate h-svh .*overflow-hidden bg-beige px-4 md:px-6/
   );
   assert.doesNotMatch(imageStripSource, /fixed inset-0/);
   assert.doesNotMatch(imageStripSource, /DocumentScrollLock/i);
@@ -162,7 +162,7 @@ test('homepage binds named DOM focus handlers to the hero section', () => {
   );
   assert.match(
     imageStripSource,
-    /<section\s+className="relative isolate h-svh overflow-hidden bg-dark"\s+onFocusCapture=\{handleFocusCapture\}\s+onBlurCapture=\{handleBlurCapture\}\s+onKeyDownCapture=\{handleKeyDownCapture\}/
+    /<section\s+className="relative isolate h-svh overflow-hidden bg-beige px-4 md:px-6"\s+onFocusCapture=\{handleFocusCapture\}\s+onBlurCapture=\{handleBlurCapture\}\s+onKeyDownCapture=\{handleKeyDownCapture\}/
   );
 });
 
