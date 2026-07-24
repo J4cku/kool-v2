@@ -11,7 +11,9 @@ export default function FooterBar() {
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 bg-transparent pb-[env(safe-area-inset-bottom)]">
-      <div className="h-px w-full origin-top bg-coral [transform:scaleY(0.5)]" />
+      {/* data-footer-line is the landing target the navbar dot measures
+          against for the idle drop (components/Navbar.tsx) */}
+      <div data-footer-line className="h-px w-full origin-top bg-coral [transform:scaleY(0.5)]" />
       <div className="flex items-center justify-between px-3 py-2 md:px-5">
         <a
           href={INSTAGRAM_URL}
