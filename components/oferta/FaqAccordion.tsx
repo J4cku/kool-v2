@@ -1,11 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { track } from '@/lib/analytics';
-
-const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 export interface FaqItem {
   q: string;
@@ -17,24 +13,27 @@ interface FaqAccordionProps {
 }
 
 export default function FaqAccordion({ items }: FaqAccordionProps) {
-  const reduceMotion = useReducedMotion();
   const [open, setOpen] = useState<number | null>(null);
 
   return (
     <ul className="border-b border-dark/15">
       {items.map((item, i) => {
         const isOpen = open === i;
+        const panelId = `faq-panel-${i}`;
+        const buttonId = `faq-button-${i}`;
         return (
           <li key={i} className="border-t border-dark/15">
             <button
               type="button"
+              id={buttonId}
+              aria-expanded={isOpen}
+              aria-controls={panelId}
               onClick={() => {
                 if (!isOpen) {
                   track('faq_opened', { question: item.q, position: i + 1 });
                 }
                 setOpen(isOpen ? null : i);
               }}
-              aria-expanded={isOpen}
               className="w-full flex items-baseline gap-4 md:gap-6 text-left py-4 md:py-5 group"
             >
               <span
@@ -53,23 +52,25 @@ export default function FaqAccordion({ items }: FaqAccordionProps) {
                 {item.q}
               </span>
             </button>
-            <AnimatePresence initial={false}>
-              {isOpen && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1, transition: { duration: reduceMotion ? 0 : 0.4, ease: EASE } }}
-                  exit={{ height: 0, opacity: 0, transition: { duration: reduceMotion ? 0 : 0.3, ease: EASE } }}
-                  className="overflow-hidden"
+            {/* The answer stays in the DOM at all times so it's in the server
+                HTML (crawlable for search + LLMs); it collapses via a grid-rows
+                0fr→1fr transition instead of mount/unmount. */}
+            <div
+              id={panelId}
+              role="region"
+              aria-labelledby={buttonId}
+              className="grid transition-[grid-template-rows] duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
+              style={{ gridTemplateRows: isOpen ? '1fr' : '0fr' }}
+            >
+              <div className="overflow-hidden">
+                <p
+                  className="text-dark/80 font-[400] leading-[1.5] max-w-[1080px] pb-6 pt-1 pl-8 md:pl-11"
+                  style={{ fontSize: 'clamp(15px, 1.5vw, 20px)' }}
                 >
-                  <p
-                    className="text-dark/80 font-[400] leading-[1.5] max-w-[1080px] pb-6 pt-1 pl-8 md:pl-11"
-                    style={{ fontSize: 'clamp(15px, 1.5vw, 20px)' }}
-                  >
-                    {item.a}
-                  </p>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                  {item.a}
+                </p>
+              </div>
+            </div>
           </li>
         );
       })}
