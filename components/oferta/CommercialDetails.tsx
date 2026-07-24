@@ -46,7 +46,7 @@ export default function CommercialDetails() {
         <RevealHeading
           as="h3"
           text={t('projectHeading')}
-          className="font-[700] text-dark uppercase mb-4 md:mb-5 leading-[1.02]"
+          className="font-[700] text-dark uppercase mb-8 md:mb-12 leading-[1.02]"
           style={{ fontSize: 'clamp(28px, 4.2vw, 60px)' }}
         />
         <p
@@ -141,7 +141,7 @@ export default function CommercialDetails() {
         <RevealHeading
           as="h3"
           text={t('benefitsHeading')}
-          className="font-[700] text-dark uppercase mb-4 md:mb-5 leading-[1.02]"
+          className="font-[700] text-dark uppercase mb-8 md:mb-12 leading-[1.02]"
           style={{ fontSize: 'clamp(28px, 4.2vw, 60px)' }}
         />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-0 items-start">
@@ -180,7 +180,7 @@ export default function CommercialDetails() {
         <RevealHeading
           as="h3"
           text={t('worksHeading')}
-          className="font-[700] text-dark uppercase mb-4 md:mb-5 leading-[1.02]"
+          className="font-[700] text-dark uppercase mb-8 md:mb-12 leading-[1.02]"
           style={{ fontSize: 'clamp(28px, 4.2vw, 60px)' }}
         />
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-x-6 lg:gap-x-8 gap-y-12 items-stretch">
@@ -231,7 +231,7 @@ export default function CommercialDetails() {
         <RevealHeading
           as="h3"
           text={t('faqHeading')}
-          className="font-[700] text-dark uppercase mb-4 md:mb-5 leading-[1.02]"
+          className="font-[700] text-dark uppercase mb-8 md:mb-12 leading-[1.02]"
           style={{ fontSize: 'clamp(28px, 4.2vw, 60px)' }}
         />
         <FaqAccordion items={faqItems} />

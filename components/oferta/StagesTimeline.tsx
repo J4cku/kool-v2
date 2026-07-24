@@ -130,7 +130,7 @@ function TimelineHeading({ heading }: { heading: string }) {
   return (
     <RevealHeading
       text={heading}
-      className="font-[700] text-dark uppercase mb-6 md:mb-10 leading-[1.02]"
+      className="font-[700] text-dark uppercase mb-4 md:mb-6 leading-[1.02]"
       style={{ fontSize: 'clamp(28px, 4.2vw, 60px)' }}
     />
   );
@@ -220,15 +220,16 @@ function ScrollPinnedTimeline({
 
   return (
     <div ref={wrapRef} style={{ height: `${stages.length * VH_PER_SLIDE}vh` }}>
-      {/* justify-between: heading + active card sit at the top (right after
-          the section above — no big centred gap), the axis pins to the
-          bottom, matching the mockup */}
-      <div className="sticky top-0 min-h-screen flex flex-col justify-between pt-24 md:pt-28 pb-10 md:pb-14">
-        <div>
-          <TimelineHeading heading={heading} />
-          <p className="sr-only" aria-live="polite" aria-atomic="true">
-            {pad(active)} — {stages[active].title}
-          </p>
+      {/* Heading anchors near the top (small gap to the section above); the
+          active card and its axis are grouped and centred in the space below,
+          so the axis sits right beneath the slides — not pinned to the very
+          bottom — and the heading gets breathing room under it */}
+      <div className="sticky top-0 min-h-screen flex flex-col pt-24 md:pt-28 pb-10 md:pb-14">
+        <TimelineHeading heading={heading} />
+        <p className="sr-only" aria-live="polite" aria-atomic="true">
+          {pad(active)} — {stages[active].title}
+        </p>
+        <div className="flex-1 flex flex-col justify-center">
           <div
             className="overflow-hidden"
             style={{ maskImage: EDGE_MASK, WebkitMaskImage: EDGE_MASK }}
@@ -237,8 +238,8 @@ function ScrollPinnedTimeline({
               <StageSlides stages={stages} active={active} />
             </motion.div>
           </div>
+          <DotTrack stages={stages} active={active} onDot={onDot} />
         </div>
-        <DotTrack stages={stages} active={active} onDot={onDot} />
       </div>
     </div>
   );

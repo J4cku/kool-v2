@@ -18,7 +18,7 @@ export default function ContactBriefCta({
       <RevealHeading
         as="h2"
         text={heading}
-        className="font-[700] text-dark uppercase mb-6 md:mb-8 leading-[1.02]"
+        className="font-[700] text-dark uppercase mb-8 md:mb-12 leading-[1.02]"
         style={{ fontSize: 'clamp(28px, 4.2vw, 60px)' }}
       />
       <Link
