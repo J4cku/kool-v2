@@ -204,7 +204,7 @@ export default function ServiceSection({
               {detailsHref && detailsCta && (
                 <Link
                   href={detailsHref as '/oferta'}
-                  className="mt-14 md:mt-20 flex items-center gap-3 md:gap-4 text-dark font-[600] uppercase hover:opacity-50 transition-opacity"
+                  className="mt-14 md:mt-20 flex items-center gap-3 md:gap-4 text-coral font-[600] uppercase hover:opacity-60 transition-opacity"
                   style={{ fontSize: 'clamp(15px, 1.6vw, 22px)' }}
                 >
                   {detailsCta}

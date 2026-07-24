@@ -7,6 +7,7 @@ import ColumnImage from '@/components/ColumnImage';
 import ScrollWeightHeading, { ScrollWeightHeadings } from './ScrollWeightHeading';
 import StagesTimeline, { type TimelineStage } from './StagesTimeline';
 import FaqAccordion, { type FaqItem } from './FaqAccordion';
+import ContactBriefCta from './ContactBriefCta';
 import { projects, localizeProject } from '@/data/projects';
 
 const WORK_SLUGS = ['delikatesy-dehesa', 'biuro-dobry-material', 'winobar-lodz'];
@@ -16,6 +17,7 @@ const WORK_SLUGS = ['delikatesy-dehesa', 'biuro-dobry-material', 'winobar-lodz']
    "rozszerzona" state. */
 export default function CommercialDetails() {
   const t = useTranslations('oferta.commercial.details');
+  const tOferta = useTranslations('oferta');
   const locale = useLocale();
 
   const fitItems = t.raw('fitItems') as string[];
@@ -47,17 +49,27 @@ export default function CommercialDetails() {
           {t('projectDescription')}
         </p>
         <p
-          className="text-dark font-[400] mt-8 md:mt-10 mb-2"
+          className="text-dark font-[400] mt-8 md:mt-10 mb-3 md:mb-4"
           style={{ fontSize: 'clamp(15px, 1.5vw, 20px)' }}
         >
           {t('typesLabel')}
         </p>
-        <p
-          className="text-dark font-[600] uppercase leading-[1.5]"
-          style={{ fontSize: 'clamp(14px, 1.5vw, 20px)' }}
-        >
-          {t('types')}
-        </p>
+        {/* Venue types as a coral marquee — like the "we are kool" footer band */}
+        <div className="overflow-hidden whitespace-nowrap" aria-hidden="true">
+          <div className="animate-marquee inline-block motion-reduce:animate-none">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <span
+                key={i}
+                className="font-[600] uppercase text-coral"
+                style={{ fontSize: 'clamp(26px, 4.5vw, 60px)' }}
+              >
+                {t('types')}
+                <span className="mx-4 md:mx-8">•</span>
+              </span>
+            ))}
+          </div>
+        </div>
+        <span className="sr-only">{t('types')}</span>
       </div>
 
       {/* Ten projekt będzie odpowiedni gdy */}
@@ -78,18 +90,21 @@ export default function CommercialDetails() {
             className="text-dark uppercase mb-4 md:mb-5 leading-[1.2]"
             style={{ fontSize: 'clamp(16px, 1.6vw, 22px)' }}
           />
-          <ol className="space-y-4 md:space-y-5">
+          <ul className="space-y-5 md:space-y-6">
             {fitItems.map((item, i) => (
               <li
                 key={i}
-                className="text-dark font-[400] leading-[1.45] flex items-start gap-3"
+                className="text-dark font-[400] leading-[1.45] flex items-start gap-3.5"
                 style={{ fontSize: 'clamp(15px, 1.5vw, 20px)' }}
               >
-                <span className="font-[700] tabular-nums">{String(i + 1).padStart(2, '0')}</span>
+                <span
+                  aria-hidden="true"
+                  className="mt-[0.6em] w-1.5 h-1.5 bg-dark rounded-full flex-shrink-0"
+                />
                 <span>{item}</span>
               </li>
             ))}
-          </ol>
+          </ul>
         </div>
       </div>
 
@@ -182,6 +197,12 @@ export default function CommercialDetails() {
             </div>
           ))}
         </div>
+        <Link
+          href={'/projekty?filter=komercyjne' as '/projekty'}
+          className="mt-8 md:mt-10 inline-flex items-center gap-3 text-coral font-[700] uppercase text-[13px] md:text-[14px] tracking-[0.06em] hover:opacity-60 transition-opacity"
+        >
+          {tOferta('portfolio')} <span aria-hidden="true">→</span>
+        </Link>
       </div>
 
       {/* FAQ */}
@@ -195,6 +216,9 @@ export default function CommercialDetails() {
         />
         <FaqAccordion items={faqItems} />
       </div>
+
+      {/* Closing brief CTA — flag-gated, opens the contact brief modal */}
+      <ContactBriefCta heading={t('contactHeading')} cta={t('contactCta')} />
     </ScrollWeightHeadings>
   );
 }

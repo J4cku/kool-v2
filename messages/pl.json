@@ -137,7 +137,7 @@
         "projectHeading": "Projekt wnętrza komercyjnego",
         "projectDescription": "Projektujemy wnętrza komercyjne, które wspierają rozwój marek. Łączymy strategię, branding i architekturę wnętrz, tworząc przestrzenie, które usprawniają funkcjonowanie biznesu, budują rozpoznawalność marki i pozostają w pamięci klientów.",
         "typesLabel": "Projektujemy m.in.:",
-        "types": "Restauracje / kawiarnie / bary / butiki / hotele / concept store'y / fitness / gabinety SPA / biura",
+        "types": "Restauracje, kawiarnie, bary, butiki, hotele, concept store'y, fitness, gabinety SPA, biura",
         "fitTitle": "Ten projekt będzie odpowiedni, gdy:",
         "fitItems": [
           "Otwierasz restaurację, kawiarnię, hotel, sklep lub lokal usługowy i chcesz stworzyć przestrzeń spójną z charakterem marki.",
@@ -162,8 +162,8 @@
             "text": "Projektujemy funkcję lokalu — rozmieszczenie stref obsługi, zaplecza i komunikacji. Testujemy warianty układu, aby przestrzeń działała sprawnie zarówno dla klientów, jak i zespołu, spełniając przy tym wymagania przepisów."
           },
           {
-            "title": "Koncepcja wizualna",
-            "text": "Tworzymy koncepcję wnętrza spójną z charakterem marki — nastrój, materiały, kolory i światło. Wizualizacje pozwalają zobaczyć przestrzeń przed rozpoczęciem realizacji i świadomie podejmować kolejne decyzje."
+            "title": "Projekt koncepcyjny",
+            "text": "Wizja inwestycji nabiera realnego kształtu. Tworzymy spójną koncepcję wnętrza, która przekłada charakter marki na przestrzeń – od atmosfery i kolorystyki, przez materiały, oświetlenie i wyposażenie, po detale nadające miejscu indywidualny charakter. Wizualizacje, moodboardy i prezentacja koncepcji pozwalają zweryfikować wszystkie kluczowe decyzje jeszcze przed rozpoczęciem realizacji. Dobieramy rozwiązania trwałe, zgodne z budżetem inwestycji oraz obowiązującymi wymaganiami technicznymi i przeciwpożarowymi."
           },
           {
             "title": "Projekt wykonawczy",
@@ -200,7 +200,9 @@
           "biuro-dobry-material": "Biuro odzwierciedlające dynamiczny charakter marki — kolor, wielkoformatowe grafiki i mobilne parawany.",
           "winobar-lodz": "Winobar w postindustrialnej hali — zachowany ceglany sufit i intensywny oranż baru. Współpraca z blsk.studio."
         },
-        "faqHeading": "FAQ",
+        "faqHeading": "Najczęstsze pytania",
+        "contactHeading": "Czeka Cię podobne wyzwanie?\nOpowiedz nam o swoim projekcie.",
+        "contactCta": "Wypełnij brief projektowy",
         "faqItems": [
           {
             "q": "Kiedy najlepiej zgłosić się do architekta wnętrz komercyjnych?",

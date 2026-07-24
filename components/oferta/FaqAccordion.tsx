@@ -21,11 +21,11 @@ export default function FaqAccordion({ items }: FaqAccordionProps) {
   const [open, setOpen] = useState<number | null>(null);
 
   return (
-    <ul>
+    <ul className="border-b border-dark/15">
       {items.map((item, i) => {
         const isOpen = open === i;
         return (
-          <li key={i}>
+          <li key={i} className="border-t border-dark/15">
             <button
               type="button"
               onClick={() => {
@@ -35,14 +35,8 @@ export default function FaqAccordion({ items }: FaqAccordionProps) {
                 setOpen(isOpen ? null : i);
               }}
               aria-expanded={isOpen}
-              className="w-full flex items-baseline justify-between gap-6 text-left py-3 md:py-3.5 group"
+              className="w-full flex items-baseline gap-4 md:gap-6 text-left py-4 md:py-5 group"
             >
-              <span
-                className="font-[600] text-dark uppercase leading-[1.35] group-hover:opacity-60 transition-opacity"
-                style={{ fontSize: 'clamp(15px, 1.6vw, 22px)' }}
-              >
-                {item.q}
-              </span>
               <span
                 aria-hidden="true"
                 className={`shrink-0 text-coral font-[400] leading-none transition-transform duration-300 ${
@@ -51,6 +45,12 @@ export default function FaqAccordion({ items }: FaqAccordionProps) {
                 style={{ fontSize: 'clamp(20px, 1.8vw, 26px)' }}
               >
                 +
+              </span>
+              <span
+                className="font-[700] text-dark uppercase leading-[1.35] group-hover:opacity-60 transition-opacity"
+                style={{ fontSize: 'clamp(15px, 1.6vw, 22px)' }}
+              >
+                {item.q}
               </span>
             </button>
             <AnimatePresence initial={false}>
@@ -62,7 +62,7 @@ export default function FaqAccordion({ items }: FaqAccordionProps) {
                   className="overflow-hidden"
                 >
                   <p
-                    className="text-dark/80 font-[400] leading-[1.5] max-w-[1080px] pb-6 pt-1"
+                    className="text-dark/80 font-[400] leading-[1.5] max-w-[1080px] pb-6 pt-1 pl-8 md:pl-11"
                     style={{ fontSize: 'clamp(15px, 1.5vw, 20px)' }}
                   >
                     {item.a}

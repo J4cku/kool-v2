@@ -56,7 +56,7 @@ function StageSlides({ stages, active }: { stages: TimelineStage[]; active: numb
             <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-4 md:gap-0">
               <span
                 aria-hidden="true"
-                className="font-[700] text-dark leading-[0.8] tabular-nums md:pr-12 lg:pr-16"
+                className="font-[700] text-coral leading-[0.8] tabular-nums md:pr-12 lg:pr-16"
                 style={{ fontSize: 'clamp(80px, 10vw, 150px)' }}
               >
                 {pad(i)}
