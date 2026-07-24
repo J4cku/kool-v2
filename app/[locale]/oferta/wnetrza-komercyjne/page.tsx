@@ -7,7 +7,7 @@ import Navbar from '@/components/Navbar';
 import FooterBanner from '@/components/FooterBanner';
 import CommercialDetails from '@/components/oferta/CommercialDetails';
 
-const HERO_IMAGE = '/images/foodhall-piazza/kool_piazza_01.webp';
+const HERO_IMAGE = '/images/oferta/KOOL_oferta_komercyjne_hero.webp';
 
 const SOCIAL_IMAGE = '/images/social/offer-commercial.jpg';
 const PATH = '/oferta/wnetrza-komercyjne';
