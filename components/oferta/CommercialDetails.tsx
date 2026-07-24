@@ -141,7 +141,7 @@ export default function CommercialDetails() {
         <RevealHeading
           as="h3"
           text={t('benefitsHeading')}
-          className="font-[700] text-dark uppercase mb-8 md:mb-12 leading-[1.02]"
+          className="font-[700] text-dark uppercase mb-12 md:mb-16 leading-[1.02]"
           style={{ fontSize: 'clamp(28px, 4.2vw, 60px)' }}
         />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-0 items-start">
@@ -226,8 +226,8 @@ export default function CommercialDetails() {
         </Link>
       </div>
 
-      {/* FAQ */}
-      <div className="mt-10 md:mt-14">
+      {/* FAQ — extra gap after the works "portfolio" link */}
+      <div className="mt-16 md:mt-24">
         <RevealHeading
           as="h3"
           text={t('faqHeading')}

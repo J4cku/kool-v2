@@ -31,10 +31,12 @@ interface ColumnImageProps {
   deferUntilVisible?: boolean;
 }
 
+// `align` places the frame within its column in the two-column (md+) layout.
+// On mobile the column is full-width, so the frame always centres regardless.
 const JUSTIFY: Record<Align, string> = {
-  start: 'justify-start',
-  center: 'justify-center',
-  end: 'justify-end',
+  start: 'md:justify-start',
+  center: 'md:justify-center',
+  end: 'md:justify-end',
 };
 
 /**
@@ -105,7 +107,7 @@ export default function ColumnImage({
   return (
     <div
       ref={columnRef}
-      className={`flex ${JUSTIFY[align]} ${valign === 'center' ? 'items-center' : 'items-start'} ${className}`}
+      className={`flex justify-center ${JUSTIFY[align]} ${valign === 'center' ? 'items-center' : 'items-start'} ${className}`}
     >
       {reveal ? (
         <Reveal className={frame}>{image}</Reveal>

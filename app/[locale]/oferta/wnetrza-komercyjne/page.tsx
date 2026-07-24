@@ -103,8 +103,9 @@ export default async function WnetrzaKomercyjnePage({
           100vw+scrollbar horizontal scroll; clip (not hidden) keeps the
           timeline's sticky pin working */}
       <main className="overflow-x-clip">
-        {/* Hero band — the fixed navbar overlays its top */}
-        <div className="relative w-full h-[50vh] md:h-[62vh]">
+        {/* Full-viewport hero — the fixed navbar overlays its top, matching
+            the project pages' immersive hero height */}
+        <div className="relative w-full h-screen">
           <Image
             src={HERO_IMAGE}
             alt={
@@ -119,7 +120,7 @@ export default async function WnetrzaKomercyjnePage({
             sizes="100vw"
           />
         </div>
-        <div className="px-5 md:px-10 lg:px-[68px] pt-12 md:pt-20">
+        <div className="px-5 md:px-10 lg:px-[68px] pt-12 md:pt-20 pb-20 md:pb-28">
           <div className="max-w-[1400px] mx-auto">
             <CommercialDetails />
           </div>
