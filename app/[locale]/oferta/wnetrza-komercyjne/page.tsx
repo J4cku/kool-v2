@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import { getTranslations } from 'next-intl/server';
 import { BASE_URL } from '@/lib/site';
 import { jsonLdScript, localeAlternates, ogLocale } from '@/lib/metadata';
 import Navbar from '@/components/Navbar';
+import ProjectHero from '@/components/ProjectHero';
 import FooterBanner from '@/components/FooterBanner';
 import CommercialDetails from '@/components/oferta/CommercialDetails';
 
@@ -98,35 +98,31 @@ export default async function WnetrzaKomercyjnePage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLdScript(jsonLd) }}
       />
+      {/* Shared hero: 16:9 image below the nav on mobile, full-height parallax
+          on desktop — matches the studio / project pages' heroes */}
+      <ProjectHero
+        src={HERO_IMAGE}
+        alt={
+          locale === 'en'
+            ? 'Commercial interior designed by kool studio'
+            : 'Wnętrze komercyjne zaprojektowane przez kool studio'
+        }
+      />
       <Navbar />
       {/* overflow-x-clip contains the full-bleed types marquee without the
           100vw+scrollbar horizontal scroll; clip (not hidden) keeps the
           timeline's sticky pin working */}
       <main className="overflow-x-clip">
-        {/* Full-viewport hero — the fixed navbar overlays its top, matching
-            the project pages' immersive hero height */}
-        <div className="relative w-full h-screen">
-          <Image
-            src={HERO_IMAGE}
-            alt={
-              locale === 'en'
-                ? 'Commercial interior designed by kool studio'
-                : 'Wnętrze komercyjne zaprojektowane przez kool studio'
-            }
-            fill
-            priority
-            fetchPriority="high"
-            className="object-cover"
-            sizes="100vw"
-          />
-        </div>
-        <div className="px-5 md:px-10 lg:px-[68px] pt-12 md:pt-20 pb-20 md:pb-28">
-          <div className="max-w-[1400px] mx-auto">
-            <CommercialDetails />
+        {/* relative z-10 bg-beige scrolls the content up over the fixed hero */}
+        <div className="relative z-10 bg-beige">
+          <div className="px-5 md:px-10 lg:px-[68px] pt-12 md:pt-20 pb-20 md:pb-28">
+            <div className="max-w-[1400px] mx-auto">
+              <CommercialDetails />
+            </div>
           </div>
+          {/* Page ends on the contact CTA (inside CommercialDetails); no marquee */}
+          <FooterBanner showMarquee={false} />
         </div>
-        {/* Page ends on the contact CTA (inside CommercialDetails); no marquee */}
-        <FooterBanner showMarquee={false} />
       </main>
     </>
   );

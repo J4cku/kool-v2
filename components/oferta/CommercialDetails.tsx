@@ -220,7 +220,8 @@ export default function CommercialDetails() {
         </div>
         <Link
           href={'/projekty?filter=komercyjne' as '/projekty'}
-          className="mt-8 md:mt-10 inline-flex items-center gap-3 text-coral font-[700] uppercase text-[13px] md:text-[14px] tracking-[0.06em] hover:opacity-60 transition-opacity"
+          className="mt-8 md:mt-10 inline-flex items-center gap-3 md:gap-4 text-coral font-[600] uppercase hover:opacity-60 transition-opacity"
+          style={{ fontSize: 'clamp(15px, 1.6vw, 22px)' }}
         >
           {tOferta('portfolio')} <span aria-hidden="true">→</span>
         </Link>
