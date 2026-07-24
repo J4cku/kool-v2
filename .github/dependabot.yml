@@ -1,0 +1,21 @@
+version: 2
+updates:
+  # Keep the CI actions current so they don't rot into the next Node deprecation
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: ci
+
+  # Batch npm updates into a single weekly PR to keep the noise down
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      all-dependencies:
+        patterns: ["*"]
+    commit-message:
+      prefix: deps

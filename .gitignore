@@ -6,6 +6,13 @@
 # testing
 /coverage
 
+# playwright (browser QA)
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+.lighthouseci/
+
 # next.js
 /.next/
 /out/
