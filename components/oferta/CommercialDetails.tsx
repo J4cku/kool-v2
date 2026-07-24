@@ -95,16 +95,18 @@ export default function CommercialDetails() {
       </div>
 
       {/* Ten projekt będzie odpowiedni gdy — extra air below the banner */}
-      <div className="mt-20 md:mt-28 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-0 items-start md:items-center">
+      {/* Same two-column treatment as "Co zyskujesz" below: even tracks, one
+          real gutter, photo centred in its column and matched in size */}
+      <div className="mt-20 md:mt-28 grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 lg:gap-24 items-center">
         <ColumnImage
           src="/images/oferta/KOOL_oferta_komercyjne_budowa.webp"
           alt={locale === 'en' ? 'Site visit during construction' : 'Wizyta na budowie'}
-          width="w-[68%] md:w-[56%]"
-          className="md:pr-8 lg:pr-12"
-          sizes="(min-width: 768px) 28vw, 68vw"
+          width="w-[74%] md:w-[62%]"
+          valign="center"
+          sizes="(min-width: 768px) 30vw, 74vw"
           deferUntilVisible
         />
-        <div className="md:pl-8 lg:pl-12">
+        <div>
           <ScrollWeightHeading
               as="h4"
             text={t('fitTitle')}
@@ -144,8 +146,11 @@ export default function CommercialDetails() {
           className="font-[700] text-dark uppercase mb-12 md:mb-16 leading-[1.02]"
           style={{ fontSize: 'clamp(28px, 4.2vw, 60px)' }}
         />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-0 items-start">
-          <div className="space-y-8 md:space-y-10 md:pr-8 lg:pr-12">
+        {/* Two even columns with a real gutter (matching the "odpowiedni gdy"
+            block above): copy fills the left column, the photo sits centred —
+            horizontally and vertically — in the right one, as in the mockup */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 lg:gap-24 items-center">
+          <div className="space-y-8 md:space-y-10">
             {benefits.map((benefit, i) => (
               <div key={i}>
                 <ScrollWeightHeading
@@ -155,7 +160,7 @@ export default function CommercialDetails() {
                   style={{ fontSize: 'clamp(16px, 1.6vw, 22px)' }}
                 />
                 <p
-                  className="text-dark/80 font-[400] leading-[1.5] max-w-[560px]"
+                  className="text-dark/80 font-[400] leading-[1.5]"
                   style={{ fontSize: 'clamp(15px, 1.5vw, 20px)' }}
                 >
                   {benefit.text}
@@ -167,8 +172,8 @@ export default function CommercialDetails() {
             src="/images/oferta/KOOL_oferta_komercyjne_materialy.webp"
             alt={locale === 'en' ? 'Material samples' : 'Próbki materiałów'}
             width="w-[74%] md:w-[62%]"
-            align="end"
-            className="md:pl-8 lg:pl-12"
+            align="center"
+            valign="center"
             sizes="(min-width: 768px) 30vw, 74vw"
             deferUntilVisible
           />
