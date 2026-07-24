@@ -103,6 +103,15 @@ Rules for any UI work. Visual reference: `/pl/design-system` (dev only); primiti
 - **Motion:** Framer Motion, subtle; marquee treatment for footer/accent text.
 - **Never** introduce new colors, typefaces, or a component library without an explicit token discussion first.
 
+## Working style (delegation)
+
+Jacek's preference for how the main agent works in this repo:
+
+- **Plan in the main thread.** Do the thinking here — brainstorming, specs, research, design, and the implementation plan (including which files change and why). Surface decisions to Jacek before writing code.
+- **Delegate the coding to an Opus subagent.** Hand implementation (writing/editing code) to a subagent running Opus: `Agent` tool with `model: opus` (agent type `general-purpose`, or OMC `executor` with `model=opus` when OMC resolves). Give it the plan, the exact files to touch, and the conventions to follow.
+- **Review is a separate pass.** After the subagent returns, verify its work in the main thread (run `pnpm check`, browser-check where relevant) — never let the implementing agent self-approve.
+- Trivial one-liners and quick fixes can stay in the main thread; the delegation rule is for real implementation work.
+
 ## Agent Toolkit
 
 Project skills live in `.claude/skills/`; shared agent permissions in `.claude/settings.json`.
@@ -160,7 +169,7 @@ Project skills live in `.claude/skills/`; shared agent permissions in `.claude/s
 - Founder/internal traffic: open any page with `?kool=<name>` once per device → auto-opts-in and identifies as `team-<name>` with person property `internal: true`; the PostHog project's "Filter out internal and test users" filter (`internal` is not set) excludes those persons from insights — this is the only place `identify()` is allowed
 - Init lives in `instrumentation-client.ts`, gated on `NEXT_PUBLIC_POSTHOG_KEY` (no-op when unset, e.g. local dev)
 - Events proxied first-party through `/dot/*` (rewrites in `next.config.mjs`) to bypass ad blockers; `/dot` is excluded from the next-intl matcher in `proxy.ts` and `skipTrailingSlashRedirect` is required — keep all three in sync
-- Custom events go through `track()` in `lib/analytics.ts` (never import `posthog-js` in components directly); current events: `contact_email_click`, `instagram_click` (`placement`), `hero_slide_change`/`hero_project_click` (`project`), `map_address_click`, `language_switch` (`to`), `contact_form_opened`/`contact_form_started`/`contact_form_submitted`/`contact_form_mailto_fallback`
+- Custom events go through `track()` in `lib/analytics.ts` (never import `posthog-js` in components directly); current events: `contact_email_click`, `instagram_click` (`placement`), `hero_slide_change`/`hero_project_click` (`project`), `map_address_click`, `language_switch` (`to`), `contact_form_opened`/`contact_form_started`/`contact_form_submitted`/`contact_form_mailto_fallback`, `faq_opened` (`question`, `position`)
 - Vercel Analytics + Speed Insights remain in `app/[locale]/layout.tsx` alongside PostHog
 - Contact/brief form: gated by the PostHog feature flag `brief-form` (fail-closed — CTA hidden until the flag is enabled in PostHog → Feature flags); modal on /kontakt (`components/kontakt/BriefModal.tsx` — trigger button under the hero heading, deep-linkable via `#brief`; form in `components/kontakt/BriefForm.tsx` + server action in `app/[locale]/kontakt/actions.ts`): validation/spam logic in `lib/brief.ts` (tested in `tests/brief-validation.test.ts`); delivers via Resend (`RESEND_API_KEY`, `BRIEF_FROM_EMAIL`, `BRIEF_TO_EMAIL`) with a customer receipt in the form's locale, and falls back to a prefilled mailto when unconfigured or on delivery failure
 - `skipTrailingSlashRedirect` removes Next's sitewide slash normalization, so `proxy.ts` restores the trailing-slash 308 for page routes itself

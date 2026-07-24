@@ -40,7 +40,10 @@ export default function FooterBar() {
             </svg>
           </span>
         </a>
-        <div className="relative flex items-center gap-2 md:gap-3">
+        {/* Not position:relative — the cookie card's mobile max-md:absolute
+            anchors to the fixed bar itself, so it can center over the
+            whole viewport instead of this right-hand cluster */}
+        <div className="flex items-center gap-2 md:gap-3">
           <CookieBanner />
           <button
             onClick={openCookieSettings}

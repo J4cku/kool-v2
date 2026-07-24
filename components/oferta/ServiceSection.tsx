@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -20,8 +21,6 @@ interface ServiceSectionProps {
   learnMoreLabel: string;
   portfolioLabel: string;
   portfolioHref: string;
-  expanded: boolean;
-  onToggle: () => void;
   scopeTitle: string;
   scopeItems: string[];
   scopeImageSrc?: string;
@@ -30,6 +29,10 @@ interface ServiceSectionProps {
   sloganText: string;
   trustedByLabel?: string;
   trustedByLogos?: { src: string; alt: string; width: number; height: number; className: string }[];
+  /** Link to the standalone deep-dive page, rendered as a CTA at the bottom of
+      the expanded block (e.g. /oferta/wnetrza-komercyjne). */
+  detailsHref?: string;
+  detailsCta?: string;
 }
 
 export default function ServiceSection({
@@ -39,8 +42,6 @@ export default function ServiceSection({
   learnMoreLabel,
   portfolioLabel,
   portfolioHref,
-  expanded,
-  onToggle,
   scopeTitle,
   scopeItems,
   scopeImageSrc,
@@ -49,8 +50,11 @@ export default function ServiceSection({
   sloganText,
   trustedByLabel,
   trustedByLogos,
+  detailsHref,
+  detailsCta,
 }: ServiceSectionProps) {
   const reduceMotion = useReducedMotion();
+  const [expanded, setExpanded] = useState(false);
 
   return (
     <section className="px-5 md:px-10 lg:px-[68px] py-12 md:pt-24 md:pb-20">
@@ -76,7 +80,8 @@ export default function ServiceSection({
           </p>
           <div className="flex items-center justify-between gap-4">
             <button
-              onClick={onToggle}
+              onClick={() => setExpanded(!expanded)}
+              aria-expanded={expanded}
               className="text-dark font-[400] uppercase hover:opacity-50 transition-opacity"
               style={{ fontSize: 'clamp(14px, 1.5vw, 20px)' }}
             >
@@ -132,11 +137,12 @@ export default function ServiceSection({
                     {scopeItems.map((item, i) => (
                       <li
                         key={i}
-                        className="text-dark font-[400] leading-[1.4] flex items-start gap-3"
+                        className="text-dark/70 font-[400] leading-[1.4] flex items-start gap-3"
                         style={{ fontSize: 'clamp(15px, 1.5vw, 20px)' }}
                       >
-                        <span className="mt-[0.6em] w-1.5 h-1.5 bg-dark rounded-full flex-shrink-0" />
-                        <span>{item}</span>
+                        <span className="mt-[0.6em] w-1.5 h-1.5 bg-dark/70 rounded-full flex-shrink-0" />
+                        {/* whitespace-pre-line honours the hard \n in scope copy */}
+                        <span className="whitespace-pre-line">{item}</span>
                       </li>
                     ))}
                   </ul>
@@ -193,6 +199,18 @@ export default function ServiceSection({
                   </div>
                 )}
               </div>
+
+              {/* Link to the standalone deep-dive page */}
+              {detailsHref && detailsCta && (
+                <Link
+                  href={detailsHref as '/oferta'}
+                  className="mt-14 md:mt-20 flex items-center gap-3 md:gap-4 text-coral font-[600] uppercase hover:opacity-60 transition-opacity"
+                  style={{ fontSize: 'clamp(15px, 1.6vw, 22px)' }}
+                >
+                  {detailsCta}
+                  <span aria-hidden="true">→</span>
+                </Link>
+              )}
             </motion.div>
           )}
         </AnimatePresence>

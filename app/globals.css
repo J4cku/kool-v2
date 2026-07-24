@@ -53,8 +53,16 @@ body {
   animation: marquee 15s linear infinite;
 }
 
+/* Hero project bar is a hover affordance only: hidden on mobile/touch,
+   where it would permanently cover the slide (title stays available to
+   AT via the pane's aria-label) */
+.project-folio {
+  display: none;
+}
+
 @media (min-width: 992px) and (hover: hover) and (pointer: fine) {
   .project-folio {
+    display: block;
     opacity: 0;
   }
   .group:hover .project-folio,
