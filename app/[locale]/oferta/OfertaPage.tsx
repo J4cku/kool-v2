@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import Navbar from '@/components/Navbar';
 import FooterBanner from '@/components/FooterBanner';
@@ -8,11 +7,10 @@ import ParallaxImage from '@/components/ParallaxImage';
 import ProjectHero from '@/components/ProjectHero';
 import ServiceSection from '@/components/oferta/ServiceSection';
 import ProcessSection from '@/components/oferta/ProcessSection';
+import CommercialDetails from '@/components/oferta/CommercialDetails';
 
 export default function OfertaPage() {
   const t = useTranslations('oferta');
-  const [commercialExpanded, setCommercialExpanded] = useState(false);
-  const [residentialExpanded, setResidentialExpanded] = useState(false);
 
   const commercialScope = t.raw('commercial.scopeItems') as string[];
   const residentialScope = t.raw('residential.scopeItems') as string[];
@@ -40,8 +38,6 @@ export default function OfertaPage() {
             learnMoreLabel={t('learnMore')}
             portfolioLabel={t('portfolio')}
             portfolioHref="/projekty?filter=komercyjne"
-            expanded={commercialExpanded}
-            onToggle={() => setCommercialExpanded(!commercialExpanded)}
             scopeTitle={t('scopeTitle')}
             scopeItems={commercialScope}
             scopeImageSrc="/images/oferta/KOOL_oferta_komercyjne_small.webp"
@@ -50,6 +46,8 @@ export default function OfertaPage() {
             sloganText={t('commercial.sloganText')}
             trustedByLabel={t('commercial.trustedBy')}
             trustedByLogos={trustedByLogos}
+            detailsCta={t('commercial.details.cta')}
+            details={<CommercialDetails />}
           />
 
           <ParallaxImage
@@ -65,8 +63,6 @@ export default function OfertaPage() {
             learnMoreLabel={t('learnMore')}
             portfolioLabel={t('portfolio')}
             portfolioHref="/projekty?filter=mieszkalne"
-            expanded={residentialExpanded}
-            onToggle={() => setResidentialExpanded(!residentialExpanded)}
             scopeTitle={t('scopeTitle')}
             scopeItems={residentialScope}
             scopeImageSrc="/images/oferta/KOOL_oferta_prywatne_small.webp"

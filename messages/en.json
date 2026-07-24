@@ -126,7 +126,123 @@
       ],
       "sloganHeading": "We create places that stay in memory",
       "sloganText": "Beyond functionality and compliance with regulations, our years of experience allow us to create spaces that reflect the brand's character, building its recognition.",
-      "trustedBy": "They trusted us:"
+      "trustedBy": "They trusted us:",
+      "details": {
+        "cta": "Explore the full offer for commercial interiors",
+        "projectHeading": "Commercial interior design",
+        "projectDescription": "We design commercial interiors that support the growth of brands. We combine strategy, branding and interior architecture, creating spaces that streamline business operations, build brand recognition and stay in customers' memory.",
+        "typesLabel": "We design, among others:",
+        "types": "Restaurants / cafés / bars / boutiques / hotels / concept stores / fitness / SPA studios / offices",
+        "fitTitle": "This project will be right for you when:",
+        "fitItems": [
+          "You are opening a restaurant, café, hotel, shop or service venue and want to create a space consistent with your brand's character.",
+          "You are choosing or adapting premises and want to plan their function well before the fit-out begins.",
+          "You care about an interior that is comfortable in everyday use and well designed for both customers and staff.",
+          "You want to create a place that sets your brand apart and stays in customers' memory.",
+          "You are planning to refresh an existing venue without a full-scale rebuild.",
+          "You are planning to grow the brand and want solutions that can be rolled out across future locations."
+        ],
+        "stagesHeading": "Project stages",
+        "stages": [
+          {
+            "title": "Brief, research and strategy",
+            "text": "We get to know how your business works, your target group, the character of the brand and the goals the space is meant to achieve. We analyse the location, competition and inspirations to create an interior that supports the company's growth and builds a coherent customer experience."
+          },
+          {
+            "title": "Site survey and venue analysis",
+            "text": "We examine the potential and constraints of the space — carrying out a survey and analysing the technical condition, services and formal requirements. This way the key decisions are made on facts, before design work begins."
+          },
+          {
+            "title": "Functional layout and zoning",
+            "text": "We design how the venue works — the arrangement of service zones, back-of-house and circulation. We test layout variants so the space runs smoothly for customers and staff alike, while meeting regulatory requirements."
+          },
+          {
+            "title": "Visual concept",
+            "text": "We create an interior concept consistent with the brand's character — mood, materials, colours and light. Visualizations let you see the space before the fit-out begins and make further decisions consciously."
+          },
+          {
+            "title": "Construction design",
+            "text": "We prepare detailed technical documentation — trade drawings, details, custom joinery and material solutions. A complete set of information that lets contractors price and deliver the project precisely."
+          },
+          {
+            "title": "Specifications and quotes",
+            "text": "We prepare material and equipment specifications and support you in selecting trusted contractors. We help keep the investment budget and schedule under control."
+          },
+          {
+            "title": "Author's supervision",
+            "text": "We watch over the fit-out — coordinating trades, answering contractors' questions and making sure the result matches the design, right up to opening day."
+          }
+        ],
+        "benefitsHeading": "What do you gain by choosing\na comprehensive interior design?",
+        "benefits": [
+          {
+            "title": "Conscious decisions",
+            "text": "A comprehensive design lets you make the most important decisions before the fit-out begins. This reduces the risk of changes on site and helps manage the investment budget effectively."
+          },
+          {
+            "title": "A smoother fit-out process",
+            "text": "Complete construction documentation and cross-trade coordination streamline cooperation with contractors. The investment runs more smoothly and the risk of errors is reduced."
+          },
+          {
+            "title": "A stronger brand",
+            "text": "We design interiors that support the way a business operates and strengthen its image. A well-designed space builds brand recognition and creates an experience customers want to return to."
+          }
+        ],
+        "worksHeading": "Selected works",
+        "workLink": "See project",
+        "workBlurbs": {
+          "delikatesy-dehesa": "An Iberian delicatessen — terrazzo, dark joinery and red accents, with a bespoke visual identity.",
+          "biuro-dobry-material": "An office reflecting the brand's dynamic character — colour, large-format graphics and movable screens.",
+          "winobar-lodz": "A wine bar in a post-industrial hall — preserved brick ceiling and an intense orange bar. In collaboration with blsk.studio."
+        },
+        "faqHeading": "FAQ",
+        "faqItems": [
+          {
+            "q": "When is the best time to approach a commercial interior architect?",
+            "a": "Ideally before signing the lease or buying the premises. We can then assess the potential of the space, its technical and formal constraints, and plan the budget realistically. If the venue is already chosen — the earlier we start, the more decisions are made before work begins."
+          },
+          {
+            "q": "How much does the design of a restaurant, hotel or shop interior cost?",
+            "a": "The cost depends on the floor area, the scope of cooperation and the complexity of the project. We prepare each quote individually after a short brief — write to us and you will receive a concrete proposal of scope and price."
+          },
+          {
+            "q": "How long does a commercial interior project take?",
+            "a": "Depending on the scale — from a few weeks for a refresh of an existing venue to several months for a comprehensive restaurant or hotel project. We agree the schedule at the start of the cooperation and run the project in stages."
+          },
+          {
+            "q": "What kinds of commercial interiors do you design?",
+            "a": "Restaurants, cafés, bars, boutiques, hotels, concept stores, fitness and SPA spaces, and offices. Our portfolio includes a delicatessen, a wine bar, offices, a food hall and a hotel — see the selected works above."
+          },
+          {
+            "q": "Does a restaurant design require approvals from the sanitary inspectorate?",
+            "a": "Yes — food service is subject to sanitary and technological requirements. We design layouts that comply with the regulations and support the investor through the approval process with the sanitary inspectorate (Sanepid) and certified experts."
+          },
+          {
+            "q": "Can the interior design also cover branding and visual identity?",
+            "a": "Yes. We design interiors together with visual identity — logo, signage, printed materials or uniforms — so the brand stays coherent at every point of contact with the customer."
+          },
+          {
+            "q": "Does the design take the assumed investment budget into account?",
+            "a": "Yes — the budget is one of the design assumptions from the very beginning. We select solutions and materials to fit the agreed frame, and specifications and quotes keep costs under control at every stage."
+          },
+          {
+            "q": "Why is it worth hiring an interior architect for a restaurant, hotel or service venue?",
+            "a": "A commercial interior has to work for the brand — a well-designed space streamlines the team's work, builds recognition and influences customers' decisions. An experienced architect also helps avoid costly mistakes and navigate the formal requirements smoothly."
+          },
+          {
+            "q": "Can an existing venue be refreshed without a full rebuild?",
+            "a": "Yes — we carry out refurbishments of existing commercial interiors. Often a change of colours, lighting, furniture and details is enough to give the interior a new character without a costly rebuild."
+          },
+          {
+            "q": "Do you design interiors with brand growth and a future chain of venues in mind?",
+            "a": "Yes — we create concepts that can scale. We define the brand's rules and signature elements so that subsequent locations stay coherent while being tailored to each specific space."
+          },
+          {
+            "q": "Where do you deliver commercial interior projects?",
+            "a": "We work across Poland — our projects include Wrocław, Łódź, Warsaw, Gdańsk and Ustronie Morskie. We are based in Wrocław, but location is not a constraint."
+          }
+        ]
+      }
     },
     "residential": {
       "label": "Residential interiors",
