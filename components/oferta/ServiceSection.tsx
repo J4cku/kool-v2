@@ -140,11 +140,12 @@ export default function ServiceSection({
                     {scopeItems.map((item, i) => (
                       <li
                         key={i}
-                        className="text-dark font-[400] leading-[1.4] flex items-start gap-3"
+                        className="text-dark/70 font-[400] leading-[1.4] flex items-start gap-3"
                         style={{ fontSize: 'clamp(15px, 1.5vw, 20px)' }}
                       >
-                        <span className="mt-[0.6em] w-1.5 h-1.5 bg-dark rounded-full flex-shrink-0" />
-                        <span>{item}</span>
+                        <span className="mt-[0.6em] w-1.5 h-1.5 bg-dark/70 rounded-full flex-shrink-0" />
+                        {/* whitespace-pre-line honours the hard \n in scope copy */}
+                        <span className="whitespace-pre-line">{item}</span>
                       </li>
                     ))}
                   </ul>
