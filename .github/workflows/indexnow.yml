@@ -1,0 +1,28 @@
+name: IndexNow
+
+on:
+  # Fires after Vercel reports a deployment status; the job filters to
+  # successful Production deploys so URLs are submitted once the new content
+  # (and the updated sitemap) is actually live.
+  deployment_status:
+  # Manual trigger for an on-demand submission.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  submit:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.deployment_status.state == 'success' &&
+       github.event.deployment_status.environment == 'Production')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+      - name: Submit sitemap URLs to IndexNow
+        run: node scripts/indexnow.mjs
