@@ -5,7 +5,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import ColumnImage from '@/components/ColumnImage';
 import RevealHeading from '@/components/RevealHeading';
-import ScrollWeightHeading, { ScrollWeightHeadings } from './ScrollWeightHeading';
+import ScrollWeightHeading from './ScrollWeightHeading';
 import StagesTimeline, { type TimelineStage } from './StagesTimeline';
 import FaqAccordion, { type FaqItem } from './FaqAccordion';
 import ContactBriefCta from './ContactBriefCta';
@@ -32,17 +32,15 @@ export default function CommercialDetails() {
     return project ? [localizeProject(project, locale)] : [];
   });
 
-  // Venue types → " • "-separated categories; trailing separator keeps the
-  // marquee seamless across the loop point
-  const marqueeText =
-    t('types')
-      .split(',')
-      .map((s) => s.trim())
-      .filter(Boolean)
-      .join(' • ') + ' • ';
+  // Venue types split into categories; the marquee renders each followed by
+  // a small, spaced bullet (incl. after the last one) so the loop is seamless
+  const marqueeCategories = t('types')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
 
   return (
-    <ScrollWeightHeadings>
+    <>
       {/* Projekt wnętrza komercyjnego */}
       <div>
         <RevealHeading
@@ -78,10 +76,17 @@ export default function CommercialDetails() {
             {Array.from({ length: 4 }).map((_, i) => (
               <span
                 key={i}
-                className="font-[600] uppercase text-coral"
+                className="font-[400] uppercase text-coral"
                 style={{ fontSize: 'clamp(26px, 4.5vw, 60px)' }}
               >
-                {marqueeText}
+                {marqueeCategories.map((cat, j) => (
+                  <span key={j}>
+                    {cat}
+                    <span aria-hidden="true" className="mx-[0.6em]">
+                      <span className="text-[0.5em] align-middle">•</span>
+                    </span>
+                  </span>
+                ))}
               </span>
             ))}
           </div>
@@ -89,8 +94,8 @@ export default function CommercialDetails() {
         <span className="sr-only">{t('types')}</span>
       </div>
 
-      {/* Ten projekt będzie odpowiedni gdy */}
-      <div className="mt-14 md:mt-20 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-0 items-start md:items-center">
+      {/* Ten projekt będzie odpowiedni gdy — extra air below the banner */}
+      <div className="mt-20 md:mt-28 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-0 items-start md:items-center">
         <ColumnImage
           src="/images/oferta/KOOL_oferta_komercyjne_budowa.webp"
           alt={locale === 'en' ? 'Site visit during construction' : 'Wizyta na budowie'}
@@ -101,8 +106,7 @@ export default function CommercialDetails() {
         />
         <div className="md:pl-8 lg:pl-12">
           <ScrollWeightHeading
-            id="fit"
-            as="h4"
+              as="h4"
             text={t('fitTitle')}
             className="text-dark uppercase mb-4 md:mb-5 leading-[1.2]"
             style={{ fontSize: 'clamp(16px, 1.6vw, 22px)' }}
@@ -133,7 +137,7 @@ export default function CommercialDetails() {
       </div>
 
       {/* Co zyskujesz */}
-      <div className="mt-14 md:mt-20">
+      <div className="mt-10 md:mt-14">
         <RevealHeading
           as="h3"
           text={t('benefitsHeading')}
@@ -145,7 +149,6 @@ export default function CommercialDetails() {
             {benefits.map((benefit, i) => (
               <div key={i}>
                 <ScrollWeightHeading
-                  id={`benefit-${i}`}
                   as="h4"
                   text={benefit.title}
                   className="text-dark uppercase mb-3 md:mb-4"
@@ -173,7 +176,7 @@ export default function CommercialDetails() {
       </div>
 
       {/* Wybrane realizacje */}
-      <div className="mt-14 md:mt-20">
+      <div className="mt-10 md:mt-14">
         <RevealHeading
           as="h3"
           text={t('worksHeading')}
@@ -224,7 +227,7 @@ export default function CommercialDetails() {
       </div>
 
       {/* FAQ */}
-      <div className="mt-14 md:mt-20">
+      <div className="mt-10 md:mt-14">
         <RevealHeading
           as="h3"
           text={t('faqHeading')}
@@ -236,6 +239,6 @@ export default function CommercialDetails() {
 
       {/* Closing brief CTA — flag-gated, opens the contact brief modal */}
       <ContactBriefCta heading={t('contactHeading')} cta={t('contactCta')} />
-    </ScrollWeightHeadings>
+    </>
   );
 }
