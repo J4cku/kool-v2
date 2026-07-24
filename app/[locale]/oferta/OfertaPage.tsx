@@ -7,7 +7,6 @@ import ParallaxImage from '@/components/ParallaxImage';
 import ProjectHero from '@/components/ProjectHero';
 import ServiceSection from '@/components/oferta/ServiceSection';
 import ProcessSection from '@/components/oferta/ProcessSection';
-import CommercialDetails from '@/components/oferta/CommercialDetails';
 
 export default function OfertaPage() {
   const t = useTranslations('oferta');
@@ -47,7 +46,7 @@ export default function OfertaPage() {
             trustedByLabel={t('commercial.trustedBy')}
             trustedByLogos={trustedByLogos}
             detailsCta={t('commercial.details.cta')}
-            details={<CommercialDetails />}
+            detailsHref="/oferta/wnetrza-komercyjne"
           />
 
           <ParallaxImage

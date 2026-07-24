@@ -29,9 +29,9 @@ interface ServiceSectionProps {
   sloganText: string;
   trustedByLabel?: string;
   trustedByLogos?: { src: string; alt: string; width: number; height: number; className: string }[];
-  /** Second-level offer body revealed by the details CTA inside the expanded
-      block (e.g. CommercialDetails). */
-  details?: React.ReactNode;
+  /** Link to the standalone deep-dive page, rendered as a CTA at the bottom of
+      the expanded block (e.g. /oferta/wnetrza-komercyjne). */
+  detailsHref?: string;
   detailsCta?: string;
 }
 
@@ -50,14 +50,11 @@ export default function ServiceSection({
   sloganText,
   trustedByLabel,
   trustedByLogos,
-  details,
+  detailsHref,
   detailsCta,
 }: ServiceSectionProps) {
   const reduceMotion = useReducedMotion();
   const [expanded, setExpanded] = useState(false);
-  const [detailsExpanded, setDetailsExpanded] = useState(false);
-
-  const hasDetails = Boolean(details && detailsCta);
 
   return (
     <section className="px-5 md:px-10 lg:px-[68px] py-12 md:pt-24 md:pb-20">
@@ -203,48 +200,16 @@ export default function ServiceSection({
                 )}
               </div>
 
-              {/* Details expander + second-level offer body */}
-              {hasDetails && (
-                <>
-                  <div className="mt-14 md:mt-20">
-                    <button
-                      onClick={() => setDetailsExpanded(!detailsExpanded)}
-                      aria-expanded={detailsExpanded}
-                      className="flex items-center gap-3 md:gap-4 text-left text-dark font-[600] uppercase hover:opacity-50 transition-opacity"
-                      style={{ fontSize: 'clamp(15px, 1.6vw, 22px)' }}
-                    >
-                      {detailsCta}
-                      <motion.span
-                        aria-hidden="true"
-                        animate={{ rotate: detailsExpanded ? 90 : 0 }}
-                        transition={{ duration: reduceMotion ? 0 : 0.35, ease: easeOutExpo }}
-                        className="inline-block"
-                      >
-                        →
-                      </motion.span>
-                    </button>
-                  </div>
-                  <AnimatePresence initial={false}>
-                    {detailsExpanded && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{
-                          height: 'auto',
-                          opacity: 1,
-                          transition: { duration: reduceMotion ? 0 : 0.6, ease: easeOutExpo },
-                        }}
-                        exit={{
-                          opacity: 0,
-                          height: 0,
-                          transition: { duration: reduceMotion ? 0 : 0.5, ease: easeOutExpo },
-                        }}
-                        className="overflow-hidden"
-                      >
-                        {details}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </>
+              {/* Link to the standalone deep-dive page */}
+              {detailsHref && detailsCta && (
+                <Link
+                  href={detailsHref as '/oferta'}
+                  className="mt-14 md:mt-20 flex items-center gap-3 md:gap-4 text-dark font-[600] uppercase hover:opacity-50 transition-opacity"
+                  style={{ fontSize: 'clamp(15px, 1.6vw, 22px)' }}
+                >
+                  {detailsCta}
+                  <span aria-hidden="true">→</span>
+                </Link>
               )}
             </motion.div>
           )}

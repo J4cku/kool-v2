@@ -40,6 +40,11 @@
       "description": "Comprehensive interior design for commercial and residential spaces: concept, construction documentation, author's supervision, custom furniture, branding. Wrocław and all of Poland.",
       "ogImageAlt": "Restaurant interior designed by kool studio"
     },
+    "wnetrzaKomercyjne": {
+      "title": "Commercial interior design — restaurants, hotels, shops",
+      "description": "Commercial interior design in Wrocław and across Poland: restaurants, hotels, shops and offices. Concept, construction documentation, author's supervision, budget and FAQ.",
+      "ogImageAlt": "Restaurant interior designed by kool studio"
+    },
     "kontakt": {
       "title": "contact",
       "description": "Get in touch with kool studio — an interior architecture practice from Wrocław, Poland. Studio: Zaporoska 83/15, 53-415 Wrocław. Email: hello@koolstudio.pl.",
