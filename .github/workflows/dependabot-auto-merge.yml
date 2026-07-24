@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Fetch Dependabot metadata
         id: meta
-        uses: dependabot/fetch-metadata@v2
+        uses: dependabot/fetch-metadata@v3
 
       # Auto-merge patch & minor updates once the required checks pass; leave
       # major version bumps for manual review. Auto-merge still waits on branch
