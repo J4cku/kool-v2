@@ -126,7 +126,123 @@
       ],
       "sloganHeading": "Tworzymy miejsca, które zostają\nw pamięci",
       "sloganText": "Oprócz funkcjonalności i zgodności z przepisami, nasze wieloletnie doświadczenie, pozwala kreować nam przestrzenie odpowiadające charakterowi marki budujące jej rozpoznawalność.",
-      "trustedBy": "Zaufali nam:"
+      "trustedBy": "Zaufali nam:",
+      "details": {
+        "cta": "Poznaj szczegóły oferty dla wnętrz komercyjnych",
+        "projectHeading": "Projekt wnętrza komercyjnego",
+        "projectDescription": "Projektujemy wnętrza komercyjne, które wspierają rozwój marek. Łączymy strategię, branding i architekturę wnętrz, tworząc przestrzenie, które usprawniają funkcjonowanie biznesu, budują rozpoznawalność marki i pozostają w pamięci klientów.",
+        "typesLabel": "Projektujemy m.in.:",
+        "types": "Restauracje / kawiarnie / bary / butiki / hotele / concept store'y / fitness / gabinety SPA / biura",
+        "fitTitle": "Ten projekt będzie odpowiedni, gdy:",
+        "fitItems": [
+          "Otwierasz restaurację, kawiarnię, hotel, sklep lub lokal usługowy i chcesz stworzyć przestrzeń spójną z charakterem marki.",
+          "Jesteś na etapie wyboru lub adaptacji lokalu i chcesz dobrze zaplanować jego funkcję jeszcze przed rozpoczęciem realizacji.",
+          "Zależy Ci na wnętrzu, które będzie wygodne w codziennym użytkowaniu i dobrze zaprojektowane dla klientów oraz zespołu.",
+          "Chcesz stworzyć miejsce, które wyróżni Twoją markę i pozostanie w pamięci klientów.",
+          "Planujesz odświeżenie istniejącego lokalu bez konieczności generalnej przebudowy.",
+          "Planujesz rozwój marki i zależy Ci na rozwiązaniach, które będzie można rozwijać w kolejnych lokalizacjach."
+        ],
+        "stagesHeading": "Etapy projektu",
+        "stages": [
+          {
+            "title": "Brief, research i strategia",
+            "text": "Poznajemy sposób działania Twojego biznesu, grupę docelową, charakter marki oraz cele, jakie ma realizować przestrzeń. Analizujemy lokalizację, konkurencję i inspiracje, aby stworzyć wnętrze, które będzie wspierało rozwój firmy oraz budowało spójne doświadczenie klientów."
+          },
+          {
+            "title": "Inwentaryzacja i analiza lokalu",
+            "text": "Sprawdzamy możliwości i ograniczenia przestrzeni — wykonujemy inwentaryzację, analizujemy stan techniczny, instalacje oraz wymagania formalne. Dzięki temu najważniejsze decyzje zapadają na podstawie faktów, jeszcze przed rozpoczęciem projektowania."
+          },
+          {
+            "title": "Układ funkcjonalny i strefowanie",
+            "text": "Projektujemy funkcję lokalu — rozmieszczenie stref obsługi, zaplecza i komunikacji. Testujemy warianty układu, aby przestrzeń działała sprawnie zarówno dla klientów, jak i zespołu, spełniając przy tym wymagania przepisów."
+          },
+          {
+            "title": "Koncepcja wizualna",
+            "text": "Tworzymy koncepcję wnętrza spójną z charakterem marki — nastrój, materiały, kolory i światło. Wizualizacje pozwalają zobaczyć przestrzeń przed rozpoczęciem realizacji i świadomie podejmować kolejne decyzje."
+          },
+          {
+            "title": "Projekt wykonawczy",
+            "text": "Opracowujemy szczegółową dokumentację techniczną — rysunki branżowe, detale, zabudowy meblowe i rozwiązania materiałowe. To komplet informacji, który pozwala wykonawcom precyzyjnie wycenić i zrealizować projekt."
+          },
+          {
+            "title": "Zestawienia i wyceny",
+            "text": "Przygotowujemy zestawienia materiałów i wyposażenia oraz wspieramy w wyborze sprawdzonych wykonawców. Pomagamy zapanować nad budżetem i harmonogramem inwestycji."
+          },
+          {
+            "title": "Nadzór autorski",
+            "text": "Czuwamy nad realizacją — koordynujemy branże, odpowiadamy na pytania wykonawców i dbamy o zgodność efektu z projektem, aż do otwarcia lokalu."
+          }
+        ],
+        "benefitsHeading": "Co zyskujesz, wybierając\nkompleksowy projekt wnętrza?",
+        "benefits": [
+          {
+            "title": "Świadome decyzje",
+            "text": "Kompleksowy projekt pozwala podejmować najważniejsze decyzje przed rozpoczęciem realizacji. Dzięki temu ograniczamy ryzyko zmian na budowie i pomagamy efektywnie zarządzać budżetem inwestycji."
+          },
+          {
+            "title": "Sprawniejszy proces realizacji",
+            "text": "Komplet dokumentacji wykonawczej i koordynacja międzybranżowa usprawniają współpracę z wykonawcami. Inwestycja przebiega sprawniej, a ryzyko błędów zostaje ograniczone."
+          },
+          {
+            "title": "Silniejsza marka",
+            "text": "Projektujemy wnętrza, które wspierają sposób działania biznesu i wzmacniają jego wizerunek. Dobrze zaprojektowana przestrzeń buduje rozpoznawalność marki i tworzy doświadczenie, do którego klienci chcą wracać."
+          }
+        ],
+        "worksHeading": "Wybrane realizacje",
+        "workLink": "Zobacz projekt",
+        "workBlurbs": {
+          "delikatesy-dehesa": "Delikatesy iberyjskie — terrazzo, ciemna stolarka i czerwone akcenty oraz autorska identyfikacja wizualna.",
+          "biuro-dobry-material": "Biuro odzwierciedlające dynamiczny charakter marki — kolor, wielkoformatowe grafiki i mobilne parawany.",
+          "winobar-lodz": "Winobar w postindustrialnej hali — zachowany ceglany sufit i intensywny oranż baru. Współpraca z blsk.studio."
+        },
+        "faqHeading": "FAQ",
+        "faqItems": [
+          {
+            "q": "Kiedy najlepiej zgłosić się do architekta wnętrz komercyjnych?",
+            "a": "Najlepiej jeszcze przed podpisaniem umowy najmu lub zakupem lokalu. Możemy wtedy ocenić potencjał przestrzeni, jej ograniczenia techniczne i formalne oraz realnie zaplanować budżet. Jeśli lokal jest już wybrany — im wcześniej zaczniemy, tym więcej decyzji zapadnie przed rozpoczęciem prac."
+          },
+          {
+            "q": "Ile kosztuje projekt wnętrza restauracji, hotelu lub sklepu?",
+            "a": "Koszt zależy od metrażu, zakresu współpracy i złożoności projektu. Wycenę przygotowujemy indywidualnie po krótkim briefie — napisz do nas, a otrzymasz konkretną propozycję zakresu i ceny."
+          },
+          {
+            "q": "Ile trwa projekt wnętrza komercyjnego?",
+            "a": "W zależności od skali — od kilku tygodni przy liftingu istniejącego lokalu do kilku miesięcy przy kompleksowym projekcie restauracji czy hotelu. Harmonogram ustalamy na początku współpracy i prowadzimy projekt etapami."
+          },
+          {
+            "q": "Jakie wnętrza komercyjne projektujecie?",
+            "a": "Restauracje, kawiarnie, bary, butiki, hotele, concept store'y, przestrzenie fitness i SPA oraz biura. W naszym portfolio znajdziesz m.in. delikatesy, winobar, biura, foodhall i hotel — zobacz wybrane realizacje powyżej."
+          },
+          {
+            "q": "Czy projekt restauracji wymaga uzgodnień z Sanepidem?",
+            "a": "Tak — gastronomia podlega wymaganiom sanitarnym i technologicznym. Projektujemy układy zgodne z przepisami i wspieramy inwestora w procesie uzgodnień z Sanepidem oraz rzeczoznawcami."
+          },
+          {
+            "q": "Czy projekt wnętrza może obejmować również branding i identyfikację wizualną?",
+            "a": "Tak. Projektujemy wnętrza w połączeniu z identyfikacją wizualną — logo, oznakowaniem, materiałami drukowanymi czy uniformami — tak, aby marka była spójna w każdym punkcie styku z klientem."
+          },
+          {
+            "q": "Czy projekt uwzględnia założony budżet inwestycji?",
+            "a": "Tak — budżet jest jednym z założeń projektu od samego początku. Dobieramy rozwiązania i materiały do przyjętych ram, a zestawienia i wyceny pozwalają kontrolować koszty na każdym etapie."
+          },
+          {
+            "q": "Dlaczego warto zatrudnić architekta wnętrz do restauracji, hotelu lub lokalu usługowego?",
+            "a": "Wnętrze komercyjne musi pracować na markę — dobrze zaprojektowana przestrzeń usprawnia pracę zespołu, buduje rozpoznawalność i wpływa na decyzje klientów. Doświadczony architekt pomaga też uniknąć kosztownych błędów i sprawnie przejść przez wymagania formalne."
+          },
+          {
+            "q": "Czy można odświeżyć istniejący lokal bez pełnej przebudowy?",
+            "a": "Tak — wykonujemy liftingi istniejących wnętrz komercyjnych. Często zmiana kolorystyki, oświetlenia, mebli i detali wystarczy, aby wnętrze zyskało nowy charakter bez kosztownej przebudowy."
+          },
+          {
+            "q": "Czy projektujecie wnętrza z myślą o rozwoju marki i przyszłej sieci lokali?",
+            "a": "Tak — tworzymy koncepty, które można skalować. Definiujemy zasady i elementy charakterystyczne marki tak, aby kolejne lokalizacje były spójne, a jednocześnie dopasowane do konkretnej przestrzeni."
+          },
+          {
+            "q": "Gdzie realizujecie projekty wnętrz komercyjnych?",
+            "a": "Pracujemy w całej Polsce — zrealizowaliśmy projekty m.in. we Wrocławiu, Łodzi, Warszawie, Gdańsku i Ustroniu Morskim. Jesteśmy z Wrocławia, ale lokalizacja nie jest ograniczeniem."
+          }
+        ]
+      }
     },
     "residential": {
       "label": "Wnętrza mieszkalne",
