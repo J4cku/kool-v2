@@ -11,6 +11,7 @@
     "typecheck": "tsc --noEmit",
     "check:i18n": "node scripts/check-i18n.mjs",
     "test": "vitest run && node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test tests/*.test.ts",
+    "test:e2e": "playwright test",
     "check": "pnpm test && pnpm typecheck && pnpm lint && pnpm check:i18n && pnpm build"
   },
   "dependencies": {
@@ -25,6 +26,7 @@
     "swiper": "^14.0.5"
   },
   "devDependencies": {
+    "@playwright/test": "^1.61.1",
     "@tailwindcss/postcss": "^4.1.18",
     "@testing-library/react": "^16.3.2",
     "@types/node": "^25.2.1",
