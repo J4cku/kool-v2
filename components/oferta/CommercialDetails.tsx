@@ -54,8 +54,12 @@ export default function CommercialDetails() {
         >
           {t('typesLabel')}
         </p>
-        {/* Venue types as a coral marquee — like the "we are kool" footer band */}
-        <div className="overflow-hidden whitespace-nowrap" aria-hidden="true">
+        {/* Venue types as a full-bleed coral marquee — like the "we are kool"
+            footer band; breaks out of the content column to the viewport edges */}
+        <div
+          className="w-screen relative left-1/2 -translate-x-1/2 overflow-hidden whitespace-nowrap"
+          aria-hidden="true"
+        >
           <div className="animate-marquee inline-block motion-reduce:animate-none">
             {Array.from({ length: 4 }).map((_, i) => (
               <span

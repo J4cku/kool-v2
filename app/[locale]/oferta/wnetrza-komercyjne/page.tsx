@@ -101,7 +101,10 @@ export default async function WnetrzaKomercyjnePage({
         dangerouslySetInnerHTML={{ __html: jsonLdScript(jsonLd) }}
       />
       <Navbar />
-      <main className="pt-[200px]">
+      {/* overflow-x-clip contains the full-bleed types marquee without the
+          100vw+scrollbar horizontal scroll; clip (not hidden) keeps the
+          timeline's sticky pin working */}
+      <main className="pt-[200px] overflow-x-clip">
         <div className="px-5 md:px-10 lg:px-[68px] mb-10 md:mb-14">
           <div className="max-w-[1400px] mx-auto">
             <nav className="text-[11px] md:text-[12px] font-[500] uppercase tracking-[0.08em] text-dark/60">
