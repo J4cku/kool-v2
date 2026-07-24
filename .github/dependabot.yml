@@ -8,14 +8,24 @@ updates:
     commit-message:
       prefix: ci
 
-  # Batch npm updates into a single weekly PR to keep the noise down
+  # Batch only safe minor/patch bumps into one weekly PR (auto-mergeable).
+  # Major bumps come as individual PRs for manual review, so one breaking
+  # change never blocks the safe updates the way a single all-in group does.
   - package-ecosystem: npm
     directory: "/"
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
     groups:
-      all-dependencies:
+      minor-and-patch:
+        update-types: [minor, patch]
         patterns: ["*"]
+    ignore:
+      # Coordinated toolchain migrations — bump these deliberately by hand,
+      # not via Dependabot (TypeScript 7 drops the ES5 target the config uses).
+      - dependency-name: typescript
+        update-types: [version-update:semver-major]
+      - dependency-name: eslint
+        update-types: [version-update:semver-major]
     commit-message:
       prefix: deps
