@@ -1,0 +1,9 @@
+# Keep all of gitleaks' default rules; only add an allowlist below.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Public IndexNow key files are served at the site root by design"
+paths = [
+  '''public/[0-9a-fA-F]{8,128}\.txt''',
+]
