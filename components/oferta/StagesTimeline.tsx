@@ -98,7 +98,11 @@ export default function StagesTimeline({ heading, stages }: StagesTimelineProps)
                   key={i}
                   aria-hidden={!isActive}
                   onClick={isActive ? undefined : () => goTo(i)}
-                  className={`shrink-0 w-[86%] md:w-[62%] pr-10 md:pr-20 select-none transition-opacity duration-500 ${
+                  /* relative scopes the sr-only number span (position:absolute)
+                     to this slide; without it, in the very wide flex track the
+                     span escapes the masked container's clip and adds horizontal
+                     page overflow */
+                  className={`relative shrink-0 w-[86%] md:w-[62%] pr-10 md:pr-20 select-none transition-opacity duration-500 ${
                     isActive ? 'opacity-100' : 'opacity-30 cursor-pointer hover:opacity-50'
                   }`}
                 >
