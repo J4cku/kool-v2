@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { track } from '@/lib/analytics';
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -27,7 +28,12 @@ export default function FaqAccordion({ items }: FaqAccordionProps) {
           <li key={i}>
             <button
               type="button"
-              onClick={() => setOpen(isOpen ? null : i)}
+              onClick={() => {
+                if (!isOpen) {
+                  track('faq_opened', { question: item.q, position: i + 1 });
+                }
+                setOpen(isOpen ? null : i);
+              }}
               aria-expanded={isOpen}
               className="w-full flex items-baseline justify-between gap-6 text-left py-3 md:py-3.5 group"
             >
