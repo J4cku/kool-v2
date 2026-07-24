@@ -214,9 +214,15 @@ test('homepage shows full-width folios and an animated vertical page-scroll cue'
   assert.doesNotMatch(imageStripSource, /project-folio[^"]*bottom-1\/3/);
   assert.doesNotMatch(imageStripSource, /project-folio[^"]*translate-y-1\/2/);
   assert.doesNotMatch(imageStripSource, /min-\[992px\]:opacity-0/);
+  // Folio is a hover affordance only: display:none by default (mobile/touch
+  // never shows it), revealed via hover/focus on hover-capable desktops
   assert.match(
     globalsSource,
-    /@media \(min-width: 992px\) and \(hover: hover\) and \(pointer: fine\) \{\s*\.project-folio \{\s*opacity: 0;\s*\}\s*\.group:hover \.project-folio,\s*\.group:focus-within \.project-folio \{\s*opacity: 1;\s*\}\s*\}/
+    /\.project-folio \{\s*display: none;\s*\}/
+  );
+  assert.match(
+    globalsSource,
+    /@media \(min-width: 992px\) and \(hover: hover\) and \(pointer: fine\) \{\s*\.project-folio \{\s*display: block;\s*opacity: 0;\s*\}\s*\.group:hover \.project-folio,\s*\.group:focus-within \.project-folio \{\s*opacity: 1;\s*\}\s*\}/
   );
   assert.match(imageStripSource, /\[0, 1, 2\]\.map/);
   assert.match(

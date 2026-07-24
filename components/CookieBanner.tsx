@@ -16,9 +16,10 @@ import { useReducedMotion } from '@/hooks/useReducedMotion';
 /* Consent controls shown while PostHog's on_reject consent is pending, and
    re-openable at any time via openCookieSettings() (FooterBar "cookies"
    link, privacy page). Rendered inside FooterBar's right-hand group: inline
-   as a single footer line from md up, and as a compact card floating above
-   the bar on mobile (anchored to the group via max-md:absolute). Reuses the
-   hero project-folio treatment: translucent beige, backdrop blur. */
+   as a single footer line from md up, and as a compact card floating
+   centred above the bar on mobile (max-md:absolute against the fixed bar).
+   Reuses the hero project-folio treatment: translucent beige, backdrop
+   blur. */
 export default function CookieBanner() {
   const t = useTranslations('cookies');
   const reduceMotion = useReducedMotion();
@@ -69,7 +70,7 @@ export default function CookieBanner() {
           animate={{ opacity: 1, y: 0 }}
           exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 8 }}
           transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-          className="max-md:absolute max-md:bottom-full max-md:right-0 max-md:mb-2 max-md:w-[min(330px,calc(100vw-24px))]"
+          className="max-md:absolute max-md:bottom-full max-md:inset-x-0 max-md:mx-auto max-md:mb-2 max-md:w-[min(330px,calc(100vw-24px))]"
         >
           <div className="bg-beige/40 backdrop-blur-md px-3 py-2 md:py-0 md:flex md:items-center md:gap-3">
             <p className="text-[10px] font-[500] uppercase tracking-[-0.01em] text-dark md:whitespace-nowrap">
