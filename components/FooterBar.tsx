@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import { INSTAGRAM_URL } from '@/lib/site';
 import { openCookieSettings, track } from '@/lib/analytics';
 import CookieBanner from './CookieBanner';
+import FooterHairline from './FooterHairline';
 import LanguageToggle from './LanguageToggle';
 
 export default function FooterBar() {
@@ -11,7 +12,14 @@ export default function FooterBar() {
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 bg-transparent pb-[env(safe-area-inset-bottom)]">
-      <div className="h-px w-full origin-top bg-coral [transform:scaleY(0.5)]" />
+      {/* data-footer-line is the landing target the navbar dot measures
+          against for the idle drop (components/Navbar.tsx). The h-px box is
+          layout only — unchanged, so the measured top is unchanged; the half
+          pixel of coral inside it is now drawn by FooterHairline, which can
+          bend where the dot strikes it. */}
+      <div data-footer-line className="relative h-px w-full">
+        <FooterHairline />
+      </div>
       <div className="flex items-center justify-between px-3 py-2 md:px-5">
         <a
           href={INSTAGRAM_URL}
