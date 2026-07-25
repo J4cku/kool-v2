@@ -15,7 +15,7 @@ import { Link, usePathname } from '@/i18n/navigation';
 import { useIdle } from '@/hooks/useIdle';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { INSTAGRAM_URL } from '@/lib/site';
-import { track } from '@/lib/analytics';
+import { featureFlagEnabled, subscribeFeatureFlags, track } from '@/lib/analytics';
 import { emitDotImpact, planDotFlight } from '@/lib/dot-drop';
 
 const navLinks = [
@@ -126,7 +126,22 @@ export default function Navbar() {
   const flightRef = useRef(0);
   const flyingRef = useRef(false);
   const impactTimersRef = useRef<number[]>([]);
-  const idle = useIdle(!menuOpen && !reduceMotion);
+  /* Launch gate, the same idiom BriefModal uses for 'brief-form': fail-closed
+     on the 'dot-drop' PostHog flag, so no flag means no drop.
+     The one deliberate exception is local development, where posthog is never
+     initialised (instrumentation-client.ts no-ops without
+     NEXT_PUBLIC_POSTHOG_KEY) and a purely fail-closed gate would make the
+     easter egg impossible to see at all. NODE_ENV is inlined at build time
+     into both the server and the client bundle, so the two snapshots below
+     agree in every environment and hydration never sees a flip. */
+  const dropEnabled = useSyncExternalStore(
+    subscribeFeatureFlags,
+    () => featureFlagEnabled('dot-drop') || process.env.NODE_ENV === 'development',
+    () => process.env.NODE_ENV === 'development'
+  );
+  /* Gates the hook itself, not just the animation: with the flag off useIdle
+     registers no input listeners and starts no timer. */
+  const idle = useIdle(dropEnabled && !menuOpen && !reduceMotion);
 
   useEffect(() => {
     droppedRef.current = false;

@@ -21,6 +21,38 @@ Phase A is a strict prefix of phase B: same fall, same impact timing, same
 `kool:dot-impact` dispatch. B only adds a listener at the other end. A browser
 checkpoint sits between them.
 
+Both phases shipped. Phase B did not survive first contact with the pixel
+diff and was re-derived; see [Phase B — the flexing line](#phase-b--the-flexing-line).
+
+## Launch gate
+
+The whole easter egg sits behind the PostHog feature flag `dot-drop`, read in
+`components/Navbar.tsx` with the idiom `components/kontakt/BriefModal.tsx`
+already uses for `brief-form`:
+
+```ts
+useSyncExternalStore(
+  subscribeFeatureFlags,
+  () => featureFlagEnabled('dot-drop') || process.env.NODE_ENV === 'development',
+  () => process.env.NODE_ENV === 'development'
+)
+```
+
+Fail-closed: no flag, no drop. The one deliberate exception is local
+development — posthog never initialises without `NEXT_PUBLIC_POSTHOG_KEY`, so
+a purely fail-closed gate would make the effect impossible to see at all.
+`NODE_ENV` is inlined at build time into both the server and the client
+bundle, so the two snapshots above agree in every environment and hydration
+never sees the value flip.
+
+The result feeds `useIdle`'s `enabled` argument rather than guarding the
+animation, so with the flag off the hook registers no input listeners and
+starts no timer: an unlaunched easter egg costs a visitor nothing.
+
+The flag gates the **drop**, not the hairline. The hairline is an SVG for
+every visitor on every page whether the flag is on or off, which is what
+makes its resting render the hard constraint in phase B.
+
 ## Motivation
 
 The dot already carries the site's only playful gesture — a recurring 1.5px
@@ -36,7 +68,9 @@ this is a photography-led portfolio: the gag must be rare, brief and silent.
 | Dot shrink wrapper | `components/Navbar.tsx:199` | `style={{ scale: dotScale, y: dotY }}` + `.nav-dot-shrink` |
 | Scroll-timeline CSS | `app/globals.css:130` | `@keyframes nav-dot-shrink`, explicit `from` to **replace** the inline Framer transform |
 | Idle x-jitter | `components/Navbar.tsx:208` | `x: [0,0,-1.5,1.5,-1,1,0,0]`, `repeat: Infinity`, `repeatDelay: 3.4` |
-| Footer hairline | `components/FooterBar.tsx:14` | `h-px w-full origin-top bg-coral [transform:scaleY(0.5)]` — a 0.5px line |
+| Footer hairline | `components/FooterBar.tsx:14` | `h-px w-full origin-top bg-coral [transform:scaleY(0.5)]` — a 0.5px line (phase B replaces the paint, not the box) |
+| Feature-flag store | `lib/analytics.ts:69` | `featureFlagEnabled` / `subscribeFeatureFlags`, fail-closed |
+| Flag-gated UI precedent | `components/kontakt/BriefModal.tsx:26` | `brief-form`, via `useSyncExternalStore` |
 | Footer bar | `components/FooterBar.tsx:13` | `fixed inset-x-0 bottom-0 z-40` |
 | Navbar | `components/Navbar.tsx:112` | `fixed top-0 left-0 right-0 z-50` |
 | Cross-component event idiom | `lib/analytics.ts:101` | `kool:`-namespaced window event + paired `onX(cb): () => void` unsubscriber |
@@ -207,27 +241,69 @@ attached, which is inert and correct.
 
 ## Phase B — the flexing line
 
-`components/FooterBar.tsx:14` keeps its `h-px` wrapper so layout is byte-for-byte
-unchanged, and gains `relative`. Inside it, an absolutely positioned
-`<svg className="absolute -top-[6px] left-0 w-full h-[12px] overflow-visible pointer-events-none">`
-with `preserveAspectRatio="none"` draws the line as a `<motion.path>` at
-`strokeWidth={0.5}` with `vector-effect="non-scaling-stroke"` — which keeps the
-stroke at a constant 0.5 CSS px regardless of the non-uniform viewBox scaling.
+`components/FooterBar.tsx` keeps its `h-px` wrapper so layout is byte-for-byte
+unchanged and the `top` the navbar measures is untouched; it gains `relative`
+and one child, `components/FooterHairline.tsx`. That renders an absolutely
+positioned `<svg className="absolute -top-[6px] left-0 w-full h-[12px] overflow-visible pointer-events-none">`
+with `preserveAspectRatio="none"` and `viewBox="0 0 100 12"` — 12 units into a
+12px box, so one unit is one CSS pixel vertically and unit `y = 6` is the top
+of the `h-px` box, while `x` stretches to whatever the viewport is.
 
-Flat state is a straight path. On impact the path becomes two cubic segments
-meeting at the impact `x`, pulled down by `dip = 6px * strength`, driven by a
-Framer spring and derived through `useTransform(dip, v => buildPath(v, x))`. A
-single quadratic across the full width would bow the entire line like a
-skipping rope; two localised cubics read as a taut wire struck at a point.
+On impact the line becomes two cubic segments meeting at the impact `x`,
+pulled down by `dip = 6px * strength` and derived through
+`useTransform([dip, strikeX], …)`. A single quadratic across the full width
+would bow the entire line like a skipping rope; two cubics whose outer control
+points stay on the resting line past the halfway mark read as a taut wire
+struck at a point.
+
+The strike is a `dip.jump()`, not a spring towards the dip: the dot arrives at
+speed, so the displacement is instantaneous and the spring
+(`stiffness 520, damping 22, mass 0.5`, ζ ≈ 0.68) carries only the recovery
+and its ring. That also makes the spring's target permanently `0` — an
+interrupted flight, an unmount and an aborted drop all leave the wire on its
+way back to flat, never parked bent. Nothing waits for the spring to land on
+exactly zero either: below `0.02px` the bend cannot occupy a device pixel at
+any DPR and the resting render is restored.
 
 Reduced-motion users never subscribe, so the line never bends.
 
-**This is the risk in phase B and the reason for the checkpoint.** The hairline
-is permanently visible on every page. Re-implementing it as an SVG stroke to
-enable a 2-second gag means that if the render differs at all — weight,
-subpixel position, 1x vs 2x DPR — every page changes subtly, always. The gate
-is a before/after screenshot diff of the footer at rest at both DPRs. If it
-cannot be made pixel-identical, phase B is abandoned and phase A ships alone.
+### The resting line is a `<rect>`, not the path
+
+**This was the risk in phase B, and it materialised.** The hairline is
+permanently visible on every page for every visitor, flag or no flag, so the
+resting render had to be the old `h-px bg-coral [transform:scaleY(0.5)]` box
+to the pixel. Measured in Chromium against the phase-A build, the stroked path
+the spec called for is not:
+
+| Resting primitive | DPR 1, on beige | DPR 2 |
+|---|---|---|
+| `div` + `bg-coral` + `scaleY(0.5)` (shipped) | `(241,135,115)` on one row | one full-coral row |
+| `path` + 0.5px `non-scaling-stroke` | `(232,200,185)` **and** `(238,157,139)` on two rows | one full-coral row |
+| `path` + 0.5px plain stroke, or a filled ribbon | `(240,134,115)` on one row | one full-coral row |
+| `rect y=6 height=0.5` | `(241,135,115)` on one row | one full-coral row |
+
+Two separate defects. `vector-effect="non-scaling-stroke"` biases the stroke
+1/8 CSS px upward at DPR 1, spilling ink into the row above — invisible at DPR
+2, where the band still lands on one whole device pixel. And *any* path,
+stroked or filled, over identical geometry blends one 8-bit step lighter than
+the background box. Skia's analytic anti-aliasing of an axis-aligned rect is
+the path the `div`'s background went through, and a `<rect>` is the only
+primitive that reproduces it exactly at both DPRs.
+
+So the SVG holds a plain `<rect x=0 y=6 width=100 height=0.5>` at rest and
+swaps to the `<motion.path>` while bent — the stroke, with
+`non-scaling-stroke`, is still right for the bend, where a constant 0.5 CSS px
+weight along a horizontally stretched curve is exactly what is wanted and a
+1/8px bias on a line that is mid-flight is meaningless. `bent` is React state
+driven off the dip, false through SSR, hydration, every reduced-motion visit
+and every page view where the drop never fires: the resting render is the
+default, not a state the component has to find its way back to.
+
+The diff, phase A build (`0577499`) against this one, at rest: **0 differing
+pixels of 1,119,960 compared, max per-channel delta 0**, over
+`/pl/polityka-prywatnosci`, `/pl/kontakt` and `/pl/projekty` × 390/1280/1441px
+viewports × DPR 1 and 2, with a baseline-against-itself control run first to
+prove the harness deterministic.
 
 ## Files
 
@@ -238,7 +314,12 @@ cannot be made pixel-identical, phase B is abandoned and phase A ships alone.
 | `components/Navbar.tsx` | A | drop wrapper inside the button, idle wiring, jitter suppression |
 | `components/FooterBar.tsx` | A | `data-footer-line` attribute only |
 | `components/Navbar.test.tsx` | A | extend framer-motion mock; drop, physics, pivot and abort cases |
-| `components/FooterBar.tsx` | B | hairline becomes a flexible SVG path |
+| `components/Navbar.tsx` | B | `dot-drop` flag into `useIdle`'s `enabled` |
+| `components/FooterBar.tsx` | B | hairline moves into `FooterHairline`; wrapper gains `relative` |
+| `components/FooterHairline.tsx` | B | new — the resting rect, the bend, the spring |
+| `components/FooterHairline.test.tsx` | B | new — path shape, rest/settle, reduced motion, unmount |
+| `hooks/useIdle.test.ts` | B | new — off registers no listeners and no timer |
+| `vitest.config.ts` | B | `include` widened to `{components,hooks}` |
 
 ### Test-mock constraint
 
@@ -246,12 +327,22 @@ cannot be made pixel-identical, phase B is abandoned and phase A ships alone.
 `AnimatePresence`, `motion`, `useAnimationControls`, `useScroll`, `useSpring`
 and `useTransform`. Any new import from that package (`useMotionValue`,
 `animate`, …) must be added to that mock in the same commit or the suite breaks
-with an unhelpful undefined-is-not-a-function error.
+with an unhelpful undefined-is-not-a-function error. It also mocks
+`@/lib/analytics`, because the launch gate reads a feature flag posthog cannot
+supply in jsdom.
 
 The `motion` proxy must hand back the **same** component for a given tag on
 every access. A fresh function per access changes the element type on each
 render, so React tears the dot down and rebuilds it — losing refs, DOM identity
 and the imperatively written squash pivot, none of which happens in a browser.
+
+`FooterHairline.test.tsx` fakes the motion values rather than the animation:
+`jump()` lands immediately, `set()` only records where the value is *heading*,
+and the test says when it arrives. The real spring covers that ground in
+~250ms, which is over before a first assertion could run. The fakes are
+memoised per component instance for the same reason the `motion` proxy is
+stable — a fresh value per render hands the test a value the component is no
+longer holding.
 
 ## Verification
 
@@ -264,7 +355,17 @@ and the imperatively written squash pivot, none of which happens in a browser.
   (penetration `0.00px`) and does not slide sideways (`0.00px`) — on desktop and
   on a mobile viewport scrolled past the shrink range, where an unmeasured
   wrapper-box pivot instead gives `+3.06px` / `0.38px`.
-- Browser, phase B: footer hairline screenshot-identical at rest, 1x and 2x DPR.
+- Browser, phase B: footer hairline screenshot-identical at rest, 1x and 2x DPR
+  — two production builds served side by side, a control run of the baseline
+  against itself, then baseline against the change. 0 of 1,119,960 pixels
+  differ; max per-channel delta 0.
+- Browser, phase B: the line dips at the strike, rings, and comes back to the
+  exact resting `<rect>`; a second strike after settling behaves the same; under
+  `prefers-reduced-motion: reduce` it never leaves the rect.
+- Browser, the launch gate: in a production build with no flag, `window` carries
+  none of the idle-reset listeners and the dot does not move after 12s of
+  stillness; injecting a posthog stub with `dot-drop` enabled and firing
+  `kool:posthog-ready` registers them and the drop fires — no reload.
 - `verify-site` skill across routes × both locales before handoff.
 
 ## Non-goals
