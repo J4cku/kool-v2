@@ -12,10 +12,6 @@ const motionState = vi.hoisted(() => ({ reducedMotion: false }));
    difference between a suppressed animation and a hook that never registers
    an input listener or a timer at all (see hooks/useIdle.test.ts). */
 const idleState = vi.hoisted(() => ({ idle: false, enabled: false }));
-const flagState = vi.hoisted(() => ({
-  dotDrop: true,
-  listeners: new Set<() => void>(),
-}));
 const dropStart = vi.hoisted(() =>
   vi.fn((target: Record<string, unknown>) => Promise.resolve(target))
 );
@@ -117,16 +113,8 @@ vi.mock('@/hooks/useIdle', () => ({
   },
 }));
 
-/* posthog is a no-op in jsdom, so the 'dot-drop' launch gate is driven here
-   instead. NODE_ENV is 'test', not 'development', so the dev default is out
-   of the way and these tests see the production gate. */
 vi.mock('@/lib/analytics', () => ({
   track: vi.fn(),
-  featureFlagEnabled: (flag: string) => flag === 'dot-drop' && flagState.dotDrop,
-  subscribeFeatureFlags: (onChange: () => void) => {
-    flagState.listeners.add(onChange);
-    return () => flagState.listeners.delete(onChange);
-  },
 }));
 
 function motionComponent(tag: string) {
@@ -187,8 +175,6 @@ afterEach(() => {
   motionState.reducedMotion = false;
   idleState.idle = false;
   idleState.enabled = false;
-  flagState.dotDrop = true;
-  flagState.listeners.clear();
   dropStart.mockClear();
 });
 
@@ -258,38 +244,18 @@ describe('Navbar idle dot drop', () => {
     expect(dropStart.mock.calls[0][0]).toMatchObject({ y: [0, DROP_DISTANCE] });
   });
 
-  it('stays off the page entirely while the dot-drop flag is off', async () => {
-    flagState.dotDrop = false;
+  it('costs a reduced-motion visitor no timer and no listeners', async () => {
     idleState.idle = true;
+    motionState.reducedMotion = true;
 
     await act(async () => {
       renderWithFooterLine();
     });
 
-    // Fail-closed, and closed at the hook rather than at the animation: with
-    // `enabled` false useIdle registers no input listeners and starts no
-    // timer, so an unlaunched easter egg costs a visitor nothing
+    // Closed at the hook rather than at the animation: with `enabled` false
+    // useIdle registers no input listeners and starts no timer
     expect(idleState.enabled).toBe(false);
     expect(dropStart).not.toHaveBeenCalled();
-  });
-
-  it('arms the drop when the flag arrives, without a reload', async () => {
-    flagState.dotDrop = false;
-    idleState.idle = true;
-
-    await act(async () => {
-      renderWithFooterLine();
-    });
-    expect(dropStart).not.toHaveBeenCalled();
-
-    // Flags land with posthog's deferred /flags response, well after mount
-    flagState.dotDrop = true;
-    await act(async () => {
-      flagState.listeners.forEach((listener) => listener());
-    });
-
-    expect(idleState.enabled).toBe(true);
-    expect(dropStart.mock.calls[0][0]).toMatchObject({ y: [0, DROP_DISTANCE] });
   });
 
   it('never drops the dot for reduced-motion users', async () => {

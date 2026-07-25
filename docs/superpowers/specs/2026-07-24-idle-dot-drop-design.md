@@ -24,34 +24,39 @@ checkpoint sits between them.
 Both phases shipped. Phase B did not survive first contact with the pixel
 diff and was re-derived; see [Phase B — the flexing line](#phase-b--the-flexing-line).
 
-## Launch gate
+## Launch gate — attempted, then removed
 
-The whole easter egg sits behind the PostHog feature flag `dot-drop`, read in
-`components/Navbar.tsx` with the idiom `components/kontakt/BriefModal.tsx`
-already uses for `brief-form`:
+The easter egg was briefly gated on a PostHog feature flag `dot-drop`,
+fail-closed, using the idiom `components/kontakt/BriefModal.tsx` uses for
+`brief-form`. The flag was created, enabled at 100%, and the gate never
+opened. The reason is not in this feature:
 
-```ts
-useSyncExternalStore(
-  subscribeFeatureFlags,
-  () => featureFlagEnabled('dot-drop') || process.env.NODE_ENV === 'development',
-  () => process.env.NODE_ENV === 'development'
-)
-```
+**PostHog feature flags never reach the browser on this site.** posthog-js
+sends `distinct_id: "$posthog_cookieless"` — the default for every visitor,
+given `opt_out_capturing_by_default: true` and `cookieless_mode: 'on_reject'`
+in `instrumentation-client.ts` — and the `/flags` endpoint answers with
+`flags: {}`. `isFeatureEnabled()` therefore returns `undefined` for every
+flag. Verified against koolstudio.pl itself, before consent, after accepting
+cookies, and after a reload. The same request with an ordinary `distinct_id`
+returns the flags correctly, so the key, the token and the `/dot` proxy are
+all healthy — it is the cookieless identity that yields nothing.
 
-Fail-closed: no flag, no drop. The one deliberate exception is local
-development — posthog never initialises without `NEXT_PUBLIC_POSTHOG_KEY`, so
-a purely fail-closed gate would make the effect impossible to see at all.
-`NODE_ENV` is inlined at build time into both the server and the client
-bundle, so the two snapshots above agree in every environment and hydration
-never sees the value flip.
+Two consequences:
 
-The result feeds `useIdle`'s `enabled` argument rather than guarding the
-animation, so with the flag off the hook registers no input listeners and
-starts no timer: an unlaunched easter egg costs a visitor nothing.
+1. The drop ships **ungated**. It is suppressed only by `prefers-reduced-
+   motion`, an open menu, an open dialog, a hidden tab, or a missing footer
+   line — all local conditions that need no network.
+2. **The `brief-form` gate is dead in production for the same reason**, so
+   the /kontakt CTA is currently hidden from every visitor. That is a
+   pre-existing bug, out of scope here, and worth its own fix: flag
+   evaluation needs no personal data, so flags can load regardless of
+   consent state.
 
-The flag gates the **drop**, not the hairline. The hairline is an SVG for
-every visitor on every page whether the flag is on or off, which is what
-makes its resting render the hard constraint in phase B.
+Until that is fixed, nothing user-visible should be gated on a PostHog flag
+in this codebase.
+
+Either way the hairline is an SVG for every visitor on every page, which is
+what makes its resting render the hard constraint in phase B.
 
 ## Motivation
 
@@ -69,8 +74,6 @@ this is a photography-led portfolio: the gag must be rare, brief and silent.
 | Scroll-timeline CSS | `app/globals.css:130` | `@keyframes nav-dot-shrink`, explicit `from` to **replace** the inline Framer transform |
 | Idle x-jitter | `components/Navbar.tsx:208` | `x: [0,0,-1.5,1.5,-1,1,0,0]`, `repeat: Infinity`, `repeatDelay: 3.4` |
 | Footer hairline | `components/FooterBar.tsx:14` | `h-px w-full origin-top bg-coral [transform:scaleY(0.5)]` — a 0.5px line (phase B replaces the paint, not the box) |
-| Feature-flag store | `lib/analytics.ts:69` | `featureFlagEnabled` / `subscribeFeatureFlags`, fail-closed |
-| Flag-gated UI precedent | `components/kontakt/BriefModal.tsx:26` | `brief-form`, via `useSyncExternalStore` |
 | Footer bar | `components/FooterBar.tsx:13` | `fixed inset-x-0 bottom-0 z-40` |
 | Navbar | `components/Navbar.tsx:112` | `fixed top-0 left-0 right-0 z-50` |
 | Cross-component event idiom | `lib/analytics.ts:101` | `kool:`-namespaced window event + paired `onX(cb): () => void` unsubscriber |
@@ -314,7 +317,7 @@ prove the harness deterministic.
 | `components/Navbar.tsx` | A | drop wrapper inside the button, idle wiring, jitter suppression |
 | `components/FooterBar.tsx` | A | `data-footer-line` attribute only |
 | `components/Navbar.test.tsx` | A | extend framer-motion mock; drop, physics, pivot and abort cases |
-| `components/Navbar.tsx` | B | `dot-drop` flag into `useIdle`'s `enabled` |
+| `components/Navbar.tsx` | B | impact dispatch; no flag gate (see Launch gate) |
 | `components/FooterBar.tsx` | B | hairline moves into `FooterHairline`; wrapper gains `relative` |
 | `components/FooterHairline.tsx` | B | new — the resting rect, the bend, the spring |
 | `components/FooterHairline.test.tsx` | B | new — path shape, rest/settle, reduced motion, unmount |
@@ -362,10 +365,9 @@ longer holding.
 - Browser, phase B: the line dips at the strike, rings, and comes back to the
   exact resting `<rect>`; a second strike after settling behaves the same; under
   `prefers-reduced-motion: reduce` it never leaves the rect.
-- Browser, the launch gate: in a production build with no flag, `window` carries
-  none of the idle-reset listeners and the dot does not move after 12s of
-  stillness; injecting a posthog stub with `dot-drop` enabled and firing
-  `kool:posthog-ready` registers them and the drop fires — no reload.
+- Browser, reduced motion: in a production build with
+  `prefers-reduced-motion: reduce`, `window` carries none of the idle-reset
+  listeners and the dot does not move after 12s of stillness.
 - `verify-site` skill across routes × both locales before handoff.
 
 ## Non-goals
