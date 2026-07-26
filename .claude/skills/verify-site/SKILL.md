@@ -11,7 +11,7 @@ Walk every route and record HTTP status, console errors, and a screenshot. `pnpm
 
 Build it fresh each run — never hardcode slugs:
 
-1. Static: `/`, `/projekty`, `/studio`, `/oferta`, `/kontakt`
+1. Static: `/`, `/projekty`, `/studio`, `/oferta`, `/oferta/wnetrza-komercyjne`, `/oferta/projekt-wnetrz-mieszkania`, `/oferta/projekt-wnetrz-domu`, `/kontakt`
 2. One `/projekty/<slug>` per entry in `data/projects.ts`
 3. Prefix every route with both locales: `/pl`, `/en`
 4. Dev-server runs only: add `/pl/design-system` and `/en/design-system` (they 404 in production builds **by design** — never report that as a failure)

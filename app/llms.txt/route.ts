@@ -26,6 +26,9 @@ export function GET() {
 ## Pages
 - [Projekty / Projects](${BASE_URL}/pl/projekty): portfolio of residential and commercial interiors
 - [Oferta / Services](${BASE_URL}/pl/oferta): scope of services for commercial and residential projects
+- [Wnętrza komercyjne / Commercial interiors](${BASE_URL}/pl/oferta/wnetrza-komercyjne): commercial interior design services in detail
+- [Projekt wnętrz mieszkania / Apartment interior design](${BASE_URL}/pl/oferta/projekt-wnetrz-mieszkania): apartment interior design services in detail
+- [Projekt wnętrz domu / House interior design](${BASE_URL}/pl/oferta/projekt-wnetrz-domu): house interior design services in detail
 - [Studio / About](${BASE_URL}/pl/studio): the studio, its founders and press features
 - [Kontakt / Contact](${BASE_URL}/pl/kontakt): contact details
 

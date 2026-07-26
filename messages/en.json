@@ -45,6 +45,16 @@
       "description": "Commercial interior design in Wrocław and across Poland: restaurants, hotels, shops and offices. Concept, construction documentation, author's supervision, budget and FAQ.",
       "ogImageAlt": "Restaurant interior designed by kool studio"
     },
+    "projektWnetrzMieszkania": {
+      "title": "Apartment interior design — Wrocław & all of Poland",
+      "description": "Comprehensive apartment and flat interior design: functional layout, concept with visualisations, construction documentation and author's supervision. Wrocław and across Poland.",
+      "ogImageAlt": "Apartment interior in a townhouse designed by kool studio"
+    },
+    "projektWnetrzDomu": {
+      "title": "House interior design — Wrocław & all of Poland",
+      "description": "Interior design for detached houses and residences: living and private zones, coherent floors, construction documentation and author's supervision. Wrocław and across Poland.",
+      "ogImageAlt": "Single-family house interior designed by kool studio"
+    },
     "kontakt": {
       "title": "contact",
       "description": "Get in touch with kool studio — an interior architecture practice from Wrocław, Poland. Studio: Zaporoska 83/15, 53-415 Wrocław. Email: hello@koolstudio.pl.",
@@ -270,7 +280,224 @@
         "author's supervision"
       ],
       "sloganHeading": "We create places you want to come back to",
-      "sloganText": "We guide every project from concept to precise technical documentation, allowing the idea to be translated into a calm and predictable realization. We have experience in both developer and secondary market construction, and we have contacts with verified contractors."
+      "sloganText": "We guide every project from concept to precise technical documentation, allowing the idea to be translated into a calm and predictable realization. We have experience in both developer and secondary market construction, and we have contacts with verified contractors.",
+      "apartments": {
+        "cta": "Explore the offer for apartment interior design",
+        "projectHeading": "Apartment interior design",
+        "projectDescription": "We design premium apartments and flats, creating interiors tailored to the everyday life of their residents. We run every project in stages — from understanding your needs and the potential of the space, through building a coherent concept, to complete documentation that lets the build run smoothly. We consult on every stage and make the key decisions together, so that the finished interior responds to your lifestyle, needs and expectations. Every project is created individually, with care for ergonomics, materials and finishing details.",
+        "fitTitle": "When is it worth commissioning an apartment interior design?",
+        "fitItems": [
+          "You are taking over an apartment from a developer and want to make the most of its potential from the very start.",
+          "You are buying a secondary-market apartment and planning a comprehensive renovation.",
+          "The apartment's layout doesn't suit your needs and you want to make better use of the available space.",
+          "You want an interior designed individually, tailored to your lifestyle rather than assembled from off-the-shelf solutions.",
+          "You value high-quality materials, bespoke solutions and considered details.",
+          "You want to plan the investment budget consciously, before the finishing works begin.",
+          "You care about a smooth, stress-free process."
+        ],
+        "stagesHeading": "Project stages",
+        "stages": [
+          {
+            "title": "Brief and needs analysis",
+            "text": "We get to know you, the way you live and what you expect from the space. We devote the first stage to a conversation about your needs, lifestyle, aesthetics, budget and the schedule of the investment. We want to understand not only how the interior should look, but above all how it should work day to day. At the start of our cooperation you also receive a detailed questionnaire that helps us gather all the important information and build a solid foundation for the design work that follows."
+          },
+          {
+            "title": "Site survey",
+            "text": "Before we start designing, we get to know the space and its potential. We take precise measurements and check the spatial relationships and technical elements that affect the design. For apartments still under construction, we work from the technical documentation and materials provided by the developer, analysing the scope for changes and for tailoring the space individually."
+          },
+          {
+            "title": "Functional layouts",
+            "text": "A well-designed interior always starts with function. We analyse the potential of the space and prepare at least two functional layout options, which we discuss together. We then refine the chosen solution to make the most of the apartment's potential and create a space that is comfortable in everyday use."
+          },
+          {
+            "title": "Concept design",
+            "text": "We give the interior its character through form, materials and light. We select materials, colours, textures and lighting and design bespoke joinery and solutions. We present the concept as a detailed presentation with realistic visualisations, which we discuss together at a meeting. We work with real materials, so at this stage we also show initial colour and material samples. This stage includes two rounds of revisions, so that the final concept is fully refined and matches your expectations."
+          },
+          {
+            "title": "Construction design",
+            "text": "We prepare complete construction documentation that forms the basis for the works. It covers all the technical drawings contractors need — from tile layouts, through services, to detailed designs for joinery and other made-to-order elements. This way the works run more smoothly and the risk of errors on site is reduced."
+          },
+          {
+            "title": "Specifications and quotes",
+            "text": "We prepare specifications and shopping lists covering finishing materials, ready-made furniture, lighting and accessories, with specific products and where to buy them. We also support the budgeting process by gathering quotes from trusted contractors and suppliers."
+          },
+          {
+            "title": "Author's supervision",
+            "text": "During the works we support both clients and contractors. As part of author's supervision we visit the site, check that the work is carried out in line with the design and help resolve questions and situations that call for a decision. During visits we discuss technical details with the contractors and, where needed, prepare additional explanations or drawings. We agree the scope and frequency of supervision individually, depending on the needs of the project."
+          }
+        ],
+        "benefitsHeading": "Why a comprehensive design?",
+        "benefits": [
+          {
+            "title": "A stress-free process",
+            "text": "We bring order to the entire interior fit-out process. You don't have to coordinate dozens of decisions about materials, furnishings and technical solutions yourself — every element is thought through and described in the documentation. Thanks to author's supervision, we also help translate the design into the actual build and respond to situations that arise during the works."
+          },
+          {
+            "title": "Conscious decisions and budget control",
+            "text": "The design lets you make all the key decisions and plan your spending before the works begin. This helps you avoid impulse purchases, costly changes and solutions that won't hold up in everyday use."
+          },
+          {
+            "title": "Bespoke solutions",
+            "text": "We don't create interiors based on ready-made templates or passing trends. We tailor every solution to the residents' way of life, the character of the space and their individual needs. Bespoke joinery, considered functional layouts and a conscious choice of materials make every interior unique and timeless."
+          },
+          {
+            "title": "Consistency at every stage",
+            "text": "One of the greatest advantages of comprehensive cooperation is the consistency of the whole process. From the first conversation, through concept and documentation, to the build stage, every decision stems from a single, considered vision."
+          }
+        ],
+        "worksHeading": "Selected works",
+        "workLink": "See project",
+        "seoHeading": "Apartment interior design — Wrocław and all of Poland",
+        "seoText": "We design apartments and flats primarily in Wrocław, but we also deliver projects in other cities. We work on new-build apartments from developers, premium flats and secondary-market properties alike, including apartments in townhouses that need remodelling or a complete renovation. We run every project comprehensively — from analysing residents' needs and the functional layout, through the concept and construction documentation, to supporting clients during the build.",
+        "faqHeading": "Frequently asked questions",
+        "faqItems": [
+          {
+            "q": "When is the best time to start working with an interior designer?",
+            "a": "Ideally before the finishing works or renovation begin. For new-build apartments it's worth getting in touch as early as the tenant-modification stage, so the functional layout can be adapted to the residents' needs and costly alterations at a later stage can be avoided. The earlier we start working together, the more the design can offer."
+          },
+          {
+            "q": "How long does an apartment project take?",
+            "a": "The time needed to prepare the design depends on the size of the apartment, the scope of the work and how quickly the clients make decisions. We set the schedule individually at the start of our cooperation. We run the project in stages — from analysing needs and functional layouts, through concept and visualisations, to construction documentation."
+          },
+          {
+            "q": "Can an apartment design be tailored to a set budget?",
+            "a": "Yes. The budget is one of the core topics we discuss at the first meeting. We select solutions, materials and furnishings so that they match the assumptions of the investment. We also prepare material specifications and help obtain quotes from trusted contractors, which makes it easier to plan the successive stages of the build."
+          },
+          {
+            "q": "Do you design both new-build and secondary-market apartments?",
+            "a": "Yes. We design both new-build apartments and secondary-market properties, including flats in townhouses and pre-war German villas that need remodelling or a complete renovation. Every space has different potential, so we always adapt our design solutions to the existing technical possibilities and the residents' needs."
+          },
+          {
+            "q": "Does the interior design include documentation for contractors?",
+            "a": "Yes. Alongside the concept design we prepare complete construction documentation that forms the basis for the works. It contains detailed technical drawings, designs for bespoke joinery and all the information contractors need to carry out the work correctly."
+          },
+          {
+            "q": "Can I carry out the project in stages?",
+            "a": "Yes. Comprehensive documentation lets you carry out the works in stages, adapting the schedule to your time or the investment budget. Already at the design stage we help plan the order of the individual works and purchases."
+          },
+          {
+            "q": "Do you design apartments outside Wrocław?",
+            "a": "Yes. Our studio is based in Wrocław, but we also deliver projects in other cities. Depending on the location, part of the design process can take place remotely, while the most important stages of our cooperation are planned to suit the specific investment."
+          },
+          {
+            "q": "Do I need to know what style I want for my apartment?",
+            "a": "No. Many clients begin working with us without a defined vision for the interior. Through our conversations and needs analysis we help set the direction of the design, getting to know your inspirations, way of life and expectations. On that basis we create an interior that is coherent, functional and tailored to you, rather than copying ready-made styles or passing trends."
+          },
+          {
+            "q": "How much does an apartment interior design cost?",
+            "a": "We price every project individually, because the scope of work depends on the apartment's floor area, the complexity of the design and the expected scope of the work. Already after the first conversation we can outline an approximate scope of cooperation and prepare an initial quote."
+          }
+        ],
+        "contactHeading": "Tell us about your project",
+        "contactCta": "Get in touch"
+      },
+      "houses": {
+        "cta": "Explore the offer for house interior design",
+        "projectHeading": "House interior design",
+        "projectDescription": "We design the interiors of detached houses and residences, creating spaces tailored to the lifestyle of the people who live in them. We run every project comprehensively — from analysing needs and the functional layout, through the interior concept, to construction documentation and support during the build. A house project is not only about designing individual rooms, but about creating a coherent space to live in. We take care over the relationships between the living and private zones, the connection between floors and the solutions that will meet the household's needs both today and in the future.",
+        "fitTitle": "When is it worth commissioning a house interior design?",
+        "fitItems": [
+          "You are building a house and want to plan the interiors before the finishing works begin.",
+          "You are buying a house from a developer or in shell condition.",
+          "You are renovating or remodelling an existing house.",
+          "You want to create a coherent space across all floors.",
+          "You want an interior designed individually rather than assembled from off-the-shelf solutions.",
+          "You value high-quality materials and considered details.",
+          "You want to plan the budget for the whole investment consciously.",
+          "You care about a smooth, stress-free process."
+        ],
+        "stagesHeading": "Project stages",
+        "stages": [
+          {
+            "title": "Brief and needs analysis",
+            "text": "We get to know you, the way you live and how you want to use the house day to day. We devote the first stage to a conversation about your needs, habits, aesthetics, budget and the schedule of the investment. We want to understand not only how the interior should look, but above all how it should work day to day. At the start of our cooperation you also receive a detailed questionnaire that helps us gather all the important information and build a solid foundation for the design work that follows."
+          },
+          {
+            "title": "Site survey",
+            "text": "Before we start designing, we analyse the existing interior. We take precise measurements and check the spatial relationships and technical elements that affect the design. For houses still under construction, we work from the technical documentation and materials provided by the developer or the building's architect, analysing the scope for changes and for tailoring the space individually."
+          },
+          {
+            "title": "Functional layouts",
+            "text": "These are the foundation of every project. We design the relationships between floors, the circulation routes, the split into living and private zones and the way the house works as one coherent whole. We present two functional layout options, which we discuss together at a meeting. We then refine the chosen solution to make the most of the house's potential and create a space that is comfortable in everyday use."
+          },
+          {
+            "title": "Concept design",
+            "text": "We give the interior its character through form, materials and light. We select materials, colours, textures and lighting and design bespoke joinery and solutions. We present the concept as a detailed presentation with realistic visualisations and moodboards, which we discuss together at a meeting. We work with real materials, so we also show initial colour and material samples. This stage includes two rounds of revisions, so that the final concept is fully refined and matches your expectations."
+          },
+          {
+            "title": "Construction design",
+            "text": "We prepare precise technical documentation that lets the design be translated into the actual build. We produce all the drawings contractors need — from tile layouts and surface finishes, through the arrangement of services, to detailed designs for joinery and made-to-order elements. This way the works run more smoothly and every detail of the interior stays true to the design."
+          },
+          {
+            "title": "Specifications and quotes",
+            "text": "We prepare shopping lists covering finishing materials, ready-made furniture, lighting and accessories, with specific products and where to buy them. We also support the budgeting process by gathering quotes from trusted contractors and suppliers."
+          },
+          {
+            "title": "Author's supervision",
+            "text": "We make sure the design's intent is faithfully translated into the build. We coordinate day-to-day matters with the contractors, clarify technical solutions and support clients in making the decisions that arise during the works. Where needed, we supplement the documentation with additional drawings and guidelines. We adapt the scope and frequency of supervision to the scale and progress of the investment."
+          }
+        ],
+        "benefitsHeading": "Why a comprehensive design?",
+        "benefits": [
+          {
+            "title": "A considered investment",
+            "text": "A house is a complex investment, where every decision affects the later stages of the build. A comprehensive design lets you bring order to the whole process and make the most important decisions before the works begin. You don't have to coordinate dozens of choices yourself — every element is thought through in advance, coordinated with the others and described in the documentation."
+          },
+          {
+            "title": "A smoother build",
+            "text": "Complete construction documentation and author's supervision streamline cooperation with contractors and help coordinate the successive stages of the work. This way the build runs more smoothly and every decision rests on a single, coherent design."
+          },
+          {
+            "title": "A house tailored to you",
+            "text": "We design interiors that answer the everyday life of the people who live in them. We create individual functional layouts, bespoke joinery and solutions that make the most of the whole house's potential, with its future use in mind as well."
+          },
+          {
+            "title": "Consistency throughout the house",
+            "text": "We design the house as one consistent whole. We take care over the relationships between floors, the repetition of materials, proportions, light and details, so that all the interiors form a harmonious and timeless space."
+          }
+        ],
+        "worksHeading": "Selected works",
+        "workLink": "See project",
+        "seoHeading": "House interior design — Wrocław and all of Poland",
+        "seoText": "Designing a house calls for looking at the space as a whole. We design the interiors of detached houses, semi-detached houses and residences, taking care over functionality, material coherence and the comfort of everyday use. We work both with houses under construction and with existing buildings due for remodelling or a complete renovation. A comprehensive house interior design covers analysing residents' needs, the functional layout, the concept design, construction documentation and support during the build.",
+        "faqHeading": "Frequently asked questions",
+        "faqItems": [
+          {
+            "q": "When is the best time to start a house interior design?",
+            "a": "Ideally as early as the construction stage or right after buying the house. This makes it possible to plan the services, the functional layout and the joinery solutions before the finishing works begin."
+          },
+          {
+            "q": "How much does a house interior design cost?",
+            "a": "We price every project individually, because the scope of work depends on the size of the house, the complexity of the investment and the expected scope of the work. Already after the first conversation we can outline an approximate scope of work and prepare an initial quote."
+          },
+          {
+            "q": "Can I commission a design for just one floor?",
+            "a": "Yes, although we recommend designing the whole house. This keeps all the spaces functionally and aesthetically coherent and makes it easier to plan the investment."
+          },
+          {
+            "q": "What does the construction design for a house interior include?",
+            "a": "The construction design covers the layout of lighting, power sockets and water and drainage points, surface finishes, bathroom and kitchen designs, bespoke joinery designs and all the other studies contractors need to deliver the interior."
+          },
+          {
+            "q": "How long does a house interior design take?",
+            "a": "The time depends on the size of the house and the scope of the project. We set the schedule individually before our cooperation begins."
+          },
+          {
+            "q": "Do you design house interiors outside Wrocław?",
+            "a": "Yes. We work with clients outside Wrocław too, running projects in different parts of Poland."
+          },
+          {
+            "q": "Can a house design be carried out in stages?",
+            "a": "Yes. Comprehensive documentation makes it possible to plan the build in stages while keeping the whole project coherent."
+          },
+          {
+            "q": "How much does finishing a house cost?",
+            "a": "The cost of finishing a house interior depends above all on the floor area, the standard of the materials, the number of made-to-measure fittings, the scope of the work and the furnishings you choose. That is why we analyse every investment individually. Already during the first conversation we help estimate an approximate budget for finishing the interior and choose solutions matched to your financial assumptions. A well-prepared design lets you plan your spending consciously and reduce the risk of costly changes during the build."
+          }
+        ],
+        "contactHeading": "Tell us about your project",
+        "contactCta": "Get in touch"
+      }
     },
     "process": {
       "label": "Comprehensive project",

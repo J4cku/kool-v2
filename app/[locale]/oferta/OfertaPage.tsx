@@ -45,8 +45,9 @@ export default function OfertaPage() {
             sloganText={t('commercial.sloganText')}
             trustedByLabel={t('commercial.trustedBy')}
             trustedByLogos={trustedByLogos}
-            detailsCta={t('commercial.details.cta')}
-            detailsHref="/oferta/wnetrza-komercyjne"
+            detailsLinks={[
+              { href: '/oferta/wnetrza-komercyjne', cta: t('commercial.details.cta') },
+            ]}
           />
 
           <ParallaxImage
@@ -68,6 +69,10 @@ export default function OfertaPage() {
             scopeImageAlt="Kitchen interior"
             sloganHeading={t('residential.sloganHeading')}
             sloganText={t('residential.sloganText')}
+            detailsLinks={[
+              { href: '/oferta/projekt-wnetrz-mieszkania', cta: t('residential.apartments.cta') },
+              { href: '/oferta/projekt-wnetrz-domu', cta: t('residential.houses.cta') },
+            ]}
           />
 
           <ParallaxImage

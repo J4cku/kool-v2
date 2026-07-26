@@ -7,6 +7,8 @@ const assets = [
   'projects-dehesa.jpg',
   'studio-team.jpg',
   'offer-commercial.jpg',
+  'offer-apartments.jpg',
+  'offer-houses.jpg',
   'contact-reel.jpg',
 ];
 
