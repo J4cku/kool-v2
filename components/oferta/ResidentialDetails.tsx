@@ -11,7 +11,7 @@ import WorksGrid from './WorksGrid';
 import { projects, localizeProject } from '@/data/projects';
 
 const WORK_SLUGS = {
-  apartments: ['mieszkanie-walecznych', 'mieszkanie-strachowicka', 'mieszkanie-gdansk', 'mieszkanie-midcentury'],
+  apartments: ['mieszkanie-walecznych', 'mieszkanie-strachowicka', 'lazienki-warszawa', 'mieszkanie-midcentury'],
   houses: ['dom-dobrzykowice', 'lazienki-warszawa', 'mieszkanie-walecznych', 'mieszkanie-strachowicka'],
 };
 
@@ -140,8 +140,8 @@ export default function ResidentialDetails({ variant }: { variant: 'apartments' 
         </div>
       </div>
 
-      {/* Wybrane realizacje */}
-      <div className="mt-10 md:mt-14">
+      {/* Wybrane realizacje — extra air after the benefits photo */}
+      <div className="mt-20 md:mt-28">
         <RevealHeading
           as="h2"
           text={t('worksHeading')}
