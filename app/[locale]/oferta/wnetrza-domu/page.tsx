@@ -10,7 +10,7 @@ import ResidentialDetails from '@/components/oferta/ResidentialDetails';
 const HERO_IMAGE = '/images/oferta/KOOL_oferta_domy_hero.webp';
 
 const SOCIAL_IMAGE = '/images/social/offer-houses.jpg';
-const PATH = '/oferta/projekt-wnetrz-domu';
+const PATH = '/oferta/wnetrza-domu';
 
 export async function generateMetadata({
   params,
@@ -19,13 +19,13 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'meta' });
-  const title = t('projektWnetrzDomu.title');
-  const description = t('projektWnetrzDomu.description');
+  const title = t('wnetrzaDomu.title');
+  const description = t('wnetrzaDomu.description');
   const socialImage = {
     url: SOCIAL_IMAGE,
     width: 1200,
     height: 630,
-    alt: t('projektWnetrzDomu.ogImageAlt'),
+    alt: t('wnetrzaDomu.ogImageAlt'),
   };
 
   return {
@@ -51,7 +51,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function ProjektWnetrzDomuPage({
+export default async function WnetrzaDomuPage({
   params,
 }: {
   params: Promise<{ locale: string }>;

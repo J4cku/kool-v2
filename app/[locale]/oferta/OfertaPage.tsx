@@ -70,8 +70,8 @@ export default function OfertaPage() {
             sloganHeading={t('residential.sloganHeading')}
             sloganText={t('residential.sloganText')}
             detailsLinks={[
-              { href: '/oferta/projekt-wnetrz-mieszkania', cta: t('residential.apartments.cta') },
-              { href: '/oferta/projekt-wnetrz-domu', cta: t('residential.houses.cta') },
+              { href: '/oferta/wnetrza-mieszkania', cta: t('residential.apartments.cta') },
+              { href: '/oferta/wnetrza-domu', cta: t('residential.houses.cta') },
             ]}
           />
 
