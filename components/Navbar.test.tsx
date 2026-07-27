@@ -8,6 +8,7 @@ type MotionSpanProps = ComponentProps<'span'> & Record<string, unknown>;
 
 const motionPropNames = new Set(['animate', 'exit', 'initial', 'transition', 'whileFocus', 'whileHover']);
 const motionState = vi.hoisted(() => ({ reducedMotion: false }));
+const pathnameState = vi.hoisted(() => ({ pathname: '/' }));
 /* `enabled` records what the drop's gate passed to useIdle, which is the
    difference between a suppressed animation and a hook that never registers
    an input listener or a timer at all (see hooks/useIdle.test.ts). */
@@ -106,7 +107,7 @@ vi.mock('next-intl', () => ({
 
 vi.mock('@/i18n/navigation', () => ({
   Link: ({ children, ...props }: React.ComponentProps<'a'>) => <a {...props}>{children}</a>,
-  usePathname: () => '/',
+  usePathname: () => pathnameState.pathname,
 }));
 
 vi.mock('@/hooks/useReducedMotion', () => ({
@@ -198,6 +199,7 @@ vi.mock('framer-motion', () => ({
 afterEach(() => {
   cleanup();
   document.querySelector('[data-footer-line]')?.remove();
+  document.querySelectorAll('[aria-modal="true"]').forEach((dialog) => dialog.remove());
   motionState.reducedMotion = false;
   idleState.idle = false;
   idleState.enabled = false;
@@ -205,7 +207,9 @@ afterEach(() => {
   bottomState.arrival = 0;
   bottomState.enabled = false;
   bottomState.navigations = 0;
+  pathnameState.pathname = '/';
   dropStart.mockClear();
+  vi.useRealTimers();
 });
 
 describe('Navbar desktop links', () => {
@@ -640,6 +644,23 @@ describe('Navbar idle dot drop', () => {
 });
 
 describe('Navbar bottom-arrival dot drop', () => {
+  it('notes navigation and discards arrivals from the previous pathname', async () => {
+    let view!: ReturnType<typeof render>;
+    await act(async () => {
+      view = renderWithFooterLine();
+    });
+
+    bottomState.atBottom = true;
+    bottomState.arrival = 1;
+    pathnameState.pathname = '/studio';
+    await act(async () => {
+      view.rerender(<Navbar />);
+    });
+
+    expect(bottomState.navigations).toBe(1);
+    expect(dropStart).not.toHaveBeenCalled();
+  });
+
   it('drops the dot on a settled bottom arrival', async () => {
     let view!: ReturnType<typeof render>;
     await act(async () => {
@@ -680,6 +701,41 @@ describe('Navbar bottom-arrival dot drop', () => {
 
     // A second flight, cooldown notwithstanding
     expect(dropStart).toHaveBeenCalledTimes(4);
+  });
+
+  it('keeps the idle cooldown disarmed when a bottom flight starts just before expiry', async () => {
+    vi.useFakeTimers();
+    idleState.idle = true;
+
+    let view!: ReturnType<typeof render>;
+    await act(async () => {
+      view = renderWithFooterLine();
+    });
+    expect(dropStart).toHaveBeenCalledTimes(2);
+
+    idleState.idle = false;
+    await act(async () => {
+      view.rerender(<Navbar />);
+      vi.advanceTimersByTime(45_000 - 1);
+    });
+
+    deferDropStart();
+    bottomState.atBottom = true;
+    bottomState.arrival = 1;
+    await act(async () => {
+      view.rerender(<Navbar />);
+    });
+    expect(dropStart).toHaveBeenCalledTimes(3);
+
+    await act(async () => {
+      vi.advanceTimersByTime(1);
+    });
+    idleState.idle = true;
+    await act(async () => {
+      view.rerender(<Navbar />);
+    });
+
+    expect(dropStart).toHaveBeenCalledTimes(3);
   });
 
   it('puts the idle trigger on its cooldown after a bottom flight', async () => {
@@ -755,6 +811,36 @@ describe('Navbar bottom-arrival dot drop', () => {
     });
   });
 
+  it('floats a bottom flight home when a dialog is inserted mid-flight', async () => {
+    deferDropStart();
+
+    let view!: ReturnType<typeof render>;
+    await act(async () => {
+      view = renderWithFooterLine();
+    });
+
+    bottomState.atBottom = true;
+    bottomState.arrival = 1;
+    await act(async () => {
+      view.rerender(<Navbar />);
+    });
+    expect(dropStart).toHaveBeenCalledTimes(1);
+
+    const dialog = document.createElement('div');
+    dialog.setAttribute('aria-modal', 'true');
+    await act(async () => {
+      document.body.appendChild(dialog);
+      await Promise.resolve();
+    });
+
+    expect(dropStart.mock.calls.at(-1)?.[0]).toMatchObject({
+      y: 0,
+      scaleX: 1,
+      scaleY: 1,
+      transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1] },
+    });
+  });
+
   it('consumes an arrival blocked by an open dialog', async () => {
     const dialog = document.createElement('div');
     dialog.setAttribute('aria-modal', 'true');
@@ -789,5 +875,25 @@ describe('Navbar bottom-arrival dot drop', () => {
     });
 
     expect(bottomState.enabled).toBe(false);
+  });
+
+  it('does not replay a live arrival when reduced motion is switched off', async () => {
+    bottomState.atBottom = true;
+    bottomState.arrival = 1;
+    motionState.reducedMotion = true;
+
+    let view!: ReturnType<typeof render>;
+    await act(async () => {
+      view = renderWithFooterLine();
+    });
+    expect(bottomState.enabled).toBe(false);
+
+    motionState.reducedMotion = false;
+    await act(async () => {
+      view.rerender(<Navbar />);
+    });
+
+    expect(bottomState.enabled).toBe(true);
+    expect(dropStart).not.toHaveBeenCalled();
   });
 });

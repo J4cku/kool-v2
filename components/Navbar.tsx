@@ -143,7 +143,7 @@ export default function Navbar() {
   /* Arrivals this navbar has already acted on. The store outlives client-side
      navigations, so the baseline starts at the current counter and
      re-baselines on pathname change — never at zero. */
-  const consumedArrivalRef = useRef(arrival);
+  const consumedArrivalRef = useRef(getBottomArrivalSnapshot().arrival);
 
   const clearImpactTimers = useCallback(() => {
     impactTimersRef.current.forEach((timer) => window.clearTimeout(timer));
@@ -183,6 +183,10 @@ export default function Navbar() {
 
   const fly = useCallback(
     async (distance: number, impactX: number) => {
+      if (rearmTimerRef.current !== null) {
+        window.clearTimeout(rearmTimerRef.current);
+        rearmTimerRef.current = null;
+      }
       const generation = flightRef.current + 1;
       flightRef.current = generation;
       flyingRef.current = true;
@@ -249,6 +253,52 @@ export default function Navbar() {
     [clearImpactTimers, dropControls, scheduleRearm]
   );
 
+  const abortFlight = useCallback(() => {
+    if (!flyingRef.current) return;
+    flyingRef.current = false;
+    flightRef.current += 1;
+    clearImpactTimers();
+    scheduleRearm(REARM_DELAY_MS);
+    void dropControls
+      .start({
+        y: 0,
+        scaleX: 1,
+        scaleY: 1,
+        transition: { duration: ABORT_DURATION, ease: SETTLE_EASE },
+      })
+      // A bottom arrival can start a fresh flight while this abort is still
+      // settling (abort animation and settle beat are the same ~250ms);
+      // the stale resolution must not strip the new flight's dropping state
+      .then(() => {
+        if (!flyingRef.current) setDropping(false);
+      });
+  }, [clearImpactTimers, dropControls, scheduleRearm]);
+
+  useEffect(() => {
+    if (!dropping || !flyingRef.current) return;
+
+    const observer = new MutationObserver(() => {
+      if (!document.querySelector('[aria-modal="true"]')) return;
+      observer.disconnect();
+      abortFlight();
+    });
+
+    // Covers a dialog inserted after the fire-time guard but before this
+    // active-flight observer was installed.
+    if (document.querySelector('[aria-modal="true"]')) {
+      abortFlight();
+      return;
+    }
+
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ['aria-modal'],
+      childList: true,
+      subtree: true,
+    });
+    return () => observer.disconnect();
+  }, [abortFlight, dropping]);
+
   useEffect(() => {
     const bottomPending = arrival > consumedArrivalRef.current;
     if ((idle || atBottom || bottomPending) && !menuOpen && !reduceMotion) {
@@ -297,25 +347,8 @@ export default function Navbar() {
     }
 
     // Input arrived (or the menu opened) mid-flight: float the dot home
-    if (!flyingRef.current) return;
-    flyingRef.current = false;
-    flightRef.current += 1;
-    clearImpactTimers();
-    scheduleRearm(REARM_DELAY_MS);
-    void dropControls
-      .start({
-        y: 0,
-        scaleX: 1,
-        scaleY: 1,
-        transition: { duration: ABORT_DURATION, ease: SETTLE_EASE },
-      })
-      // A bottom arrival can start a fresh flight while this abort is still
-      // settling (abort animation and settle beat are the same ~250ms);
-      // the stale resolution must not strip the new flight's dropping state
-      .then(() => {
-        if (!flyingRef.current) setDropping(false);
-      });
-  }, [armed, arrival, atBottom, clearImpactTimers, dropControls, fly, idle, menuOpen, reduceMotion, scheduleRearm]);
+    abortFlight();
+  }, [abortFlight, armed, arrival, atBottom, fly, idle, menuOpen, reduceMotion]);
 
   const isActive = (href: string) => {
     if (href === '/') return pathname === '/';

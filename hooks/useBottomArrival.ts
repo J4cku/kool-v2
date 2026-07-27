@@ -118,7 +118,8 @@ export function subscribeToBottomArrival(onStoreChange: () => void) {
     INPUT_EVENTS.forEach((event) => window.removeEventListener(event, noteInput));
     clearSettle();
     genuineInput = false;
-    armed = true;
+    // Freshness survives temporary gates such as an open menu. Only rising
+    // far enough above the bottom re-arms a consumed arrival.
     // The arrival counter deliberately survives (see BottomArrival)
     snapshot = { atBottom: false, arrival: snapshot.arrival };
   };

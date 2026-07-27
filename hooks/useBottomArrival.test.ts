@@ -52,6 +52,12 @@ function gesture() {
 }
 
 afterEach(() => {
+  // Preserve the production store across enabled unsubscribe/resubscribe
+  // cycles, but leave each test fresh through the same real scroll transition
+  // that re-arms it for a visitor.
+  act(() => {
+    scrollTo(0);
+  });
   cleanup();
   const scroller = document.scrollingElement as HTMLElement;
   OVERRIDDEN.forEach((property) => Reflect.deleteProperty(scroller, property));
@@ -184,6 +190,33 @@ describe('useBottomArrival', () => {
       vi.advanceTimersByTime(SETTLE_MS);
     });
     expect(result.current.arrival).toBe(before + 2);
+  });
+
+  it('stays disarmed across an enabled unsubscribe/resubscribe cycle', () => {
+    vi.useFakeTimers();
+    const { result, rerender } = renderHook(({ enabled }) => useBottomArrival(enabled), {
+      initialProps: { enabled: true },
+    });
+    const before = result.current.arrival;
+
+    act(() => {
+      gesture();
+      scrollTo(MAX_SCROLL);
+      vi.advanceTimersByTime(SETTLE_MS);
+    });
+    expect(result.current.arrival).toBe(before + 1);
+
+    rerender({ enabled: false });
+    rerender({ enabled: true });
+
+    act(() => {
+      gesture();
+      scrollTo(MAX_SCROLL - 1);
+      scrollTo(MAX_SCROLL);
+      vi.advanceTimersByTime(SETTLE_MS);
+    });
+
+    expect(result.current.arrival).toBe(before + 1);
   });
 
   it('holds atBottom through a jiggle and drops it past the tolerance', () => {
