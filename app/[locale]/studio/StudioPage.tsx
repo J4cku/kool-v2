@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { pressItems } from '@/data/press';
 import FooterBanner from '@/components/FooterBanner';
+import MarqueeEdges from '@/components/MarqueeEdges';
 import Navbar from '@/components/Navbar';
 import ProjectHero from '@/components/ProjectHero';
 import Reveal from '@/components/Reveal';
@@ -43,7 +44,7 @@ export default function StudioPage() {
       <Navbar />
       <main>
         <div className="relative z-10 bg-beige">
-          <section className="overflow-hidden whitespace-nowrap pt-16 pb-8 md:pt-24 md:pb-12">
+          <section className="relative overflow-hidden whitespace-nowrap pt-16 pb-8 md:pt-24 md:pb-12">
             <h1 className="animate-marquee inline-block motion-reduce:animate-none">
               <span
                 className="font-[400] uppercase text-coral leading-tight mx-8 md:mx-16"
@@ -62,6 +63,7 @@ export default function StudioPage() {
                 </span>
               ))}
             </h1>
+            <MarqueeEdges />
           </section>
 
           <section className="px-5 pt-10 pb-20 md:px-10 md:pt-14 md:pb-28 lg:px-[68px] lg:pt-20 lg:pb-36">

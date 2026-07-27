@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import ColumnImage from '@/components/ColumnImage';
+import MarqueeEdges from '@/components/MarqueeEdges';
 import RevealHeading from '@/components/RevealHeading';
 
 function ManifestoText({ heading, text }: { heading: string; text: string }) {
@@ -53,7 +54,7 @@ export default function ManifestoSection() {
       </section>
 
       {/* Marquee */}
-      <div className="overflow-hidden whitespace-nowrap py-16 md:py-24">
+      <div className="relative overflow-hidden whitespace-nowrap py-16 md:py-24">
         <div className="animate-marquee inline-block">
           {Array.from({ length: 4 }).map((_, i) => (
             <span
@@ -65,6 +66,7 @@ export default function ManifestoSection() {
             </span>
           ))}
         </div>
+        <MarqueeEdges />
       </div>
 
       {/* Section 2: image left, text right — project-page 50/50 row */}
