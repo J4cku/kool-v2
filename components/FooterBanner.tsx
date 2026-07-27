@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import AddressBlock from './AddressBlock';
 import FooterBar from './FooterBar';
 import LazyAutoplayVideo from './LazyAutoplayVideo';
+import MarqueeEdges from './MarqueeEdges';
 
 interface FooterBannerProps {
   showAddress?: boolean;
@@ -18,7 +19,7 @@ export default function FooterBanner({ showAddress = false, showMarquee = true }
     <footer className="pb-[calc(61px+env(safe-area-inset-bottom))] md:pb-[calc(43px+env(safe-area-inset-bottom))]">
       {/* Marquee */}
       {showMarquee && (
-        <div className="overflow-hidden whitespace-nowrap pt-8 md:pt-12 pb-2">
+        <div className="relative overflow-hidden whitespace-nowrap pt-8 md:pt-12 pb-2">
           <div className="animate-marquee inline-block">
             {Array.from({ length: 4 }).map((_, i) => (
               <span
@@ -30,6 +31,7 @@ export default function FooterBanner({ showAddress = false, showMarquee = true }
               </span>
             ))}
           </div>
+          <MarqueeEdges />
         </div>
       )}
 

@@ -2,6 +2,7 @@
 
 import { useLocale, useTranslations } from 'next-intl';
 import ColumnImage from '@/components/ColumnImage';
+import MarqueeEdges from '@/components/MarqueeEdges';
 import RevealHeading from '@/components/RevealHeading';
 import ScrollWeightHeading from './ScrollWeightHeading';
 import StagesTimeline, { type TimelineStage } from './StagesTimeline';
@@ -89,6 +90,7 @@ export default function CommercialDetails() {
               </span>
             ))}
           </div>
+          <MarqueeEdges />
         </div>
         <span className="sr-only">{t('types')}</span>
       </div>
