@@ -6,6 +6,7 @@ import { openCookieSettings, track } from '@/lib/analytics';
 import CookieBanner from './CookieBanner';
 import FooterHairline from './FooterHairline';
 import LanguageToggle from './LanguageToggle';
+import ScrollDot from './ScrollDot';
 
 export default function FooterBar() {
   const t = useTranslations('cookies');
@@ -19,6 +20,12 @@ export default function FooterBar() {
           bend where the dot strikes it. */}
       <div data-footer-line className="relative h-px w-full">
         <FooterHairline />
+        {/* Reading progress rides the same line, on every page. Absolutely
+            positioned and painted after the hairline: it adds nothing to this
+            box's rect, which the idle drop measures, and it sits above the
+            coral half-pixel but still under the nav (z-50), so the falling
+            dot passes in front of it. */}
+        <ScrollDot />
       </div>
       <div className="flex items-center justify-between px-3 py-2 md:px-5">
         <a
