@@ -16,13 +16,16 @@ export default function FaqAccordion({ items }: FaqAccordionProps) {
   const [open, setOpen] = useState<number | null>(null);
 
   return (
-    <ul className="border-b border-dark/15">
+    <ul className="relative after:absolute after:left-1/2 after:bottom-0 after:w-dvw after:-translate-x-1/2 after:border-b after:border-dark/15 after:content-['']">
       {items.map((item, i) => {
         const isOpen = open === i;
         const panelId = `faq-panel-${i}`;
         const buttonId = `faq-button-${i}`;
         return (
-          <li key={i} className="border-t border-dark/15">
+          <li
+            key={i}
+            className="relative before:absolute before:left-1/2 before:w-dvw before:-translate-x-1/2 before:border-t before:border-dark/15 before:content-['']"
+          >
             <button
               type="button"
               id={buttonId}

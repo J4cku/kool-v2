@@ -105,7 +105,10 @@ function DotTrack({
 }) {
   return (
     <div className="relative mt-6 md:mt-10 h-10">
-      <div aria-hidden="true" className="absolute inset-x-0 top-1/2 h-px bg-coral" />
+      <div
+        aria-hidden="true"
+        className="absolute left-1/2 top-1/2 h-px w-dvw -translate-x-1/2 bg-coral"
+      />
       <div className="absolute inset-x-0 top-0 bottom-0 w-[86%] md:w-[72%] mx-auto flex justify-between items-center">
         {stages.map((s, i) => (
           <button
