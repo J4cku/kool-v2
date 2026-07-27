@@ -140,14 +140,9 @@ export default function ResidentialDetails({ variant }: { variant: 'apartments' 
         </div>
       </div>
 
-      {/* Wybrane realizacje — extra air after the benefits photo */}
-      <div className="mt-20 md:mt-28">
-        <RevealHeading
-          as="h2"
-          text={t('worksHeading')}
-          className="font-[700] text-dark uppercase mb-8 md:mb-12 leading-[1.02]"
-          style={{ fontSize: 'clamp(28px, 4.2vw, 60px)' }}
-        />
+      {/* Selected works — headingless by design; the gap absorbs the room the
+          old "Wybrane realizacje" display heading occupied */}
+      <div className="mt-24 md:mt-40">
         <WorksGrid
           works={works}
           workLinkLabel={t('workLink')}

@@ -179,14 +179,9 @@ export default function CommercialDetails() {
         </div>
       </div>
 
-      {/* Wybrane realizacje */}
-      <div className="mt-10 md:mt-14">
-        <RevealHeading
-          as="h3"
-          text={t('worksHeading')}
-          className="font-[700] text-dark uppercase mb-8 md:mb-12 leading-[1.02]"
-          style={{ fontSize: 'clamp(28px, 4.2vw, 60px)' }}
-        />
+      {/* Selected works — headingless by design; the gap absorbs the room the
+          old "Wybrane realizacje" display heading occupied */}
+      <div className="mt-24 md:mt-40">
         <WorksGrid
           works={works}
           blurbs={workBlurbs}

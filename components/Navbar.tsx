@@ -35,6 +35,9 @@ const HOLD_DURATION = 0.18;
 const RETURN_DURATION = 0.62;
 const RETURN_OVERSHOOT = 4;
 const ABORT_DURATION = 0.25;
+/* Re-arms the drop this long after a flight ends, so a patient visitor sees
+   it again — sparse enough to stay a gag rather than a metronome. */
+const REARM_DELAY_MS = 45_000;
 
 const mobileQuery = '(max-width: 768px)';
 
@@ -118,8 +121,11 @@ export default function Navbar() {
   const dropWrapRef = useRef<HTMLDivElement>(null);
   const dropControls = useAnimationControls();
   const [dropping, setDropping] = useState(false);
-  // One drop per page view; client-side navigation re-arms it
-  const droppedRef = useRef(false);
+  // Disarmed while a flight is in the air or cooling down; re-armed
+  // REARM_DELAY_MS after each flight and on client-side navigation, so the
+  // dot drops again on a later — or continuing — idle spell
+  const [armed, setArmed] = useState(true);
+  const rearmTimerRef = useRef<number | null>(null);
   // Generation token, bumped on every start and every abort, so a sequence
   // that is no longer current stops at its next await instead of animating
   // the dot back into a position the user has moved on from
@@ -131,19 +137,36 @@ export default function Navbar() {
      listeners and starts no timer. */
   const idle = useIdle(!menuOpen && !reduceMotion);
 
-  useEffect(() => {
-    droppedRef.current = false;
-  }, [pathname]);
-
   const clearImpactTimers = useCallback(() => {
     impactTimersRef.current.forEach((timer) => window.clearTimeout(timer));
     impactTimersRef.current = [];
   }, []);
 
+  /* Re-arm after `delay`, replacing any pending re-arm. */
+  const scheduleRearm = useCallback((delay: number) => {
+    if (rearmTimerRef.current !== null) window.clearTimeout(rearmTimerRef.current);
+    rearmTimerRef.current = window.setTimeout(() => {
+      rearmTimerRef.current = null;
+      setArmed(true);
+    }, delay);
+  }, []);
+
+  // Client-side navigation re-arms right away (through the timer, so the
+  // reset stays async and clears any re-arm pending from the previous page).
+  // Skipped on mount: the initial state is already armed, and a 0 ms timer
+  // armed there would land just after a first drop fires and double it.
+  const prevPathnameRef = useRef(pathname);
+  useEffect(() => {
+    if (prevPathnameRef.current === pathname) return;
+    prevPathnameRef.current = pathname;
+    scheduleRearm(0);
+  }, [pathname, scheduleRearm]);
+
   useEffect(() => () => {
-    // Nothing may resume (or emit an impact) after unmount
+    // Nothing may resume (or emit an impact, or re-arm) after unmount
     flightRef.current += 1;
     clearImpactTimers();
+    if (rearmTimerRef.current !== null) window.clearTimeout(rearmTimerRef.current);
   }, [clearImpactTimers]);
 
   const fly = useCallback(
@@ -209,21 +232,22 @@ export default function Navbar() {
 
       flyingRef.current = false;
       setDropping(false);
+      scheduleRearm(REARM_DELAY_MS);
     },
-    [clearImpactTimers, dropControls]
+    [clearImpactTimers, dropControls, scheduleRearm]
   );
 
   useEffect(() => {
     if (idle && !menuOpen && !reduceMotion) {
-      if (droppedRef.current) return;
+      if (!armed) return;
       const dot = dotRef.current;
       const wrap = dropWrapRef.current;
       // Absent on 404 and design-system, where the gag silently no-ops
       const line = document.querySelector('[data-footer-line]');
       // Everything outside an open dialog is inert, so a gag sweeping past the
       // brief modal's translucent backdrop is unsolicited motion while the user
-      // is mid-form. Deliberately left unarmed, so a later idle period on the
-      // same page view can still fire it once the dialog is closed.
+      // is mid-form. Deliberately skipped while still armed, so a later idle
+      // period on the same page view can still fire it once the dialog closes.
       const modal = document.querySelector('[aria-modal="true"]');
       if (!dot || !wrap || !line || modal) return;
       // Measured at fire time, never cached: both ends are position:fixed and
@@ -246,7 +270,7 @@ export default function Navbar() {
       wrap.style.transformOrigin =
         `${impactX - wrapRect.left}px ${dotRect.bottom - wrapRect.top}px`;
 
-      droppedRef.current = true;
+      setArmed(false);
       setDropping(true);
       void fly(distance, impactX);
       return;
@@ -257,6 +281,7 @@ export default function Navbar() {
     flyingRef.current = false;
     flightRef.current += 1;
     clearImpactTimers();
+    scheduleRearm(REARM_DELAY_MS);
     void dropControls
       .start({
         y: 0,
@@ -265,7 +290,7 @@ export default function Navbar() {
         transition: { duration: ABORT_DURATION, ease: SETTLE_EASE },
       })
       .then(() => setDropping(false));
-  }, [clearImpactTimers, dropControls, fly, idle, menuOpen, reduceMotion]);
+  }, [armed, clearImpactTimers, dropControls, fly, idle, menuOpen, reduceMotion, scheduleRearm]);
 
   const isActive = (href: string) => {
     if (href === '/') return pathname === '/';
