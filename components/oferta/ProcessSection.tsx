@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import ColumnImage from '@/components/ColumnImage';
+import ScrollSpine from '@/components/ScrollSpine';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
@@ -70,20 +71,26 @@ export default function ProcessSection({
           />
 
           <div className="flex flex-col justify-center md:pl-8 lg:pl-12">
-            <ol className="space-y-6 md:space-y-9">
-              {steps.map((step, i) => (
-                <li
-                  key={i}
-                  className="flex items-start gap-3 md:gap-4 leading-[1.4]"
-                  style={{ fontSize: 'clamp(15px, 1.5vw, 20px)' }}
-                >
-                  <span className="text-dark font-[700] tabular-nums">
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-                  <span className="text-dark font-[400]">{step}</span>
-                </li>
-              ))}
-            </ol>
+            {/* The spine sits on a wrapper rather than the <ol> itself: an
+                ordered list may only contain list items, and the steps keep
+                their own left padding so the numbers clear the line. */}
+            <div className="relative">
+              <ScrollSpine className="absolute inset-y-0 left-0" />
+              <ol className="space-y-6 md:space-y-9 pl-5 md:pl-8">
+                {steps.map((step, i) => (
+                  <li
+                    key={i}
+                    className="flex items-start gap-3 md:gap-4 leading-[1.4]"
+                    style={{ fontSize: 'clamp(15px, 1.5vw, 20px)' }}
+                  >
+                    <span className="text-dark font-[700] tabular-nums">
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <span className="text-dark font-[400]">{step}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
           </div>
         </motion.div>
 
