@@ -29,10 +29,9 @@ interface ServiceSectionProps {
   sloganText: string;
   trustedByLabel?: string;
   trustedByLogos?: { src: string; alt: string; width: number; height: number; className: string }[];
-  /** Link to the standalone deep-dive page, rendered as a CTA at the bottom of
-      the expanded block (e.g. /oferta/wnetrza-komercyjne). */
-  detailsHref?: string;
-  detailsCta?: string;
+  /** Links to standalone deep-dive pages, rendered as a stacked column of CTAs
+      at the bottom of the expanded block (e.g. /oferta/wnetrza-komercyjne). */
+  detailsLinks?: { href: string; cta: string }[];
 }
 
 export default function ServiceSection({
@@ -50,8 +49,7 @@ export default function ServiceSection({
   sloganText,
   trustedByLabel,
   trustedByLogos,
-  detailsHref,
-  detailsCta,
+  detailsLinks,
 }: ServiceSectionProps) {
   const reduceMotion = useReducedMotion();
   const [expanded, setExpanded] = useState(false);
@@ -200,16 +198,21 @@ export default function ServiceSection({
                 )}
               </div>
 
-              {/* Link to the standalone deep-dive page */}
-              {detailsHref && detailsCta && (
-                <Link
-                  href={detailsHref as '/oferta'}
-                  className="mt-14 md:mt-20 flex items-center gap-3 md:gap-4 text-coral font-[600] uppercase hover:opacity-60 transition-opacity"
-                  style={{ fontSize: 'clamp(15px, 1.6vw, 22px)' }}
-                >
-                  {detailsCta}
-                  <span aria-hidden="true">→</span>
-                </Link>
+              {/* Links to the standalone deep-dive pages */}
+              {detailsLinks && detailsLinks.length > 0 && (
+                <div className="mt-14 md:mt-20 flex flex-col items-start gap-4 md:gap-5">
+                  {detailsLinks.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href as '/oferta'}
+                      className="flex items-center gap-3 md:gap-4 text-coral font-[600] uppercase hover:opacity-60 transition-opacity"
+                      style={{ fontSize: 'clamp(15px, 1.6vw, 22px)' }}
+                    >
+                      {link.cta}
+                      <span aria-hidden="true">→</span>
+                    </Link>
+                  ))}
+                </div>
               )}
             </motion.div>
           )}

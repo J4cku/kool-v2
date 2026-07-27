@@ -45,6 +45,16 @@
       "description": "Projektowanie wnętrz komercyjnych we Wrocławiu i całej Polsce: restauracje, hotele, sklepy i biura. Koncepcja, dokumentacja wykonawcza, nadzór autorski, budżet i FAQ.",
       "ogImageAlt": "Wnętrze restauracji zaprojektowane przez kool studio"
     },
+    "wnetrzaMieszkania": {
+      "title": "Projekt wnętrz mieszkania — Wrocław i cała Polska",
+      "description": "Kompleksowy projekt wnętrz mieszkania i apartamentu: układ funkcjonalny, koncepcja z wizualizacjami, dokumentacja wykonawcza i nadzory autorskie. Wrocław i cała Polska.",
+      "ogImageAlt": "Wnętrze mieszkania w kamienicy zaprojektowane przez kool studio"
+    },
+    "wnetrzaDomu": {
+      "title": "Projekt wnętrz domu — Wrocław i cała Polska",
+      "description": "Projekt wnętrz domu jednorodzinnego i rezydencji: strefy dzienne i prywatne, spójne kondygnacje, dokumentacja wykonawcza i nadzory autorskie. Wrocław i cała Polska.",
+      "ogImageAlt": "Wnętrze domu jednorodzinnego zaprojektowane przez kool studio"
+    },
     "kontakt": {
       "title": "kontakt",
       "description": "Skontaktuj się z kool studio — pracownią architektury wnętrz z Wrocławia. Studio: Zaporoska 83/15, 53-415 Wrocław. E-mail: hello@koolstudio.pl.",
@@ -194,7 +204,6 @@
             "text": "Projektujemy wnętrza, które wspierają sposób działania biznesu i wzmacniają jego wizerunek. Dobrze zaprojektowana przestrzeń buduje rozpoznawalność marki i tworzy doświadczenie, do którego klienci chcą wracać."
           }
         ],
-        "worksHeading": "Wybrane realizacje",
         "workLink": "Zobacz projekt",
         "workBlurbs": {
           "delikatesy-dehesa": "Delikatesy iberyjskie — terrazzo, ciemna stolarka i czerwone akcenty oraz autorska identyfikacja wizualna.",
@@ -270,7 +279,222 @@
         "nadzór autorski"
       ],
       "sloganHeading": "Tworzymy miejsca, do których chce się wracać",
-      "sloganText": "Każdy projekt prowadzimy od koncepcji po precyzyjną dokumentację techniczną, która pozwala przełożyć ideę na spokojną i przewidywalną realizację. Mamy doświadczenie pozwalające na projektowanie zarówno w budownictwie deweloperskim, jak i z rynku wtórnego oraz dysponujemy kontaktami do sprawdzonych wykonawców."
+      "sloganText": "Każdy projekt prowadzimy od koncepcji po precyzyjną dokumentację techniczną, która pozwala przełożyć ideę na spokojną i przewidywalną realizację. Mamy doświadczenie pozwalające na projektowanie zarówno w budownictwie deweloperskim, jak i z rynku wtórnego oraz dysponujemy kontaktami do sprawdzonych wykonawców.",
+      "apartments": {
+        "cta": "Poznaj szczegóły oferty dla projektu mieszkania",
+        "projectHeading": "Projekt wnętrz mieszkania",
+        "projectDescription": "Projektujemy wnętrza mieszkań i apartamentów o podwyższonym standardzie, tworząc wnętrza dopasowane do codzienności ich mieszkańców. Każdy projekt prowadzimy etapami, od poznania Waszych potrzeb i możliwości przestrzeni, przez stworzenie spójnej koncepcji, aż po kompletną dokumentację pozwalającą sprawnie przeprowadzić realizację. Każdy etap konsultujemy i wspólnie podejmujemy najważniejsze decyzje, aby finalne wnętrze było odpowiedzią na Wasz styl życia, potrzeby i oczekiwania. Każdy projekt powstaje indywidualnie, z dbałością o ergonomię, materiały oraz detale wykonawcze.",
+        "fitTitle": "Kiedy warto zdecydować się na projekt wnętrz mieszkania?",
+        "fitItems": [
+          "Odbierasz mieszkanie od dewelopera i chcesz wykorzystać jego potencjał od samego początku.",
+          "Kupujesz mieszkanie z rynku wtórnego i planujesz kompleksowy remont.",
+          "Układ mieszkania nie odpowiada Twoim potrzebom i chcesz lepiej wykorzystać dostępną przestrzeń.",
+          "Zależy Ci na wnętrzu zaprojektowanym indywidualnie, dopasowanym do Twojego stylu życia, a nie złożonym z gotowych rozwiązań.",
+          "Cenisz wysoką jakość materiałów, autorskie rozwiązania i przemyślane detale.",
+          "Chcesz świadomie zaplanować budżet inwestycji jeszcze przed rozpoczęciem prac wykończeniowych.",
+          "Zależy Ci na spokojnym przebiegu realizacji."
+        ],
+        "stagesHeading": "Etapy projektu",
+        "stages": [
+          {
+            "title": "Brief i analiza potrzeb",
+            "text": "Poznajemy Was, Wasz sposób życia oraz oczekiwania wobec przestrzeni. Pierwszy etap poświęcamy na rozmowę o Waszych potrzebach, stylu życia, estetyce, budżecie oraz harmonogramie inwestycji. Chcemy zrozumieć nie tylko to, jak wnętrze ma wyglądać, ale przede wszystkim jak ma funkcjonować na co dzień. Na początku współpracy otrzymujecie również szczegółową ankietę, która pomaga nam zebrać wszystkie ważne informacje i stworzyć solidną podstawę dla dalszego projektowania."
+          },
+          {
+            "title": "Inwentaryzacja",
+            "text": "Przed rozpoczęciem projektowania poznajemy przestrzeń i jej możliwości. Wykonujemy dokładne pomiary, sprawdzamy zależności przestrzenne oraz elementy techniczne, które mają wpływ na projekt. W przypadku mieszkań będących jeszcze w trakcie budowy pracujemy na dokumentacji technicznej oraz materiałach przekazanych przez dewelopera, analizując możliwości zmian i indywidualnego dopasowania przestrzeni."
+          },
+          {
+            "title": "Układy funkcjonalne",
+            "text": "Dobrze zaprojektowane wnętrze zawsze zaczyna się od funkcji. Analizujemy możliwości przestrzeni i przygotowujemy minimum dwa warianty układu funkcjonalnego, które wspólnie omawiamy. Następnie dopracowujemy wybrane rozwiązanie, tak aby maksymalnie wykorzystać potencjał mieszkania i stworzyć przestrzeń wygodną w codziennym użytkowaniu."
+          },
+          {
+            "title": "Projekt koncepcyjny",
+            "text": "Nadajemy wnętrzu charakter poprzez formę, materiały i światło. Dobieramy materiały, kolory, faktury, oświetlenie oraz projektujemy indywidualne zabudowy i rozwiązania. Koncepcję przedstawiamy w formie szczegółowej prezentacji z realistycznymi wizualizacjami, którą omawiamy podczas wspólnego spotkania. Pracujemy na rzeczywistych materiałach, dlatego na tym etapie pokazujemy również wstępne próbki kolorystyczne i materiałowe. W ramach tego etapu przewidujemy dwie tury zmian, aby finalna koncepcja była w pełni dopracowana i odpowiadała Waszym oczekiwaniom."
+          },
+          {
+            "title": "Projekt wykonawczy",
+            "text": "Przygotowujemy kompletną dokumentację wykonawczą stanowiącą podstawę realizacji. Obejmuje ona wszystkie rysunki techniczne niezbędne wykonawcom — od rozkładów płytek, przez instalacje, aż po szczegółowe projekty zabudów stolarskich i innych elementów wykonywanych na zamówienie. Dzięki temu realizacja przebiega sprawniej, a ryzyko błędów na budowie zostaje ograniczone."
+          },
+          {
+            "title": "Zestawienia i wyceny",
+            "text": "Przygotowujemy zestawienia i listy zakupowe obejmujące materiały wykończeniowe, meble gotowe, oświetlenie i dodatki wraz ze wskazaniem konkretnych produktów oraz miejsc zakupu. Wspieramy również proces przygotowania budżetu, zbierając wyceny od sprawdzonych wykonawców i dostawców."
+          },
+          {
+            "title": "Nadzory autorskie",
+            "text": "Podczas realizacji wspieramy inwestorów i wykonawców. W ramach nadzoru autorskiego odwiedzamy miejsce realizacji, sprawdzamy zgodność prac z projektem oraz pomagamy rozwiązywać pojawiające się pytania i sytuacje wymagające decyzji. Podczas wizyt omawiamy szczegóły techniczne z wykonawcami, a w razie potrzeby przygotowujemy dodatkowe wyjaśnienia lub rysunki. Zakres i częstotliwość nadzorów ustalamy indywidualnie, zależnie od potrzeb projektu."
+          }
+        ],
+        "benefitsHeading": "Dlaczego projekt kompleksowy?",
+        "benefits": [
+          {
+            "title": "Spokojna realizacja",
+            "text": "Porządkujemy cały proces wykończenia wnętrza. Nie musicie samodzielnie koordynować dziesiątek decyzji dotyczących materiałów, wyposażenia i rozwiązań technicznych, wszystkie elementy są przemyślane i opisane w dokumentacji. Dzięki nadzorom autorskim pomagamy również przełożyć projekt na rzeczywistą realizację oraz reagować na sytuacje pojawiające się podczas prac."
+          },
+          {
+            "title": "Świadome decyzje i kontrola budżetu",
+            "text": "Projekt pozwala podjąć wszystkie najważniejsze decyzje i zaplanować wydatki jeszcze przed rozpoczęciem prac. Dzięki temu unikniesz przypadkowych zakupów, kosztownych zmian i rozwiązań, które nie sprawdzą się w codziennym użytkowaniu."
+          },
+          {
+            "title": "Indywidualne rozwiązania",
+            "text": "Nie tworzymy wnętrz opartych na gotowych schematach ani chwilowych trendach. Każde rozwiązanie dopasowujemy do sposobu życia mieszkańców, charakteru przestrzeni i indywidualnych potrzeb. Autorskie zabudowy, przemyślane układy funkcjonalne i świadomy dobór materiałów sprawiają, że każde wnętrze jest wyjątkowe i ponadczasowe."
+          },
+          {
+            "title": "Spójność na każdym etapie",
+            "text": "Jednym z największych atutów kompleksowej współpracy jest spójność całego procesu. Od pierwszej rozmowy, przez koncepcję i dokumentację, aż po etap realizacji wszystkie decyzje wynikają z jednej, przemyślanej wizji."
+          }
+        ],
+        "workLink": "Zobacz projekt",
+        "seoHeading": "Projekt wnętrz mieszkania —\nWrocław i cała Polska",
+        "seoText": "Projektujemy mieszkania i apartamenty przede wszystkim we Wrocławiu, jednak realizujemy również projekty w innych miastach. Pracujemy zarówno nad mieszkaniami od dewelopera, apartamentami, jak i lokalami z rynku wtórnego, w tym mieszkaniami w kamienicach wymagającymi przebudowy lub generalnego remontu. Każdy projekt prowadzimy kompleksowo — od analizy potrzeb mieszkańców i układu funkcjonalnego, przez koncepcję oraz dokumentację wykonawczą, aż po wsparcie inwestorów podczas realizacji.",
+        "faqHeading": "Najczęstsze pytania",
+        "faqItems": [
+          {
+            "q": "Kiedy najlepiej rozpocząć współpracę z projektantem wnętrz?",
+            "a": "Najlepiej jeszcze przed rozpoczęciem prac wykończeniowych lub remontu. W przypadku mieszkań od dewelopera warto zgłosić się już na etapie zmian lokatorskich, aby dostosować układ funkcjonalny do potrzeb mieszkańców i uniknąć kosztownych przeróbek w późniejszym etapie. Im wcześniej rozpoczynamy współpracę, tym większe możliwości daje projekt."
+          },
+          {
+            "q": "Ile trwa projekt mieszkania?",
+            "a": "Czas przygotowania projektu zależy od wielkości mieszkania, zakresu opracowania oraz tempa podejmowania decyzji przez inwestorów. Harmonogram ustalamy indywidualnie na początku współpracy. Projekt prowadzimy etapowo, od analizy potrzeb i układów funkcjonalnych, przez koncepcję i wizualizacje, aż po dokumentację wykonawczą."
+          },
+          {
+            "q": "Czy projekt mieszkania można dopasować do określonego budżetu?",
+            "a": "Tak. Budżet jest jednym z podstawowych tematów omawianych podczas pierwszego spotkania. Dobieramy rozwiązania, materiały i wyposażenie w taki sposób, aby odpowiadały założeniom inwestycji. Przygotowujemy również zestawienia materiałów i pomagamy uzyskać wyceny od sprawdzonych wykonawców, dzięki czemu łatwiej zaplanować kolejne etapy realizacji."
+          },
+          {
+            "q": "Czy projektujecie mieszkania od dewelopera i z rynku wtórnego?",
+            "a": "Tak. Projektujemy zarówno mieszkania od dewelopera, jak i lokale z rynku wtórnego, m.in. w kamienicach i poniemieckich willach wymagające przebudowy lub generalnego remontu. Każda przestrzeń ma inny potencjał, dlatego rozwiązania projektowe zawsze dopasowujemy do istniejących możliwości technicznych oraz potrzeb mieszkańców."
+          },
+          {
+            "q": "Czy projekt wnętrza zawiera dokumentację dla wykonawców?",
+            "a": "Tak. Oprócz projektu koncepcyjnego przygotowujemy kompletną dokumentację wykonawczą, która stanowi podstawę realizacji. Zawiera ona szczegółowe rysunki techniczne, projekty zabudów stolarskich oraz wszystkie informacje potrzebne wykonawcom do prawidłowego wykonania prac."
+          },
+          {
+            "q": "Czy mogę zrealizować projekt etapami?",
+            "a": "Tak. Kompleksowa dokumentacja pozwala prowadzić realizację etapowo, dostosowując harmonogram prac do możliwości czasowych lub budżetu inwestycji. Już na etapie projektowym pomagamy zaplanować kolejność poszczególnych prac oraz zakupów."
+          },
+          {
+            "q": "Czy wykonujecie projekty mieszkań poza Wrocławiem?",
+            "a": "Tak. Nasza pracownia znajduje się we Wrocławiu, jednak realizujemy projekty również w innych miastach. W zależności od lokalizacji część procesu projektowego może odbywać się zdalnie, natomiast najważniejsze etapy współpracy planujemy w sposób dopasowany do konkretnej inwestycji."
+          },
+          {
+            "q": "Czy muszę wiedzieć, w jakim stylu chcę urządzić mieszkanie?",
+            "a": "Nie. Wielu klientów rozpoczyna współpracę bez sprecyzowanej wizji wnętrza. Podczas rozmów i analizy potrzeb pomagamy określić kierunek projektu, poznajemy Wasze inspiracje, sposób życia oraz oczekiwania. Na tej podstawie tworzymy wnętrze, które jest spójne, funkcjonalne i dopasowane do Was, zamiast kopiować gotowe style czy chwilowe trendy."
+          },
+          {
+            "q": "Ile kosztuje projekt wnętrz mieszkania?",
+            "a": "Każdy projekt wyceniamy indywidualnie, ponieważ zakres prac zależy od powierzchni mieszkania, stopnia skomplikowania projektu oraz oczekiwanego zakresu opracowania. Już po pierwszej rozmowie jesteśmy w stanie określić orientacyjny zakres współpracy i przygotować wstępną wycenę."
+          }
+        ],
+        "contactHeading": "Opowiedz nam o swoim projekcie",
+        "contactCta": "Napisz do nas"
+      },
+      "houses": {
+        "cta": "Poznaj szczegóły oferty dla projektu domu",
+        "projectHeading": "Projekt wnętrz domu",
+        "projectDescription": "Projektujemy wnętrza domów jednorodzinnych i rezydencji, tworząc przestrzenie dopasowane do stylu życia ich mieszkańców. Każdy projekt prowadzimy kompleksowo, od analizy potrzeb i układu funkcjonalnego, przez koncepcję wnętrz, aż po dokumentację wykonawczą oraz wsparcie podczas realizacji. Projekt domu to nie tylko zaprojektowanie poszczególnych pomieszczeń, ale stworzenie spójnej przestrzeni do życia. Dbamy o relacje pomiędzy strefami dziennymi i prywatnymi, połączenie kondygnacji oraz rozwiązania, które będą odpowiadały potrzebom domowników zarówno dziś, jak i w przyszłości.",
+        "fitTitle": "Kiedy warto zdecydować się na projekt wnętrz domu?",
+        "fitItems": [
+          "Budujesz dom i chcesz zaplanować wnętrza jeszcze przed rozpoczęciem prac wykończeniowych.",
+          "Kupujesz dom od dewelopera lub w stanie surowym.",
+          "Remontujesz lub przebudowujesz istniejący dom.",
+          "Chcesz stworzyć spójną przestrzeń na wszystkich kondygnacjach.",
+          "Zależy Ci na wnętrzu zaprojektowanym indywidualnie, a nie złożonym z gotowych rozwiązań.",
+          "Cenisz wysoką jakość materiałów i przemyślane detale.",
+          "Chcesz świadomie zaplanować budżet całej inwestycji.",
+          "Zależy Ci na spokojnym przebiegu realizacji."
+        ],
+        "stagesHeading": "Etapy projektu",
+        "stages": [
+          {
+            "title": "Brief i analiza potrzeb",
+            "text": "Poznajemy Was, Wasz sposób życia oraz sposób, w jaki chcecie korzystać z domu na co dzień. Pierwszy etap poświęcamy na rozmowę o Waszych potrzebach, przyzwyczajeniach, estetyce, budżecie oraz harmonogramie inwestycji. Chcemy zrozumieć nie tylko to, jak wnętrze ma wyglądać, ale przede wszystkim jak ma funkcjonować na co dzień. Na początku współpracy otrzymujecie również szczegółową ankietę, która pomaga nam zebrać wszystkie ważne informacje i stworzyć solidną podstawę dla dalszego projektowania."
+          },
+          {
+            "title": "Inwentaryzacja",
+            "text": "Przed rozpoczęciem projektowania analizujemy istniejące wnętrze. Wykonujemy dokładne pomiary, sprawdzamy zależności przestrzenne oraz elementy techniczne, które mają wpływ na projekt. W przypadku domów będących jeszcze w trakcie budowy pracujemy na dokumentacji technicznej oraz materiałach przekazanych przez dewelopera lub architekta budynku, analizując możliwości zmian i indywidualnego dopasowania przestrzeni."
+          },
+          {
+            "title": "Układy funkcjonalne",
+            "text": "Są podstawą każdego projektu. Projektujemy relacje pomiędzy kondygnacjami, ciągi komunikacyjne, podział na strefę dzienną i prywatną oraz sposób funkcjonowania domu jako jednej, spójnej całości. Przedstawiamy dwa warianty układu funkcjonalnego, które omawiamy wspólnie podczas spotkania. Następnie dopracowujemy wybrane rozwiązanie, tak aby maksymalnie wykorzystać potencjał domu i stworzyć przestrzeń wygodną w codziennym użytkowaniu."
+          },
+          {
+            "title": "Projekt koncepcyjny",
+            "text": "Nadajemy wnętrzu charakter poprzez formę, materiały i światło. Dobieramy materiały, kolory, faktury, oświetlenie oraz projektujemy indywidualne zabudowy i rozwiązania. Koncepcję przedstawiamy w formie szczegółowej prezentacji z realistycznymi wizualizacjami i moodboardami, którą omawiamy podczas wspólnego spotkania. Pracujemy na rzeczywistych materiałach, dlatego pokazujemy również wstępne próbki kolorystyczne i materiałowe. W ramach tego etapu przewidujemy dwie tury zmian, aby finalna koncepcja była w pełni dopracowana i odpowiadała Waszym oczekiwaniom."
+          },
+          {
+            "title": "Projekt wykonawczy",
+            "text": "Przygotowujemy precyzyjną dokumentację techniczną, która pozwala przełożyć projekt na rzeczywistą realizację. Opracowujemy wszystkie niezbędne rysunki dla wykonawców, od rozkładów płytek i wykończenia powierzchni, przez rozmieszczenie instalacji, po szczegółowe projekty zabudów i elementów wykonywanych na zamówienie. Dzięki temu realizacja przebiega sprawniej, a każdy detal wnętrza pozostaje zgodny z założeniami projektu."
+          },
+          {
+            "title": "Zestawienia i wyceny",
+            "text": "Przygotowujemy listy zakupowe obejmujące materiały wykończeniowe, meble gotowe, oświetlenie i dodatki wraz ze wskazaniem konkretnych produktów oraz miejsc zakupu. Wspieramy również proces przygotowania budżetu, zbierając wyceny od sprawdzonych wykonawców i dostawców."
+          },
+          {
+            "title": "Nadzory autorskie",
+            "text": "Czuwamy nad tym, aby założenia projektu zostały wiernie przełożone na realizację. Koordynujemy bieżące kwestie z wykonawcami, wyjaśniamy rozwiązania techniczne oraz wspieramy inwestorów w podejmowaniu decyzji pojawiających się w trakcie prac. W razie potrzeby uzupełniamy dokumentację o dodatkowe rysunki i wytyczne. Zakres oraz częstotliwość nadzorów dopasowujemy do skali i przebiegu inwestycji."
+          }
+        ],
+        "benefitsHeading": "Dlaczego projekt kompleksowy?",
+        "benefits": [
+          {
+            "title": "Przemyślana inwestycja",
+            "text": "Dom to złożona inwestycja, w której każda decyzja wpływa na kolejne etapy realizacji. Kompleksowy projekt pozwala uporządkować cały proces i podjąć najważniejsze decyzje jeszcze przed rozpoczęciem prac. Nie musicie samodzielnie koordynować dziesiątek wyborów - wszystkie elementy są wcześniej przemyślane, wzajemnie skoordynowane i opisane w dokumentacji."
+          },
+          {
+            "title": "Sprawna realizacja",
+            "text": "Kompletna dokumentacja wykonawcza oraz nadzory autorskie usprawniają współpracę z wykonawcami i pomagają koordynować kolejne etapy prac. Dzięki temu realizacja przebiega sprawniej, a wszystkie decyzje opierają się na jednym, spójnym projekcie."
+          },
+          {
+            "title": "Dom dopasowany do Was",
+            "text": "Projektujemy wnętrza odpowiadające codziennemu życiu mieszkańców. Tworzymy indywidualne układy funkcjonalne, autorskie zabudowy stolarskie oraz rozwiązania wykorzystujące potencjał całego domu, z myślą o jego użytkowaniu również w przyszłości."
+          },
+          {
+            "title": "Spójność wnętrz całego domu",
+            "text": "Projektujemy dom jako jedną, konsekwentną całość. Dbamy o relacje pomiędzy kondygnacjami, powtarzalność materiałów, proporcje, światło oraz detale, dzięki czemu wszystkie wnętrza tworzą harmonijną i ponadczasową przestrzeń."
+          }
+        ],
+        "workLink": "Zobacz projekt",
+        "seoHeading": "Projekt wnętrz domu —\nWrocław i cała Polska",
+        "seoText": "Projekt domu wymaga spojrzenia na przestrzeń jako całość. Projektujemy wnętrza domów jednorodzinnych, domów w zabudowie bliźniaczej oraz rezydencji, dbając o funkcjonalność, spójność materiałową i komfort codziennego użytkowania. Pracujemy zarówno z domami w budowie, jak i istniejącymi budynkami przeznaczonymi do przebudowy lub generalnego remontu. Kompleksowy projekt wnętrz domu obejmuje analizę potrzeb mieszkańców, układ funkcjonalny, projekt koncepcyjny, dokumentację wykonawczą oraz wsparcie podczas realizacji.",
+        "faqHeading": "Najczęstsze pytania",
+        "faqItems": [
+          {
+            "q": "Kiedy najlepiej rozpocząć projekt wnętrz domu?",
+            "a": "Najlepiej już na etapie budowy lub zaraz po zakupie domu. Pozwala to zaplanować instalacje, układ funkcjonalny i rozwiązania stolarskie jeszcze przed rozpoczęciem prac wykończeniowych."
+          },
+          {
+            "q": "Ile kosztuje projekt wnętrz domu?",
+            "a": "Każdy projekt wyceniamy indywidualnie, ponieważ zakres prac zależy od wielkości domu, stopnia skomplikowania inwestycji oraz oczekiwanego zakresu opracowania. Już po pierwszej rozmowie możemy określić orientacyjny zakres prac oraz przygotować wstępną wycenę."
+          },
+          {
+            "q": "Czy mogę zlecić projekt tylko jednej kondygnacji?",
+            "a": "Tak, jednak rekomendujemy projektowanie całego domu. Pozwala to zachować spójność funkcjonalną i estetyczną wszystkich przestrzeni oraz lepiej zaplanować inwestycję."
+          },
+          {
+            "q": "Co zawiera projekt wykonawczy wnętrz domu?",
+            "a": "Projekt wykonawczy obejmuje rozmieszczenie oświetlenia, gniazd elektrycznych, punktów wodno-kanalizacyjnych, wykończenia powierzchni, projekty łazienek i kuchni, projekty zabudów stolarskich oraz pozostałe opracowania niezbędne wykonawcom do realizacji wnętrza."
+          },
+          {
+            "q": "Ile trwa projekt wnętrz domu?",
+            "a": "Czas zależy od wielkości domu oraz zakresu projektu. Harmonogram ustalamy indywidualnie przed rozpoczęciem współpracy."
+          },
+          {
+            "q": "Czy projektujecie wnętrza domów poza Wrocławiem?",
+            "a": "Tak. Współpracujemy z klientami również poza Wrocławiem, prowadząc projekty w różnych częściach Polski."
+          },
+          {
+            "q": "Czy projekt domu można realizować etapami?",
+            "a": "Tak. Kompleksowa dokumentacja pozwala zaplanować realizację w etapach, zachowując spójność całego projektu."
+          },
+          {
+            "q": "Ile kosztuje wykończenie domu?",
+            "a": "Koszt wykończenia wnętrz domu zależy przede wszystkim od powierzchni, standardu materiałów, liczby zabudów wykonywanych na wymiar, zakresu prac oraz wybranego wyposażenia. Dlatego każdą inwestycję analizujemy indywidualnie. Już podczas pierwszej rozmowy pomagamy określić orientacyjny budżet wykończenia wnętrz i dobrać rozwiązania dopasowane do założeń finansowych. Dobrze przygotowany projekt pozwala świadomie planować wydatki i ograniczyć ryzyko kosztownych zmian na etapie realizacji."
+          }
+        ],
+        "contactHeading": "Opowiedz nam o swoim projekcie",
+        "contactCta": "Napisz do nas"
+      }
     },
     "process": {
       "label": "Projekt kompleksowy",

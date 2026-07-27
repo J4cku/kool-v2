@@ -5,7 +5,7 @@ import { BASE_URL } from '@/lib/site';
 export default function sitemap(): MetadataRoute.Sitemap {
   const locales = ['pl', 'en'];
 
-  const staticPages = ['', '/projekty', '/studio', '/oferta', '/oferta/wnetrza-komercyjne', '/kontakt', '/polityka-prywatnosci'];
+  const staticPages = ['', '/projekty', '/studio', '/oferta', '/oferta/wnetrza-komercyjne', '/oferta/wnetrza-mieszkania', '/oferta/wnetrza-domu', '/kontakt', '/polityka-prywatnosci'];
 
   const staticEntries = locales.flatMap((locale) =>
     staticPages.map((page) => ({
