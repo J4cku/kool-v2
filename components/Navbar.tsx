@@ -13,6 +13,7 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { Link, usePathname } from '@/i18n/navigation';
 import { useIdle } from '@/hooks/useIdle';
+import { getBottomArrivalSnapshot, noteNavigation, useBottomArrival } from '@/hooks/useBottomArrival';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { INSTAGRAM_URL } from '@/lib/site';
 import { track } from '@/lib/analytics';
@@ -136,6 +137,13 @@ export default function Navbar() {
      the visitor asked for reduced motion, useIdle registers no input
      listeners and starts no timer. */
   const idle = useIdle(!menuOpen && !reduceMotion);
+  /* Second trigger — a settled arrival at the bottom of the page. Gated the
+     same way: while suppressed, the store keeps no scroll listener at all. */
+  const { atBottom, arrival } = useBottomArrival(!menuOpen && !reduceMotion);
+  /* Arrivals this navbar has already acted on. The store outlives client-side
+     navigations, so the baseline starts at the current counter and
+     re-baselines on pathname change — never at zero. */
+  const consumedArrivalRef = useRef(arrival);
 
   const clearImpactTimers = useCallback(() => {
     impactTimersRef.current.forEach((timer) => window.clearTimeout(timer));
@@ -159,6 +167,10 @@ export default function Navbar() {
   useEffect(() => {
     if (prevPathnameRef.current === pathname) return;
     prevPathnameRef.current = pathname;
+    // Input on the previous page must not validate an arrival here, and an
+    // arrival the dialog guard swallowed there must not fire here
+    noteNavigation();
+    consumedArrivalRef.current = getBottomArrivalSnapshot().arrival;
     scheduleRearm(0);
   }, [pathname, scheduleRearm]);
 
@@ -238,8 +250,16 @@ export default function Navbar() {
   );
 
   useEffect(() => {
-    if (idle && !menuOpen && !reduceMotion) {
-      if (!armed) return;
+    const bottomPending = arrival > consumedArrivalRef.current;
+    if ((idle || atBottom || bottomPending) && !menuOpen && !reduceMotion) {
+      // Idle respects the cooldown; a fresh bottom arrival does not — its
+      // rarity is structural (the visitor must leave the bottom and return)
+      if (!((idle && armed) || bottomPending)) return;
+      // A blocked bottom arrival is consumed rather than left pending: unlike
+      // idleness, which recurs on its own, an arrival held back by the guards
+      // below would otherwise fire at whatever later moment re-runs this
+      // effect. The idle branch keeps its opposite behaviour (stays armed).
+      if (bottomPending) consumedArrivalRef.current = arrival;
       const dot = dotRef.current;
       const wrap = dropWrapRef.current;
       // Absent on 404 and design-system, where the gag silently no-ops
@@ -289,8 +309,13 @@ export default function Navbar() {
         scaleY: 1,
         transition: { duration: ABORT_DURATION, ease: SETTLE_EASE },
       })
-      .then(() => setDropping(false));
-  }, [armed, clearImpactTimers, dropControls, fly, idle, menuOpen, reduceMotion, scheduleRearm]);
+      // A bottom arrival can start a fresh flight while this abort is still
+      // settling (abort animation and settle beat are the same ~250ms);
+      // the stale resolution must not strip the new flight's dropping state
+      .then(() => {
+        if (!flyingRef.current) setDropping(false);
+      });
+  }, [armed, arrival, atBottom, clearImpactTimers, dropControls, fly, idle, menuOpen, reduceMotion, scheduleRearm]);
 
   const isActive = (href: string) => {
     if (href === '/') return pathname === '/';

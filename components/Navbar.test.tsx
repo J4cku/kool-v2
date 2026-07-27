@@ -12,6 +12,14 @@ const motionState = vi.hoisted(() => ({ reducedMotion: false }));
    difference between a suppressed animation and a hook that never registers
    an input listener or a timer at all (see hooks/useIdle.test.ts). */
 const idleState = vi.hoisted(() => ({ idle: false, enabled: false }));
+/* `enabled` records what the drop's gate passed to useBottomArrival — the
+   same suppression contract as useIdle. */
+const bottomState = vi.hoisted(() => ({
+  atBottom: false,
+  arrival: 0,
+  enabled: false,
+  navigations: 0,
+}));
 const dropStart = vi.hoisted(() =>
   vi.fn((target: Record<string, unknown>) => Promise.resolve(target))
 );
@@ -113,6 +121,24 @@ vi.mock('@/hooks/useIdle', () => ({
   },
 }));
 
+/* Mirrors the real store's contract: `enabled` false yields the resting
+   snapshot, and the arrival counter is what the navbar baselines against. */
+vi.mock('@/hooks/useBottomArrival', () => ({
+  useBottomArrival: (enabled = true) => {
+    bottomState.enabled = enabled;
+    return enabled
+      ? { atBottom: bottomState.atBottom, arrival: bottomState.arrival }
+      : { atBottom: false, arrival: 0 };
+  },
+  getBottomArrivalSnapshot: () => ({
+    atBottom: bottomState.atBottom,
+    arrival: bottomState.arrival,
+  }),
+  noteNavigation: () => {
+    bottomState.navigations += 1;
+  },
+}));
+
 vi.mock('@/lib/analytics', () => ({
   track: vi.fn(),
 }));
@@ -175,6 +201,10 @@ afterEach(() => {
   motionState.reducedMotion = false;
   idleState.idle = false;
   idleState.enabled = false;
+  bottomState.atBottom = false;
+  bottomState.arrival = 0;
+  bottomState.enabled = false;
+  bottomState.navigations = 0;
   dropStart.mockClear();
 });
 
@@ -606,5 +636,158 @@ describe('Navbar idle dot drop', () => {
       fall.resolve();
     });
     expect(dropStart.mock.calls).toHaveLength(callsAtAbort);
+  });
+});
+
+describe('Navbar bottom-arrival dot drop', () => {
+  it('drops the dot on a settled bottom arrival', async () => {
+    let view!: ReturnType<typeof render>;
+    await act(async () => {
+      view = renderWithFooterLine();
+    });
+    expect(dropStart).not.toHaveBeenCalled();
+
+    bottomState.atBottom = true;
+    bottomState.arrival = 1;
+    await act(async () => {
+      view.rerender(<Navbar />);
+    });
+
+    expect(dropStart).toHaveBeenCalled();
+    expect(dropStart.mock.calls[0][0]).toMatchObject({ y: [0, DROP_DISTANCE] });
+  });
+
+  it('fires even while the idle trigger is cooling down', async () => {
+    idleState.idle = true;
+
+    let view!: ReturnType<typeof render>;
+    await act(async () => {
+      view = renderWithFooterLine();
+    });
+    // The idle flight has flown (flight + return) and started its 45s cooldown
+    expect(dropStart).toHaveBeenCalledTimes(2);
+
+    idleState.idle = false;
+    await act(async () => {
+      view.rerender(<Navbar />);
+    });
+
+    bottomState.atBottom = true;
+    bottomState.arrival = 1;
+    await act(async () => {
+      view.rerender(<Navbar />);
+    });
+
+    // A second flight, cooldown notwithstanding
+    expect(dropStart).toHaveBeenCalledTimes(4);
+  });
+
+  it('puts the idle trigger on its cooldown after a bottom flight', async () => {
+    let view!: ReturnType<typeof render>;
+    await act(async () => {
+      view = renderWithFooterLine();
+    });
+
+    bottomState.atBottom = true;
+    bottomState.arrival = 1;
+    await act(async () => {
+      view.rerender(<Navbar />);
+    });
+    expect(dropStart).toHaveBeenCalledTimes(2);
+
+    // Sitting at the bottom, idleness sets in — but the flight just flown
+    // consumed the idle trigger's once-per-view arming
+    idleState.idle = true;
+    await act(async () => {
+      view.rerender(<Navbar />);
+    });
+    expect(dropStart).toHaveBeenCalledTimes(2);
+  });
+
+  it('holds a bottom flight through non-scroll input', async () => {
+    deferDropStart();
+
+    let view!: ReturnType<typeof render>;
+    await act(async () => {
+      view = renderWithFooterLine();
+    });
+
+    bottomState.atBottom = true;
+    bottomState.arrival = 1;
+    await act(async () => {
+      view.rerender(<Navbar />);
+    });
+    expect(dropStart).toHaveBeenCalledTimes(1);
+
+    // Pointer movement mid-flight: idle stays false, atBottom stays true —
+    // the flight must neither abort nor restart
+    await act(async () => {
+      view.rerender(<Navbar />);
+    });
+    expect(dropStart).toHaveBeenCalledTimes(1);
+  });
+
+  it('floats the dot home when the visitor scrolls away mid-flight', async () => {
+    deferDropStart();
+
+    let view!: ReturnType<typeof render>;
+    await act(async () => {
+      view = renderWithFooterLine();
+    });
+
+    bottomState.atBottom = true;
+    bottomState.arrival = 1;
+    await act(async () => {
+      view.rerender(<Navbar />);
+    });
+    expect(dropStart).toHaveBeenCalledTimes(1);
+
+    bottomState.atBottom = false;
+    await act(async () => {
+      view.rerender(<Navbar />);
+    });
+
+    expect(dropStart.mock.calls.at(-1)?.[0]).toMatchObject({
+      y: 0,
+      scaleX: 1,
+      scaleY: 1,
+      transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1] },
+    });
+  });
+
+  it('consumes an arrival blocked by an open dialog', async () => {
+    const dialog = document.createElement('div');
+    dialog.setAttribute('aria-modal', 'true');
+    document.body.appendChild(dialog);
+
+    let view!: ReturnType<typeof render>;
+    await act(async () => {
+      view = renderWithFooterLine();
+    });
+
+    bottomState.atBottom = true;
+    bottomState.arrival = 1;
+    await act(async () => {
+      view.rerender(<Navbar />);
+    });
+    expect(dropStart).not.toHaveBeenCalled();
+
+    // Unlike idleness, which recurs on its own, an arrival is a moment; one
+    // blocked here must not fire at whatever later point re-runs the effect
+    dialog.remove();
+    await act(async () => {
+      view.rerender(<Navbar />);
+    });
+    expect(dropStart).not.toHaveBeenCalled();
+  });
+
+  it('costs a reduced-motion visitor no scroll listener', async () => {
+    motionState.reducedMotion = true;
+
+    await act(async () => {
+      renderWithFooterLine();
+    });
+
+    expect(bottomState.enabled).toBe(false);
   });
 });
