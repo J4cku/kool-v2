@@ -641,6 +641,30 @@ describe('Navbar idle dot drop', () => {
     });
     expect(dropStart.mock.calls).toHaveLength(callsAtAbort);
   });
+
+  it('floats an idle-owned flight home on input even while still at the bottom', async () => {
+    idleState.idle = true;
+    bottomState.atBottom = true;
+    deferDropStart();
+
+    let view!: ReturnType<typeof render>;
+    await act(async () => {
+      view = renderWithFooterLine();
+    });
+    expect(dropStart).toHaveBeenCalledTimes(1);
+
+    idleState.idle = false;
+    await act(async () => {
+      view.rerender(<Navbar />);
+    });
+
+    expect(dropStart.mock.calls.at(-1)?.[0]).toMatchObject({
+      y: 0,
+      scaleX: 1,
+      scaleY: 1,
+      transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1] },
+    });
+  });
 });
 
 describe('Navbar bottom-arrival dot drop', () => {

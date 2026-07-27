@@ -133,6 +133,7 @@ export default function Navbar() {
   // the dot back into a position the user has moved on from
   const flightRef = useRef(0);
   const flyingRef = useRef(false);
+  const flightOwnerRef = useRef<'idle' | 'bottom' | null>(null);
   const impactTimersRef = useRef<number[]>([]);
   /* Gates the hook itself, not just the animation: while the menu is open or
      the visitor asked for reduced motion, useIdle registers no input
@@ -183,7 +184,7 @@ export default function Navbar() {
   }, [clearImpactTimers]);
 
   const fly = useCallback(
-    async (distance: number, impactX: number) => {
+    async (distance: number, impactX: number, owner: 'idle' | 'bottom') => {
       if (rearmTimerRef.current !== null) {
         window.clearTimeout(rearmTimerRef.current);
         rearmTimerRef.current = null;
@@ -191,6 +192,7 @@ export default function Navbar() {
       const generation = flightRef.current + 1;
       flightRef.current = generation;
       flyingRef.current = true;
+      flightOwnerRef.current = owner;
       setActiveFlightGeneration(generation);
       const alive = () => flightRef.current === generation;
 
@@ -249,6 +251,7 @@ export default function Navbar() {
       if (!alive()) return;
 
       flyingRef.current = false;
+      flightOwnerRef.current = null;
       setActiveFlightGeneration(null);
       setDropping(false);
       scheduleRearm(REARM_DELAY_MS);
@@ -259,6 +262,7 @@ export default function Navbar() {
   const abortFlight = useCallback(() => {
     if (!flyingRef.current) return;
     flyingRef.current = false;
+    flightOwnerRef.current = null;
     flightRef.current += 1;
     setActiveFlightGeneration(null);
     clearImpactTimers();
@@ -305,10 +309,25 @@ export default function Navbar() {
 
   useEffect(() => {
     const bottomPending = arrival > consumedArrivalRef.current;
-    if ((idle || atBottom || bottomPending) && !menuOpen && !reduceMotion) {
+    if (flyingRef.current) {
+      // Each trigger owns its own keep-alive premise: input ends an idle
+      // flight even at the bottom, while non-scroll input leaves a
+      // bottom-owned flight alone until the visitor scrolls away.
+      const ownerStillActive =
+        !menuOpen &&
+        !reduceMotion &&
+        ((flightOwnerRef.current === 'idle' && idle) ||
+          (flightOwnerRef.current === 'bottom' && atBottom));
+      if (ownerStillActive) return;
+      abortFlight();
+      return;
+    }
+
+    if (!menuOpen && !reduceMotion) {
       // Idle respects the cooldown; a fresh bottom arrival does not — its
-      // rarity is structural (the visitor must leave the bottom and return)
-      if (!((idle && armed) || bottomPending)) return;
+      // rarity is structural (the visitor must leave the bottom and return).
+      const owner = bottomPending ? 'bottom' : idle && armed ? 'idle' : null;
+      if (owner === null) return;
       // A blocked bottom arrival is consumed rather than left pending: unlike
       // idleness, which recurs on its own, an arrival held back by the guards
       // below would otherwise fire at whatever later moment re-runs this
@@ -346,12 +365,9 @@ export default function Navbar() {
 
       setArmed(false);
       setDropping(true);
-      void fly(distance, impactX);
+      void fly(distance, impactX, owner);
       return;
     }
-
-    // Input arrived (or the menu opened) mid-flight: float the dot home
-    abortFlight();
   }, [abortFlight, armed, arrival, atBottom, fly, idle, menuOpen, reduceMotion]);
 
   const isActive = (href: string) => {
