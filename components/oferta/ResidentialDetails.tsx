@@ -10,9 +10,36 @@ import ContactBriefCta from './ContactBriefCta';
 import WorksGrid from './WorksGrid';
 import { projects, localizeProject } from '@/data/projects';
 
-const WORK_SLUGS = {
-  apartments: ['mieszkanie-walecznych', 'mieszkanie-strachowicka', 'lazienki-warszawa', 'mieszkanie-midcentury'],
-  houses: ['dom-dobrzykowice', 'lazienki-warszawa', 'mieszkanie-walecznych', 'mieszkanie-strachowicka'],
+/* Per-variant works and the two column photos (client-delivered, one set per
+   page — the fit photo sits beside "kiedy warto", the benefits photo beside
+   "dlaczego projekt kompleksowy"). */
+const VARIANTS = {
+  apartments: {
+    workSlugs: ['mieszkanie-walecznych', 'mieszkanie-strachowicka', 'lazienki-warszawa', 'mieszkanie-midcentury'],
+    fitImage: {
+      src: '/images/oferta/KOOL_oferta_mieszkania_stolarka.webp',
+      alt: 'Autorska zabudowa stolarska w trakcie realizacji',
+      altEn: 'Custom joinery during construction',
+    },
+    benefitsImage: {
+      src: '/images/oferta/KOOL_oferta_mieszkania_materialy.webp',
+      alt: 'Dobór próbek materiałów i kolorów',
+      altEn: 'Selecting material and colour samples',
+    },
+  },
+  houses: {
+    workSlugs: ['dom-dobrzykowice', 'lazienki-warszawa', 'mieszkanie-walecznych', 'mieszkanie-strachowicka'],
+    fitImage: {
+      src: '/images/oferta/KOOL_oferta_domy_okno.webp',
+      alt: 'Wyremontowany pokój z oknem na zieleń',
+      altEn: 'Freshly renovated room with a leafy view',
+    },
+    benefitsImage: {
+      src: '/images/oferta/KOOL_oferta_domy_targi.webp',
+      alt: 'Architektki kool studio na targach wnętrzarskich',
+      altEn: 'kool studio architects at a design fair',
+    },
+  },
 };
 
 const PORTFOLIO_HREF = '/projekty?filter=mieszkalne';
@@ -30,7 +57,8 @@ export default function ResidentialDetails({ variant }: { variant: 'apartments' 
   const benefits = t.raw('benefits') as { title: string; text: string }[];
   const faqItems = t.raw('faqItems') as FaqItem[];
 
-  const works = WORK_SLUGS[variant].flatMap((slug) => {
+  const { workSlugs, fitImage, benefitsImage } = VARIANTS[variant];
+  const works = workSlugs.flatMap((slug) => {
     const project = projects.find((p) => p.slug === slug);
     return project ? [localizeProject(project, locale)] : [];
   });
@@ -56,12 +84,8 @@ export default function ResidentialDetails({ variant }: { variant: 'apartments' 
       {/* Kiedy warto… — photo left, ScrollWeightHeading + bullet list right */}
       <div className="mt-20 md:mt-28 grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 lg:gap-24 items-center">
         <ColumnImage
-          src="/images/oferta/KOOL_oferta_mieszkalne_stolarka.webp"
-          alt={
-            locale === 'en'
-              ? 'Custom joinery during construction'
-              : 'Autorska zabudowa stolarska w trakcie realizacji'
-          }
+          src={fitImage.src}
+          alt={locale === 'en' ? fitImage.altEn : fitImage.alt}
           width="w-[74%] md:w-[62%]"
           valign="center"
           sizes="(min-width: 768px) 30vw, 74vw"
@@ -125,12 +149,8 @@ export default function ResidentialDetails({ variant }: { variant: 'apartments' 
             ))}
           </div>
           <ColumnImage
-            src="/images/oferta/KOOL_oferta_mieszkalne_targi.webp"
-            alt={
-              locale === 'en'
-                ? 'kool studio architects at a design fair'
-                : 'Architektki kool studio na targach wnętrzarskich'
-            }
+            src={benefitsImage.src}
+            alt={locale === 'en' ? benefitsImage.altEn : benefitsImage.alt}
             width="w-[74%] md:w-[62%]"
             align="center"
             valign="center"
