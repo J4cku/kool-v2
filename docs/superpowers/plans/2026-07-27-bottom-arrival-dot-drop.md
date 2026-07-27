@@ -40,7 +40,7 @@
 - Snapshot object identity must be stable between value changes (`useSyncExternalStore` compares with `Object.is` on every render).
 - The settle timer re-checks geometry at fire time — iOS bars move without emitting scroll events.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 Create `hooks/useBottomArrival.test.ts`:
 
@@ -268,12 +268,12 @@ describe('useBottomArrival', () => {
 });
 ```
 
-- [ ] **Step 2: Run the tests to verify they fail**
+- [x] **Step 2: Run the tests to verify they fail**
 
 Run: `pnpm vitest run hooks/useBottomArrival.test.ts`
 Expected: FAIL — cannot resolve `@/hooks/useBottomArrival`.
 
-- [ ] **Step 3: Write the store**
+- [x] **Step 3: Write the store**
 
 Create `hooks/useBottomArrival.ts`:
 
@@ -419,13 +419,13 @@ export function useBottomArrival(enabled = true): BottomArrival {
 }
 ```
 
-- [ ] **Step 4: Run the tests to verify they pass**
+- [x] **Step 4: Run the tests to verify they pass**
 
 Run: `pnpm vitest run hooks/useBottomArrival.test.ts`
 Expected: PASS, all 10 tests. Also run the whole suite to prove nothing else moved: `pnpm vitest run`
 Expected: PASS.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add hooks/useBottomArrival.ts hooks/useBottomArrival.test.ts
@@ -444,7 +444,7 @@ git commit -m "Bottom-arrival store: settled, fresh, genuine arrivals at the pag
 - Consumes from Task 1: `useBottomArrival(enabled): { atBottom, arrival }`, `noteNavigation()`, `getBottomArrivalSnapshot()`.
 - Produces: no new exports. Behavior contract: an unconsumed arrival fires the existing `fly()`; `(idle || atBottom || bottomPending)` is the keep-alive condition; a bottom flight sets `armed` false (idle cooldown consumed); a blocked arrival is consumed, not deferred.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 In `components/Navbar.test.tsx`, make three edits.
 
@@ -649,12 +649,12 @@ describe('Navbar bottom-arrival dot drop', () => {
 });
 ```
 
-- [ ] **Step 2: Run the tests to verify they fail**
+- [x] **Step 2: Run the tests to verify they fail**
 
 Run: `pnpm vitest run components/Navbar.test.tsx`
 Expected: the new describe block FAILS (no drop fires on arrival); the pre-existing tests still PASS.
 
-- [ ] **Step 3: Wire the navbar**
+- [x] **Step 3: Wire the navbar**
 
 Four edits in `components/Navbar.tsx`.
 
@@ -761,17 +761,17 @@ the consumption are new, and the effect deps gain `arrival` and `atBottom`:
 
 Note the dialog guard's comment gains no changes for idle — but the *placement* matters: `bottomPending` consumption happens **before** the guards (arrival semantics), while `setArmed(false)` stays **after** them (idle semantics). The existing test `does not drop behind an open dialog, and stays armed for afterwards` enforces the latter.
 
-- [ ] **Step 4: Run the tests to verify they pass**
+- [x] **Step 4: Run the tests to verify they pass**
 
 Run: `pnpm vitest run components/Navbar.test.tsx`
 Expected: PASS — all pre-existing cases plus the seven new ones.
 
-- [ ] **Step 5: Run the full verification gate**
+- [x] **Step 5: Run the full verification gate**
 
 Run: `pnpm check`
 Expected: vitest suites + node tests pass, typecheck clean, lint clean, i18n parity holds, build succeeds.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add components/Navbar.tsx components/Navbar.test.tsx
