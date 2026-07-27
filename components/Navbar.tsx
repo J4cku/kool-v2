@@ -122,6 +122,7 @@ export default function Navbar() {
   const dropWrapRef = useRef<HTMLDivElement>(null);
   const dropControls = useAnimationControls();
   const [dropping, setDropping] = useState(false);
+  const [activeFlightGeneration, setActiveFlightGeneration] = useState<number | null>(null);
   // Disarmed while a flight is in the air or cooling down; re-armed
   // REARM_DELAY_MS after each flight and on client-side navigation, so the
   // dot drops again on a later — or continuing — idle spell
@@ -190,6 +191,7 @@ export default function Navbar() {
       const generation = flightRef.current + 1;
       flightRef.current = generation;
       flyingRef.current = true;
+      setActiveFlightGeneration(generation);
       const alive = () => flightRef.current === generation;
 
       const flight = planDotFlight(distance);
@@ -247,6 +249,7 @@ export default function Navbar() {
       if (!alive()) return;
 
       flyingRef.current = false;
+      setActiveFlightGeneration(null);
       setDropping(false);
       scheduleRearm(REARM_DELAY_MS);
     },
@@ -257,6 +260,7 @@ export default function Navbar() {
     if (!flyingRef.current) return;
     flyingRef.current = false;
     flightRef.current += 1;
+    setActiveFlightGeneration(null);
     clearImpactTimers();
     scheduleRearm(REARM_DELAY_MS);
     void dropControls
@@ -275,7 +279,7 @@ export default function Navbar() {
   }, [clearImpactTimers, dropControls, scheduleRearm]);
 
   useEffect(() => {
-    if (!dropping || !flyingRef.current) return;
+    if (activeFlightGeneration === null || !flyingRef.current) return;
 
     const observer = new MutationObserver(() => {
       if (!document.querySelector('[aria-modal="true"]')) return;
@@ -297,7 +301,7 @@ export default function Navbar() {
       subtree: true,
     });
     return () => observer.disconnect();
-  }, [abortFlight, dropping]);
+  }, [abortFlight, activeFlightGeneration]);
 
   useEffect(() => {
     const bottomPending = arrival > consumedArrivalRef.current;

@@ -841,6 +841,57 @@ describe('Navbar bottom-arrival dot drop', () => {
     });
   });
 
+  it('keeps watching for dialogs when a fresh flight starts before an abort settles', async () => {
+    deferDropStart();
+
+    let view!: ReturnType<typeof render>;
+    await act(async () => {
+      view = renderWithFooterLine();
+    });
+
+    bottomState.atBottom = true;
+    bottomState.arrival = 1;
+    await act(async () => {
+      view.rerender(<Navbar />);
+    });
+    expect(dropStart).toHaveBeenCalledTimes(1);
+
+    // Keep the first abort unresolved, so `dropping` stays true while the
+    // next bottom arrival starts a fresh flight.
+    deferDropStart();
+    const firstDialog = document.createElement('div');
+    firstDialog.setAttribute('aria-modal', 'true');
+    await act(async () => {
+      document.body.appendChild(firstDialog);
+      await Promise.resolve();
+    });
+    expect(dropStart).toHaveBeenCalledTimes(2);
+    expect(dropStart.mock.calls.at(-1)?.[0]).toMatchObject({ y: 0 });
+
+    firstDialog.remove();
+    deferDropStart();
+    bottomState.arrival = 2;
+    await act(async () => {
+      view.rerender(<Navbar />);
+    });
+    expect(dropStart).toHaveBeenCalledTimes(3);
+
+    const secondDialog = document.createElement('div');
+    secondDialog.setAttribute('aria-modal', 'true');
+    await act(async () => {
+      document.body.appendChild(secondDialog);
+      await Promise.resolve();
+    });
+
+    expect(dropStart).toHaveBeenCalledTimes(4);
+    expect(dropStart.mock.calls.at(-1)?.[0]).toMatchObject({
+      y: 0,
+      scaleX: 1,
+      scaleY: 1,
+      transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1] },
+    });
+  });
+
   it('consumes an arrival blocked by an open dialog', async () => {
     const dialog = document.createElement('div');
     dialog.setAttribute('aria-modal', 'true');
