@@ -166,10 +166,11 @@ uniform float uVignette;
 uniform float uGrain;
 uniform float uGlitch;      // 0..1 burst intensity; 0 = perfectly clean frame
 uniform float uSliceCount;  // horizontal bands the frame is cut into
-uniform float uScope;       // 0..1 oscilloscope trace opacity
-uniform float uScopeLines;  // trace lanes stacked down the frame
-uniform float uScopeGain;   // deflection as a fraction of lane height
-uniform float uScopeShake;  // per-lane jitter, uv units
+uniform float uScope;       // 0..1 contour trace opacity
+uniform float uScopeSpread; // gradient probe distance, texels
+uniform float uScopeGain;   // gradient magnitude that reads as a full edge
+uniform float uScopeShake;  // contour tremble amplitude, uv units
+uniform vec3 uScopeChopSet; // x: 0..1 chop, y: cells across frame, z: breakaway
 uniform vec3 uScopeTint;    // trace colour, linear light
 
 const vec3 SCOPE_LUMA = vec3(0.2126, 0.7152, 0.0722);
@@ -237,30 +238,82 @@ void main() {
      The shake is per-lane and re-drawn ~24x/s, so lanes jitter independently
      like channels sharing a timebase rather than the whole frame wobbling. */
   if (uScope > 0.0) {
-    float laneH = 1.0 / uScopeLines;
-    float lane = floor(vUv.y / laneH);
-    float laneY = (lane + 0.5) * laneH;
-
     vec2 texel = 1.0 / vec2(textureSize(uField, 0));
-    vec3 aCol = texture(uField, vec2(vUv.x, laneY)).rgb;
-    vec3 bCol = texture(uField, vec2(vUv.x + texel.x * 2.0, laneY)).rgb;
-    float lumA = dot(aCol, SCOPE_LUMA);
-    float edge = abs(dot(bCol, SCOPE_LUMA) - lumA);
 
-    float shake = (speck(uvec2(uint(lane), uint(uTime * 24.0)), 0x5eedu) - 0.5)
-                * uScopeShake;
-    float swing = clamp((lumA - 0.5) * uScopeGain, -0.45, 0.45) * laneH;
-    float traceY = laneY + swing + shake;
+    /* The tremble has to be spatially coherent or the contour dissolves into
+       noise instead of wobbling as a line. Two sine pairs at different
+       frequencies and drift rates give a smooth, non-repeating displacement
+       field: neighbouring pixels sample almost the same offset, so a whole
+       edge sways together the way a trace does on a scope with a loose
+       ground. Sampling is displaced, never the output — the contour moves
+       across the picture rather than the picture moving. */
+    vec2 wob = vec2(
+      sin(vUv.y * 37.0 + uTime * 6.3) + 0.55 * sin(vUv.y * 14.3 - uTime * 3.9),
+      cos(vUv.x * 31.0 + uTime * 5.1) + 0.55 * sin(vUv.x * 11.7 + uTime * 4.4)
+    ) * uScopeShake;
+    vec2 p = vUv + wob;
 
-    /* Two-texel half-width keeps the trace hairline at any accumulator size. */
-    float halfW = texel.y * 1.6;
-    float line = smoothstep(halfW, 0.0, abs(vUv.y - traceY));
-    line *= 0.18 + 0.82 * smoothstep(0.0, 0.12, edge);
-    /* Fade out where the field is empty, so traces do not draw across bare
-       ground and turn the piece into a grid. */
-    line *= smoothstep(0.02, 0.12, lumA);
+    /* Chop. On a fling the contours stop being a faithful outline and start
+       living on their own: the frame is diced into cells, each cell draws its
+       own lot on a stepped clock, and a lot decides both how far that piece
+       of contour tears away from the geometry it came from and whether it is
+       drawn at all this tick. Because the clock is quantised the pieces snap
+       between positions instead of gliding — the motion is stuttered, not
+       smooth, which is what separates a broken signal from a slow one.
 
-    col += uScopeTint * line * uScope;
+       The +8.0 bias keeps the cell index positive before the unsigned cast;
+       a negative float to uint conversion is undefined. */
+    float chop = uScopeChopSet.x;
+    float alive = 1.0;
+    if (chop > 0.0) {
+      uvec2 cellId = uvec2(floor((vUv + 8.0) * uScopeChopSet.y));
+      uint tq = uint(uTime * 15.0);
+      float ha = speck(cellId, tq * 3u + 1u);
+      float hb = speck(cellId, tq * 3u + 2u);
+      float hc = speck(cellId, tq * 3u + 3u);
+      p += (vec2(ha, hb) - 0.5) * uScopeChopSet.z * chop;
+      /* Up to ~60% of segments blink out at full chop, so the outline reads
+         as fragments of itself rather than a dashed line. */
+      alive = step(chop * 0.6, hc);
+    }
+
+    /* Central-difference gradient, four taps rather than a nine-tap Sobel:
+       the field is intrinsically soft, so the extra corner taps buy no
+       accuracy and cost 2.4 Mpx of bandwidth a frame. The probe spans
+       several texels because a one-texel difference on blurred material is
+       mostly dither. */
+    vec2 d = texel * uScopeSpread;
+    float lXm = dot(texture(uField, p - vec2(d.x, 0.0)).rgb, SCOPE_LUMA);
+    float lXp = dot(texture(uField, p + vec2(d.x, 0.0)).rgb, SCOPE_LUMA);
+    float lYm = dot(texture(uField, p - vec2(0.0, d.y)).rgb, SCOPE_LUMA);
+    float lYp = dot(texture(uField, p + vec2(0.0, d.y)).rgb, SCOPE_LUMA);
+
+    /* Gradient magnitude peaks along an object's silhouette, so the trace
+       lands on the leg of a chair, the lip of a shelf, the edge of a table —
+       wherever the photograph actually changes. No lanes, no fixed geometry:
+       the picture supplies the lines. */
+    vec2 grad = vec2(lXp - lXm, lYp - lYm);
+    float mag = length(grad);
+
+    /* Normalise against local brightness so contours in shadow read as
+       strongly as contours in a bright window, then square the response to
+       thin the gradient band into something line-like. */
+    float localLum = (lXm + lXp + lYm + lYp) * 0.25;
+    float edge = mag / (localLum * 0.85 + 0.06);
+    /* The response window narrows as chop rises and then hardens to a plain
+       threshold: at rest the contour is a soft gradient that sits in the
+       photograph, on a fling it is a hard-edged aliased line sitting on top
+       of it. Sharpness is the other half of "choppy" — a soft dashed line
+       still reads as an effect, a hard one reads as a fault. */
+    edge = smoothstep(mix(0.35, 0.58, chop), mix(1.0, 0.70, chop), edge / uScopeGain);
+    edge = mix(edge * edge, step(0.5, edge), chop);
+    edge *= alive;
+
+    /* Suppress over bare ground, so the traces belong to the photograph and
+       do not draw a net across the empty frame. */
+    edge *= smoothstep(0.015, 0.10, localLum);
+
+    col += uScopeTint * edge * uScope;
   }
 
   /* One noise term doing two jobs: half an 8-bit quantum of it kills the

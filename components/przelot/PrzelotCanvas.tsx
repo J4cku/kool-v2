@@ -79,17 +79,35 @@ const GLITCH_ENERGY_GATE = 0.55;
 const GLITCH_MAX = 0.34;
 const SLICE_COUNT = 28;
 
-/* Oscilloscope traces. Always present but faint at rest — this is the piece's
-   instrumentation, not a burst effect — and they open up as the field starts
-   moving. The tint is coral: the traces are chrome, drawn over the field in
-   the same register as the caption pill and the progress hairline, not a
-   colour term inside the tunnel. Values are linear light, so they are the
-   sRGB token 0xFC3117 with the transfer function undone. */
-const SCOPE_LINES = 14;
-const SCOPE_GAIN = 1.35;
-const SCOPE_SHAKE = 0.0016;
-const SCOPE_IDLE = 0.3;
-const SCOPE_PEAK = 0.95;
+/* Contour traces. Not lanes: a gradient probe finds the photograph's own
+   silhouettes — chair legs, shelf lips, table edges — and draws along them,
+   so the lines are part of the picture rather than a grid laid over it. They
+   tremble on a coherent low-frequency displacement, the way a scope trace
+   sways on a loose ground.
+
+   SPREAD is in texels and is the single knob that decides which edges count:
+   small values pick out fine detail and read as noise on a soft field, large
+   values find only major silhouettes. GAIN is the gradient that reads as a
+   full-strength edge — lower it to catch more.
+
+   The tint is coral: traces are chrome drawn over the field, the same
+   register as the caption pill and the progress hairline, not a colour term
+   inside the tunnel. Linear light, i.e. the sRGB token 0xFC3117 decoded. */
+const SCOPE_SPREAD = 2.6;
+const SCOPE_GAIN = 0.9;
+const SCOPE_SHAKE = 0.0022;
+const SCOPE_IDLE = 0.55;
+const SCOPE_PEAK = 1.1;
+
+/* Chop: on a fling the contours tear off the geometry, blink in and out on a
+   stepped clock and harden to aliased lines. Zero below the gate, so at
+   reading speed the traces stay faithful outlines. CELLS is how finely the
+   outline is diced — too few and whole objects jump as one, too many and it
+   degrades into sparkle. BREAK is how far a piece can travel, in uv units. */
+const SCOPE_CHOP_GATE = 0.3;
+const SCOPE_CHOP_MAX = 1;
+const SCOPE_CELLS = 34;
+const SCOPE_BREAK = 0.035;
 const SCOPE_TINT_CORAL = [0.964, 0.0331, 0.0092] as const;
 
 /* Handoff: the injected plane crossfades over the last 18% of a segment —
@@ -207,6 +225,7 @@ type PresentUniforms = {
   uTime: WebGLUniformLocation | null;
   uGlitch: WebGLUniformLocation | null;
   uScope: WebGLUniformLocation | null;
+  uScopeChopSet: WebGLUniformLocation | null;
 };
 
 export default function PrzelotCanvas({
@@ -621,7 +640,7 @@ export default function PrzelotCanvas({
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     };
 
-    const runPresent = (time: number, glitch = 0, scope = SCOPE_IDLE) => {
+    const runPresent = (time: number, glitch = 0, scope = SCOPE_IDLE, chop = 0) => {
       if (!presentUniforms) return;
       gl.bindFramebuffer(gl.FRAMEBUFFER, null);
       gl.viewport(0, 0, canvas.width, canvas.height);
@@ -629,6 +648,7 @@ export default function PrzelotCanvas({
       gl.uniform1f(presentUniforms.uTime, time);
       gl.uniform1f(presentUniforms.uGlitch, glitch);
       gl.uniform1f(presentUniforms.uScope, scope);
+      gl.uniform3f(presentUniforms.uScopeChopSet, chop, SCOPE_CELLS, SCOPE_BREAK);
       gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, fieldTex[readIx]);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
@@ -736,6 +756,7 @@ export default function PrzelotCanvas({
         uTime: pu('uTime'),
         uGlitch: pu('uGlitch'),
         uScope: pu('uScope'),
+        uScopeChopSet: pu('uScopeChopSet'),
       };
       gl.useProgram(accumProgram);
       gl.uniform1i(au('uField'), 0);
@@ -754,7 +775,7 @@ export default function PrzelotCanvas({
       gl.uniform1f(pu('uVignette'), ground === 'beige' ? VIGNETTE_BEIGE : VIGNETTE_DARK);
       gl.uniform1f(pu('uGrain'), GRAIN);
       gl.uniform1f(pu('uSliceCount'), SLICE_COUNT);
-      gl.uniform1f(pu('uScopeLines'), SCOPE_LINES);
+      gl.uniform1f(pu('uScopeSpread'), SCOPE_SPREAD);
       gl.uniform1f(pu('uScopeGain'), SCOPE_GAIN);
       gl.uniform1f(pu('uScopeShake'), SCOPE_SHAKE);
       gl.uniform3f(
@@ -967,7 +988,16 @@ export default function PrzelotCanvas({
         energy > GLITCH_ENERGY_GATE
           ? GLITCH_MAX * ((energy - GLITCH_ENERGY_GATE) / (1 - GLITCH_ENERGY_GATE))
           : 0;
-      runPresent(time, glitch, SCOPE_IDLE + (SCOPE_PEAK - SCOPE_IDLE) * energy);
+      const chop =
+        energy > SCOPE_CHOP_GATE
+          ? SCOPE_CHOP_MAX * ((energy - SCOPE_CHOP_GATE) / (1 - SCOPE_CHOP_GATE))
+          : 0;
+      runPresent(
+        time,
+        glitch,
+        SCOPE_IDLE + (SCOPE_PEAK - SCOPE_IDLE) * energy,
+        chop,
+      );
 
       /* The pill, the centre-click target and the analytics event all follow
          the plane: whichever photograph owns more than half the blend. */
