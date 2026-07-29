@@ -247,10 +247,25 @@ void main() {
        edge sways together the way a trace does on a scope with a loose
        ground. Sampling is displaced, never the output — the contour moves
        across the picture rather than the picture moving. */
-    vec2 wob = vec2(
-      sin(vUv.y * 37.0 + uTime * 6.3) + 0.55 * sin(vUv.y * 14.3 - uTime * 3.9),
-      cos(vUv.x * 31.0 + uTime * 5.1) + 0.55 * sin(vUv.x * 11.7 + uTime * 4.4)
-    ) * uScopeShake;
+    /* Three octaves, roughly 2.9x apart, and none of them a multiple of the
+       field's own band frequency (uBandK 8.6) or its 0.22 rad/s drift. That
+       matters: if the traces shared a wavelength with the shear underneath
+       they would phase-lock to it and read as part of the same animation.
+       Detuned, they behave like a separate layer with its own weather — a
+       long swell that drifts whole contours as a group, a mid ripple, and a
+       fine tremble on top.
+
+       Each axis is driven by BOTH coordinates rather than its own, so the
+       field is not separable and the motion never collapses into visible
+       horizontal and vertical banding. */
+    vec2 wob =
+        vec2(sin(vUv.y * 4.7 + vUv.x * 1.9 + uTime * 0.83),
+             cos(vUv.x * 3.9 - vUv.y * 2.3 - uTime * 0.67)) * 1.00
+      + vec2(sin(vUv.y * 12.9 - vUv.x * 5.1 - uTime * 2.31),
+             cos(vUv.x * 15.7 + vUv.y * 6.3 + uTime * 1.97)) * 0.42
+      + vec2(sin(vUv.y * 41.3 + vUv.x * 17.9 + uTime * 7.13),
+             cos(vUv.x * 37.1 - vUv.y * 21.7 - uTime * 6.29)) * 0.17;
+    wob *= uScopeShake;
     vec2 p = vUv + wob;
 
     /* Chop. On a fling the contours stop being a faithful outline and start

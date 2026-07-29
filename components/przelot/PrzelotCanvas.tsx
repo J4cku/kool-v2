@@ -95,7 +95,10 @@ const SLICE_COUNT = 28;
    inside the tunnel. Linear light, i.e. the sRGB token 0xFC3117 decoded. */
 const SCOPE_SPREAD = 2.6;
 const SCOPE_GAIN = 0.9;
-const SCOPE_SHAKE = 0.0022;
+/* Summed weight of the three wobble octaves is ~1.59, so peak displacement is
+   this times that — a few pixels of drift, enough to see the contours move
+   independently of the field without them sliding off their edges. */
+const SCOPE_SHAKE = 0.0034;
 const SCOPE_IDLE = 0.55;
 const SCOPE_PEAK = 1.1;
 
