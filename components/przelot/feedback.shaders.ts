@@ -27,6 +27,16 @@ void main() {
 
 export const ACCUMULATE_FRAGMENT_SHADER = `#version 300 es
 precision highp float;
+/* GLSL ES 3.00 predeclares fragment integers as mediump, which is only
+   guaranteed 16 bits. speck() is a murmur3 finaliser and needs 32: at
+   mediump its multipliers truncate, the 16-bit right shift moves by the
+   whole operand width (undefined), and every pixel hashes to ~0. Silent — a
+   precision default is not a compile error — and it does not reproduce on
+   desktop, where ANGLE reports mediump as 32-bit. On the phone GPUs this
+   route budgets for it would kill the tearing and the chop outright, and on
+   the 8-bit fallback it would turn the dither into a constant that the
+   integrator amplifies ~108x, driving the field to permanent black. */
+precision highp int;
 precision highp sampler2D;
 
 in vec2 vUv;
@@ -52,6 +62,7 @@ uniform vec3 uGround;       // ground colour, linear light
 uniform float uDither;      // 0 on RGBA16F, ~one quantum on the SRGB8 fallback
 uniform float uPrism;       // per-frame radial split between R and B, field units
 uniform float uSmear;       // 0..1 advection bias: how far the tail chases the flow
+uniform float uSmearMix;    // dt-compensated weight for that chase
 
 const vec3 LUMA = vec3(0.2126, 0.7152, 0.0722);
 
@@ -119,7 +130,7 @@ void main() {
     texture(uField, toUv(moved)).g,
     texture(uField, toUv(moved * (1.0 + split))).b
   );
-  field = mix(field, texture(uField, toUv(far)).rgb, uSmear * 0.34);
+  field = mix(field, texture(uField, toUv(far)).rgb, uSmearMix);
 
   /* The photo plane: a centred square over 72% of the short edge. Its border
      against the ground is the frame's strongest luminance edge and therefore
@@ -146,7 +157,19 @@ void main() {
   /* Live only on the 8-bit fallback target: without it the decay step falls
      under half a quantum below ~20% grey and the tail freezes into fixed
      plateaus. */
-  result += (speck(uvec2(gl_FragCoord.xy), uint(uTime * 1000.0)) - 0.5) * uDither;
+  /* Live only on the 8-bit fallback target. The dither has to be one *sRGB*
+     code step expressed in linear light at this pixel's own level, not a
+     fixed linear 1/255: the target quantises after the sRGB encode, and
+     d(srgb)/d(linear) = (1.055/2.4) * c^(1/2.4 - 1), so inverting it gives
+     quantum = (1/255) * c^0.5833 * (2.4/1.055). Near the dark ground a flat
+     linear step is ~6x too large, and since it sits inside a keep=0.99
+     integrator that amplifies it ~108x the ground visibly boils. */
+  if (uDither > 0.0) {
+    float lvl = max(max(result.r, max(result.g, result.b)), 1e-4);
+    float quantum = (1.0 / 255.0) * pow(lvl, 0.5833) * (2.4 / 1.055);
+    result += (speck(uvec2(gl_FragCoord.xy), uint(mod(uTime, 1000.0) * 1000.0)) - 0.5)
+            * quantum * uDither;
+  }
 
   fragColor = vec4(result, 1.0);
 }
@@ -154,6 +177,16 @@ void main() {
 
 export const PRESENT_FRAGMENT_SHADER = `#version 300 es
 precision highp float;
+/* GLSL ES 3.00 predeclares fragment integers as mediump, which is only
+   guaranteed 16 bits. speck() is a murmur3 finaliser and needs 32: at
+   mediump its multipliers truncate, the 16-bit right shift moves by the
+   whole operand width (undefined), and every pixel hashes to ~0. Silent — a
+   precision default is not a compile error — and it does not reproduce on
+   desktop, where ANGLE reports mediump as 32-bit. On the phone GPUs this
+   route budgets for it would kill the tearing and the chop outright, and on
+   the 8-bit fallback it would turn the dither into a constant that the
+   integrator amplifies ~108x, driving the field to permanent black. */
+precision highp int;
 
 in vec2 vUv;
 out vec4 fragColor;
@@ -334,7 +367,7 @@ void main() {
   /* One noise term doing two jobs: half an 8-bit quantum of it kills the
      banding the output encode would otherwise show in the long dark tail,
      and a little more reads as film grain over the photographic plane. */
-  float n = speck(uvec2(gl_FragCoord.xy), uint(uTime * 997.0)) - 0.5;
+  float n = speck(uvec2(gl_FragCoord.xy), uint(mod(uTime, 1000.0) * 997.0)) - 0.5;
 
   fragColor = vec4(encodeSrgb(max(col, vec3(0.0))) + n * uGrain, 1.0);
 }

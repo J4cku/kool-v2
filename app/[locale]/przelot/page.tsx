@@ -40,6 +40,12 @@ export default async function PrzelotPage({
   return (
     <main>
       <h1 className="sr-only">{t('title')}</h1>
+      {/* Without JS the mount can never flag a WebGL2 failure, so reveal the
+          grid and drop the stage outright — otherwise a no-JS visitor is left
+          with a tall dark shell and no photographs anywhere in the page. */}
+      <noscript>
+        <style>{'.przelot-grid{display:block}.przelot-stage{display:none}'}</style>
+      </noscript>
       <PrzelotMount
         items={items}
         fallback={<StaticFallback locale={locale} items={items} />}

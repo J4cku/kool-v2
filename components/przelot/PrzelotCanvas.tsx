@@ -59,18 +59,27 @@ const EXPOSURE_BEIGE = 1.0;
 const VIGNETTE_DARK = 0.55;
 const VIGNETTE_BEIGE = 0.3;
 const GRAIN = 0.02;
-const FALLBACK_DITHER = 1 / 255;
+/* An enable flag, not an amplitude: the shader derives the correct linear
+   quantum per pixel, because one sRGB code step is worth very different
+   amounts of linear light at the ground than at the highlights. */
+const FALLBACK_DITHER = 1;
 
 /* Artefacts. PRISM is a per-frame radial channel split that compounds down
    the tail into colour fringing; because it accumulates, the useful range is
    tiny — 0.0075 already reads clearly within a second. SMEAR biases the field
    read further along the flow so the tail chases it rather than merely
    decaying. Both idle low and open up with energy, so a resting frame stays
-   near-photographic and a fling disintegrates. */
+   near-photographic and a fling disintegrates.
+
+   Both are stated per 60 Hz frame and converted with the measured dt, because
+   both compound: passed raw they would be twice as strong on a 120 Hz display
+   as on a 60 Hz one. The prism displacement scales linearly; the smear is a
+   repeated mix, so its weight compounds as 1 - (1 - w)^frames. */
 const PRISM_IDLE = 0.0012;
 const PRISM_PEAK = 0.0075;
 const SMEAR_IDLE = 0.18;
 const SMEAR_PEAK = 0.85;
+const SMEAR_MIX_SCALE = 0.34;
 
 /* Slice tearing lives in the present pass and never feeds back. It is gated
    above the energy the piece sits at while being read, so it appears only on
@@ -118,6 +127,9 @@ const SCOPE_TINT_CORAL = [0.964, 0.0331, 0.0092] as const;
    project keeps swirling while the incoming one materialises inside it. */
 const BLEND_START = 0.8;
 const BLEND_END = 0.98;
+/* Short enough to be invisible on a normal handoff, long enough to turn a
+   late texture's arrival into a fade rather than a cut. */
+const TAU_BLEND = 0.12;
 const PLANE_SWELL = 0.05;
 const PREFETCH_FRAC = 0.25;
 const KEEP_DISTANCE = 2;
@@ -221,6 +233,7 @@ type AccumUniforms = {
   uDither: WebGLUniformLocation | null;
   uPrism: WebGLUniformLocation | null;
   uSmear: WebGLUniformLocation | null;
+  uSmearMix: WebGLUniformLocation | null;
 };
 
 type PresentUniforms = {
@@ -385,6 +398,8 @@ export default function PrzelotCanvas({
     let maxScroll = 0;
     let needsResize = true;
     let travelPrev: number | null = null;
+    let lastResident: WebGLTexture | null = null;
+    let blendPrev = 0;
     let energy = INTRO_ENERGY;
     let dir = 1;
     let lastSeg = -1;
@@ -532,8 +547,16 @@ export default function PrzelotCanvas({
         const backward = (seg - index + count) % count;
         if (Math.min(forward, backward) > KEEP_DISTANCE) {
           if (slot.tex) gl.deleteTexture(slot.tex);
-          /* An in-flight bitmap is dropped, not closed: the decode promise
-             may be shared with a fresher mount of this component. */
+          /* Close a decoded bitmap rather than dropping it to GC. Ownership
+             is exclusive once it is stored: decodeBitmap removes its inflight
+             entry when the promise settles, before this consumer's .then
+             assigns slot.bitmap, so no other mount can still be sharing it.
+             Left to GC, a fling round the ring strands ~124 MB of 1440-square
+             backing store — the iOS memory-pressure kill the no-cache policy
+             exists to prevent. A slot still in 'fetching' has no bitmap to
+             close and its pending promise may legitimately be shared. */
+          slot.bitmap?.close();
+          slot.bitmap = null;
           slots.delete(index);
         }
       });
@@ -610,6 +633,7 @@ export default function PrzelotCanvas({
       planeSwell: number;
       prism: number;
       smear: number;
+      smearMix: number;
       time: number;
       photoA: WebGLTexture | null;
       photoB: WebGLTexture | null;
@@ -634,6 +658,7 @@ export default function PrzelotCanvas({
       gl.uniform1f(accumUniforms.uPlaneSwell, pass.planeSwell);
       gl.uniform1f(accumUniforms.uPrism, pass.prism);
       gl.uniform1f(accumUniforms.uSmear, pass.smear);
+      gl.uniform1f(accumUniforms.uSmearMix, pass.smearMix);
       gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, pass.source);
       gl.activeTexture(gl.TEXTURE1);
@@ -689,6 +714,7 @@ export default function PrzelotCanvas({
           planeSwell: 1,
           prism: 0,
           smear: 0,
+          smearMix: 0,
           time,
           photoA: null,
           photoB: null,
@@ -729,6 +755,21 @@ export default function PrzelotCanvas({
       const w = Math.max(2, Math.round(width * scale));
       const h = Math.max(2, Math.round(height * scale));
       maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      /* travel is scrollY/maxScroll, so remapping maxScroll moves travel
+         without the user having scrolled. Left alone, the next frame measures
+         that jump as velocity — a resize from 900x700 to 1400x1300 at a fixed
+         scrollY reads as ~187 segments/s against a V_REF of 1.4 — which pins
+         energy at 1 and fires maximum tearing, maximum chop and a direction
+         reversal at somebody sitting still. Dropping the reference makes the
+         next frame measure zero across the discontinuity. Every mobile
+         URL-bar collapse goes through here. */
+      travelPrev = null;
+      /* Re-arm the grace window: the reallocation frames that follow are
+         expensive by definition, and without this the quality controller
+         reads them as GPU overload and downshifts. grace is only ever
+         decremented, so it has to be reset here or a single window drag
+         pins the accumulator at its lowest step indefinitely. */
+      grace = GRACE_FRAMES;
       if (w === accumW && h === accumH) return true;
       return reallocateField(w, h, time);
     };
@@ -753,6 +794,7 @@ export default function PrzelotCanvas({
         uDither: au('uDither'),
         uPrism: au('uPrism'),
         uSmear: au('uSmear'),
+        uSmearMix: au('uSmearMix'),
       };
       presentUniforms = {
         uAspect: pu('uAspect'),
@@ -919,6 +961,7 @@ export default function PrzelotCanvas({
             planeSwell: 1,
             prism: 0,
             smear: 0,
+            smearMix: 0,
             time,
             photoA: tex,
             photoB: tex,
@@ -932,10 +975,23 @@ export default function PrzelotCanvas({
         }
       }
 
-      const texA = slotTexture(seg) ?? placeholderTex;
+      /* Hold the last photograph that actually arrived rather than falling
+         back to the 1x1 placeholder. The placeholder is ground-coloured, and
+         soaking flat ground into the plane blanks the tunnel — so a segment
+         whose texture is late, or a jump several segments ahead, wipes the
+         screen instead of simply staying on the previous picture. */
+      const texSeg = slotTexture(seg);
+      if (texSeg) lastResident = texSeg;
+      const texA = texSeg ?? lastResident ?? placeholderTex;
       const texBReady = slotTexture(nextSeg);
+      /* Ramp the crossfade in from wherever it is when B lands, instead of
+         letting blend step straight to smoothstep(frac) on the arrival
+         frame. Without this, a texture that becomes ready mid-handoff cuts
+         the plane rather than fading it. */
       const s = smoothstep(BLEND_START, BLEND_END, frac);
-      const blend = texBReady ? s : 0;
+      const blendTarget = texBReady ? s : 0;
+      blendPrev += (blendTarget - blendPrev) * (1 - Math.exp(-dt / TAU_BLEND));
+      const blend = Math.abs(blendTarget - blendPrev) < 0.002 ? blendTarget : blendPrev;
       const texB = texBReady ?? texA;
       const planeSwell = 1 + PLANE_SWELL * 4 * blend * (1 - blend);
 
@@ -955,6 +1011,10 @@ export default function PrzelotCanvas({
             planeSwell: 1,
             prism: PRISM_IDLE + (PRISM_PEAK - PRISM_IDLE) * INTRO_ENERGY,
             smear: SMEAR_IDLE + (SMEAR_PEAK - SMEAR_IDLE) * INTRO_ENERGY,
+            /* The warm-up already steps at a fixed 1/60 s, so no dt
+               conversion is needed here — this is the reference rate. */
+            smearMix:
+              (SMEAR_IDLE + (SMEAR_PEAK - SMEAR_IDLE) * INTRO_ENERGY) * SMEAR_MIX_SCALE,
             time,
             photoA: texA,
             photoB: texB,
@@ -966,6 +1026,12 @@ export default function PrzelotCanvas({
         scheduleUpload();
         return;
       }
+
+      /* This frame expressed in 60 Hz frames, so the two compounding
+         artefacts can be stated at a reference rate and converted. */
+      const frames = dt * 60;
+      const smearW = (SMEAR_IDLE + (SMEAR_PEAK - SMEAR_IDLE) * energy) * SMEAR_MIX_SCALE;
+      const smearMixForFrame = 1 - Math.pow(1 - smearW, frames);
 
       const keep = Math.exp(-dt / TAU_TAIL);
       if (process.env.NODE_ENV !== 'production') {
@@ -979,8 +1045,9 @@ export default function PrzelotCanvas({
         swell: aRate * dt,
         blend,
         planeSwell,
-        prism: PRISM_IDLE + (PRISM_PEAK - PRISM_IDLE) * energy,
+        prism: (PRISM_IDLE + (PRISM_PEAK - PRISM_IDLE) * energy) * frames,
         smear: SMEAR_IDLE + (SMEAR_PEAK - SMEAR_IDLE) * energy,
+        smearMix: smearMixForFrame,
         time,
         photoA: texA,
         photoB: texB,
@@ -1055,8 +1122,11 @@ export default function PrzelotCanvas({
       rootStyle.overscrollBehavior = previous.overscroll;
       slots.forEach((slot) => {
         if (slot.tex) gl.deleteTexture(slot.tex);
-        /* In-flight bitmaps are dropped, not closed — the decode promise may
-           be shared with a fresher mount (StrictMode, locale switch). */
+        /* Same ownership argument as evictBeyondWindow: a bitmap that has
+           been assigned to a slot is no longer in the inflight map, so this
+           mount is its only owner and can close it. Only a still-pending
+           decode is left to GC. */
+        slot.bitmap?.close();
         slot.bitmap = null;
       });
       slots.clear();
