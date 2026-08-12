@@ -636,5 +636,14 @@
     },
     "openCta": "opowiedz nam o projekcie",
     "close": "Zamknij formularz"
+  },
+  "przelot": {
+    "title": "przelot",
+    "enter": "otwórz projekt",
+    "scrollHint": "przewiń, aby zacząć",
+    "fallback": {
+      "heading": "przelot",
+      "intro": "Przelot przez wnętrza kool studio — piętnaście projektów w jednym tunelu. Ta wersja pokazuje je jako siatkę: wybierz zdjęcie, aby przejść do projektu."
+    }
   }
 }

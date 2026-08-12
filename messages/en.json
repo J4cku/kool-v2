@@ -636,5 +636,14 @@
     },
     "openCta": "tell us about your project",
     "close": "Close the form"
+  },
+  "przelot": {
+    "title": "flythrough",
+    "enter": "open this project",
+    "scrollHint": "scroll to begin",
+    "fallback": {
+      "heading": "flythrough",
+      "intro": "A flythrough of kool studio interiors — fifteen projects in a single tunnel. This version lays them out as a grid: pick a photo to open its project."
+    }
   }
 }

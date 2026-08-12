@@ -144,3 +144,31 @@ body {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+/* przelot (unlisted lab route): both the WebGL stage and the static grid ship
+   in the server HTML, and CSS picks which one is shown. A display:none
+   container does not fetch its lazy images, so a capable visitor pays nothing
+   for the grid, while a reduced-motion or no-JS visitor gets the photographs
+   at first paint without waiting on a script. `.przelot-failed` is set by the
+   mount when WebGL2 is unavailable at runtime. */
+.przelot-grid {
+  display: none;
+}
+
+.przelot-failed .przelot-grid {
+  display: block;
+}
+
+.przelot-failed .przelot-stage {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .przelot-grid {
+    display: block;
+  }
+
+  .przelot-stage {
+    display: none;
+  }
+}
