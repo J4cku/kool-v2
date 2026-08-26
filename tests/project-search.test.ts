@@ -183,3 +183,26 @@ test('totalMatches precedes limit and search mutates neither input nor index', (
   assert.deepEqual(input, inputBefore);
   assert.equal(searchProjects(index, { ...input, limit: 5 }).matches.length, 5);
 });
+
+test('client search modules cannot cross the canonical catalog boundary', () => {
+  const clientModules = [
+    'components/WebMcpProvider.tsx',
+    'lib/projects/project-search-types.ts',
+    'lib/projects/search-projects.ts',
+    'lib/webmcp/tools/find-projects.ts',
+  ];
+
+  for (const file of clientModules) {
+    const source = readFileSync(file, 'utf8');
+    assert.doesNotMatch(source, /from ['"]@\/data\/projects|project-search-index\.server/, file);
+  }
+
+  const serverSource = readFileSync('lib/projects/project-search-index.server.ts', 'utf8');
+  assert.match(serverSource, /from ['"]@\/data\/projects/);
+});
+
+test('the locale layout passes only the projected index into the client provider', () => {
+  const source = readFileSync('app/[locale]/layout.tsx', 'utf8');
+  assert.match(source, /getProjectSearchIndex\(validatedLocale\)/);
+  assert.match(source, /<WebMcpProvider locale=\{validatedLocale\} projectIndex=\{projectIndex\}/);
+});

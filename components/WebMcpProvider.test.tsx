@@ -1,15 +1,46 @@
 import { cleanup, render } from '@testing-library/react';
+import { NextIntlClientProvider } from 'next-intl';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import WebMcpProvider from '@/components/WebMcpProvider';
 import { isWebMcpDebugEnabled, isWebMcpEnabled } from '@/lib/webmcp/flags';
 import { createWebMcpDebugTool } from '@/lib/webmcp/tools/debug';
 import { registerWebMcpTool } from '@/lib/webmcp/model-context';
+import type { ProjectIndexEntry } from '@/lib/projects/project-search-types';
+import enMessages from '@/messages/en.json';
+import plMessages from '@/messages/pl.json';
 
 const unregister = vi.hoisted(() => vi.fn());
+
+const projectIndex: ProjectIndexEntry[] = [{
+  catalogOrder: 0,
+  slug: 'mieszkanie-walecznych',
+  title: 'apartment',
+  location: 'Wrocław',
+  category: 'residential',
+  projectType: 'apartment',
+  areaM2: 84,
+  objectiveFeatures: ['pre_war_building', 'furniture_design'],
+  url: 'https://koolstudio.pl/en/projekty/mieszkanie-walecznych',
+}];
 
 vi.mock('@/lib/webmcp/model-context', () => ({
   registerWebMcpTool: vi.fn(() => unregister),
 }));
+
+function renderProvider(locale: 'pl' | 'en' = 'pl') {
+  return render(
+    <NextIntlClientProvider
+      locale={locale}
+      messages={locale === 'pl' ? plMessages : enMessages}
+    >
+      <WebMcpProvider locale={locale} projectIndex={projectIndex} />
+    </NextIntlClientProvider>,
+  );
+}
+
+function registeredNames() {
+  return vi.mocked(registerWebMcpTool).mock.calls.map(([tool]) => tool.name);
+}
 
 afterEach(() => {
   cleanup();
@@ -70,40 +101,50 @@ describe('kool_webmcp_debug', () => {
 });
 
 describe('WebMcpProvider', () => {
-  it('registers nothing when disabled', () => {
+  it('registers neither tool when the production base gate is disabled', () => {
     vi.stubEnv('NODE_ENV', 'production');
     vi.stubEnv('NEXT_PUBLIC_WEBMCP_ENABLED', 'false');
-    render(<WebMcpProvider locale="pl" />);
+    renderProvider('pl');
     expect(registerWebMcpTool).not.toHaveBeenCalled();
   });
 
-  it('registers the debug tool in development and unregisters on cleanup', () => {
-    vi.stubEnv('NODE_ENV', 'development');
-    const view = render(<WebMcpProvider locale="en" />);
-
-    expect(registerWebMcpTool).toHaveBeenCalledOnce();
-    expect(vi.mocked(registerWebMcpTool).mock.calls[0][0].name).toBe('kool_webmcp_debug');
-    view.unmount();
-    expect(unregister).toHaveBeenCalledOnce();
-  });
-
-  it('keeps the debug tool absent when only the production base gate is enabled', () => {
+  it('registers search but not debug when only the production base gate is enabled', () => {
     vi.stubEnv('NODE_ENV', 'production');
     vi.stubEnv('NEXT_PUBLIC_WEBMCP_ENABLED', 'true');
     vi.stubEnv('NEXT_PUBLIC_WEBMCP_DEBUG', 'false');
-    render(<WebMcpProvider locale="pl" />);
-    expect(registerWebMcpTool).not.toHaveBeenCalled();
+    renderProvider('en');
+    expect(registeredNames()).toEqual(['kool_find_projects']);
   });
 
-  it('registers the debug tool in production when both public gates are enabled', () => {
+  it('registers search and debug in development and unregisters each exactly once', () => {
+    vi.stubEnv('NODE_ENV', 'development');
+    const view = renderProvider('pl');
+
+    expect(registeredNames()).toEqual(['kool_find_projects', 'kool_webmcp_debug']);
+    view.unmount();
+    expect(unregister).toHaveBeenCalledTimes(2);
+  });
+
+  it('registers search and debug in production only when both public gates are enabled', () => {
     vi.stubEnv('NODE_ENV', 'production');
     vi.stubEnv('NEXT_PUBLIC_WEBMCP_ENABLED', 'true');
     vi.stubEnv('NEXT_PUBLIC_WEBMCP_DEBUG', 'true');
-    const view = render(<WebMcpProvider locale="pl" />);
+    renderProvider('pl');
+    expect(registeredNames()).toEqual(['kool_find_projects', 'kool_webmcp_debug']);
+  });
 
-    expect(registerWebMcpTool).toHaveBeenCalledOnce();
-    expect(vi.mocked(registerWebMcpTool).mock.calls[0][0].name).toBe('kool_webmcp_debug');
-    view.unmount();
+  it('re-registers localized search metadata after a locale change', () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    vi.stubEnv('NEXT_PUBLIC_WEBMCP_ENABLED', 'true');
+
+    const first = renderProvider('pl');
+    expect(vi.mocked(registerWebMcpTool).mock.calls[0][0].title)
+      .toBe('Znajdź projekty kool studio');
+    first.unmount();
+
+    renderProvider('en');
+    expect(vi.mocked(registerWebMcpTool).mock.calls[1][0].title)
+      .toBe('Find kool studio projects');
     expect(unregister).toHaveBeenCalledOnce();
   });
 });
