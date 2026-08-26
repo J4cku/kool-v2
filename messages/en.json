@@ -524,7 +524,7 @@
     "title": "Privacy policy",
     "intro": "The controller of your personal data is kool studio, Zaporoska 83/15, Wrocław, Poland. For any data-related matters, write to hello@koolstudio.pl.",
     "contactLabel": "Email contact",
-    "contactBody": "When you write to hello@koolstudio.pl or send a brief via the contact form, we process the data you provide (name, email address, project details) solely to reply and discuss a potential collaboration; after sending a brief you receive an email confirmation. We keep correspondence for as long as the matter requires.",
+    "contactBody": "When you write to hello@koolstudio.pl or send a brief through the form, we process the details you provide: name, email address, optional phone number and correspondence language, plus project information (type, location, property stage, approximate area, scope, design and construction timing, budget, requirements, and an optional link to plans or photos). We use them to reply and discuss a potential collaboration. When form delivery is configured, Resend, our email-delivery provider acting as our processor, handles the message to the studio and your confirmation receipt. If the form cannot send the message, the site creates a prepared brief in your email app; the site does not send it — you decide whether to send it from the email app. We keep correspondence for as long as the matter requires.",
     "analyticsLabel": "Visit statistics",
     "analyticsBody": "With your consent we use PostHog (data processed in the EU) to understand how visitors use the site — which projects they view, how they find us, and how they move around the site (session recording: cursor movement and scrolling, never the content of text inputs). Without your consent we measure traffic anonymously only: no cookies and nothing stored on your device.",
     "adsLabel": "Advertising",
@@ -627,7 +627,11 @@
     "honeypotLabel": "Leave this field empty",
     "submit": "Send brief",
     "sending": "Sending…",
-    "privacy": "Your details go solely to hello@koolstudio.pl and are used only to reply to this enquiry.",
+    "privacy": {
+      "beforeLink": "We use the form details to reply to your enquiry. Configured delivery is handled by our email provider; if the form cannot send the message, we will open a prepared brief in your email app. See our ",
+      "link": "privacy policy",
+      "afterLink": " for details."
+    },
     "errors": {
       "required": "This field is required.",
       "email": "Enter a valid email address.",

@@ -24,6 +24,10 @@ vi.mock('@/hooks/useReducedMotion', () => ({
   useReducedMotion: () => false,
 }));
 
+vi.mock('@/i18n/navigation', () => ({
+  Link: ({ children, ...props }: React.ComponentProps<'a'>) => <a {...props}>{children}</a>,
+}));
+
 afterEach(cleanup);
 
 function BriefFormHarness() {
@@ -65,5 +69,7 @@ describe('BriefForm', () => {
       'desiredScope', 'designStart', 'constructionStart', 'budget', 'requirements',
       'plansUrl', 'language',
     ]);
+    expect(container.querySelector('a[href="/polityka-prywatnosci"]')?.textContent)
+      .toBe('polityce prywatności');
   });
 });

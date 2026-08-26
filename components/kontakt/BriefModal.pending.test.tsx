@@ -15,6 +15,9 @@ vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
 }));
 vi.mock('@/hooks/useReducedMotion', () => ({ useReducedMotion: () => false }));
+vi.mock('@/i18n/navigation', () => ({
+  Link: ({ children, ...props }: React.ComponentProps<'a'>) => <a {...props}>{children}</a>,
+}));
 
 const motionTags = vi.hoisted(() => new Map<string, ComponentType<Record<string, unknown>>>());
 vi.mock('framer-motion', () => ({

@@ -524,7 +524,7 @@
     "title": "Polityka prywatności",
     "intro": "Administratorem Twoich danych osobowych jest kool studio, ul. Zaporoska 83/15, Wrocław. W sprawach dotyczących danych osobowych napisz na hello@koolstudio.pl.",
     "contactLabel": "Kontakt e-mail",
-    "contactBody": "Gdy piszesz na hello@koolstudio.pl lub wysyłasz brief przez formularz na stronie kontaktowej, przetwarzamy podane dane (imię, adres e-mail, informacje o projekcie) wyłącznie po to, aby odpowiedzieć i poprowadzić rozmowę o współpracy; po wysłaniu briefu otrzymasz e-mailowe potwierdzenie. Korespondencję przechowujemy tak długo, jak wymaga tego prowadzona sprawa.",
+    "contactBody": "Gdy piszesz na hello@koolstudio.pl lub wysyłasz brief przez formularz, przetwarzamy podane dane: imię, adres e-mail, opcjonalny numer telefonu i język korespondencji oraz informacje o projekcie (typ, lokalizacja, etap nieruchomości, przybliżona powierzchnia, zakres, terminy projektu i realizacji, budżet, wymagania oraz opcjonalny link do rzutów lub zdjęć). Używamy ich, aby odpowiedzieć i omówić możliwą współpracę. Gdy wysyłka formularza jest skonfigurowana, wiadomość do studia i potwierdzenie dla Ciebie obsługuje Resend, nasz dostawca wysyłki e-mail, który przetwarza dane w naszym imieniu. Jeśli formularz nie może wysłać wiadomości, strona tworzy gotowy brief w Twoim programie pocztowym; strona go nie wysyła — to Ty decydujesz, czy wysłać go z programu pocztowego. Korespondencję przechowujemy tak długo, jak wymaga tego prowadzona sprawa.",
     "analyticsLabel": "Statystyki odwiedzin",
     "analyticsBody": "Za Twoją zgodą używamy narzędzia PostHog (dane przetwarzane w UE), aby rozumieć, jak odwiedzający korzystają ze strony — które projekty oglądają, skąd do nas trafiają, a także jak poruszają się po stronie (nagranie sesji: ruch kursora i przewijanie, bez treści wpisywanych w pola tekstowe). Bez Twojej zgody mierzymy ruch wyłącznie anonimowo: bez plików cookie i bez zapisywania czegokolwiek na Twoim urządzeniu.",
     "adsLabel": "Reklama",
@@ -627,7 +627,11 @@
     "honeypotLabel": "Zostaw to pole puste",
     "submit": "Wyślij brief",
     "sending": "Wysyłanie…",
-    "privacy": "Twoje dane trafiają wyłącznie na hello@koolstudio.pl i służą jedynie do odpowiedzi na to zapytanie.",
+    "privacy": {
+      "beforeLink": "Dane z formularza wykorzystamy, aby odpowiedzieć na Twoje zapytanie. Skonfigurowaną wysyłkę obsługuje nasz dostawca poczty; jeśli formularz nie może wysłać wiadomości, otworzymy gotowy brief w Twoim programie pocztowym. Szczegóły znajdziesz w ",
+      "link": "polityce prywatności",
+      "afterLink": "."
+    },
     "errors": {
       "required": "To pole jest wymagane.",
       "email": "Podaj poprawny adres e-mail.",

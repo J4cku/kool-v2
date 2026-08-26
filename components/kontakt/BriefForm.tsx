@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { Link } from '@/i18n/navigation';
 import type { BriefFormState } from '@/app/[locale]/kontakt/brief-state';
 import {
   PROJECT_TYPES,
@@ -532,7 +533,14 @@ export default function BriefForm({
             {!isPending && <span aria-hidden="true">→</span>}
           </button>
           <p className="text-muted text-[13px] leading-[1.5] max-w-[560px]">
-            {t('privacy')}
+            {t('privacy.beforeLink')}
+            <Link
+              href="/polityka-prywatnosci"
+              className="underline underline-offset-2 hover:text-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
+            >
+              {t('privacy.link')}
+            </Link>
+            {t('privacy.afterLink')}
           </p>
         </div>
       </form>
