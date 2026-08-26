@@ -3,6 +3,7 @@
 ## Phase 2 automated evidence
 
 - Full repository gate: `pnpm check` on 2026-08-26 (Europe/Warsaw), exit code `0`. Vitest passed 86/86 tests in 7 files; Node passed 61/61 tests; typecheck, lint, and i18n parity passed; 423 translation keys matched; the production build generated 58/58 static pages.
+- Focused provider-gate evidence: `pnpm exec vitest run components/WebMcpProvider.test.tsx` on 2026-08-27 (Europe/Warsaw), exit code `0`; 1/1 test file and 9/9 tests passed. Its production assertions verified that base `false` registers neither `kool_find_projects` nor `kool_webmcp_debug`, while base `true` with debug `false` registers exactly `kool_find_projects` and no debug tool.
 - Complete diff checks: `git diff --check origin/main...HEAD`, `git diff --name-status origin/main...HEAD`, `git diff origin/main...HEAD -- package.json pnpm-lock.yaml`, and `git status --short` each exited `0`. The dependency diff contained only the existing `webmcp-types` `0.1.5` development dependency and no runtime dependency; the working tree was clean.
 - Enabled production build: `NEXT_PUBLIC_WEBMCP_ENABLED=true NEXT_PUBLIC_WEBMCP_DEBUG=false pnpm build` on 2026-08-27 (Europe/Warsaw), exit code `0`; 58/58 static pages generated.
 - Default-off production build: `NEXT_PUBLIC_WEBMCP_ENABLED=false NEXT_PUBLIC_WEBMCP_DEBUG=false pnpm build` on 2026-08-27 (Europe/Warsaw), exit code `0`; 58/58 static pages generated. Production Site tools absence was not observed because no supported native-WebMCP browser context was connected.
