@@ -1,8 +1,9 @@
 import { cleanup, fireEvent, render } from '@testing-library/react';
-import { createElement, type ReactNode } from 'react';
+import { createElement, useState, type ReactNode } from 'react';
 import { NextIntlClientProvider } from 'next-intl';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import BriefForm from '@/components/kontakt/BriefForm';
+import { applyInquiryDraftPatch, createInquiryDraft } from '@/lib/brief';
 import plMessages from '@/messages/pl.json';
 
 vi.mock('framer-motion', async () => ({
@@ -24,11 +25,27 @@ vi.mock('@/hooks/useReducedMotion', () => ({
 
 afterEach(cleanup);
 
+function BriefFormHarness() {
+  const [draft, setDraft] = useState(() => createInquiryDraft('pl'));
+  return (
+    <BriefForm
+      draft={draft}
+      renderedAt={1_800_000_000_000}
+      onDraftPatch={(patch) => setDraft((current) => {
+        const result = applyInquiryDraftPatch(current, patch);
+        return result.ok ? result.draft : current;
+      })}
+      onStarted={() => undefined}
+      onDelivered={() => undefined}
+    />
+  );
+}
+
 describe('BriefForm', () => {
   it('serializes canonical enquiry fields in order with language last', () => {
     const { container } = render(
       <NextIntlClientProvider locale="pl" messages={plMessages}>
-        <BriefForm />
+        <BriefFormHarness />
       </NextIntlClientProvider>,
     );
     const form = container.querySelector('form');

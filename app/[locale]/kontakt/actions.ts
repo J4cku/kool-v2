@@ -10,7 +10,7 @@ import {
   type BriefRawInput,
   type NormalizedBrief,
 } from '@/lib/brief';
-import type { BriefEchoValues, BriefFormState } from './brief-state';
+import type { BriefFormState } from './brief-state';
 
 function readForm(formData: FormData): BriefRawInput {
   const one = (key: string) => {
@@ -28,18 +28,6 @@ function readForm(formData: FormData): BriefRawInput {
     constructionStart: one('constructionStart'), budget: one('budget'),
     requirements: one('requirements'), plansUrl: one('plansUrl'),
     language: one('language'), company: one('company'), ts: one('ts'),
-  };
-}
-
-function echo(raw: BriefRawInput): BriefEchoValues {
-  return {
-    name: raw.name ?? '', email: raw.email ?? '', phone: raw.phone ?? '',
-    projectType: raw.projectType ?? '', location: raw.location ?? '',
-    propertyStage: raw.propertyStage ?? '', area: raw.area ?? '',
-    desiredScope: raw.desiredScope ?? [], designStart: raw.designStart ?? '',
-    constructionStart: raw.constructionStart ?? '', budget: raw.budget ?? '',
-    requirements: raw.requirements ?? '', plansUrl: raw.plansUrl ?? '',
-    language: raw.language === 'en' ? 'en' : 'pl',
   };
 }
 
@@ -122,13 +110,12 @@ export async function submitBrief(
 ): Promise<BriefFormState> {
   const raw = readForm(formData);
   const result = validateBrief(raw);
-  const values = echo(raw);
   const submittedAt = Date.now();
   if (result.spam) {
-    return { status: 'error', formError: 'generic', values, submittedAt };
+    return { status: 'error', formError: 'generic', submittedAt };
   }
   if (!isBriefValid(result)) {
-    return { status: 'invalid', errors: result.errors, values, submittedAt };
+    return { status: 'invalid', errors: result.errors, submittedAt };
   }
   const clean = result.values;
   const subject = buildBriefSubject(clean);
@@ -139,7 +126,6 @@ export async function submitBrief(
       status: 'fallback',
       fallback: { reason: 'unconfigured', mailtoHref: buildMailtoHref(subject, body) },
       submitted: clean,
-      values,
       submittedAt,
     };
   }
@@ -149,7 +135,6 @@ export async function submitBrief(
       status: 'fallback',
       fallback: { reason: 'delivery-failed', mailtoHref: buildMailtoHref(subject, body) },
       submitted: clean,
-      values,
       submittedAt,
     };
   }

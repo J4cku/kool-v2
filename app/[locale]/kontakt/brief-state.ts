@@ -5,17 +5,8 @@
 import type {
   BriefErrorCode,
   InquiryField,
-  InquiryLanguage,
   NormalizedBrief,
 } from '@/lib/brief';
-
-// Values echoed back to the form so a failed submit re-populates every field.
-export interface BriefEchoValues {
-  name: string; email: string; phone: string; projectType: string;
-  location: string; propertyStage: string; area: string; desiredScope: string[];
-  designStart: string; constructionStart: string; budget: string;
-  requirements: string; plansUrl: string; language: InquiryLanguage;
-}
 
 export type BriefStatus = 'idle' | 'success' | 'invalid' | 'error' | 'fallback';
 
@@ -25,8 +16,6 @@ export interface BriefFormState {
   errors?: Partial<Record<InquiryField, BriefErrorCode>>;
   // generic, non-field error code for the status live region
   formError?: 'generic';
-  // preserved input for re-population after invalid / error / fallback
-  values?: BriefEchoValues;
   // client opens this mailto when server delivery isn't available
   fallback?: { reason: 'unconfigured' | 'delivery-failed'; mailtoHref: string };
   // rendered back on success / fallback so the user sees what was sent

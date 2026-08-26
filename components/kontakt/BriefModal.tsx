@@ -5,33 +5,56 @@ import {
   useEffect,
   useRef,
   useState,
-  useSyncExternalStore,
 } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import BriefForm from './BriefForm';
-import { featureFlagEnabled, subscribeFeatureFlags, track } from '@/lib/analytics';
+import { track } from '@/lib/analytics';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import {
+  applyInquiryDraftPatch,
+  createInquiryDraft,
+  type InquiryDraft,
+  type InquiryDraftPatch,
+  type InquiryLanguage,
+} from '@/lib/brief';
 
 /* Trigger button + modal shell for the project-brief form on the kontakt
-   page. The form itself (BriefForm) is unchanged — this only moves it from
-   an inline section into a dialog: beige panel over a dimmed, blurred
-   backdrop, closable via the × button, Escape, or a backdrop click. Opening
-   via the #brief hash is supported so the form stays deep-linkable. */
-export default function BriefModal() {
+   page. This page-scoped owner preserves the controlled draft across dialog
+   close/reopen. The dialog stays closable via the × button, Escape, or a
+   backdrop click, and #brief keeps the form deep-linkable. */
+export interface BriefModalProps {
+  navigateToMailto?: (href: string) => void;
+}
+
+export default function BriefModal({ navigateToMailto }: BriefModalProps = {}) {
   const t = useTranslations('brief');
   const reduceMotion = useReducedMotion();
-  /* Launch gate: the whole CTA + dialog stays hidden until the 'brief-form'
-     feature flag is enabled in PostHog. Deliberately fail-closed while the
-     form awaits approval — flip the flag to launch, no deploy needed. */
-  const formEnabled = useSyncExternalStore(
-    subscribeFeatureFlags,
-    () => featureFlagEnabled('brief-form'),
-    () => false,
-  );
+  const locale = useLocale();
+  const language: InquiryLanguage = locale === 'en' ? 'en' : 'pl';
   const [open, setOpen] = useState(false);
+  const [draft, setDraft] = useState<InquiryDraft>(() => createInquiryDraft(language));
+  const [renderedAt, setRenderedAt] = useState<number | null>(null);
+  const startedRef = useRef(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
+
+  const patchDraft = useCallback((patch: InquiryDraftPatch) => {
+    setDraft((current) => {
+      const result = applyInquiryDraftPatch(current, patch);
+      return result.ok ? result.draft : current;
+    });
+  }, []);
+  const markStarted = useCallback(() => {
+    if (startedRef.current) return;
+    startedRef.current = true;
+    track('contact_form_started');
+  }, []);
+  const resetAfterDelivery = useCallback(() => {
+    setDraft(createInquiryDraft(language));
+    setRenderedAt(null);
+    startedRef.current = false;
+  }, [language]);
 
   const close = useCallback(() => {
     setOpen(false);
@@ -39,6 +62,7 @@ export default function BriefModal() {
   }, []);
 
   const show = useCallback(() => {
+    setRenderedAt((current) => current ?? Date.now());
     setOpen(true);
     track('contact_form_opened');
   }, []);
@@ -70,10 +94,6 @@ export default function BriefModal() {
       document.documentElement.style.overflow = previousOverflow;
     };
   }, [open, close]);
-
-  if (!formEnabled) {
-    return null;
-  }
 
   return (
     <>
@@ -126,7 +146,14 @@ export default function BriefModal() {
                   <line x1="16" y1="4" x2="4" y2="16" />
                 </svg>
               </button>
-              <BriefForm />
+              <BriefForm
+                draft={draft}
+                renderedAt={renderedAt}
+                onDraftPatch={patchDraft}
+                onStarted={markStarted}
+                onDelivered={resetAfterDelivery}
+                navigateToMailto={navigateToMailto}
+              />
             </motion.div>
           </motion.div>
         )}

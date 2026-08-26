@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { track } from '@/lib/analytics';
 import { submitBrief } from '@/app/[locale]/kontakt/actions';
@@ -17,6 +17,8 @@ import {
   INQUIRY_VISIBLE_FIELD_ORDER,
   INQUIRY_SUBMISSION_FIELD_ORDER,
   LIMITS,
+  type InquiryDraft,
+  type InquiryDraftPatch,
   type InquiryField,
   type NormalizedBrief,
   type VisibleInquiryField,
@@ -31,90 +33,79 @@ const CONTROL =
   'w-full min-h-[48px] bg-white/50 border border-dark/15 rounded-none px-4 py-3 text-dark text-[16px] leading-normal ' +
   'placeholder:text-muted focus:outline-none focus:border-coral focus:ring-1 focus:ring-coral transition-colors';
 
-const ERRORABLE_ORDER: VisibleInquiryField[] = INQUIRY_VISIBLE_FIELD_ORDER;
+export interface BriefFormProps {
+  draft: InquiryDraft;
+  renderedAt: number | null;
+  onDraftPatch: (patch: InquiryDraftPatch) => void;
+  onStarted: () => void;
+  onDelivered: () => void;
+  navigateToMailto?: (href: string) => void;
+}
 
-export default function BriefForm() {
+function navigateBrowserToMailto(href: string) {
+  window.location.href = href;
+}
+
+export default function BriefForm({
+  draft,
+  renderedAt,
+  onDraftPatch,
+  onStarted,
+  onDelivered,
+  navigateToMailto,
+}: BriefFormProps) {
   const t = useTranslations('brief');
-  const locale = useLocale();
   const reduceMotion = useReducedMotion();
   const [state, formAction, isPending] = useActionState<BriefFormState, FormData>(
     submitBrief,
     initialBriefState
   );
 
-  const tsRef = useRef<HTMLInputElement>(null);
-  const mountTime = useRef<number | null>(null);
   const resultRef = useRef<HTMLDivElement>(null);
   const formErrorRef = useRef<HTMLParagraphElement>(null);
-  // brief_start guard — first meaningful interaction, once per page view.
-  const briefStartedRef = useRef(false);
+  const invalidSummaryRef = useRef<HTMLParagraphElement>(null);
+  const focusedResponseRef = useRef<number | null>(null);
+  const handledResponseRef = useRef<number | null>(null);
 
-  // Fire contact_form_started on the first real focus/input (honeypot +
-  // anti-spam field excluded). track() no-ops when posthog is not running.
-  const handleBriefStart = (event: React.SyntheticEvent) => {
-    if (briefStartedRef.current) return;
+  const handleMeaningfulInteraction = (event: React.SyntheticEvent) => {
     const name = (event.target as HTMLElement & { name?: string }).name;
     if (name === 'company' || name === 'ts') return;
-    briefStartedRef.current = true;
-    track('contact_form_started');
+    onStarted();
   };
 
-  const values = state.values;
   const errors = state.status === 'invalid' ? state.errors : undefined;
 
-  // Keep the anti-spam timestamp populated on the client (empty during SSR so
-  // there is no hydration mismatch; Date.now() runs in the effect, not during
-  // render). Re-apply after each submit if React's form auto-reset cleared it;
-  // the original mount time is reused so elapsed only ever grows and never
-  // falsely blocks a genuine user.
   useEffect(() => {
-    if (mountTime.current === null) mountTime.current = Date.now();
-    if (tsRef.current && !tsRef.current.value) {
-      tsRef.current.value = String(mountTime.current);
-    }
-  }, [state.submittedAt]);
-
-  // Post-submit side effects: move focus, open the mailto fallback.
-  useEffect(() => {
-    if (state.status === 'idle') return;
-
+    if (state.submittedAt === undefined || focusedResponseRef.current === state.submittedAt) return;
+    focusedResponseRef.current = state.submittedAt;
     if (state.status === 'invalid' && state.errors) {
-      const first = ERRORABLE_ORDER.find((f) => state.errors?.[f]);
-      if (first) {
-        document.getElementById(`brief-${first}`)?.focus();
-        return;
-      }
+      const firstVisible = INQUIRY_VISIBLE_FIELD_ORDER.find((field) => state.errors?.[field]);
+      const target = firstVisible ? document.getElementById(`brief-${firstVisible}`) : null;
+      if (target) target.focus();
+      else invalidSummaryRef.current?.focus();
+      return;
     }
-
     if (state.status === 'error') {
       formErrorRef.current?.focus();
       return;
     }
-
     if (state.status === 'success' || state.status === 'fallback') {
       resultRef.current?.focus();
     }
+  }, [state]);
 
-    if (state.status === 'fallback' && state.fallback) {
-      // Open the user's mail client with the prefilled brief. The manual
-      // button below is the reliable path if the browser blocks this.
-      window.location.href = state.fallback.mailtoHref;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.submittedAt]);
-
-  // Analytics: report the terminal outcome exactly once per submission, keeping
-  // confirmed server delivery (brief_submit) and the mailto path
-  // (brief_mailto_fallback) as distinct events so they are never conflated.
-  // The helpers no-op when GA4 is not loaded and never carry any field value.
   useEffect(() => {
+    if (state.submittedAt === undefined || handledResponseRef.current === state.submittedAt) return;
+    handledResponseRef.current = state.submittedAt;
     if (state.status === 'success') {
       track('contact_form_submitted');
-    } else if (state.status === 'fallback') {
+      onDelivered();
+    } else if (state.status === 'fallback' && state.fallback) {
       track('contact_form_mailto_fallback');
+      const openMailClient = navigateToMailto ?? navigateBrowserToMailto;
+      openMailClient(state.fallback.mailtoHref);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.submittedAt]);
+  }, [state, onDelivered, navigateToMailto]);
 
   const describedBy = (field: InquiryField, hasHelp: boolean): string | undefined => {
     const ids: string[] = [];
@@ -188,8 +179,8 @@ export default function BriefForm() {
         id="brief-form"
         action={formAction}
         noValidate
-        onFocusCapture={handleBriefStart}
-        onInput={handleBriefStart}
+        onFocusCapture={handleMeaningfulInteraction}
+        onInput={handleMeaningfulInteraction}
         className="mt-10 md:mt-12"
       >
         {/* Honeypot: off-screen, hidden from assistive tech, out of tab order. */}
@@ -207,8 +198,7 @@ export default function BriefForm() {
             defaultValue=""
           />
         </div>
-        {/* Anti-spam render timestamp (populated on the client). */}
-        <input type="hidden" name="ts" ref={tsRef} />
+        <input type="hidden" name="ts" value={renderedAt === null ? '' : String(renderedAt)} />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
           {/* name */}
@@ -227,7 +217,8 @@ export default function BriefForm() {
               aria-required="true"
               maxLength={LIMITS.name}
               autoComplete="name"
-              defaultValue={values?.name ?? ''}
+              value={draft.name}
+              onChange={(event) => onDraftPatch({ name: event.target.value })}
               aria-invalid={errors?.name ? true : undefined}
               aria-describedby={describedBy('name', true)}
               className={CONTROL}
@@ -251,7 +242,8 @@ export default function BriefForm() {
               inputMode="email"
               maxLength={LIMITS.email}
               autoComplete="email"
-              defaultValue={values?.email ?? ''}
+              value={draft.email}
+              onChange={(event) => onDraftPatch({ email: event.target.value })}
               aria-invalid={errors?.email ? true : undefined}
               aria-describedby={describedBy('email', true)}
               className={CONTROL}
@@ -271,7 +263,8 @@ export default function BriefForm() {
               type="tel"
               maxLength={LIMITS.phone}
               autoComplete="tel"
-              defaultValue={values?.phone ?? ''}
+              value={draft.phone}
+              onChange={(event) => onDraftPatch({ phone: event.target.value })}
               aria-invalid={errors?.phone ? true : undefined}
               aria-describedby={describedBy('phone', true)}
               className={CONTROL}
@@ -290,7 +283,10 @@ export default function BriefForm() {
               name="projectType"
               required
               aria-required="true"
-              defaultValue={values?.projectType ?? ''}
+              value={draft.projectType}
+              onChange={(event) => onDraftPatch({
+                projectType: event.target.value as InquiryDraft['projectType'],
+              })}
               aria-invalid={errors?.projectType ? true : undefined}
               aria-describedby={describedBy('projectType', false)}
               className={CONTROL}
@@ -317,7 +313,8 @@ export default function BriefForm() {
               type="text"
               maxLength={LIMITS.location}
               placeholder={t('fields.location.placeholder')}
-              defaultValue={values?.location ?? ''}
+              value={draft.location}
+              onChange={(event) => onDraftPatch({ location: event.target.value })}
               aria-invalid={errors?.location ? true : undefined}
               aria-describedby={describedBy('location', true)}
               className={CONTROL}
@@ -333,7 +330,10 @@ export default function BriefForm() {
             <select
               id="brief-propertyStage"
               name="propertyStage"
-              defaultValue={values?.propertyStage ?? ''}
+              value={draft.propertyStage}
+              onChange={(event) => onDraftPatch({
+                propertyStage: event.target.value as InquiryDraft['propertyStage'],
+              })}
               aria-invalid={errors?.propertyStage ? true : undefined}
               aria-describedby={describedBy('propertyStage', false)}
               className={CONTROL}
@@ -360,7 +360,8 @@ export default function BriefForm() {
               inputMode="decimal"
               maxLength={LIMITS.area}
               placeholder={t('fields.area.placeholder')}
-              defaultValue={values?.area ?? ''}
+              value={draft.area}
+              onChange={(event) => onDraftPatch({ area: event.target.value })}
               aria-invalid={errors?.area ? true : undefined}
               aria-describedby={describedBy('area', false)}
               className={CONTROL}
@@ -392,7 +393,12 @@ export default function BriefForm() {
                     type="checkbox"
                     name="desiredScope"
                     value={key}
-                    defaultChecked={values?.desiredScope.includes(key) ?? false}
+                    checked={draft.desiredScope.includes(key)}
+                    onChange={(event) => onDraftPatch({
+                      desiredScope: event.target.checked
+                        ? [...draft.desiredScope, key]
+                        : draft.desiredScope.filter((item) => item !== key),
+                    })}
                     className="h-5 w-5 shrink-0 cursor-pointer appearance-none border border-dark/15 bg-white/50 checked:border-coral checked:bg-coral transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
                   />
                   <span>{t(`scopeOptions.${key}`)}</span>
@@ -421,7 +427,8 @@ export default function BriefForm() {
               type="text"
               maxLength={LIMITS.designStart}
               placeholder={t('fields.designStart.placeholder')}
-              defaultValue={values?.designStart ?? ''}
+              value={draft.designStart}
+              onChange={(event) => onDraftPatch({ designStart: event.target.value })}
               aria-invalid={errors?.designStart ? true : undefined}
               aria-describedby={describedBy('designStart', false)}
               className={CONTROL}
@@ -440,7 +447,8 @@ export default function BriefForm() {
               type="text"
               maxLength={LIMITS.constructionStart}
               placeholder={t('fields.constructionStart.placeholder')}
-              defaultValue={values?.constructionStart ?? ''}
+              value={draft.constructionStart}
+              onChange={(event) => onDraftPatch({ constructionStart: event.target.value })}
               aria-invalid={errors?.constructionStart ? true : undefined}
               aria-describedby={describedBy('constructionStart', false)}
               className={CONTROL}
@@ -460,7 +468,8 @@ export default function BriefForm() {
               name="budget"
               type="text"
               maxLength={LIMITS.budget}
-              defaultValue={values?.budget ?? ''}
+              value={draft.budget}
+              onChange={(event) => onDraftPatch({ budget: event.target.value })}
               aria-invalid={errors?.budget ? true : undefined}
               aria-describedby={describedBy('budget', true)}
               className={CONTROL}
@@ -480,7 +489,8 @@ export default function BriefForm() {
               name="requirements"
               rows={4}
               maxLength={LIMITS.requirements}
-              defaultValue={values?.requirements ?? ''}
+              value={draft.requirements}
+              onChange={(event) => onDraftPatch({ requirements: event.target.value })}
               aria-invalid={errors?.requirements ? true : undefined}
               aria-describedby={describedBy('requirements', true)}
               className={`${CONTROL} resize-y`}
@@ -502,21 +512,27 @@ export default function BriefForm() {
               inputMode="url"
               maxLength={LIMITS.plansUrl}
               placeholder={t('fields.plansUrl.placeholder')}
-              defaultValue={values?.plansUrl ?? ''}
+              value={draft.plansUrl}
+              onChange={(event) => onDraftPatch({ plansUrl: event.target.value })}
               aria-invalid={errors?.plansUrl ? true : undefined}
               aria-describedby={describedBy('plansUrl', true)}
               className={CONTROL}
             />
           </Field>
         </div>
-        {/* Locale for the confirmation-receipt language. */}
-        <input type="hidden" name="language" value={locale === 'en' ? 'en' : 'pl'} />
+        <input type="hidden" name="language" value={draft.language} />
 
         {/* Live status region: pending / invalid summary / generic error. */}
         <div aria-live="polite" aria-atomic="true" className="mt-8">
           {isPending && <p className="text-muted text-[15px]">{t('status.sending')}</p>}
           {!isPending && state.status === 'invalid' && (
-            <p className="text-coral text-[15px] font-[500]">{t('errors.summary')}</p>
+            <p
+              ref={invalidSummaryRef}
+              tabIndex={-1}
+              className="text-coral text-[15px] font-[500] outline-none"
+            >
+              {t('errors.summary')}
+            </p>
           )}
           {!isPending && state.status === 'error' && (
             <p

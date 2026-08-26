@@ -5,7 +5,7 @@ import RevealHeading from '@/components/RevealHeading';
 
 /* Closing call-to-action — the final section of the commercial subpage.
    Deep-links to /kontakt#brief, which opens the brief modal on the kontakt
-   page when the 'brief-form' flag is on (otherwise it just lands on kontakt). */
+   page. */
 export default function ContactBriefCta({
   heading,
   cta,
