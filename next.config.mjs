@@ -10,6 +10,16 @@ const nextConfig = {
   // First-party proxy for PostHog EU so ad blockers don't drop events.
   // /dot is also excluded from the next-intl matcher in proxy.ts — keep both
   // in sync if the prefix ever changes
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          { key: 'Origin-Agent-Cluster', value: '?1' },
+        ],
+      },
+    ];
+  },
   async rewrites() {
     return [
       {
