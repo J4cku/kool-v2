@@ -13,8 +13,24 @@ const formProbe = vi.hoisted(() => ({
   submittedTimestamp: null as number | null,
 }));
 const navigationMock = vi.hoisted(() => vi.fn());
+const actionHarness = vi.hoisted(() => ({
+  state: { status: 'idle' } as BriefFormProps['state'],
+  formAction: vi.fn(),
+  pending: false,
+}));
 const NOW = 1_800_000_000_000;
 
+vi.mock('react', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('react')>();
+  return {
+    ...actual,
+    useActionState: () => [
+      actionHarness.state,
+      actionHarness.formAction,
+      actionHarness.pending,
+    ],
+  };
+});
 vi.mock('next-intl', () => ({
   useLocale: () => 'pl',
   useTranslations: () => (key: string) => key,
@@ -88,6 +104,9 @@ afterEach(() => {
   formProbe.submittedTimestamp = null;
   trackMock.mockReset();
   navigationMock.mockReset();
+  actionHarness.state = { status: 'idle' };
+  actionHarness.formAction.mockReset();
+  actionHarness.pending = false;
   vi.restoreAllMocks();
   vi.useRealTimers();
   window.history.replaceState(null, '', '/pl/kontakt');
@@ -122,7 +141,8 @@ it('preserves draft, timestamp, and started identity across close/reopen', () =>
   fireEvent.focus(name);
   fireEvent.change(name, { target: { value: 'Ola' } });
   fireEvent.focus(name);
-  expect(trackMock.mock.calls.filter(([event]) => event === 'contact_form_started')).toHaveLength(1);
+  expect(trackMock.mock.calls.filter(([event]) => event === 'contact_form_started'))
+    .toEqual([['contact_form_started']]);
   expect(navigationMock).not.toHaveBeenCalled();
   const timestamp = (document.querySelector('[name="ts"]') as HTMLInputElement).value;
   fireEvent.click(screen.getByRole('button', { name: /close/ }));
@@ -131,7 +151,8 @@ it('preserves draft, timestamp, and started identity across close/reopen', () =>
   expect((screen.getByLabelText('probe-name') as HTMLInputElement).value).toBe('Ola');
   expect((document.querySelector('[name="ts"]') as HTMLInputElement).value).toBe(timestamp);
   fireEvent.focus(screen.getByLabelText('probe-name'));
-  expect(trackMock.mock.calls.filter(([event]) => event === 'contact_form_started')).toHaveLength(1);
+  expect(trackMock.mock.calls.filter(([event]) => event === 'contact_form_started'))
+    .toEqual([['contact_form_started']]);
   expect(navigationMock).not.toHaveBeenCalled();
 });
 
@@ -145,6 +166,47 @@ it('starts with a blank draft after a hard component remount', () => {
   fireEvent.click(screen.getByRole('button', { name: /openCta/ }));
   expect((screen.getByLabelText('probe-name') as HTMLInputElement).value).toBe('');
   expect(navigationMock).not.toHaveBeenCalled();
+});
+
+it('clears the draft after confirmed delivery and tracks the response once without properties', async () => {
+  const view = render(<BriefModal navigateToMailto={navigationMock} />);
+  fireEvent.click(screen.getByRole('button', { name: /openCta/ }));
+  fireEvent.change(screen.getByLabelText('probe-name'), { target: { value: 'Ola' } });
+  expect(formProbe.props?.draft.name).toBe('Ola');
+
+  actionHarness.state = { status: 'success', submittedAt: 101 };
+  view.rerender(<BriefModal navigateToMailto={navigationMock} />);
+  await waitFor(() => expect(formProbe.props?.draft.name).toBe(''));
+  expect(trackMock.mock.calls.filter(([event]) => event === 'contact_form_submitted'))
+    .toEqual([['contact_form_submitted']]);
+
+  view.rerender(<BriefModal navigateToMailto={navigationMock} />);
+  expect(trackMock.mock.calls.filter(([event]) => event === 'contact_form_submitted'))
+    .toHaveLength(1);
+  expect(navigationMock).not.toHaveBeenCalled();
+});
+
+it('retains the draft for fallback and performs one argument-free analytic and one navigation', async () => {
+  const href = 'mailto:hello@koolstudio.pl?subject=Brief%20projektowy';
+  const view = render(<BriefModal navigateToMailto={navigationMock} />);
+  fireEvent.click(screen.getByRole('button', { name: /openCta/ }));
+  fireEvent.change(screen.getByLabelText('probe-name'), { target: { value: 'Ola' } });
+
+  actionHarness.state = {
+    status: 'fallback',
+    fallback: { reason: 'unconfigured', mailtoHref: href },
+    submittedAt: 102,
+  };
+  view.rerender(<BriefModal navigateToMailto={navigationMock} />);
+  await waitFor(() => expect(navigationMock).toHaveBeenCalledWith(href));
+  expect(navigationMock).toHaveBeenCalledOnce();
+  expect(formProbe.props?.draft.name).toBe('Ola');
+  expect(trackMock.mock.calls.filter(([event]) => event === 'contact_form_mailto_fallback'))
+    .toEqual([['contact_form_mailto_fallback']]);
+
+  view.rerender(<BriefModal navigateToMailto={navigationMock} />);
+  expect(navigationMock).toHaveBeenCalledOnce();
+  expect(formProbe.props?.draft.name).toBe('Ola');
 });
 
 it('uses the original timestamp for an immediate submit after close/reopen', () => {
@@ -232,21 +294,51 @@ it('closes by Escape and by the backdrop itself', async () => {
   await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
 });
 
-it('restores exact background state before restoring opener focus', async () => {
-  const background = document.createElement('main');
-  background.inert = false;
-  background.setAttribute('aria-hidden', 'false');
-  document.body.appendChild(background);
-  render(<BriefModal />);
+it('restores nested background state before restoring opener focus', async () => {
+  const outer = document.createElement('div');
+  const outerBefore = document.createElement('nav');
+  const outerAfter = document.createElement('aside');
+  const middle = document.createElement('main');
+  const middleBefore = document.createElement('header');
+  const middleAfter = document.createElement('footer');
+  const mount = document.createElement('section');
+  outerBefore.inert = false;
+  outerBefore.setAttribute('aria-hidden', 'false');
+  outerAfter.inert = true;
+  middleBefore.inert = false;
+  middleAfter.inert = false;
+  middleAfter.setAttribute('aria-hidden', 'false');
+  middle.append(middleBefore, mount, middleAfter);
+  outer.append(outerBefore, middle, outerAfter);
+  document.body.appendChild(outer);
+
+  const view = render(<BriefModal />, { container: mount });
   const opener = screen.getByRole('button', { name: /openCta/ });
+  opener.inert = false;
   fireEvent.click(opener);
-  expect(background.inert).toBe(true);
-  expect(background.getAttribute('aria-hidden')).toBe('true');
+  for (const sibling of [outerBefore, outerAfter, middleBefore, middleAfter]) {
+    expect(sibling.inert).toBe(true);
+    expect(sibling.getAttribute('aria-hidden')).toBe('true');
+  }
+
+  let stateAtFocus: Array<[boolean, string | null]> | null = null;
+  opener.addEventListener('focus', () => {
+    stateAtFocus = [opener, outerBefore, outerAfter, middleBefore, middleAfter].map(
+      (element) => [element.inert, element.getAttribute('aria-hidden')],
+    );
+  }, { once: true });
+
   fireEvent.click(screen.getByRole('button', { name: /close/ }));
   await waitFor(() => expect(document.activeElement).toBe(opener));
-  expect(background.inert).toBe(false);
-  expect(background.getAttribute('aria-hidden')).toBe('false');
-  background.remove();
+  expect(stateAtFocus).toEqual([
+    [false, null],
+    [false, 'false'],
+    [true, null],
+    [false, null],
+    [false, 'false'],
+  ]);
+  view.unmount();
+  outer.remove();
 });
 
 it('restores pre-existing inert, absent aria-hidden, and overflow on unmount', () => {

@@ -347,6 +347,7 @@ export default function BriefForm({
           {/* desiredScope — checkbox group */}
           <fieldset
             id="brief-desiredScope"
+            tabIndex={errors?.desiredScope ? -1 : undefined}
             className="md:col-span-2 border-0 p-0 m-0"
             aria-invalid={errors?.desiredScope ? true : undefined}
             aria-describedby={describedBy('desiredScope', true)}
