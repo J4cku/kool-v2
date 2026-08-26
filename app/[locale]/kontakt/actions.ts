@@ -21,37 +21,25 @@ function readForm(formData: FormData): BriefRawInput {
     formData.getAll(key).filter((v): v is string => typeof v === 'string');
 
   return {
-    name: one('name'),
-    email: one('email'),
-    projectType: one('projectType'),
-    location: one('location'),
-    stage: one('stage'),
-    area: one('area'),
-    startDate: one('startDate'),
-    completionDate: one('completionDate'),
-    scope: many('scope'),
-    budget: one('budget'),
-    priorities: one('priorities'),
-    plansUrl: one('plansUrl'),
-    company: one('company'),
-    ts: one('ts'),
+    name: one('name'), email: one('email'), phone: one('phone'),
+    projectType: one('projectType'), location: one('location'),
+    propertyStage: one('propertyStage'), area: one('area'),
+    desiredScope: many('desiredScope'), designStart: one('designStart'),
+    constructionStart: one('constructionStart'), budget: one('budget'),
+    requirements: one('requirements'), plansUrl: one('plansUrl'),
+    language: one('language'), company: one('company'), ts: one('ts'),
   };
 }
 
 function echo(raw: BriefRawInput): BriefEchoValues {
   return {
-    name: raw.name ?? '',
-    email: raw.email ?? '',
-    projectType: raw.projectType ?? '',
-    location: raw.location ?? '',
-    stage: raw.stage ?? '',
-    area: raw.area ?? '',
-    startDate: raw.startDate ?? '',
-    completionDate: raw.completionDate ?? '',
-    scope: raw.scope ?? [],
-    budget: raw.budget ?? '',
-    priorities: raw.priorities ?? '',
-    plansUrl: raw.plansUrl ?? '',
+    name: raw.name ?? '', email: raw.email ?? '', phone: raw.phone ?? '',
+    projectType: raw.projectType ?? '', location: raw.location ?? '',
+    propertyStage: raw.propertyStage ?? '', area: raw.area ?? '',
+    desiredScope: raw.desiredScope ?? [], designStart: raw.designStart ?? '',
+    constructionStart: raw.constructionStart ?? '', budget: raw.budget ?? '',
+    requirements: raw.requirements ?? '', plansUrl: raw.plansUrl ?? '',
+    language: raw.language === 'en' ? 'en' : 'pl',
   };
 }
 
@@ -129,55 +117,42 @@ async function sendReceipt(
  * mailto fallback the client opens. Never throws — always returns a state.
  */
 export async function submitBrief(
-  _prev: BriefFormState,
-  formData: FormData
+  _previous: BriefFormState,
+  formData: FormData,
 ): Promise<BriefFormState> {
   const raw = readForm(formData);
   const result = validateBrief(raw);
   const values = echo(raw);
-  const now = Date.now();
-
-  // Spam (honeypot / too-fast): reject with a generic message, no detail.
+  const submittedAt = Date.now();
   if (result.spam) {
-    return { status: 'error', formError: 'generic', values, submittedAt: now };
+    return { status: 'error', formError: 'generic', values, submittedAt };
   }
-
-  // Field errors: return per-field codes and preserve input.
   if (!isBriefValid(result)) {
-    return { status: 'invalid', errors: result.errors, values, submittedAt: now };
+    return { status: 'invalid', errors: result.errors, values, submittedAt };
   }
-
   const clean = result.values;
   const subject = buildBriefSubject(clean);
   const body = buildBriefText(clean);
-
   const apiKey = process.env.RESEND_API_KEY;
-
-  if (apiKey) {
-    const ok = await deliverViaResend(apiKey, clean, subject, body);
-    if (ok) {
-      const locale = formData.get('locale') === 'en' ? 'en' : 'pl';
-      await sendReceipt(apiKey, clean, locale);
-      return { status: 'success', submitted: clean, submittedAt: now };
-    }
-    // Configured but the send failed: fall back to the user's mail client so
-    // the brief is not lost.
+  if (!apiKey) {
+    return {
+      status: 'fallback',
+      fallback: { reason: 'unconfigured', mailtoHref: buildMailtoHref(subject, body) },
+      submitted: clean,
+      values,
+      submittedAt,
+    };
+  }
+  const delivered = await deliverViaResend(apiKey, clean, subject, body);
+  if (!delivered) {
     return {
       status: 'fallback',
       fallback: { reason: 'delivery-failed', mailtoHref: buildMailtoHref(subject, body) },
       submitted: clean,
       values,
-      submittedAt: now,
+      submittedAt,
     };
   }
-
-  // No delivery configured (current state): the client opens a prefilled
-  // mailto to hello@koolstudio.pl with the same structured body.
-  return {
-    status: 'fallback',
-    fallback: { reason: 'unconfigured', mailtoHref: buildMailtoHref(subject, body) },
-    submitted: clean,
-    values,
-    submittedAt: now,
-  };
+  await sendReceipt(apiKey, clean, clean.language);
+  return { status: 'success', submitted: clean, submittedAt };
 }

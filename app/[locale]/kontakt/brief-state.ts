@@ -3,25 +3,18 @@
 // that file may only export async functions at runtime; a plain const like
 // initialBriefState must live in an ordinary module.
 import type {
-  BriefField,
   BriefErrorCode,
+  InquiryField,
+  InquiryLanguage,
   NormalizedBrief,
 } from '@/lib/brief';
 
 // Values echoed back to the form so a failed submit re-populates every field.
 export interface BriefEchoValues {
-  name: string;
-  email: string;
-  projectType: string;
-  location: string;
-  stage: string;
-  area: string;
-  startDate: string;
-  completionDate: string;
-  scope: string[];
-  budget: string;
-  priorities: string;
-  plansUrl: string;
+  name: string; email: string; phone: string; projectType: string;
+  location: string; propertyStage: string; area: string; desiredScope: string[];
+  designStart: string; constructionStart: string; budget: string;
+  requirements: string; plansUrl: string; language: InquiryLanguage;
 }
 
 export type BriefStatus = 'idle' | 'success' | 'invalid' | 'error' | 'fallback';
@@ -29,7 +22,7 @@ export type BriefStatus = 'idle' | 'success' | 'invalid' | 'error' | 'fallback';
 export interface BriefFormState {
   status: BriefStatus;
   // field -> error code (client localises)
-  errors?: Partial<Record<BriefField, BriefErrorCode>>;
+  errors?: Partial<Record<InquiryField, BriefErrorCode>>;
   // generic, non-field error code for the status live region
   formError?: 'generic';
   // preserved input for re-population after invalid / error / fallback

@@ -14,10 +14,12 @@ import {
   PROJECT_TYPES,
   STAGES,
   SCOPE_ITEMS,
-  BRIEF_FIELD_ORDER,
+  INQUIRY_VISIBLE_FIELD_ORDER,
+  INQUIRY_SUBMISSION_FIELD_ORDER,
   LIMITS,
-  type BriefField,
+  type InquiryField,
   type NormalizedBrief,
+  type VisibleInquiryField,
 } from '@/lib/brief';
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
@@ -29,8 +31,7 @@ const CONTROL =
   'w-full min-h-[48px] bg-white/50 border border-dark/15 rounded-none px-4 py-3 text-dark text-[16px] leading-normal ' +
   'placeholder:text-muted focus:outline-none focus:border-coral focus:ring-1 focus:ring-coral transition-colors';
 
-// Fields that carry a per-field error code (scope has no error path).
-const ERRORABLE_ORDER: BriefField[] = BRIEF_FIELD_ORDER.filter((f) => f !== 'scope');
+const ERRORABLE_ORDER: VisibleInquiryField[] = INQUIRY_VISIBLE_FIELD_ORDER;
 
 export default function BriefForm() {
   const t = useTranslations('brief');
@@ -115,14 +116,14 @@ export default function BriefForm() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.submittedAt]);
 
-  const describedBy = (field: BriefField, hasHelp: boolean): string | undefined => {
+  const describedBy = (field: InquiryField, hasHelp: boolean): string | undefined => {
     const ids: string[] = [];
     if (hasHelp) ids.push(`brief-${field}-help`);
     if (errors?.[field]) ids.push(`brief-${field}-error`);
     return ids.length ? ids.join(' ') : undefined;
   };
 
-  const errorText = (field: BriefField) => {
+  const errorText = (field: InquiryField) => {
     const code = errors?.[field];
     return code ? t(`errors.${code}`) : null;
   };
@@ -209,7 +210,7 @@ export default function BriefForm() {
         {/* Anti-spam render timestamp (populated on the client). */}
         <input type="hidden" name="ts" ref={tsRef} />
         {/* Locale for the confirmation-receipt language. */}
-        <input type="hidden" name="locale" value={locale} />
+        <input type="hidden" name="language" value={locale === 'en' ? 'en' : 'pl'} />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
           {/* name */}
@@ -227,7 +228,7 @@ export default function BriefForm() {
               required
               aria-required="true"
               maxLength={LIMITS.name}
-              autoComplete="given-name"
+              autoComplete="name"
               defaultValue={values?.name ?? ''}
               aria-invalid={errors?.name ? true : undefined}
               aria-describedby={describedBy('name', true)}
@@ -255,6 +256,26 @@ export default function BriefForm() {
               defaultValue={values?.email ?? ''}
               aria-invalid={errors?.email ? true : undefined}
               aria-describedby={describedBy('email', true)}
+              className={CONTROL}
+            />
+          </Field>
+
+          {/* phone */}
+          <Field
+            field="phone"
+            label={t('fields.phone.label')}
+            help={t('fields.phone.help')}
+            error={errorText('phone')}
+          >
+            <input
+              id="brief-phone"
+              name="phone"
+              type="tel"
+              maxLength={LIMITS.phone}
+              autoComplete="tel"
+              defaultValue={values?.phone ?? ''}
+              aria-invalid={errors?.phone ? true : undefined}
+              aria-describedby={describedBy('phone', true)}
               className={CONTROL}
             />
           </Field>
@@ -305,21 +326,21 @@ export default function BriefForm() {
             />
           </Field>
 
-          {/* stage */}
+          {/* propertyStage */}
           <Field
-            field="stage"
-            label={t('fields.stage.label')}
-            error={errorText('stage')}
+            field="propertyStage"
+            label={t('fields.propertyStage.label')}
+            error={errorText('propertyStage')}
           >
             <select
-              id="brief-stage"
-              name="stage"
-              defaultValue={values?.stage ?? ''}
-              aria-invalid={errors?.stage ? true : undefined}
-              aria-describedby={describedBy('stage', false)}
+              id="brief-propertyStage"
+              name="propertyStage"
+              defaultValue={values?.propertyStage ?? ''}
+              aria-invalid={errors?.propertyStage ? true : undefined}
+              aria-describedby={describedBy('propertyStage', false)}
               className={CONTROL}
             >
-              <option value="">{t('fields.stage.placeholder')}</option>
+              <option value="">{t('fields.propertyStage.placeholder')}</option>
               {STAGES.map((key) => (
                 <option key={key} value={key}>
                   {t(`stageOptions.${key}`)}
@@ -338,7 +359,7 @@ export default function BriefForm() {
               id="brief-area"
               name="area"
               type="text"
-              inputMode="numeric"
+              inputMode="decimal"
               maxLength={LIMITS.area}
               placeholder={t('fields.area.placeholder')}
               defaultValue={values?.area ?? ''}
@@ -348,75 +369,85 @@ export default function BriefForm() {
             />
           </Field>
 
-          {/* startDate */}
-          <Field
-            field="startDate"
-            label={t('fields.startDate.label')}
-            error={errorText('startDate')}
-          >
-            <input
-              id="brief-startDate"
-              name="startDate"
-              type="text"
-              maxLength={LIMITS.startDate}
-              placeholder={t('fields.startDate.placeholder')}
-              defaultValue={values?.startDate ?? ''}
-              aria-invalid={errors?.startDate ? true : undefined}
-              aria-describedby={describedBy('startDate', false)}
-              className={CONTROL}
-            />
-          </Field>
-
-          {/* completionDate */}
-          <Field
-            field="completionDate"
-            label={t('fields.completionDate.label')}
-            error={errorText('completionDate')}
-          >
-            <input
-              id="brief-completionDate"
-              name="completionDate"
-              type="text"
-              maxLength={LIMITS.completionDate}
-              placeholder={t('fields.completionDate.placeholder')}
-              defaultValue={values?.completionDate ?? ''}
-              aria-invalid={errors?.completionDate ? true : undefined}
-              aria-describedby={describedBy('completionDate', false)}
-              className={CONTROL}
-            />
-          </Field>
-
-          {/* scope — checkbox group */}
+          {/* desiredScope — checkbox group */}
           <fieldset
+            id="brief-desiredScope"
             className="md:col-span-2 border-0 p-0 m-0"
-            aria-describedby="brief-scope-help"
+            aria-invalid={errors?.desiredScope ? true : undefined}
+            aria-describedby={describedBy('desiredScope', true)}
           >
             <legend className="block text-dark font-[500] text-[13px] uppercase tracking-[0.08em] mb-1">
-              {t('fields.scope.label')}
+              {t('fields.desiredScope.label')}
             </legend>
-            <p id="brief-scope-help" className="text-muted text-[13px] mb-3">
-              {t('fields.scope.help')}
+            <p id="brief-desiredScope-help" className="text-muted text-[13px] mb-3">
+              {t('fields.desiredScope.help')}
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3">
               {SCOPE_ITEMS.map((key) => (
                 <label
                   key={key}
-                  htmlFor={`brief-scope-${key}`}
+                  htmlFor={`brief-desiredScope-${key}`}
                   className="flex items-center gap-3 min-h-[44px] cursor-pointer text-dark text-[15px]"
                 >
                   <input
-                    id={`brief-scope-${key}`}
+                    id={`brief-desiredScope-${key}`}
                     type="checkbox"
-                    name="scope"
+                    name="desiredScope"
                     value={key}
-                    defaultChecked={values?.scope?.includes(key) ?? false}
+                    defaultChecked={values?.desiredScope.includes(key) ?? false}
                     className="h-5 w-5 shrink-0 cursor-pointer appearance-none border border-dark/15 bg-white/50 checked:border-coral checked:bg-coral transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
                   />
                   <span>{t(`scopeOptions.${key}`)}</span>
                 </label>
               ))}
             </div>
+            {errors?.desiredScope && (
+              <p
+                id="brief-desiredScope-error"
+                className="text-coral text-[13px] mt-1 font-[500]"
+              >
+                {errorText('desiredScope')}
+              </p>
+            )}
           </fieldset>
+
+          {/* designStart */}
+          <Field
+            field="designStart"
+            label={t('fields.designStart.label')}
+            error={errorText('designStart')}
+          >
+            <input
+              id="brief-designStart"
+              name="designStart"
+              type="text"
+              maxLength={LIMITS.designStart}
+              placeholder={t('fields.designStart.placeholder')}
+              defaultValue={values?.designStart ?? ''}
+              aria-invalid={errors?.designStart ? true : undefined}
+              aria-describedby={describedBy('designStart', false)}
+              className={CONTROL}
+            />
+          </Field>
+
+          {/* constructionStart */}
+          <Field
+            field="constructionStart"
+            label={t('fields.constructionStart.label')}
+            error={errorText('constructionStart')}
+          >
+            <input
+              id="brief-constructionStart"
+              name="constructionStart"
+              type="text"
+              maxLength={LIMITS.constructionStart}
+              placeholder={t('fields.constructionStart.placeholder')}
+              defaultValue={values?.constructionStart ?? ''}
+              aria-invalid={errors?.constructionStart ? true : undefined}
+              aria-describedby={describedBy('constructionStart', false)}
+              className={CONTROL}
+            />
+          </Field>
 
           {/* budget */}
           <Field
@@ -438,22 +469,22 @@ export default function BriefForm() {
             />
           </Field>
 
-          {/* priorities */}
+          {/* requirements */}
           <Field
-            field="priorities"
+            field="requirements"
             className="md:col-span-2"
-            label={t('fields.priorities.label')}
-            help={t('fields.priorities.help')}
-            error={errorText('priorities')}
+            label={t('fields.requirements.label')}
+            help={t('fields.requirements.help')}
+            error={errorText('requirements')}
           >
             <textarea
-              id="brief-priorities"
-              name="priorities"
+              id="brief-requirements"
+              name="requirements"
               rows={4}
-              maxLength={LIMITS.priorities}
-              defaultValue={values?.priorities ?? ''}
-              aria-invalid={errors?.priorities ? true : undefined}
-              aria-describedby={describedBy('priorities', true)}
+              maxLength={LIMITS.requirements}
+              defaultValue={values?.requirements ?? ''}
+              aria-invalid={errors?.requirements ? true : undefined}
+              aria-describedby={describedBy('requirements', true)}
               className={`${CONTROL} resize-y`}
             />
           </Field>
@@ -521,7 +552,7 @@ export default function BriefForm() {
 // --- Internal presentational helpers -----------------------------------
 
 interface FieldProps {
-  field: BriefField;
+  field: VisibleInquiryField;
   label: string;
   help?: string;
   required?: boolean;
@@ -613,19 +644,18 @@ function SubmittedSummary({
   submitted: NormalizedBrief;
   t: ReturnType<typeof useTranslations>;
 }) {
-  const rows = BRIEF_FIELD_ORDER.map((field) => {
-    let value = '';
-    if (field === 'projectType') {
-      value = submitted.projectType ? t(`projectTypeOptions.${submitted.projectType}`) : '';
-    } else if (field === 'stage') {
-      value = submitted.stage ? t(`stageOptions.${submitted.stage}`) : '';
-    } else if (field === 'scope') {
-      value = submitted.scope.map((k) => t(`scopeOptions.${k}`)).join(', ');
-    } else {
-      value = submitted[field] as string;
-    }
+  const rows = INQUIRY_SUBMISSION_FIELD_ORDER.map((field) => {
+    let value: string;
+    if (field === 'projectType') value = submitted.projectType
+      ? t(`projectTypeOptions.${submitted.projectType}`) : '';
+    else if (field === 'propertyStage') value = submitted.propertyStage
+      ? t(`stageOptions.${submitted.propertyStage}`) : '';
+    else if (field === 'desiredScope') value = submitted.desiredScope
+      .map((key) => t(`scopeOptions.${key}`)).join(', ');
+    else if (field === 'language') value = t(`languageOptions.${submitted.language}`);
+    else value = submitted[field];
     return { field, value };
-  }).filter((row) => row.value.length > 0);
+  }).filter(({ value }) => value.length > 0);
 
   if (rows.length === 0) return null;
 

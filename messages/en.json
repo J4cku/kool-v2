@@ -549,6 +549,10 @@
         "label": "Email",
         "help": "We'll reply to this address."
       },
+      "phone": {
+        "label": "Phone (optional)",
+        "help": "If you prefer us to contact you by phone."
+      },
       "projectType": {
         "label": "Project type",
         "placeholder": "Choose…"
@@ -558,38 +562,41 @@
         "placeholder": "e.g. Wrocław",
         "help": "The city is enough."
       },
-      "stage": {
-        "label": "Project stage",
+      "propertyStage": {
+        "label": "Property stage",
         "placeholder": "Choose…"
       },
       "area": {
         "label": "Approximate area (m²)",
         "placeholder": "e.g. 85"
       },
-      "startDate": {
-        "label": "Desired start",
+      "designStart": {
+        "label": "Desired design start",
         "placeholder": "e.g. September 2026"
       },
-      "completionDate": {
-        "label": "Desired completion",
+      "constructionStart": {
+        "label": "Planned construction start",
         "placeholder": "e.g. spring 2027"
       },
-      "scope": {
-        "label": "Expected scope",
-        "help": "Tick what you're interested in."
+      "desiredScope": {
+        "label": "Desired scope",
+        "help": "Select what you are interested in."
       },
       "budget": {
         "label": "Approximate implementation budget (optional)",
         "help": "If you'd like, give a rough figure."
       },
-      "priorities": {
-        "label": "Priorities",
-        "help": "What should work better than it does today? Max. 3 points."
+      "requirements": {
+        "label": "Requirements and priorities",
+        "help": "Describe your needs, constraints, and what should work better. Maximum 1,000 characters."
       },
       "plansUrl": {
         "label": "Link to plans or photos",
         "placeholder": "https://…",
         "help": "A link to a cloud folder. No file upload."
+      },
+      "language": {
+        "label": "Correspondence language"
       }
     },
     "projectTypeOptions": {
@@ -612,6 +619,10 @@
       "zabudowy-na-wymiar": "custom cabinetry",
       "zestawienia-wyceny": "specifications and quotes",
       "nadzor-autorski": "author's supervision"
+    },
+    "languageOptions": {
+      "pl": "Polish",
+      "en": "English"
     },
     "honeypotLabel": "Leave this field empty",
     "submit": "Send brief",

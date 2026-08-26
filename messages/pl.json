@@ -549,6 +549,10 @@
         "label": "E-mail",
         "help": "Na ten adres odpiszemy."
       },
+      "phone": {
+        "label": "Telefon (opcjonalnie)",
+        "help": "Jeśli wolisz kontakt telefoniczny."
+      },
       "projectType": {
         "label": "Typ projektu",
         "placeholder": "Wybierz…"
@@ -558,23 +562,23 @@
         "placeholder": "np. Wrocław",
         "help": "Wystarczy miasto."
       },
-      "stage": {
-        "label": "Etap projektu",
+      "propertyStage": {
+        "label": "Etap nieruchomości",
         "placeholder": "Wybierz…"
       },
       "area": {
         "label": "Przybliżona powierzchnia (m²)",
         "placeholder": "np. 85"
       },
-      "startDate": {
-        "label": "Pożądany start",
+      "designStart": {
+        "label": "Pożądany start projektu",
         "placeholder": "np. wrzesień 2026"
       },
-      "completionDate": {
-        "label": "Pożądane zakończenie",
+      "constructionStart": {
+        "label": "Planowany start realizacji",
         "placeholder": "np. wiosna 2027"
       },
-      "scope": {
+      "desiredScope": {
         "label": "Oczekiwany zakres",
         "help": "Zaznacz, co Cię interesuje."
       },
@@ -582,14 +586,17 @@
         "label": "Przybliżony budżet realizacji (opcjonalnie)",
         "help": "Jeśli chcesz, podaj orientacyjną kwotę."
       },
-      "priorities": {
-        "label": "Priorytety",
-        "help": "Co powinno działać lepiej niż dziś? Maks. 3 punkty."
+      "requirements": {
+        "label": "Wymagania i priorytety",
+        "help": "Opisz potrzeby, ograniczenia i to, co powinno działać lepiej. Maks. 1000 znaków."
       },
       "plansUrl": {
         "label": "Link do rzutów lub zdjęć",
         "placeholder": "https://…",
         "help": "Link do folderu w chmurze. Bez przesyłania plików."
+      },
+      "language": {
+        "label": "Język korespondencji"
       }
     },
     "projectTypeOptions": {
@@ -612,6 +619,10 @@
       "zabudowy-na-wymiar": "zabudowy na wymiar",
       "zestawienia-wyceny": "zestawienia i wyceny",
       "nadzor-autorski": "nadzór autorski"
+    },
+    "languageOptions": {
+      "pl": "polski",
+      "en": "angielski"
     },
     "honeypotLabel": "Zostaw to pole puste",
     "submit": "Wyślij brief",

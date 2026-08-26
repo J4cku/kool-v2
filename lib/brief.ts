@@ -37,8 +37,6 @@ export type ProjectType = (typeof PROJECT_TYPES)[number];
 export type PropertyStage = (typeof STAGES)[number];
 export type DesiredScopeItem = (typeof SCOPE_ITEMS)[number];
 export type InquiryLanguage = 'pl' | 'en';
-export type Stage = (typeof STAGES)[number];
-export type ScopeItem = (typeof SCOPE_ITEMS)[number];
 
 // Text-length caps (characters). Server-enforced; the client also sets
 // maxLength for immediate feedback.
@@ -50,11 +48,8 @@ export const LIMITS = {
   area: 40,
   designStart: 60,
   constructionStart: 60,
-  requirements: 1000,
-  startDate: 60,
-  completionDate: 60,
   budget: 80,
-  priorities: 1000,
+  requirements: 1000,
   plansUrl: 600,
 } as const;
 
@@ -74,6 +69,18 @@ export interface InquiryDraft {
   plansUrl: string;
   language: InquiryLanguage;
 }
+
+export type InquiryField = keyof InquiryDraft;
+export type VisibleInquiryField = Exclude<InquiryField, 'language'>;
+export const INQUIRY_VISIBLE_FIELD_ORDER: VisibleInquiryField[] = [
+  'name', 'email', 'phone', 'projectType', 'location', 'propertyStage', 'area',
+  'desiredScope', 'designStart', 'constructionStart', 'budget', 'requirements',
+  'plansUrl',
+];
+export const INQUIRY_SUBMISSION_FIELD_ORDER: InquiryField[] = [
+  ...INQUIRY_VISIBLE_FIELD_ORDER,
+  'language',
+];
 
 export type InquiryDraftPatch = Partial<InquiryDraft>;
 export type InquiryPatchErrorCode = 'type' | 'option' | 'tooLong';
@@ -97,13 +104,9 @@ export function createInquiryDraft(language: InquiryLanguage): InquiryDraft {
   };
 }
 
-const DRAFT_KEYS = [
-  'name', 'email', 'phone', 'projectType', 'location', 'propertyStage', 'area',
-  'desiredScope', 'designStart', 'constructionStart', 'budget', 'requirements',
-  'plansUrl', 'language',
-] as const satisfies readonly (keyof InquiryDraft)[];
+const DRAFT_KEYS: readonly InquiryField[] = INQUIRY_SUBMISSION_FIELD_ORDER;
 const STRING_DRAFT_KEYS = DRAFT_KEYS.filter(
-  (key): key is Exclude<keyof InquiryDraft, 'desiredScope'> => key !== 'desiredScope',
+  (key): key is Exclude<InquiryField, 'desiredScope'> => key !== 'desiredScope',
 );
 const RECOMMENDED_FIELDS = [
   'name', 'email', 'projectType', 'location', 'propertyStage', 'area',
@@ -199,79 +202,26 @@ export function getMissingRecommendedInquiryFields(
   });
 }
 
-export type BriefField =
-  | 'name'
-  | 'email'
-  | 'projectType'
-  | 'location'
-  | 'stage'
-  | 'area'
-  | 'startDate'
-  | 'completionDate'
-  | 'scope'
-  | 'budget'
-  | 'priorities'
-  | 'plansUrl';
-
-// Field order used for focus management, the email body and the success
-// render-back. Keeping one source of order avoids drift between the three.
-export const BRIEF_FIELD_ORDER: BriefField[] = [
-  'name',
-  'email',
-  'projectType',
-  'location',
-  'stage',
-  'area',
-  'startDate',
-  'completionDate',
-  'scope',
-  'budget',
-  'priorities',
-  'plansUrl',
-];
-
 export type BriefErrorCode = 'required' | 'email' | 'url' | 'tooLong' | 'option';
 
-// Raw, untrusted input (all strings from FormData; scope is multi-value).
 export interface BriefRawInput {
-  name?: string;
-  email?: string;
-  projectType?: string;
-  location?: string;
-  stage?: string;
-  area?: string;
-  startDate?: string;
-  completionDate?: string;
-  scope?: string[];
-  budget?: string;
-  priorities?: string;
-  plansUrl?: string;
-  company?: string; // honeypot — must stay empty
-  ts?: string; // form-render timestamp (ms since epoch)
+  name?: string; email?: string; phone?: string; projectType?: string;
+  location?: string; propertyStage?: string; area?: string;
+  desiredScope?: string[]; designStart?: string; constructionStart?: string;
+  budget?: string; requirements?: string; plansUrl?: string; language?: string;
+  company?: string; ts?: string;
 }
 
-// Normalised, trimmed values with scope narrowed to known keys.
 export interface NormalizedBrief {
-  name: string;
-  email: string;
-  projectType: string;
-  location: string;
-  stage: string;
-  area: string;
-  startDate: string;
-  completionDate: string;
-  scope: string[];
-  budget: string;
-  priorities: string;
-  plansUrl: string;
+  name: string; email: string; phone: string; projectType: ProjectType | '';
+  location: string; propertyStage: PropertyStage | ''; area: string;
+  desiredScope: DesiredScopeItem[]; designStart: string; constructionStart: string;
+  budget: string; requirements: string; plansUrl: string; language: InquiryLanguage;
 }
 
 export interface BriefCheckResult {
-  // Honeypot filled or submitted implausibly fast. Reject silently.
   spam: boolean;
-  // field -> error code (empty when valid)
-  errors: Partial<Record<BriefField, BriefErrorCode>>;
-  // trimmed + narrowed values, safe to email / render back
+  errors: Partial<Record<InquiryField, BriefErrorCode>>;
   values: NormalizedBrief;
 }
 
@@ -292,91 +242,54 @@ function str(value: string | undefined): string {
   return (value ?? '').trim();
 }
 
-/**
- * Validate a raw brief submission. Pure and synchronous so it can be unit
- * tested and reused server-side. Separates spam signals (honeypot / timing)
- * from field-level errors, and returns normalised values either way.
- */
-export function validateBrief(
-  input: BriefRawInput,
-  now: number = Date.now()
-): BriefCheckResult {
-  // --- spam signals ------------------------------------------------------
-  const honeypot = str(input.company);
-  const ts = Number(input.ts);
-  const elapsed = now - ts;
-  // Only reject when the elapsed time is a plausible, non-negative, too-small
-  // value. Missing/negative (clock skew, cached page) values are allowed
-  // through so genuine users are never blocked by the timing heuristic.
-  const tooFast = Number.isFinite(ts) && elapsed >= 0 && elapsed < MIN_SUBMIT_MS;
-  const spam = honeypot.length > 0 || tooFast;
-
-  // --- normalise ---------------------------------------------------------
+export function validateBrief(input: BriefRawInput, now = Date.now()): BriefCheckResult {
+  const rawProjectType = str(input.projectType);
+  const rawPropertyStage = str(input.propertyStage);
+  const rawLanguage = str(input.language) || 'pl';
+  const rawScope = (input.desiredScope ?? []).map((value) => value.trim());
+  const projectType = PROJECT_TYPES.includes(rawProjectType as ProjectType)
+    ? rawProjectType as ProjectType : '';
+  const propertyStage = STAGES.includes(rawPropertyStage as PropertyStage)
+    ? rawPropertyStage as PropertyStage : '';
+  const language: InquiryLanguage = rawLanguage === 'en' ? 'en' : 'pl';
+  const validScope = rawScope.filter(
+    (value): value is DesiredScopeItem => SCOPE_ITEMS.includes(value as DesiredScopeItem),
+  );
   const values: NormalizedBrief = {
-    name: str(input.name),
-    email: str(input.email),
-    projectType: str(input.projectType),
-    location: str(input.location),
-    stage: str(input.stage),
-    area: str(input.area),
-    startDate: str(input.startDate),
-    completionDate: str(input.completionDate),
-    scope: (input.scope ?? [])
-      .map((v) => v.trim())
-      .filter((v): v is ScopeItem => (SCOPE_ITEMS as readonly string[]).includes(v)),
-    budget: str(input.budget),
-    priorities: str(input.priorities),
-    plansUrl: str(input.plansUrl),
+    name: str(input.name), email: str(input.email), phone: str(input.phone),
+    projectType, location: str(input.location), propertyStage, area: str(input.area),
+    desiredScope: canonicalScope(validScope), designStart: str(input.designStart),
+    constructionStart: str(input.constructionStart), budget: str(input.budget),
+    requirements: str(input.requirements), plansUrl: str(input.plansUrl), language,
   };
-
-  // --- field validation --------------------------------------------------
-  const errors: Partial<Record<BriefField, BriefErrorCode>> = {};
-
-  // name (required)
+  const errors: Partial<Record<InquiryField, BriefErrorCode>> = {};
   if (!values.name) errors.name = 'required';
   else if (values.name.length > LIMITS.name) errors.name = 'tooLong';
-
-  // email (required + shape)
   if (!values.email) errors.email = 'required';
   else if (values.email.length > LIMITS.email) errors.email = 'tooLong';
   else if (!EMAIL_RE.test(values.email)) errors.email = 'email';
-
-  // projectType (required + known option)
-  if (!values.projectType) errors.projectType = 'required';
-  else if (!(PROJECT_TYPES as readonly string[]).includes(values.projectType))
-    errors.projectType = 'option';
-
-  // location (optional, length)
-  if (values.location && values.location.length > LIMITS.location)
-    errors.location = 'tooLong';
-
-  // stage (optional, known option)
-  if (values.stage && !(STAGES as readonly string[]).includes(values.stage))
-    errors.stage = 'option';
-
-  // area (optional, length)
-  if (values.area && values.area.length > LIMITS.area) errors.area = 'tooLong';
-
-  // start / completion (optional, length)
-  if (values.startDate && values.startDate.length > LIMITS.startDate)
-    errors.startDate = 'tooLong';
-  if (values.completionDate && values.completionDate.length > LIMITS.completionDate)
-    errors.completionDate = 'tooLong';
-
-  // budget (optional, length)
-  if (values.budget && values.budget.length > LIMITS.budget) errors.budget = 'tooLong';
-
-  // priorities (optional, length)
-  if (values.priorities && values.priorities.length > LIMITS.priorities)
-    errors.priorities = 'tooLong';
-
-  // plansUrl (optional, length + http(s) shape)
-  if (values.plansUrl) {
-    if (values.plansUrl.length > LIMITS.plansUrl) errors.plansUrl = 'tooLong';
-    else if (!isValidHttpUrl(values.plansUrl)) errors.plansUrl = 'url';
+  if (!rawProjectType) errors.projectType = 'required';
+  else if (!projectType) errors.projectType = 'option';
+  if (values.phone.length > LIMITS.phone) errors.phone = 'tooLong';
+  if (values.location.length > LIMITS.location) errors.location = 'tooLong';
+  if (rawPropertyStage && !propertyStage) errors.propertyStage = 'option';
+  if (values.area.length > LIMITS.area) errors.area = 'tooLong';
+  if (rawScope.some((value) => !SCOPE_ITEMS.includes(value as DesiredScopeItem))) {
+    errors.desiredScope = 'option';
   }
-
-  return { spam, errors, values };
+  if (values.designStart.length > LIMITS.designStart) errors.designStart = 'tooLong';
+  if (values.constructionStart.length > LIMITS.constructionStart) {
+    errors.constructionStart = 'tooLong';
+  }
+  if (values.budget.length > LIMITS.budget) errors.budget = 'tooLong';
+  if (values.requirements.length > LIMITS.requirements) errors.requirements = 'tooLong';
+  if (values.plansUrl.length > LIMITS.plansUrl) errors.plansUrl = 'tooLong';
+  else if (values.plansUrl && !isValidHttpUrl(values.plansUrl)) errors.plansUrl = 'url';
+  if (rawLanguage !== 'pl' && rawLanguage !== 'en') errors.language = 'option';
+  const timestamp = Number(input.ts);
+  const elapsed = now - timestamp;
+  const tooFast = Number.isFinite(timestamp) && elapsed >= 0 && elapsed < MIN_SUBMIT_MS;
+  return { spam: str(input.company).length > 0 || tooFast, errors, values };
 }
 
 export function isBriefValid(result: BriefCheckResult): boolean {
@@ -386,14 +299,14 @@ export function isBriefValid(result: BriefCheckResult): boolean {
 // --- Canonical Polish labels for the email body -------------------------
 // The recipient is the studio (Polish). These are independent of the UI
 // locale so the delivered brief is deterministic and testable.
-export const PROJECT_TYPE_LABELS_PL: Record<string, string> = {
+export const PROJECT_TYPE_LABELS_PL: Record<ProjectType, string> = {
   mieszkanie: 'mieszkanie',
   dom: 'dom',
   komercyjne: 'wnętrze komercyjne',
   inne: 'inne',
 };
 
-export const STAGE_LABELS_PL: Record<string, string> = {
+export const STAGE_LABELS_PL: Record<PropertyStage, string> = {
   zakup: 'planuję zakup',
   'przed-zmianami': 'przed zmianami lokatorskimi',
   'w-budowie': 'w budowie',
@@ -401,7 +314,7 @@ export const STAGE_LABELS_PL: Record<string, string> = {
   remont: 'remont istniejącego wnętrza',
 };
 
-export const SCOPE_LABELS_PL: Record<string, string> = {
+export const SCOPE_LABELS_PL: Record<DesiredScopeItem, string> = {
   'uklad-funkcjonalny': 'układ funkcjonalny',
   'projekt-koncepcyjny': 'projekt koncepcyjny',
   'dokumentacja-wykonawcza': 'dokumentacja wykonawcza',
@@ -410,48 +323,48 @@ export const SCOPE_LABELS_PL: Record<string, string> = {
   'nadzor-autorski': 'nadzór autorski',
 };
 
-const FIELD_LABELS_PL: Record<BriefField, string> = {
+const FIELD_LABELS_PL: Record<InquiryField, string> = {
   name: 'Imię',
   email: 'E-mail',
+  phone: 'Telefon',
   projectType: 'Typ projektu',
   location: 'Lokalizacja',
-  stage: 'Etap projektu',
+  propertyStage: 'Etap nieruchomości',
   area: 'Przybliżona powierzchnia (m²)',
-  startDate: 'Pożądany start',
-  completionDate: 'Pożądane zakończenie',
-  scope: 'Oczekiwany zakres',
+  desiredScope: 'Oczekiwany zakres',
+  designStart: 'Pożądany start projektu',
+  constructionStart: 'Planowany start realizacji',
   budget: 'Przybliżony budżet realizacji',
-  priorities: 'Priorytety (maks. 3)',
+  requirements: 'Wymagania i priorytety',
   plansUrl: 'Link do rzutów / zdjęć',
+  language: 'Język korespondencji',
 };
 
-const EMPTY = '—';
-
-function displayValue(field: BriefField, values: NormalizedBrief): string {
-  switch (field) {
-    case 'projectType':
-      return PROJECT_TYPE_LABELS_PL[values.projectType] ?? values.projectType ?? EMPTY;
-    case 'stage':
-      return values.stage ? (STAGE_LABELS_PL[values.stage] ?? values.stage) : EMPTY;
-    case 'scope':
-      return values.scope.length
-        ? values.scope.map((k) => SCOPE_LABELS_PL[k] ?? k).join(', ')
-        : EMPTY;
-    default: {
-      const v = values[field];
-      return typeof v === 'string' && v.length ? v : EMPTY;
-    }
+function displayValue(field: InquiryField, values: NormalizedBrief): string {
+  if (field === 'projectType') {
+    return values.projectType ? PROJECT_TYPE_LABELS_PL[values.projectType] : '—';
   }
+  if (field === 'propertyStage') {
+    return values.propertyStage ? STAGE_LABELS_PL[values.propertyStage] : '—';
+  }
+  if (field === 'desiredScope') {
+    return values.desiredScope.length
+      ? values.desiredScope.map((key) => SCOPE_LABELS_PL[key]).join(', ')
+      : '—';
+  }
+  if (field === 'language') return values.language === 'en' ? 'angielski' : 'polski';
+  const value = values[field] as string;
+  return value || '—';
 }
 
 export function buildBriefSubject(values: NormalizedBrief): string {
-  const type = PROJECT_TYPE_LABELS_PL[values.projectType] ?? values.projectType;
+  const type = values.projectType ? PROJECT_TYPE_LABELS_PL[values.projectType] : '';
   return `Brief projektowy — ${type || 'zapytanie'}`;
 }
 
 // Plain-text, structured body listing every field in a stable order.
 export function buildBriefText(values: NormalizedBrief): string {
-  const lines = BRIEF_FIELD_ORDER.map(
+  const lines = INQUIRY_SUBMISSION_FIELD_ORDER.map(
     (field) => `${FIELD_LABELS_PL[field]}: ${displayValue(field, values)}`
   );
   return `${buildBriefSubject(values)}\n\n${lines.join('\n')}\n`;
