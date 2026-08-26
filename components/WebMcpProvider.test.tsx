@@ -41,6 +41,9 @@ describe('kool_webmcp_debug', () => {
     const signal = new AbortController().signal;
 
     expect(tool.name).toBe('kool_webmcp_debug');
+    expect(tool.description).toBe(
+      'Read public diagnostic state for the current kool studio page.',
+    );
     expect(tool.annotations).toEqual({ readOnlyHint: true });
     expect(tool.inputSchema).toEqual({
       type: 'object',
@@ -90,5 +93,17 @@ describe('WebMcpProvider', () => {
     vi.stubEnv('NEXT_PUBLIC_WEBMCP_DEBUG', 'false');
     render(<WebMcpProvider locale="pl" />);
     expect(registerWebMcpTool).not.toHaveBeenCalled();
+  });
+
+  it('registers the debug tool in production when both public gates are enabled', () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    vi.stubEnv('NEXT_PUBLIC_WEBMCP_ENABLED', 'true');
+    vi.stubEnv('NEXT_PUBLIC_WEBMCP_DEBUG', 'true');
+    const view = render(<WebMcpProvider locale="pl" />);
+
+    expect(registerWebMcpTool).toHaveBeenCalledOnce();
+    expect(vi.mocked(registerWebMcpTool).mock.calls[0][0].name).toBe('kool_webmcp_debug');
+    view.unmount();
+    expect(unregister).toHaveBeenCalledOnce();
   });
 });
