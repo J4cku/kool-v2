@@ -1,4 +1,4 @@
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { createElement, type ComponentProps, type ComponentType, type ReactNode } from 'react';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import BriefModal from '@/components/kontakt/BriefModal';
@@ -165,4 +165,102 @@ it('uses the original timestamp for an immediate submit after close/reopen', () 
   }, NOW);
   expect(result.spam).toBe(false);
   expect(navigationMock).not.toHaveBeenCalled();
+});
+
+it('focuses the close button initially', async () => {
+  render(<BriefModal />);
+  fireEvent.click(screen.getByRole('button', { name: /openCta/ }));
+  await waitFor(() => expect(document.activeElement)
+    .toBe(screen.getByRole('button', { name: /close/ })));
+});
+
+it('wraps Tab from the last form control to close', () => {
+  render(<BriefModal />);
+  fireEvent.click(screen.getByRole('button', { name: /openCta/ }));
+  const last = screen.getByRole('button', { name: 'probe-submit' });
+  last.focus();
+  fireEvent.keyDown(window, { key: 'Tab' });
+  expect(document.activeElement).toBe(screen.getByRole('button', { name: /close/ }));
+});
+
+it('wraps Shift-Tab from close to the last form control', () => {
+  render(<BriefModal />);
+  fireEvent.click(screen.getByRole('button', { name: /openCta/ }));
+  const closeButton = screen.getByRole('button', { name: /close/ });
+  closeButton.focus();
+  fireEvent.keyDown(window, { key: 'Tab', shiftKey: true });
+  expect(document.activeElement).toBe(screen.getByRole('button', { name: 'probe-submit' }));
+});
+
+it('moves Tab from every programmatic result panel to the first sequential control', () => {
+  for (const mode of ['success', 'error', 'fallback'] as const) {
+    const view = render(<BriefModal />);
+    fireEvent.click(screen.getByRole('button', { name: /openCta/ }));
+    formProbe.mode = mode;
+    view.rerender(<BriefModal />);
+    const panel = screen.getByTestId(`probe-${mode}`);
+    panel.focus();
+    fireEvent.keyDown(window, { key: 'Tab' });
+    expect(document.activeElement).toBe(screen.getByRole('button', { name: /close/ }));
+    view.unmount();
+  }
+});
+
+it('moves Shift-Tab from every programmatic result panel to its last sequential control', () => {
+  for (const mode of ['success', 'error', 'fallback'] as const) {
+    const view = render(<BriefModal />);
+    fireEvent.click(screen.getByRole('button', { name: /openCta/ }));
+    formProbe.mode = mode;
+    view.rerender(<BriefModal />);
+    const panel = screen.getByTestId(`probe-${mode}`);
+    panel.focus();
+    fireEvent.keyDown(window, { key: 'Tab', shiftKey: true });
+    expect(document.activeElement).toBe(screen.getByRole('link', { name: `${mode}-link` }));
+    view.unmount();
+  }
+});
+
+it('closes by Escape and by the backdrop itself', async () => {
+  render(<BriefModal />);
+  const opener = screen.getByRole('button', { name: /openCta/ });
+  fireEvent.click(opener);
+  fireEvent.keyDown(window, { key: 'Escape' });
+  await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+  fireEvent.click(opener);
+  const dialog = screen.getByRole('dialog');
+  fireEvent.mouseDown(dialog);
+  await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+});
+
+it('restores exact background state before restoring opener focus', async () => {
+  const background = document.createElement('main');
+  background.inert = false;
+  background.setAttribute('aria-hidden', 'false');
+  document.body.appendChild(background);
+  render(<BriefModal />);
+  const opener = screen.getByRole('button', { name: /openCta/ });
+  fireEvent.click(opener);
+  expect(background.inert).toBe(true);
+  expect(background.getAttribute('aria-hidden')).toBe('true');
+  fireEvent.click(screen.getByRole('button', { name: /close/ }));
+  await waitFor(() => expect(document.activeElement).toBe(opener));
+  expect(background.inert).toBe(false);
+  expect(background.getAttribute('aria-hidden')).toBe('false');
+  background.remove();
+});
+
+it('restores pre-existing inert, absent aria-hidden, and overflow on unmount', () => {
+  const background = document.createElement('aside');
+  background.inert = true;
+  document.body.appendChild(background);
+  document.documentElement.style.overflow = 'clip';
+  const view = render(<BriefModal />);
+  fireEvent.click(screen.getByRole('button', { name: /openCta/ }));
+  expect(document.documentElement.style.overflow).toBe('hidden');
+  expect(background.getAttribute('aria-hidden')).toBe('true');
+  view.unmount();
+  expect(background.inert).toBe(true);
+  expect(background.hasAttribute('aria-hidden')).toBe(false);
+  expect(document.documentElement.style.overflow).toBe('clip');
+  background.remove();
 });

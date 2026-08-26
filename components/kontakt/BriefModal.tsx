@@ -37,6 +37,61 @@ function navigateBrowserToMailto(href: string) {
   window.location.href = href;
 }
 
+const FOCUSABLE_SELECTOR = [
+  'a[href]', 'button:not([disabled])',
+  'input:not([disabled]):not([type="hidden"])',
+  'select:not([disabled])', 'textarea:not([disabled])',
+  '[tabindex]:not([tabindex="-1"])',
+].join(',');
+
+function focusables(container: HTMLElement): HTMLElement[] {
+  return Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter(
+    (element) => {
+      const style = window.getComputedStyle(element);
+      return !element.hidden
+        && element.getAttribute('aria-hidden') !== 'true'
+        && style.display !== 'none'
+        && style.visibility !== 'hidden';
+    },
+  );
+}
+
+interface SuppressedState {
+  element: HTMLElement;
+  inert: boolean;
+  ariaHidden: string | null;
+}
+
+function suppressOutside(dialog: HTMLElement): () => void {
+  const seen = new Set<HTMLElement>();
+  const states: SuppressedState[] = [];
+  let node: HTMLElement = dialog;
+  while (node.parentElement) {
+    const parent = node.parentElement;
+    for (const sibling of Array.from(parent.children)) {
+      if (!(sibling instanceof HTMLElement)) continue;
+      if (sibling === node || sibling.contains(dialog) || seen.has(sibling)) continue;
+      seen.add(sibling);
+      states.push({
+        element: sibling,
+        inert: sibling.inert,
+        ariaHidden: sibling.getAttribute('aria-hidden'),
+      });
+      sibling.inert = true;
+      sibling.setAttribute('aria-hidden', 'true');
+    }
+    node = parent;
+    if (parent === document.body) break;
+  }
+  return () => {
+    for (const state of states.reverse()) {
+      state.element.inert = state.inert;
+      if (state.ariaHidden === null) state.element.removeAttribute('aria-hidden');
+      else state.element.setAttribute('aria-hidden', state.ariaHidden);
+    }
+  };
+}
+
 export default function BriefModal({ navigateToMailto }: BriefModalProps = {}) {
   const t = useTranslations('brief');
   const reduceMotion = useReducedMotion();
@@ -53,6 +108,8 @@ export default function BriefModal({ navigateToMailto }: BriefModalProps = {}) {
   const handledResponseRef = useRef<number | null>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const pendingRestoreRef = useRef<HTMLElement | null>(null);
 
   const patchDraft = useCallback((patch: InquiryDraftPatch) => {
     setDraft((current) => {
@@ -85,8 +142,8 @@ export default function BriefModal({ navigateToMailto }: BriefModalProps = {}) {
   }, [state, resetAfterDelivery, navigateToMailto]);
 
   const close = useCallback(() => {
+    pendingRestoreRef.current = triggerRef.current;
     setOpen(false);
-    triggerRef.current?.focus();
   }, []);
 
   const show = useCallback(() => {
@@ -108,18 +165,50 @@ export default function BriefModal({ navigateToMailto }: BriefModalProps = {}) {
   }, [show]);
 
   useEffect(() => {
-    if (!open) return;
+    if (open || !pendingRestoreRef.current) return;
+    const target = pendingRestoreRef.current;
+    pendingRestoreRef.current = null;
+    const timeout = window.setTimeout(() => target.focus(), 0);
+    return () => window.clearTimeout(timeout);
+  }, [open]);
+
+  useEffect(() => {
+    if (!open || !dialogRef.current) return;
+    const dialog = dialogRef.current;
     closeRef.current?.focus();
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') close();
-    };
-    window.addEventListener('keydown', onKey);
-    /* Scroll lock while the dialog is up. */
+    const restoreOutside = suppressOutside(dialog);
     const previousOverflow = document.documentElement.style.overflow;
     document.documentElement.style.overflow = 'hidden';
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        close();
+        return;
+      }
+      if (event.key !== 'Tab') return;
+      const available = focusables(dialog);
+      if (!available.length) {
+        event.preventDefault();
+        dialog.focus();
+        return;
+      }
+      const first = available[0];
+      const last = available[available.length - 1];
+      const active = document.activeElement as HTMLElement | null;
+      const activeIndex = active ? available.indexOf(active) : -1;
+      if (event.shiftKey && activeIndex <= 0) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && (activeIndex === -1 || activeIndex === available.length - 1)) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
     return () => {
-      window.removeEventListener('keydown', onKey);
+      window.removeEventListener('keydown', onKeyDown);
       document.documentElement.style.overflow = previousOverflow;
+      restoreOutside();
     };
   }, [open, close]);
 
@@ -137,9 +226,11 @@ export default function BriefModal({ navigateToMailto }: BriefModalProps = {}) {
       <AnimatePresence>
         {open && (
           <motion.div
+            ref={dialogRef}
             role="dialog"
             aria-modal="true"
             aria-label={t('heading')}
+            tabIndex={-1}
             initial={reduceMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
