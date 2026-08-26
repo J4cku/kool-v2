@@ -1,4 +1,16 @@
-export type WebMcpTool = WebMCP.ModelContextTool;
+export type JsonValue =
+  | null
+  | boolean
+  | number
+  | string
+  | JsonValue[]
+  | { [key: string]: JsonValue };
+
+export type WebMcpTool = Omit<WebMCP.ModelContextTool, 'execute'> & {
+  execute: (
+    ...args: Parameters<WebMCP.ToolExecuteCallback>
+  ) => WebMCP.MaybePromise<JsonValue>;
+};
 
 export interface RegisterWebMcpToolOptions {
   context?: WebMCP.ModelContext;
@@ -16,7 +28,11 @@ export function registerWebMcpTool(
   options: RegisterWebMcpToolOptions = {},
 ): () => void {
   const modelContext = options.context ?? currentModelContext();
-  if (!modelContext || activeRegistrations.has(tool.name)) return () => {};
+  if (
+    !modelContext ||
+    typeof modelContext.registerTool !== 'function' ||
+    activeRegistrations.has(tool.name)
+  ) return () => {};
 
   const controller = new AbortController();
   activeRegistrations.set(tool.name, controller);

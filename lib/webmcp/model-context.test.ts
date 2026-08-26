@@ -17,6 +17,13 @@ function tool(name = 'test_tool'): WebMcpTool {
   };
 }
 
+const bigIntResultTool: WebMcpTool = {
+  ...tool('bigint_result_tool'),
+  // @ts-expect-error BigInt is not a JSON-serializable tool result.
+  execute: async () => BigInt(1),
+};
+void bigIntResultTool;
+
 function context(registerTool = vi.fn().mockResolvedValue(undefined)) {
   return {
     registerTool,
@@ -31,6 +38,15 @@ afterEach(() => {
 describe('registerWebMcpTool', () => {
   it('does nothing when the browser has no model context', () => {
     const cleanup = registerWebMcpTool(tool(), { context: undefined });
+    expect(cleanup).toBeTypeOf('function');
+    cleanup();
+  });
+
+  it('does nothing when the model context has no callable registerTool', () => {
+    const cleanup = registerWebMcpTool(tool('partial_context_tool'), {
+      context: {} as WebMCP.ModelContext,
+    });
+
     expect(cleanup).toBeTypeOf('function');
     cleanup();
   });
