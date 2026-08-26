@@ -9,6 +9,7 @@ import { locales, type Locale } from '@/i18n/request';
 import { BASE_URL, INSTAGRAM_URL } from '@/lib/site';
 import { jsonLdScript } from '@/lib/metadata';
 import PageTransition from '@/components/PageTransition';
+import WebMcpProvider from '@/components/WebMcpProvider';
 import '../globals.css';
 
 const poppins = Poppins({
@@ -127,6 +128,7 @@ export default async function LocaleLayout({
       </head>
       <body className="font-sans bg-beige text-dark antialiased">
         <NextIntlClientProvider locale={locale} messages={messages}>
+          <WebMcpProvider locale={locale as Locale} />
           <PageTransition>{children}</PageTransition>
         </NextIntlClientProvider>
         {isVercelDeployment && (
