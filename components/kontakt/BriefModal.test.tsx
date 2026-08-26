@@ -180,9 +180,16 @@ it('clears the draft after confirmed delivery and tracks the response once witho
   expect(trackMock.mock.calls.filter(([event]) => event === 'contact_form_submitted'))
     .toEqual([['contact_form_submitted']]);
 
+  actionHarness.state = { status: 'success', submittedAt: 101 };
   view.rerender(<BriefModal navigateToMailto={navigationMock} />);
   expect(trackMock.mock.calls.filter(([event]) => event === 'contact_form_submitted'))
     .toHaveLength(1);
+
+  actionHarness.state = { status: 'success', submittedAt: 103 };
+  view.rerender(<BriefModal navigateToMailto={navigationMock} />);
+  await waitFor(() => expect(
+    trackMock.mock.calls.filter(([event]) => event === 'contact_form_submitted'),
+  ).toEqual([['contact_form_submitted'], ['contact_form_submitted']]));
   expect(navigationMock).not.toHaveBeenCalled();
 });
 
@@ -204,8 +211,27 @@ it('retains the draft for fallback and performs one argument-free analytic and o
   expect(trackMock.mock.calls.filter(([event]) => event === 'contact_form_mailto_fallback'))
     .toEqual([['contact_form_mailto_fallback']]);
 
+  actionHarness.state = {
+    status: 'fallback',
+    fallback: { reason: 'unconfigured', mailtoHref: href },
+    submittedAt: 102,
+  };
   view.rerender(<BriefModal navigateToMailto={navigationMock} />);
   expect(navigationMock).toHaveBeenCalledOnce();
+  expect(trackMock.mock.calls.filter(([event]) => event === 'contact_form_mailto_fallback'))
+    .toEqual([['contact_form_mailto_fallback']]);
+  expect(formProbe.props?.draft.name).toBe('Ola');
+
+  actionHarness.state = {
+    status: 'fallback',
+    fallback: { reason: 'unconfigured', mailtoHref: href },
+    submittedAt: 104,
+  };
+  view.rerender(<BriefModal navigateToMailto={navigationMock} />);
+  await waitFor(() => expect(navigationMock).toHaveBeenCalledTimes(2));
+  expect(navigationMock.mock.calls).toEqual([[href], [href]]);
+  expect(trackMock.mock.calls.filter(([event]) => event === 'contact_form_mailto_fallback'))
+    .toEqual([['contact_form_mailto_fallback'], ['contact_form_mailto_fallback']]);
   expect(formProbe.props?.draft.name).toBe('Ola');
 });
 
