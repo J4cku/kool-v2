@@ -3,6 +3,7 @@ import { createElement, useState, type ReactNode } from 'react';
 import { NextIntlClientProvider } from 'next-intl';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import BriefForm from '@/components/kontakt/BriefForm';
+import { initialBriefState } from '@/app/[locale]/kontakt/brief-state';
 import { applyInquiryDraftPatch, createInquiryDraft } from '@/lib/brief';
 import plMessages from '@/messages/pl.json';
 
@@ -36,7 +37,9 @@ function BriefFormHarness() {
         return result.ok ? result.draft : current;
       })}
       onStarted={() => undefined}
-      onDelivered={() => undefined}
+      state={initialBriefState}
+      formAction={() => undefined}
+      isPending={false}
     />
   );
 }

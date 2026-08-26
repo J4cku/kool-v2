@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  useActionState,
   useCallback,
   useEffect,
   useRef,
@@ -11,6 +12,11 @@ import { useLocale, useTranslations } from 'next-intl';
 import BriefForm from './BriefForm';
 import { track } from '@/lib/analytics';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { submitBrief } from '@/app/[locale]/kontakt/actions';
+import {
+  initialBriefState,
+  type BriefFormState,
+} from '@/app/[locale]/kontakt/brief-state';
 import {
   applyInquiryDraftPatch,
   createInquiryDraft,
@@ -27,6 +33,10 @@ export interface BriefModalProps {
   navigateToMailto?: (href: string) => void;
 }
 
+function navigateBrowserToMailto(href: string) {
+  window.location.href = href;
+}
+
 export default function BriefModal({ navigateToMailto }: BriefModalProps = {}) {
   const t = useTranslations('brief');
   const reduceMotion = useReducedMotion();
@@ -35,7 +45,12 @@ export default function BriefModal({ navigateToMailto }: BriefModalProps = {}) {
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState<InquiryDraft>(() => createInquiryDraft(language));
   const [renderedAt, setRenderedAt] = useState<number | null>(null);
+  const [state, formAction, isPending] = useActionState<BriefFormState, FormData>(
+    submitBrief,
+    initialBriefState,
+  );
   const startedRef = useRef(false);
+  const handledResponseRef = useRef<number | null>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
 
@@ -55,6 +70,19 @@ export default function BriefModal({ navigateToMailto }: BriefModalProps = {}) {
     setRenderedAt(null);
     startedRef.current = false;
   }, [language]);
+
+  useEffect(() => {
+    if (state.submittedAt === undefined || handledResponseRef.current === state.submittedAt) return;
+    handledResponseRef.current = state.submittedAt;
+    if (state.status === 'success') {
+      track('contact_form_submitted');
+      queueMicrotask(resetAfterDelivery);
+    } else if (state.status === 'fallback' && state.fallback) {
+      track('contact_form_mailto_fallback');
+      const openMailClient = navigateToMailto ?? navigateBrowserToMailto;
+      openMailClient(state.fallback.mailtoHref);
+    }
+  }, [state, resetAfterDelivery, navigateToMailto]);
 
   const close = useCallback(() => {
     setOpen(false);
@@ -151,8 +179,9 @@ export default function BriefModal({ navigateToMailto }: BriefModalProps = {}) {
                 renderedAt={renderedAt}
                 onDraftPatch={patchDraft}
                 onStarted={markStarted}
-                onDelivered={resetAfterDelivery}
-                navigateToMailto={navigateToMailto}
+                state={state}
+                formAction={formAction}
+                isPending={isPending}
               />
             </motion.div>
           </motion.div>

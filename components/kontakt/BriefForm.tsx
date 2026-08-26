@@ -1,15 +1,10 @@
 'use client';
 
-import { useActionState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
-import { track } from '@/lib/analytics';
-import { submitBrief } from '@/app/[locale]/kontakt/actions';
-import {
-  initialBriefState,
-  type BriefFormState,
-} from '@/app/[locale]/kontakt/brief-state';
+import type { BriefFormState } from '@/app/[locale]/kontakt/brief-state';
 import {
   PROJECT_TYPES,
   STAGES,
@@ -38,12 +33,9 @@ export interface BriefFormProps {
   renderedAt: number | null;
   onDraftPatch: (patch: InquiryDraftPatch) => void;
   onStarted: () => void;
-  onDelivered: () => void;
-  navigateToMailto?: (href: string) => void;
-}
-
-function navigateBrowserToMailto(href: string) {
-  window.location.href = href;
+  state: BriefFormState;
+  formAction: (payload: FormData) => void;
+  isPending: boolean;
 }
 
 export default function BriefForm({
@@ -51,21 +43,17 @@ export default function BriefForm({
   renderedAt,
   onDraftPatch,
   onStarted,
-  onDelivered,
-  navigateToMailto,
+  state,
+  formAction,
+  isPending,
 }: BriefFormProps) {
   const t = useTranslations('brief');
   const reduceMotion = useReducedMotion();
-  const [state, formAction, isPending] = useActionState<BriefFormState, FormData>(
-    submitBrief,
-    initialBriefState
-  );
 
   const resultRef = useRef<HTMLDivElement>(null);
   const formErrorRef = useRef<HTMLParagraphElement>(null);
   const invalidSummaryRef = useRef<HTMLParagraphElement>(null);
   const focusedResponseRef = useRef<number | null>(null);
-  const handledResponseRef = useRef<number | null>(null);
 
   const handleMeaningfulInteraction = (event: React.SyntheticEvent) => {
     const name = (event.target as HTMLElement & { name?: string }).name;
@@ -93,19 +81,6 @@ export default function BriefForm({
       resultRef.current?.focus();
     }
   }, [state]);
-
-  useEffect(() => {
-    if (state.submittedAt === undefined || handledResponseRef.current === state.submittedAt) return;
-    handledResponseRef.current = state.submittedAt;
-    if (state.status === 'success') {
-      track('contact_form_submitted');
-      onDelivered();
-    } else if (state.status === 'fallback' && state.fallback) {
-      track('contact_form_mailto_fallback');
-      const openMailClient = navigateToMailto ?? navigateBrowserToMailto;
-      openMailClient(state.fallback.mailtoHref);
-    }
-  }, [state, onDelivered, navigateToMailto]);
 
   const describedBy = (field: InquiryField, hasHelp: boolean): string | undefined => {
     const ids: string[] = [];

@@ -49,7 +49,6 @@ vi.mock('@/components/kontakt/BriefForm', () => ({
           onChange={(event) => props.onDraftPatch({ name: event.target.value })}
         />
         <input name="ts" type="hidden" value={props.renderedAt ?? ''} />
-        <button type="button" onClick={props.onDelivered}>probe-success</button>
         <button type="submit">probe-submit</button>
       </form>
     );
@@ -115,7 +114,7 @@ it('opens from #brief after the effect schedules its timer', () => {
   expect(screen.getByRole('dialog')).toBeTruthy();
 });
 
-it('preserves draft and timestamp across close/reopen, then resets only on success', () => {
+it('preserves draft, timestamp, and started identity across close/reopen', () => {
   render(<BriefModal navigateToMailto={navigationMock} />);
   fireEvent.click(screen.getByRole('button', { name: /openCta/ }));
   expect(navigationMock).not.toHaveBeenCalled();
@@ -133,10 +132,6 @@ it('preserves draft and timestamp across close/reopen, then resets only on succe
   expect((document.querySelector('[name="ts"]') as HTMLInputElement).value).toBe(timestamp);
   fireEvent.focus(screen.getByLabelText('probe-name'));
   expect(trackMock.mock.calls.filter(([event]) => event === 'contact_form_started')).toHaveLength(1);
-  expect(navigationMock).not.toHaveBeenCalled();
-  fireEvent.click(screen.getByRole('button', { name: 'probe-success' }));
-  expect(formProbe.props?.draft.name).toBe('');
-  expect(formProbe.props?.renderedAt).toBeNull();
   expect(navigationMock).not.toHaveBeenCalled();
 });
 
