@@ -209,8 +209,6 @@ export default function BriefForm() {
         </div>
         {/* Anti-spam render timestamp (populated on the client). */}
         <input type="hidden" name="ts" ref={tsRef} />
-        {/* Locale for the confirmation-receipt language. */}
-        <input type="hidden" name="language" value={locale === 'en' ? 'en' : 'pl'} />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
           {/* name */}
@@ -511,6 +509,8 @@ export default function BriefForm() {
             />
           </Field>
         </div>
+        {/* Locale for the confirmation-receipt language. */}
+        <input type="hidden" name="language" value={locale === 'en' ? 'en' : 'pl'} />
 
         {/* Live status region: pending / invalid summary / generic error. */}
         <div aria-live="polite" aria-atomic="true" className="mt-8">
