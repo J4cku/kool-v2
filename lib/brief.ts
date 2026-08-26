@@ -34,6 +34,9 @@ export const SCOPE_ITEMS = [
 ] as const;
 
 export type ProjectType = (typeof PROJECT_TYPES)[number];
+export type PropertyStage = (typeof STAGES)[number];
+export type DesiredScopeItem = (typeof SCOPE_ITEMS)[number];
+export type InquiryLanguage = 'pl' | 'en';
 export type Stage = (typeof STAGES)[number];
 export type ScopeItem = (typeof SCOPE_ITEMS)[number];
 
@@ -42,14 +45,159 @@ export type ScopeItem = (typeof SCOPE_ITEMS)[number];
 export const LIMITS = {
   name: 120,
   email: 254,
+  phone: 40,
   location: 160,
   area: 40,
+  designStart: 60,
+  constructionStart: 60,
+  requirements: 1000,
   startDate: 60,
   completionDate: 60,
   budget: 80,
   priorities: 1000,
   plansUrl: 600,
 } as const;
+
+export interface InquiryDraft {
+  name: string;
+  email: string;
+  phone: string;
+  projectType: ProjectType | '';
+  location: string;
+  propertyStage: PropertyStage | '';
+  area: string;
+  desiredScope: DesiredScopeItem[];
+  designStart: string;
+  constructionStart: string;
+  budget: string;
+  requirements: string;
+  plansUrl: string;
+  language: InquiryLanguage;
+}
+
+export type InquiryDraftPatch = Partial<InquiryDraft>;
+export type InquiryPatchErrorCode = 'type' | 'option' | 'tooLong';
+export type InquiryPatchResult =
+  | { ok: true; draft: InquiryDraft }
+  | { ok: false; errors: Partial<Record<keyof InquiryDraft, InquiryPatchErrorCode>> };
+export type InquiryPatchParseResult =
+  | { ok: true; patch: InquiryDraftPatch }
+  | {
+      ok: false;
+      rootError?: 'type';
+      errors: Partial<Record<keyof InquiryDraft, InquiryPatchErrorCode>>;
+      unknownKeys: string[];
+    };
+
+export function createInquiryDraft(language: InquiryLanguage): InquiryDraft {
+  return {
+    name: '', email: '', phone: '', projectType: '', location: '',
+    propertyStage: '', area: '', desiredScope: [], designStart: '',
+    constructionStart: '', budget: '', requirements: '', plansUrl: '', language,
+  };
+}
+
+const DRAFT_KEYS = [
+  'name', 'email', 'phone', 'projectType', 'location', 'propertyStage', 'area',
+  'desiredScope', 'designStart', 'constructionStart', 'budget', 'requirements',
+  'plansUrl', 'language',
+] as const satisfies readonly (keyof InquiryDraft)[];
+const STRING_DRAFT_KEYS = DRAFT_KEYS.filter(
+  (key): key is Exclude<keyof InquiryDraft, 'desiredScope'> => key !== 'desiredScope',
+);
+const RECOMMENDED_FIELDS = [
+  'name', 'email', 'projectType', 'location', 'propertyStage', 'area',
+  'desiredScope', 'designStart', 'constructionStart', 'budget', 'requirements',
+] as const;
+export type InquiryRecommendedField = (typeof RECOMMENDED_FIELDS)[number];
+
+function canonicalScope(values: readonly DesiredScopeItem[]): DesiredScopeItem[] {
+  const supplied = new Set(values);
+  return SCOPE_ITEMS.filter((key) => supplied.has(key));
+}
+
+export function parseInquiryDraftPatch(input: unknown): InquiryPatchParseResult {
+  if (typeof input !== 'object' || input === null || Array.isArray(input)) {
+    return { ok: false, rootError: 'type', errors: {}, unknownKeys: [] };
+  }
+  const prototype = Object.getPrototypeOf(input);
+  if (prototype !== Object.prototype && prototype !== null) {
+    return { ok: false, rootError: 'type', errors: {}, unknownKeys: [] };
+  }
+  const record = input as Record<string, unknown>;
+  const unknownKeys = Object.keys(record).filter(
+    (key) => !(DRAFT_KEYS as readonly string[]).includes(key),
+  );
+  const errors: Partial<Record<keyof InquiryDraft, InquiryPatchErrorCode>> = {};
+  const patch: InquiryDraftPatch = {};
+  for (const key of DRAFT_KEYS) {
+    if (!Object.prototype.hasOwnProperty.call(record, key)) continue;
+    const value = record[key];
+    if (key === 'desiredScope') {
+      if (!Array.isArray(value) || value.some((item) => typeof item !== 'string')) {
+        errors.desiredScope = 'type';
+      } else {
+        patch.desiredScope = value as DesiredScopeItem[];
+      }
+    } else if (typeof value !== 'string') {
+      errors[key] = 'type';
+    } else {
+      patch[key] = value as never;
+    }
+  }
+  return unknownKeys.length || Object.keys(errors).length
+    ? { ok: false, errors, unknownKeys }
+    : { ok: true, patch };
+}
+
+export function applyInquiryDraftPatch(
+  current: InquiryDraft,
+  patch: InquiryDraftPatch,
+): InquiryPatchResult {
+  const errors: Partial<Record<keyof InquiryDraft, InquiryPatchErrorCode>> = {};
+  for (const key of STRING_DRAFT_KEYS) {
+    const value = patch[key];
+    if (value === undefined) continue;
+    if (key === 'projectType' && value !== '' && !PROJECT_TYPES.includes(value as ProjectType)) {
+      errors.projectType = 'option';
+    } else if (key === 'propertyStage' && value !== '' && !STAGES.includes(value as PropertyStage)) {
+      errors.propertyStage = 'option';
+    } else if (key === 'language' && value !== 'pl' && value !== 'en') {
+      errors.language = 'option';
+    } else if (key in LIMITS && value.length > LIMITS[key as keyof typeof LIMITS]) {
+      errors[key] = 'tooLong';
+    }
+  }
+  if (
+    patch.desiredScope !== undefined
+    && patch.desiredScope.some((item) => !SCOPE_ITEMS.includes(item))
+  ) {
+    errors.desiredScope = 'option';
+  }
+  if (Object.keys(errors).length) return { ok: false, errors };
+  const supplied = Object.fromEntries(
+    Object.entries(patch).filter(([, value]) => value !== undefined),
+  );
+  return {
+    ok: true,
+    draft: {
+      ...current,
+      ...supplied,
+      desiredScope: patch.desiredScope === undefined
+        ? current.desiredScope
+        : canonicalScope(patch.desiredScope),
+    } as InquiryDraft,
+  };
+}
+
+export function getMissingRecommendedInquiryFields(
+  draft: InquiryDraft,
+): InquiryRecommendedField[] {
+  return RECOMMENDED_FIELDS.filter((field) => {
+    const value = draft[field];
+    return Array.isArray(value) ? value.length === 0 : value.trim().length === 0;
+  });
+}
 
 export type BriefField =
   | 'name'
