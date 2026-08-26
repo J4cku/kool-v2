@@ -637,6 +637,54 @@
     "openCta": "tell us about your project",
     "close": "Close the form"
   },
+  "webmcp": {
+    "projectSearch": {
+      "title": "Find kool studio projects",
+      "description": "Search published kool studio projects by category, type, location, floor area, and curated objective features. Returns portfolio facts only; it does not assess style, budget, availability, or project acceptance.",
+      "properties": {
+        "category": "Project category.",
+        "projectType": "Type of space designed.",
+        "location": "Exact city or town (1–80 characters); matching ignores case and Polish diacritics.",
+        "targetAreaM2": "Target floor area in square metres; affects ordering but does not exclude results.",
+        "features": "Required curated objective features; a result must contain all of them.",
+        "limit": "Maximum number of projects to return, from 1 to 5."
+      },
+      "categories": {
+        "residential": "residential",
+        "commercial": "commercial"
+      },
+      "projectTypes": {
+        "house": "house",
+        "apartment": "apartment",
+        "bathroom": "bathrooms",
+        "retail": "retail",
+        "food_and_beverage": "food and beverage",
+        "hospitality": "hospitality",
+        "office": "office",
+        "public_cultural": "public or cultural space",
+        "service_pavilion": "service pavilion"
+      },
+      "features": {
+        "existing_space_rework": "existing-space rework",
+        "pre_war_building": "pre-war building",
+        "modernist_building": "modernist building",
+        "post_industrial_building": "post-industrial building",
+        "neurodiversity_support": "neurodiversity support",
+        "competition_entry": "competition entry",
+        "furniture_design": "furniture design",
+        "lighting_design": "lighting design",
+        "visual_identity": "visual identity"
+      },
+      "reasons": {
+        "category": "same category: {label}",
+        "projectType": "same project type: {label}",
+        "location": "same location: {location}",
+        "areaSame": "{areaM2, plural, one {same floor area: # m²} other {same floor area: # m²}}",
+        "areaDifference": "{differenceM2, plural, one {floor area differs by # m²} other {floor area differs by # m²}}",
+        "feature": "feature: {label}"
+      }
+    }
+  },
   "przelot": {
     "title": "flythrough",
     "enter": "open this project",
