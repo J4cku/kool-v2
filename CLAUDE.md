@@ -131,7 +131,8 @@ Project skills live in `.claude/skills/`; shared agent permissions in `.claude/s
 ## WebMCP operations
 
 - Production tools are feature-detected: `kool_find_projects` and `kool_prepare_project_inquiry`. The preparation tool only opens/populates the visible enquiry form and always returns `submitted: false`; never add an automatic submission tool.
-- ChatGPT's in-app browser supports WebMCP out of the box. Chrome 149 needs either `chrome://flags/#enable-webmcp-testing` for local testing or a matching origin-specific trial token for each preview/production origin.
+- ChatGPT Site tools use WebMCP only in the desktop app's built-in browser and require account rollout/eligibility, a supported selected model, enabled Site tools permission, and a matching current-page tool; see the [official OpenAI procedure](https://help.openai.com/en/articles/20001423-using-site-tools-in-the-chatgpt-desktop-app). Do not use ChatGPT's Site tools UI as the Chrome test procedure.
+- Chrome 149 needs either `chrome://flags/#enable-webmcp-testing` for local testing or a matching origin-specific trial token for each preview/production origin, plus the official Model Context Tool Inspector extension for manifest inspection and manual invocation; see [Chrome's WebMCP procedure](https://developer.chrome.com/docs/ai/webmcp).
 - Configure the optional token only as server-side `WEBMCP_ORIGIN_TRIAL_TOKEN`; the shared locale layout renders it as an early origin-trial meta. Do not commit a token. `NEXT_PUBLIC_WEBMCP_DEBUG=true` enables only the diagnostic tool outside development.
 - `document.modelContext === undefined` means the current browser/environment is unsupported, not that registration failed. Reproducible checks and safe prompts live in `docs/webmcp/evals.md`.
 

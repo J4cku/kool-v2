@@ -11,8 +11,8 @@
 
 ## Browser availability and deployment
 
-- ChatGPT's in-app browser supports WebMCP out of the box; it does not need the Chrome testing flag or this site's origin-trial token.
-- Chrome 149 requires either the local `chrome://flags/#enable-webmcp-testing` flag or a valid origin-trial token. Enable the flag and relaunch Chrome for local testing.
+- [ChatGPT Site tools](https://help.openai.com/en/articles/20001423-using-site-tools-in-the-chatgpt-desktop-app) use WebMCP only in the ChatGPT desktop app's built-in browser, not Chrome. The built-in browser needs no separate connection, Chrome flag, extension, or site origin-trial token, but Site tools appear only when the account rollout, selected model, Site tools permission, current page, and matching tool are eligible.
+- [Chrome 149 WebMCP](https://developer.chrome.com/docs/ai/webmcp) requires either the local `chrome://flags/#enable-webmcp-testing` flag or a valid origin-trial token. Chrome manifest inspection and manual invocation use the official Model Context Tool Inspector extension linked from that documentation, not ChatGPT's Site tools UI.
 - Origin-trial tokens are origin-specific. Register and configure a matching token separately for every preview and production origin, then set `WEBMCP_ORIGIN_TRIAL_TOKEN` as a server-only deployment variable. The repository intentionally contains no token.
 - In a supported page context, `document.modelContext` is present. If it is `undefined`, the browser/environment does not support WebMCP; that result is not a kool studio tool-registration failure.
 
@@ -28,16 +28,16 @@ There is permanently no automatic inquiry-submission tool. WebMCP cannot submit 
 ## Portfolio source
 
 - `data/projects.ts` is canonical.
-- Existing deterministic fields: slug, title, location, category, status, year, textual area, scope, and localized copy.
-- Missing deterministic search fields: curated building-era and objective-feature tags. Later search must not infer or claim them until added explicitly.
+- Existing deterministic fields include slug, title, location, category, status, year, textual area, numeric `areaM2`, `projectType`, curated `objectiveFeatures`, scope, and localized copy.
+- Building-era facts are canonical curated values within `objectiveFeatures` (`pre_war_building`, `modernist_building`, and `post_industrial_building`); search may match only the values explicitly assigned to each project.
 
 ## Existing enquiry flow
 
 - `components/kontakt/BriefForm.tsx` renders named localized inputs.
 - `lib/brief.ts` owns shared normalization and validation.
 - `app/[locale]/kontakt/actions.ts` sends through Resend and falls back to mailto.
-- `components/kontakt/BriefModal.tsx` owns dialog visibility.
-- The current PostHog `brief-form` gate is known to fail closed in production, so WebMCP rollout will not depend on PostHog flags.
+- `components/kontakt/BriefModal.tsx` owns dialog visibility and is mounted unconditionally by `app/[locale]/kontakt/KontaktPage.tsx`; the contact brief modal is always available.
+- The former PostHog `brief-form` gate has been removed. WebMCP and contact-form availability do not depend on PostHog feature flags.
 
 ## Verification and observability
 

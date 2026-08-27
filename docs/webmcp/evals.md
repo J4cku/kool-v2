@@ -6,17 +6,30 @@
 - GREEN: `pnpm vitest run components/WebMcpProvider.test.tsx && node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test tests/webmcp-config.test.ts` exited `0`; Vitest passed 11/11 and Node passed 2/2, including the exact `Origin-Agent-Cluster: ?1` assertion.
 - Focused integration: `pnpm vitest run components/WebMcpProvider.test.tsx components/kontakt/BriefModal.test.tsx lib/webmcp/tools/prepare-project-inquiry.test.ts` exited `0`; 53/53 tests passed.
 - Safety search: the prescribed ripgrep command found no forbidden runtime submission tool, imperative DOM submission call, or obsolete base flag in the requested runtime/config/documentation scope; ripgrep exited `1`, its expected no-match status.
-- Full repository gate: `pnpm check` on 2026-08-27 (Europe/Warsaw) exited `0`; Vitest passed 158/158 tests, Node passed 58/58 tests, typecheck, lint, and i18n parity passed, 466 translation keys matched, and the production build generated 58/58 static pages.
+- Full repository gate: `pnpm check` on 2026-08-27 (Europe/Warsaw) exited `0` against the Phase 4 implementation tree later committed as `def6b8707f2d2fbedc45f1111db5a763aa1d63ed`; Vitest passed 158/158 tests, Node passed 58/58 tests, typecheck, lint, and i18n parity passed, 466 translation keys matched, and the production build generated 58/58 static pages.
+- Evidence packaging: `10df53e9ca5d98e147511f7a42cebf7d057533bf` added only the Task 3 report after that full check. It did not change the tested runtime, configuration, or tests and is not presented as the tested implementation snapshot.
 - Native browser discovery was not run in this workspace; the setup and prompts below are the reproducible follow-up procedure.
 
-## Reproducible browser setup
+## ChatGPT desktop Site tools procedure
 
-1. ChatGPT's in-app browser supports WebMCP out of the box. Open a deployed `/pl` or `/en` page; no Chrome flag or origin-trial token is needed.
-2. For local Chrome 149 testing, enable `chrome://flags/#enable-webmcp-testing`, relaunch Chrome, start the site, and open a locale-prefixed page.
-3. For Chrome 149 preview or production testing without the local flag, register each exact origin for the trial, configure its matching server-only `WEBMCP_ORIGIN_TRIAL_TOKEN`, and redeploy. A token for one preview hostname does not activate another preview hostname or production.
-4. In DevTools, evaluate `document.modelContext`. An object means the API is available to the page. `undefined` means the environment is unsupported, not that kool studio registration failed.
-5. In the browser's Site tools surface, confirm the production manifest contains exactly `kool_find_projects` and `kool_prepare_project_inquiry`. `kool_webmcp_debug` may additionally appear in development or with `NEXT_PUBLIC_WEBMCP_DEBUG=true`.
-6. Invoke preparation only with non-sensitive test data. Confirm the ordinary visible form opens and is populated, the tool result says `submitted: false`, and no email, mailto navigation, or form submission occurs.
+Use [OpenAI's Site tools procedure](https://help.openai.com/en/articles/20001423-using-site-tools-in-the-chatgpt-desktop-app). Site tools are currently available only in the ChatGPT desktop app's built-in browser, not in Chrome, and only when the account and selected model support them. A matching tool must also be available on the current page.
+
+1. In the ChatGPT desktop app, confirm Browser settings → Permissions → **Enable site tools** is on, choose a model eligible for Site tools on the current account, and open the built-in browser from the app toolbar.
+2. Open a deployed `/pl` or `/en` page in that built-in browser. Eligible accounts need no Chrome flag, extension, origin-trial token, or separate connection.
+3. If the address-bar Site tools arrow appears, open it and confirm the production manifest contains `kool_find_projects` as read-only and `kool_prepare_project_inquiry` as state-changing. `kool_webmcp_debug` may additionally appear only when its explicit debug configuration is enabled.
+4. Run a safe prompt below. Review the website-access prompt, then confirm the visible form/result boundary described under **Expected production manifest**.
+
+If the Site tools arrow does not appear, first verify desktop built-in-browser usage, account rollout/eligibility, selected-model support, the Site tools permission, and that the current page exposes a matching tool. Absence on an ineligible account/model is not evidence of a kool studio registration failure.
+
+## Chrome 149 WebMCP procedure
+
+Use [Chrome's official WebMCP procedure](https://developer.chrome.com/docs/ai/webmcp). Chrome 149 requires one activation path and the official inspector for discovery/manual execution:
+
+1. For local testing, enable `chrome://flags/#enable-webmcp-testing` and relaunch Chrome. For preview or production testing without that flag, register the exact origin for the Chrome origin trial, configure its matching server-only `WEBMCP_ORIGIN_TRIAL_TOKEN`, and redeploy. A token for one preview hostname does not activate another preview hostname or production.
+2. Install and use the official **Model Context Tool Inspector** extension linked from Chrome's WebMCP documentation.
+3. Open a locale-prefixed page and evaluate `document.modelContext` in DevTools. An object means the page API is available; `undefined` means Chrome is not activated/supported in that environment, not that kool studio registration failed.
+4. In the Inspector, confirm the registered manifest contains `kool_find_projects` and `kool_prepare_project_inquiry` with parseable schemas. `kool_webmcp_debug` may additionally appear only when its debug configuration is enabled.
+5. Use the Inspector to manually invoke search and preparation with non-sensitive test data. Confirm structured output, visible form population, `submitted: false`, and no email, mailto navigation, or form submission.
 
 There is no automatic submission tool. Evaluation must stop at the populated visible form; only a person may review and press its ordinary submit button.
 
@@ -68,9 +81,9 @@ Search-only baseline prompts:
 - `What is the weather in Wrocław?` — Not run — native discovery and agent selection remain unverified.
 - `Find a pre-war hotel in Gdańsk.` — Not run — native discovery and agent selection remain unverified.
 
-## Rollout status
+## Phase 2 rollout status
 
-- Commit SHA tested: `1aae340e380f14b1d146f4f16e621ad90ae01c13`.
+- Phase 2 commit SHA tested: `1aae340e380f14b1d146f4f16e621ad90ae01c13`.
 - Production enablement: not performed.
 - Deployment: not performed.
 - Known limitation: native discovery and agent selection remain unverified unless evidence is recorded above. `document.modelContext === undefined` in an ordinary unsupported browser is expected and cannot supply that evidence.
