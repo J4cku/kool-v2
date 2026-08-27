@@ -108,6 +108,7 @@ export default function BriefModal({ navigateToMailto }: BriefModalProps = {}) {
     submitBrief,
     initialBriefState,
   );
+  const draftRef = useRef(draft);
   const startedRef = useRef(false);
   const handledResponseRef = useRef<number | null>(null);
   const actionStateRef = useRef(state);
@@ -117,10 +118,10 @@ export default function BriefModal({ navigateToMailto }: BriefModalProps = {}) {
   const pendingRestoreRef = useRef<HTMLElement | null>(null);
 
   const patchDraft = useCallback((patch: InquiryDraftPatch) => {
-    setDraft((current) => {
-      const result = applyInquiryDraftPatch(current, patch);
-      return result.ok ? result.draft : current;
-    });
+    const result = applyInquiryDraftPatch(draftRef.current, patch);
+    if (!result.ok) return;
+    draftRef.current = result.draft;
+    setDraft(result.draft);
   }, []);
   const markStarted = useCallback(() => {
     if (startedRef.current) return;
@@ -128,7 +129,9 @@ export default function BriefModal({ navigateToMailto }: BriefModalProps = {}) {
     track('contact_form_started');
   }, []);
   const resetAfterDelivery = useCallback(() => {
-    setDraft(createInquiryDraft(language));
+    const nextDraft = createInquiryDraft(language);
+    draftRef.current = nextDraft;
+    setDraft(nextDraft);
     setRenderedAt(null);
     startedRef.current = false;
   }, [language]);
@@ -175,17 +178,26 @@ export default function BriefModal({ navigateToMailto }: BriefModalProps = {}) {
   }, [show]);
 
   useEffect(() => registerInquiryPreparationHandler((patch) => {
+    const dismissedSuccess = state.status === 'success'
+      && state.submittedAt !== undefined
+      && state.submittedAt === dismissedSuccessAt;
     const canPrepare = !isPending
-      && (state.status === 'idle' || state.status === 'invalid' || state.status === 'error');
+      && (
+        state.status === 'idle'
+        || state.status === 'invalid'
+        || state.status === 'error'
+        || dismissedSuccess
+      );
     if (!canPrepare) {
       return { status: 'form_busy', missingRecommendedFields: [], opened: false };
     }
 
-    const result = applyInquiryDraftPatch(draft, patch);
+    const result = applyInquiryDraftPatch(draftRef.current, patch);
     if (!result.ok) {
       return { status: 'form_busy', missingRecommendedFields: [], opened: false };
     }
 
+    draftRef.current = result.draft;
     setDraft(result.draft);
     show();
     return {
@@ -193,7 +205,7 @@ export default function BriefModal({ navigateToMailto }: BriefModalProps = {}) {
       missingRecommendedFields: getMissingRecommendedInquiryFields(result.draft),
       opened: true,
     };
-  }), [draft, state, isPending, language, show]);
+  }), [draft, state, isPending, language, dismissedSuccessAt, show]);
 
   useEffect(() => {
     if (open || !pendingRestoreRef.current) return;

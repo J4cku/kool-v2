@@ -210,6 +210,59 @@ it('prepares and opens one atomically merged draft without marking it started', 
   expect(trackMock.mock.calls.some(([event]) => event === 'contact_form_started')).toBe(false);
 });
 
+it('merges back-to-back preparation calls before React flushes the first update', () => {
+  render(<BriefModal navigateToMailto={navigationMock} />);
+  const handler = preparationHarness.handler;
+  if (!handler) throw new Error('Inquiry preparation handler was not registered');
+
+  let first: InquiryPreparationHandlerResult | undefined;
+  let second: InquiryPreparationHandlerResult | undefined;
+  act(() => {
+    first = handler({ name: 'Ola' });
+    second = handler({ location: 'Wrocław' });
+  });
+
+  expect(first).toEqual({
+    status: 'prepared',
+    missingRecommendedFields: [
+      'email',
+      'projectType',
+      'location',
+      'propertyStage',
+      'area',
+      'desiredScope',
+      'designStart',
+      'constructionStart',
+      'budget',
+      'requirements',
+    ],
+    opened: true,
+  });
+  expect(second).toEqual({
+    status: 'prepared',
+    missingRecommendedFields: [
+      'email',
+      'projectType',
+      'propertyStage',
+      'area',
+      'desiredScope',
+      'designStart',
+      'constructionStart',
+      'budget',
+      'requirements',
+    ],
+    opened: true,
+  });
+  expect(formProbe.props?.draft).toMatchObject({ name: 'Ola', location: 'Wrocław' });
+  expect(actionHarness.formAction).not.toHaveBeenCalled();
+  expect(navigationMock).not.toHaveBeenCalled();
+  expect(trackMock.mock.calls).toEqual([
+    ['contact_form_opened'],
+    ['contact_form_opened'],
+  ]);
+  expect(trackMock.mock.calls.some(([event]) => event === 'contact_form_started')).toBe(false);
+});
+
 it.each(['invalid', 'error'] as const)(
   'allows preparation while the form is in the recoverable %s state',
   (status) => {

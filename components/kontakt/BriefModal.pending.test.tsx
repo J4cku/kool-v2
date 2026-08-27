@@ -3,6 +3,7 @@ import { createElement, type ComponentProps, type ComponentType, type ReactNode 
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import BriefModal from '@/components/kontakt/BriefModal';
 import type { BriefFormState } from '@/app/[locale]/kontakt/brief-state';
+import { prepareProjectInquiry } from '@/lib/webmcp/inquiry-preparation';
 
 const submitBriefMock = vi.hoisted(() => vi.fn());
 const trackMock = vi.hoisted(() => vi.fn());
@@ -114,6 +115,46 @@ it('reopens a blank form after closing a confirmed success', async () => {
   expect(trackMock.mock.calls.filter(([event]) => event === 'contact_form_submitted'))
     .toEqual([['contact_form_submitted']]);
   expect(navigationMock).not.toHaveBeenCalled();
+});
+
+it('prepares the blank draft after its successful result has been dismissed', async () => {
+  submitBriefMock.mockResolvedValue({ status: 'success', submittedAt: 104 });
+  render(<BriefModal navigateToMailto={navigationMock} />);
+
+  openAndSubmit();
+  await screen.findByText('status.successTitle');
+  fireEvent.click(screen.getByRole('button', { name: /close/ }));
+  trackMock.mockClear();
+
+  let result: ReturnType<typeof prepareProjectInquiry> | undefined;
+  act(() => {
+    result = prepareProjectInquiry({ name: 'Nowa Ola' }, 'pl');
+  });
+
+  expect(result).toMatchObject({
+    status: 'prepared',
+    missingRecommendedFields: [
+      'email',
+      'projectType',
+      'location',
+      'propertyStage',
+      'area',
+      'desiredScope',
+      'designStart',
+      'constructionStart',
+      'budget',
+      'requirements',
+    ],
+    submitted: false,
+    opened: true,
+  });
+  expect(screen.getByRole('dialog')).toBeTruthy();
+  expect(document.getElementById('brief-form')).toBeTruthy();
+  expect((document.getElementById('brief-name') as HTMLInputElement).value).toBe('Nowa Ola');
+  expect(submitBriefMock).toHaveBeenCalledTimes(1);
+  expect(navigationMock).not.toHaveBeenCalled();
+  expect(trackMock.mock.calls).toEqual([['contact_form_opened']]);
+  expect(trackMock.mock.calls.some(([event]) => event === 'contact_form_started')).toBe(false);
 });
 
 it('navigates a deferred fallback once and preserves its manual link on reopen', async () => {
