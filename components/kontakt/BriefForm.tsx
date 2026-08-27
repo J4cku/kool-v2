@@ -1,10 +1,11 @@
 'use client';
 
-import { useActionState, useEffect, useRef } from 'react';
+import { useActionState, useEffect, useRef, useSyncExternalStore } from 'react';
 import { motion } from 'framer-motion';
 import { useLocale, useTranslations } from 'next-intl';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
-import { track } from '@/lib/analytics';
+import { consentStatus, subscribeConsentStatus, track } from '@/lib/analytics';
+import { metaTrack } from '@/lib/meta-pixel';
 import { submitBrief } from '@/app/[locale]/kontakt/actions';
 import {
   initialBriefState,
@@ -39,6 +40,14 @@ export default function BriefForm() {
   const [state, formAction, isPending] = useActionState<BriefFormState, FormData>(
     submitBrief,
     initialBriefState
+  );
+  /* Consent as of this render, submitted with the form so the server knows
+     whether it may forward the Lead to Meta. Server snapshot is null, so SSR
+     and the first client render agree and nothing hydration-mismatches. */
+  const marketingConsent = useSyncExternalStore(
+    subscribeConsentStatus,
+    () => consentStatus(),
+    () => null
   );
 
   const tsRef = useRef<HTMLInputElement>(null);
@@ -105,10 +114,20 @@ export default function BriefForm() {
   // Analytics: report the terminal outcome exactly once per submission, keeping
   // confirmed server delivery (brief_submit) and the mailto path
   // (brief_mailto_fallback) as distinct events so they are never conflated.
-  // The helpers no-op when GA4 is not loaded and never carry any field value.
+  // The helpers no-op when PostHog is not running / the Meta Pixel was never
+  // loaded, and never carry any field value.
   useEffect(() => {
     if (state.status === 'success') {
       track('contact_form_submitted');
+      /* Meta's conversion, deduplicated against the CAPI event the server
+         sent for the same submission via state.metaEventId. Not fired in the
+         fallback branch below: a prefilled mailto is an opened mail client,
+         not a delivered brief. */
+      metaTrack(
+        'Lead',
+        { content_name: 'project-brief', content_category: state.submitted?.projectType },
+        state.metaEventId
+      );
     } else if (state.status === 'fallback') {
       track('contact_form_mailto_fallback');
     }
@@ -210,6 +229,14 @@ export default function BriefForm() {
         <input type="hidden" name="ts" ref={tsRef} />
         {/* Locale for the confirmation-receipt language. */}
         <input type="hidden" name="locale" value={locale} />
+        {/* Marketing-consent state at submit time: the server only forwards the
+            Lead to Meta's Conversions API when the visitor accepted cookies. */}
+        <input
+          type="hidden"
+          name="marketingConsent"
+          value={marketingConsent ?? 'unknown'}
+          readOnly
+        />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
           {/* name */}

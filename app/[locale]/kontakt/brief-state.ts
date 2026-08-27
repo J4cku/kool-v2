@@ -40,6 +40,10 @@ export interface BriefFormState {
   submitted?: NormalizedBrief;
   // new identity per response so the client effect re-runs on repeat submits
   submittedAt?: number;
+  // Shared dedup key for the Meta Lead event: the browser Pixel sends it as
+  // eventID, CAPI as event_id, so Meta counts one conversion. Only set on
+  // success.
+  metaEventId?: string;
 }
 
 export const initialBriefState: BriefFormState = { status: 'idle' };

@@ -528,7 +528,7 @@
     "analyticsLabel": "Visit statistics",
     "analyticsBody": "With your consent we use PostHog (data processed in the EU) to understand how visitors use the site — which projects they view, how they find us, and how they move around the site (session recording: cursor movement and scrolling, never the content of text inputs). Without your consent we measure traffic anonymously only: no cookies and nothing stored on your device.",
     "adsLabel": "Advertising",
-    "adsBody": "If we run ad campaigns (e.g. on Instagram), with your consent we may use cookies that measure their effectiveness (e.g. Meta Pixel). Without consent these tools are never loaded.",
+    "adsBody": "If we run ad campaigns (e.g. on Instagram), with your consent we may use cookies that measure their effectiveness (e.g. Meta Pixel). Without consent these tools are never loaded. The recipient of that data is Meta Platforms Ireland Ltd., which may transfer it outside the European Economic Area.",
     "rightsLabel": "Your rights",
     "rightsBody": "You have the right to access, rectify, erase, restrict, port, and object to the processing of your data. You can also lodge a complaint with the Polish supervisory authority (UODO).",
     "cookiesLabel": "Cookies",
