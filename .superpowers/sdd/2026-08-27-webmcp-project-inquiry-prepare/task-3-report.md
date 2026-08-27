@@ -4,6 +4,13 @@
 
 Complete. The locale layout conditionally renders an early server-configured origin-trial meta, production registration no longer retains the obsolete base-gate export or configuration, the debug gate remains intact, and deployment/evaluation guidance records the supported browser paths and prepare-only safety boundary.
 
+## Review corrections
+
+- Split the ChatGPT Site tools procedure from Chrome testing. ChatGPT guidance is now limited to the desktop app's built-in browser and qualified by account rollout/eligibility, selected-model support, Site tools permission, current-page support, and matching-tool availability, with the official OpenAI Help reference.
+- Chrome 149 guidance now requires either the local testing flag or an origin-specific trial token and explicitly uses the official Model Context Tool Inspector for manifest inspection and manual invocation, with Chrome's official WebMCP reference.
+- Corrected repository findings: numeric area, project type, objective features, and curated building-era tags are canonical; the contact modal is unconditionally mounted and its former PostHog availability gate is gone.
+- Corrected test provenance without claiming a circular HEAD: the Phase 4 implementation tree tested by the original full gate is `def6b8707f2d2fbedc45f1111db5a763aa1d63ed`; `10df53e9ca5d98e147511f7a42cebf7d057533bf` only packaged evidence.
+
 ## TDD evidence
 
 ### Availability RED
@@ -74,6 +81,8 @@ Summary:
 
 An earlier full-gate run passed all tests but found one TypeScript narrowing error in the new layout-test helper. The guard was corrected, `pnpm typecheck` passed, and the complete gate was rerun from the beginning to the successful result above.
 
+After review corrections, docs-relevant assertions confirmed the two official references, separate procedures, Inspector requirement, corrected provenance, and absence of all stale claims. `pnpm check` was rerun against exact docs-only commit `4b38e2aede274520426b01f7de1e0cee1bbdae67` and again exited `0` with 158/158 Vitest tests, 58/58 Node tests, passing typecheck/lint/i18n, and a 58/58-page production build.
+
 ## Changed files
 
 - `.env.example`
@@ -89,8 +98,12 @@ An earlier full-gate run passed all tests but found one TypeScript narrowing err
 
 `def6b8707f2d2fbedc45f1111db5a763aa1d63ed` (`feat: document WebMCP production availability`)
 
+## Review correction commit
+
+`4b38e2aede274520426b01f7de1e0cee1bbdae67` (`docs: correct WebMCP browser procedures`)
+
 ## Concerns
 
-- Native browser discovery and Site tools manifest inspection were not available in this workspace, so they remain explicitly unverified. The operational log records reproducible checks for ChatGPT's in-app browser and Chrome 149.
+- Native browser discovery and manifest inspection were not available in this workspace, so they remain explicitly unverified. The operational log records separate reproducible checks for eligible ChatGPT desktop Site tools and Chrome 149 with the official Inspector.
 - Preview and production trial activation depends on registering and configuring a valid token for each exact origin. The repository intentionally contains no real or fake token.
 - No implementation blockers or known functional concerns remain within Task 3 scope. Automatic submission remains permanently absent; only the visible human-controlled form can contact kool studio.

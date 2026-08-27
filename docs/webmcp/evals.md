@@ -8,6 +8,7 @@
 - Safety search: the prescribed ripgrep command found no forbidden runtime submission tool, imperative DOM submission call, or obsolete base flag in the requested runtime/config/documentation scope; ripgrep exited `1`, its expected no-match status.
 - Full repository gate: `pnpm check` on 2026-08-27 (Europe/Warsaw) exited `0` against the Phase 4 implementation tree later committed as `def6b8707f2d2fbedc45f1111db5a763aa1d63ed`; Vitest passed 158/158 tests, Node passed 58/58 tests, typecheck, lint, and i18n parity passed, 466 translation keys matched, and the production build generated 58/58 static pages.
 - Evidence packaging: `10df53e9ca5d98e147511f7a42cebf7d057533bf` added only the Task 3 report after that full check. It did not change the tested runtime, configuration, or tests and is not presented as the tested implementation snapshot.
+- Review correction: `pnpm check` was rerun against exact docs-only commit `4b38e2aede274520426b01f7de1e0cee1bbdae67` and exited `0` with the same 158/158 Vitest, 58/58 Node, typecheck, lint, 466-key i18n, and 58/58-page build results. Later evidence text that records this SHA does not alter the tested runtime, configuration, tests, or browser procedure.
 - Native browser discovery was not run in this workspace; the setup and prompts below are the reproducible follow-up procedure.
 
 ## ChatGPT desktop Site tools procedure
