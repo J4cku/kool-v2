@@ -72,15 +72,42 @@ pnpm vitest run components/WebMcpProvider.test.tsx
 
 Exit code: `0`. Result: `1` test file passed, `9` tests passed.
 
+### Review fixes RED
+
+Command:
+
+```bash
+pnpm vitest run components/kontakt/BriefModal.test.tsx components/kontakt/BriefModal.pending.test.tsx
+```
+
+Exit code: `1`. Result: `2` new regression tests failed and `27` tests passed.
+
+Observed failures:
+
+- The second preparation call made before a React flush incorrectly reported `name` as missing, proving that it had overwritten the first call's patch from a stale render snapshot.
+- Preparation after dismissing a confirmed success returned `form_busy` instead of opening and populating the already-reset blank form.
+
+### Review fixes GREEN
+
+Command:
+
+```bash
+pnpm vitest run components/kontakt/BriefModal.test.tsx components/kontakt/BriefModal.pending.test.tsx
+```
+
+Exit code: `0`. Result: `2` test files passed, `29` tests passed.
+
+The modal now synchronously updates one current-draft ref through human patches, preparation patches, and confirmed-delivery resets. A success is recoverable only after its matching result is dismissed; visible success, fallback, and pending states remain busy.
+
 ### Final focused GREEN
 
 Command:
 
 ```bash
-pnpm vitest run components/WebMcpProvider.test.tsx components/kontakt/BriefModal.test.tsx lib/webmcp/tools/prepare-project-inquiry.test.ts
+pnpm vitest run components/WebMcpProvider.test.tsx components/kontakt/BriefModal.test.tsx components/kontakt/BriefModal.pending.test.tsx lib/webmcp/tools/prepare-project-inquiry.test.ts
 ```
 
-Exit code: `0`. Result: `3` test files passed, `50` tests passed.
+Exit code: `0`. Result: `4` test files passed, `55` tests passed.
 
 ## Final verification
 
@@ -94,7 +121,7 @@ Exit code: `0`.
 
 Summary:
 
-- Vitest: `14` files, `154` tests passed.
+- Vitest: `14` files, `156` tests passed.
 - Native Node tests: `57` tests passed.
 - TypeScript: passed.
 - ESLint: passed.
@@ -105,14 +132,17 @@ Summary:
 
 - `components/kontakt/BriefModal.tsx`
 - `components/kontakt/BriefModal.test.tsx`
+- `components/kontakt/BriefModal.pending.test.tsx`
 - `components/WebMcpProvider.tsx`
 - `components/WebMcpProvider.test.tsx`
 - `messages/pl.json`
 - `messages/en.json`
 
-## Implementation commit
+## Implementation commits
 
 `dba5dd7d46b2515c3066d9fbf8bb548d5438fdb0` (`feat: integrate WebMCP inquiry preparation`)
+
+`3553ef9c38857b1b5ccceb5a8bddfe3308d5dd80` (`fix: serialize inquiry preparation state`)
 
 ## Concerns
 
