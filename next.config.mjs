@@ -7,6 +7,16 @@ const nextConfig = {
   // Required by the PostHog proxy below: its API endpoints use trailing
   // slashes, which Next's automatic trailing-slash redirect would strip
   skipTrailingSlashRedirect: true,
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          { key: 'Origin-Agent-Cluster', value: '?1' },
+        ],
+      },
+    ];
+  },
   // First-party proxy for PostHog EU so ad blockers don't drop events.
   // /dot is also excluded from the next-intl matcher in proxy.ts — keep both
   // in sync if the prefix ever changes

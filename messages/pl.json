@@ -524,7 +524,7 @@
     "title": "Polityka prywatności",
     "intro": "Administratorem Twoich danych osobowych jest kool studio, ul. Zaporoska 83/15, Wrocław. W sprawach dotyczących danych osobowych napisz na hello@koolstudio.pl.",
     "contactLabel": "Kontakt e-mail",
-    "contactBody": "Gdy piszesz na hello@koolstudio.pl lub wysyłasz brief przez formularz na stronie kontaktowej, przetwarzamy podane dane (imię, adres e-mail, informacje o projekcie) wyłącznie po to, aby odpowiedzieć i poprowadzić rozmowę o współpracy; po wysłaniu briefu otrzymasz e-mailowe potwierdzenie. Korespondencję przechowujemy tak długo, jak wymaga tego prowadzona sprawa.",
+    "contactBody": "Gdy piszesz na hello@koolstudio.pl lub wysyłasz brief przez formularz, przetwarzamy podane dane: imię, adres e-mail, opcjonalny numer telefonu i język korespondencji oraz informacje o projekcie (typ, lokalizacja, etap nieruchomości, przybliżona powierzchnia, zakres, terminy projektu i realizacji, budżet, wymagania oraz opcjonalny link do rzutów lub zdjęć). Używamy ich, aby odpowiedzieć i omówić możliwą współpracę. Gdy wysyłka formularza jest skonfigurowana, wiadomość do studia i potwierdzenie dla Ciebie obsługuje Resend, nasz dostawca wysyłki e-mail, który przetwarza dane w naszym imieniu. Jeśli formularz nie może wysłać wiadomości, strona tworzy gotowy brief w Twoim programie pocztowym; strona go nie wysyła — to Ty decydujesz, czy wysłać go z programu pocztowego. Korespondencję przechowujemy tak długo, jak wymaga tego prowadzona sprawa.",
     "analyticsLabel": "Statystyki odwiedzin",
     "analyticsBody": "Za Twoją zgodą używamy narzędzia PostHog (dane przetwarzane w UE), aby rozumieć, jak odwiedzający korzystają ze strony — które projekty oglądają, skąd do nas trafiają, a także jak poruszają się po stronie (nagranie sesji: ruch kursora i przewijanie, bez treści wpisywanych w pola tekstowe). Bez Twojej zgody mierzymy ruch wyłącznie anonimowo: bez plików cookie i bez zapisywania czegokolwiek na Twoim urządzeniu.",
     "adsLabel": "Reklama",
@@ -549,6 +549,10 @@
         "label": "E-mail",
         "help": "Na ten adres odpiszemy."
       },
+      "phone": {
+        "label": "Telefon (opcjonalnie)",
+        "help": "Jeśli wolisz kontakt telefoniczny."
+      },
       "projectType": {
         "label": "Typ projektu",
         "placeholder": "Wybierz…"
@@ -558,23 +562,23 @@
         "placeholder": "np. Wrocław",
         "help": "Wystarczy miasto."
       },
-      "stage": {
-        "label": "Etap projektu",
+      "propertyStage": {
+        "label": "Etap nieruchomości",
         "placeholder": "Wybierz…"
       },
       "area": {
         "label": "Przybliżona powierzchnia (m²)",
         "placeholder": "np. 85"
       },
-      "startDate": {
-        "label": "Pożądany start",
+      "designStart": {
+        "label": "Pożądany start projektu",
         "placeholder": "np. wrzesień 2026"
       },
-      "completionDate": {
-        "label": "Pożądane zakończenie",
+      "constructionStart": {
+        "label": "Planowany start realizacji",
         "placeholder": "np. wiosna 2027"
       },
-      "scope": {
+      "desiredScope": {
         "label": "Oczekiwany zakres",
         "help": "Zaznacz, co Cię interesuje."
       },
@@ -582,14 +586,17 @@
         "label": "Przybliżony budżet realizacji (opcjonalnie)",
         "help": "Jeśli chcesz, podaj orientacyjną kwotę."
       },
-      "priorities": {
-        "label": "Priorytety",
-        "help": "Co powinno działać lepiej niż dziś? Maks. 3 punkty."
+      "requirements": {
+        "label": "Wymagania i priorytety",
+        "help": "Opisz potrzeby, ograniczenia i to, co powinno działać lepiej. Maks. 1000 znaków."
       },
       "plansUrl": {
         "label": "Link do rzutów lub zdjęć",
         "placeholder": "https://…",
         "help": "Link do folderu w chmurze. Bez przesyłania plików."
+      },
+      "language": {
+        "label": "Język korespondencji"
       }
     },
     "projectTypeOptions": {
@@ -613,10 +620,18 @@
       "zestawienia-wyceny": "zestawienia i wyceny",
       "nadzor-autorski": "nadzór autorski"
     },
+    "languageOptions": {
+      "pl": "polski",
+      "en": "angielski"
+    },
     "honeypotLabel": "Zostaw to pole puste",
     "submit": "Wyślij brief",
     "sending": "Wysyłanie…",
-    "privacy": "Twoje dane trafiają wyłącznie na hello@koolstudio.pl i służą jedynie do odpowiedzi na to zapytanie.",
+    "privacy": {
+      "beforeLink": "Dane z formularza wykorzystamy, aby odpowiedzieć na Twoje zapytanie. Skonfigurowaną wysyłkę obsługuje nasz dostawca poczty; jeśli formularz nie może wysłać wiadomości, otworzymy gotowy brief w Twoim programie pocztowym. Szczegóły znajdziesz w ",
+      "link": "polityce prywatności",
+      "afterLink": "."
+    },
     "errors": {
       "required": "To pole jest wymagane.",
       "email": "Podaj poprawny adres e-mail.",
@@ -636,6 +651,104 @@
     },
     "openCta": "opowiedz nam o projekcie",
     "close": "Zamknij formularz"
+  },
+  "webmcp": {
+    "projectSearch": {
+      "title": "Znajdź projekty kool studio",
+      "description": "Wyszukaj opublikowane projekty kool studio według kategorii, typu, lokalizacji, powierzchni i kuratorowanych cech obiektywnych. Zwraca wyłącznie fakty z portfolio; nie ocenia stylu, budżetu, dostępności ani przyjęcia projektu.",
+      "properties": {
+        "category": "Kategoria projektu.",
+        "projectType": "Typ projektowanej przestrzeni.",
+        "location": "Dokładna miejscowość (1–80 znaków); wielkość liter i polskie znaki nie wpływają na dopasowanie.",
+        "targetAreaM2": "Docelowa powierzchnia w metrach kwadratowych; wpływa na kolejność, ale nie odrzuca wyników.",
+        "features": "Wymagane kuratorowane cechy obiektywne; wynik musi zawierać wszystkie.",
+        "limit": "Maksymalna liczba zwróconych projektów, od 1 do 5."
+      },
+      "categories": {
+        "residential": "mieszkalne",
+        "commercial": "komercyjne"
+      },
+      "projectTypes": {
+        "house": "dom",
+        "apartment": "mieszkanie",
+        "bathroom": "łazienki",
+        "retail": "handel detaliczny",
+        "food_and_beverage": "gastronomia",
+        "hospitality": "hotelarstwo",
+        "office": "biuro",
+        "public_cultural": "przestrzeń publiczna lub kulturalna",
+        "service_pavilion": "pawilon usługowy"
+      },
+      "features": {
+        "existing_space_rework": "rearanżacja istniejącej przestrzeni",
+        "pre_war_building": "przedwojenny budynek",
+        "modernist_building": "modernistyczny budynek",
+        "post_industrial_building": "postindustrialny budynek",
+        "neurodiversity_support": "wsparcie neuroróżnorodności",
+        "competition_entry": "projekt konkursowy",
+        "furniture_design": "projekt mebli",
+        "lighting_design": "projekt oświetlenia",
+        "visual_identity": "identyfikacja wizualna"
+      },
+      "reasons": {
+        "category": "ta sama kategoria: {label}",
+        "projectType": "ten sam typ projektu: {label}",
+        "location": "ta sama lokalizacja: {location}",
+        "areaSame": "{areaM2, plural, one {ta sama powierzchnia: # m²} few {ta sama powierzchnia: # m²} many {ta sama powierzchnia: # m²} other {ta sama powierzchnia: # m²}}",
+        "areaDifference": "{differenceM2, plural, one {powierzchnia różni się o # m²} few {powierzchnia różni się o # m²} many {powierzchnia różni się o # m²} other {powierzchnia różni się o # m²}}",
+        "feature": "cecha: {label}"
+      }
+    },
+    "projectInquiry": {
+      "title": "Przygotuj zapytanie projektowe",
+      "description": "Przygotuj widoczny formularz zapytania projektowego do sprawdzenia przez użytkownika. Populate the visible project-enquiry form without submitting or contacting kool studio. Jeśli formularz nie jest dostępny, przejdź pod zwrócony adres kontaktowy i wywołaj narzędzie ponownie; status form_busy oznacza, że bieżącego stanu wysyłki nie wolno zmieniać.",
+      "properties": {
+        "name": "Imię osoby kontaktowej.",
+        "email": "Adres e-mail do odpowiedzi.",
+        "phone": "Opcjonalny numer telefonu.",
+        "projectType": "Typ projektu.",
+        "location": "Lokalizacja projektu.",
+        "propertyStage": "Obecny etap nieruchomości.",
+        "area": "Przybliżona powierzchnia w metrach kwadratowych.",
+        "desiredScope": "Oczekiwane elementy zakresu projektu.",
+        "designStart": "Pożądany termin rozpoczęcia projektu.",
+        "constructionStart": "Planowany termin rozpoczęcia realizacji.",
+        "budget": "Opcjonalny przybliżony budżet realizacji.",
+        "requirements": "Wymagania, priorytety i ograniczenia projektu.",
+        "plansUrl": "Opcjonalny link HTTP lub HTTPS do rzutów albo zdjęć.",
+        "language": "Język korespondencji w formularzu."
+      },
+      "projectTypes": {
+        "mieszkanie": "mieszkanie",
+        "dom": "dom",
+        "komercyjne": "wnętrze komercyjne",
+        "inne": "inne"
+      },
+      "stages": {
+        "zakup": "planuję zakup",
+        "przed-zmianami": "przed zmianami lokatorskimi",
+        "w-budowie": "w budowie",
+        "po-odbiorze": "po odbiorze kluczy",
+        "remont": "remont istniejącego wnętrza"
+      },
+      "scopeItems": {
+        "uklad-funkcjonalny": "układ funkcjonalny",
+        "projekt-koncepcyjny": "projekt koncepcyjny",
+        "dokumentacja-wykonawcza": "dokumentacja wykonawcza",
+        "zabudowy-na-wymiar": "zabudowy na wymiar",
+        "zestawienia-wyceny": "zestawienia i wyceny",
+        "nadzor-autorski": "nadzór autorski"
+      },
+      "languages": {
+        "pl": "polski",
+        "en": "angielski"
+      },
+      "statusGuidance": {
+        "navigate_to_contact": "Przejdź pod zwrócony adres strony kontaktowej i wywołaj narzędzie ponownie.",
+        "prepared": "Formularz jest otwarty i przygotowany do sprawdzenia oraz ręcznej wysyłki przez użytkownika.",
+        "form_busy": "Formularz wysyła dane albo pokazuje wynik; nie zmieniaj go i nie próbuj wysyłać ponownie."
+      }
+    }
   },
   "przelot": {
     "title": "przelot",

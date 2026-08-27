@@ -1,44 +1,166 @@
 'use client';
 
 import {
+  useActionState,
   useCallback,
   useEffect,
   useRef,
   useState,
-  useSyncExternalStore,
 } from 'react';
+import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import BriefForm from './BriefForm';
-import { featureFlagEnabled, subscribeFeatureFlags, track } from '@/lib/analytics';
+import { track } from '@/lib/analytics';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { submitBrief } from '@/app/[locale]/kontakt/actions';
+import {
+  initialBriefState,
+  type BriefFormState,
+} from '@/app/[locale]/kontakt/brief-state';
+import {
+  applyInquiryDraftPatch,
+  createInquiryDraft,
+  getMissingRecommendedInquiryFields,
+  type InquiryDraft,
+  type InquiryDraftPatch,
+  type InquiryLanguage,
+} from '@/lib/brief';
+import { registerInquiryPreparationHandler } from '@/lib/webmcp/inquiry-preparation';
 
 /* Trigger button + modal shell for the project-brief form on the kontakt
-   page. The form itself (BriefForm) is unchanged — this only moves it from
-   an inline section into a dialog: beige panel over a dimmed, blurred
-   backdrop, closable via the × button, Escape, or a backdrop click. Opening
-   via the #brief hash is supported so the form stays deep-linkable. */
-export default function BriefModal() {
+   page. This page-scoped owner preserves the controlled draft across dialog
+   close/reopen. The dialog stays closable via the × button, Escape, or a
+   backdrop click, and #brief keeps the form deep-linkable. */
+export interface BriefModalProps {
+  navigateToMailto?: (href: string) => void;
+}
+
+function navigateBrowserToMailto(href: string) {
+  window.location.href = href;
+}
+
+const FOCUSABLE_SELECTOR = [
+  'a[href]', 'button:not([disabled])',
+  'input:not([disabled]):not([type="hidden"])',
+  'select:not([disabled])', 'textarea:not([disabled])',
+  '[tabindex]:not([tabindex="-1"])',
+].join(',');
+
+function focusables(container: HTMLElement): HTMLElement[] {
+  return Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter(
+    (element) => {
+      const style = window.getComputedStyle(element);
+      return !element.hidden
+        && element.getAttribute('aria-hidden') !== 'true'
+        && style.display !== 'none'
+        && style.visibility !== 'hidden';
+    },
+  );
+}
+
+interface SuppressedState {
+  element: HTMLElement;
+  inert: boolean;
+  ariaHidden: string | null;
+}
+
+function suppressOutside(dialog: HTMLElement): () => void {
+  const seen = new Set<HTMLElement>();
+  const states: SuppressedState[] = [];
+  let node: HTMLElement = dialog;
+  while (node.parentElement) {
+    const parent = node.parentElement;
+    for (const sibling of Array.from(parent.children)) {
+      if (!(sibling instanceof HTMLElement)) continue;
+      if (sibling === node || sibling.contains(dialog) || seen.has(sibling)) continue;
+      seen.add(sibling);
+      states.push({
+        element: sibling,
+        inert: sibling.inert,
+        ariaHidden: sibling.getAttribute('aria-hidden'),
+      });
+      sibling.inert = true;
+      sibling.setAttribute('aria-hidden', 'true');
+    }
+    node = parent;
+    if (parent === document.body) break;
+  }
+  return () => {
+    for (const state of states.reverse()) {
+      state.element.inert = state.inert;
+      if (state.ariaHidden === null) state.element.removeAttribute('aria-hidden');
+      else state.element.setAttribute('aria-hidden', state.ariaHidden);
+    }
+  };
+}
+
+export default function BriefModal({ navigateToMailto }: BriefModalProps = {}) {
   const t = useTranslations('brief');
   const reduceMotion = useReducedMotion();
-  /* Launch gate: the whole CTA + dialog stays hidden until the 'brief-form'
-     feature flag is enabled in PostHog. Deliberately fail-closed while the
-     form awaits approval — flip the flag to launch, no deploy needed. */
-  const formEnabled = useSyncExternalStore(
-    subscribeFeatureFlags,
-    () => featureFlagEnabled('brief-form'),
-    () => false,
-  );
+  const locale = useLocale();
+  const language: InquiryLanguage = locale === 'en' ? 'en' : 'pl';
   const [open, setOpen] = useState(false);
+  const [draft, setDraft] = useState<InquiryDraft>(() => createInquiryDraft(language));
+  const [renderedAt, setRenderedAt] = useState<number | null>(null);
+  const [dismissedSuccessAt, setDismissedSuccessAt] = useState<number | null>(null);
+  const [state, formAction, isPending] = useActionState<BriefFormState, FormData>(
+    submitBrief,
+    initialBriefState,
+  );
+  const draftRef = useRef(draft);
+  const startedRef = useRef(false);
+  const handledResponseRef = useRef<number | null>(null);
+  const actionStateRef = useRef(state);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const pendingRestoreRef = useRef<HTMLElement | null>(null);
+
+  const patchDraft = useCallback((patch: InquiryDraftPatch) => {
+    const result = applyInquiryDraftPatch(draftRef.current, patch);
+    if (!result.ok) return;
+    draftRef.current = result.draft;
+    setDraft(result.draft);
+  }, []);
+  const markStarted = useCallback(() => {
+    if (startedRef.current) return;
+    startedRef.current = true;
+    track('contact_form_started');
+  }, []);
+  const resetAfterDelivery = useCallback(() => {
+    const nextDraft = createInquiryDraft(language);
+    draftRef.current = nextDraft;
+    setDraft(nextDraft);
+    setRenderedAt(null);
+    startedRef.current = false;
+  }, [language]);
+
+  useEffect(() => {
+    actionStateRef.current = state;
+    if (state.submittedAt === undefined || handledResponseRef.current === state.submittedAt) return;
+    handledResponseRef.current = state.submittedAt;
+    if (state.status === 'success') {
+      track('contact_form_submitted');
+      queueMicrotask(resetAfterDelivery);
+    } else if (state.status === 'fallback' && state.fallback) {
+      track('contact_form_mailto_fallback');
+      const openMailClient = navigateToMailto ?? navigateBrowserToMailto;
+      openMailClient(state.fallback.mailtoHref);
+    }
+  }, [state, resetAfterDelivery, navigateToMailto]);
 
   const close = useCallback(() => {
+    const currentState = actionStateRef.current;
+    if (currentState.status === 'success' && currentState.submittedAt !== undefined) {
+      setDismissedSuccessAt(currentState.submittedAt);
+    }
+    pendingRestoreRef.current = triggerRef.current;
     setOpen(false);
-    triggerRef.current?.focus();
   }, []);
 
   const show = useCallback(() => {
+    setRenderedAt((current) => current ?? Date.now());
     setOpen(true);
     track('contact_form_opened');
   }, []);
@@ -55,25 +177,83 @@ export default function BriefModal() {
     return () => clearTimeout(id);
   }, [show]);
 
-  useEffect(() => {
-    if (!open) return;
-    closeRef.current?.focus();
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') close();
+  useEffect(() => registerInquiryPreparationHandler((patch) => {
+    const dismissedSuccess = state.status === 'success'
+      && state.submittedAt !== undefined
+      && state.submittedAt === dismissedSuccessAt;
+    const canPrepare = !isPending
+      && (
+        state.status === 'idle'
+        || state.status === 'invalid'
+        || state.status === 'error'
+        || dismissedSuccess
+      );
+    if (!canPrepare) {
+      return { status: 'form_busy', missingRecommendedFields: [], opened: false };
+    }
+
+    const result = applyInquiryDraftPatch(draftRef.current, patch);
+    if (!result.ok) {
+      return { status: 'form_busy', missingRecommendedFields: [], opened: false };
+    }
+
+    draftRef.current = result.draft;
+    setDraft(result.draft);
+    show();
+    return {
+      status: 'prepared',
+      missingRecommendedFields: getMissingRecommendedInquiryFields(result.draft),
+      opened: true,
     };
-    window.addEventListener('keydown', onKey);
-    /* Scroll lock while the dialog is up. */
+  }), [draft, state, isPending, language, dismissedSuccessAt, show]);
+
+  useEffect(() => {
+    if (open || !pendingRestoreRef.current) return;
+    const target = pendingRestoreRef.current;
+    pendingRestoreRef.current = null;
+    const timeout = window.setTimeout(() => target.focus(), 0);
+    return () => window.clearTimeout(timeout);
+  }, [open]);
+
+  useEffect(() => {
+    if (!open || !dialogRef.current) return;
+    const dialog = dialogRef.current;
+    closeRef.current?.focus();
+    const restoreOutside = suppressOutside(dialog);
     const previousOverflow = document.documentElement.style.overflow;
     document.documentElement.style.overflow = 'hidden';
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        close();
+        return;
+      }
+      if (event.key !== 'Tab') return;
+      const available = focusables(dialog);
+      if (!available.length) {
+        event.preventDefault();
+        dialog.focus();
+        return;
+      }
+      const first = available[0];
+      const last = available[available.length - 1];
+      const active = document.activeElement as HTMLElement | null;
+      const activeIndex = active ? available.indexOf(active) : -1;
+      if (event.shiftKey && activeIndex <= 0) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && (activeIndex === -1 || activeIndex === available.length - 1)) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
     return () => {
-      window.removeEventListener('keydown', onKey);
+      window.removeEventListener('keydown', onKeyDown);
       document.documentElement.style.overflow = previousOverflow;
+      restoreOutside();
     };
   }, [open, close]);
-
-  if (!formEnabled) {
-    return null;
-  }
 
   return (
     <>
@@ -86,51 +266,69 @@ export default function BriefModal() {
         <span aria-hidden="true">→</span>
       </button>
 
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            role="dialog"
-            aria-modal="true"
-            aria-label={t('heading')}
-            initial={reduceMotion ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-50 flex items-stretch justify-center bg-dark/40 backdrop-blur-sm md:items-center md:p-6"
-            onMouseDown={(event) => {
-              if (event.target === event.currentTarget) close();
-            }}
-          >
+      {typeof document !== 'undefined' && createPortal(
+        <AnimatePresence>
+          {open && (
             <motion.div
-              initial={reduceMotion ? false : { opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 24 }}
-              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              className="relative w-full overflow-y-auto bg-beige px-5 pb-14 pt-14 md:max-w-[860px] md:max-h-[88dvh] md:px-12 md:pb-16"
+              ref={dialogRef}
+              role="dialog"
+              aria-modal="true"
+              aria-label={t('heading')}
+              tabIndex={-1}
+              initial={reduceMotion ? false : { opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              className="ph-no-capture fixed inset-0 z-50 flex items-stretch justify-center bg-dark/40 backdrop-blur-sm md:items-center md:p-6"
+              onMouseDown={(event) => {
+                if (event.target === event.currentTarget) close();
+              }}
             >
-              <button
-                ref={closeRef}
-                onClick={close}
-                aria-label={t('close')}
-                className="absolute right-3 top-3 flex h-11 w-11 items-center justify-center text-dark hover:opacity-60 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
+              <motion.div
+                initial={reduceMotion ? false : { opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 24 }}
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                className="relative w-full overflow-y-auto bg-beige px-5 pb-14 pt-14 md:max-w-[860px] md:max-h-[88dvh] md:px-12 md:pb-16"
               >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 20 20"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  aria-hidden="true"
+                <button
+                  ref={closeRef}
+                  onClick={close}
+                  aria-label={t('close')}
+                  className="absolute right-3 top-3 flex h-11 w-11 items-center justify-center text-dark hover:opacity-60 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
                 >
-                  <line x1="4" y1="4" x2="16" y2="16" />
-                  <line x1="16" y1="4" x2="4" y2="16" />
-                </svg>
-              </button>
-              <BriefForm />
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    aria-hidden="true"
+                  >
+                    <line x1="4" y1="4" x2="16" y2="16" />
+                    <line x1="16" y1="4" x2="4" y2="16" />
+                  </svg>
+                </button>
+                <BriefForm
+                  draft={draft}
+                  renderedAt={renderedAt}
+                  onDraftPatch={patchDraft}
+                  onStarted={markStarted}
+                  state={
+                    state.status === 'success'
+                      && dismissedSuccessAt === state.submittedAt
+                      ? initialBriefState
+                      : state
+                  }
+                  formAction={formAction}
+                  isPending={isPending}
+                />
+              </motion.div>
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>,
+        document.body,
+      )}
     </>
   );
 }

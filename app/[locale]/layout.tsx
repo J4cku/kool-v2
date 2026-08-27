@@ -8,7 +8,9 @@ import { notFound } from 'next/navigation';
 import { locales, type Locale } from '@/i18n/request';
 import { BASE_URL, INSTAGRAM_URL } from '@/lib/site';
 import { jsonLdScript } from '@/lib/metadata';
+import { getProjectSearchIndex } from '@/lib/projects/project-search-index.server';
 import PageTransition from '@/components/PageTransition';
+import WebMcpProvider from '@/components/WebMcpProvider';
 import '../globals.css';
 
 const poppins = Poppins({
@@ -66,12 +68,20 @@ export default async function LocaleLayout({
     notFound();
   }
 
-  const messages = await getMessages(locale);
-  const tMeta = await getTranslations({ locale, namespace: 'meta' });
+  const validatedLocale = locale as Locale;
+  const messages = await getMessages(validatedLocale);
+  const tMeta = await getTranslations({ locale: validatedLocale, namespace: 'meta' });
+  const projectIndex = getProjectSearchIndex(validatedLocale);
 
   return (
-    <html lang={locale} className={poppins.variable}>
+    <html lang={validatedLocale} className={poppins.variable}>
       <head>
+        {process.env.WEBMCP_ORIGIN_TRIAL_TOKEN && (
+          <meta
+            httpEquiv="origin-trial"
+            content={process.env.WEBMCP_ORIGIN_TRIAL_TOKEN}
+          />
+        )}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -126,7 +136,8 @@ export default async function LocaleLayout({
         />
       </head>
       <body className="font-sans bg-beige text-dark antialiased">
-        <NextIntlClientProvider locale={locale} messages={messages}>
+        <NextIntlClientProvider locale={validatedLocale} messages={messages}>
+          <WebMcpProvider locale={validatedLocale} projectIndex={projectIndex} />
           <PageTransition>{children}</PageTransition>
         </NextIntlClientProvider>
         {isVercelDeployment && (

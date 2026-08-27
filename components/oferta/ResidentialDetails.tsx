@@ -198,7 +198,7 @@ export default function ResidentialDetails({ variant }: { variant: 'apartments' 
         <FaqAccordion items={faqItems} />
       </div>
 
-      {/* Closing brief CTA — flag-gated, opens the contact brief modal */}
+      {/* Closing brief CTA — opens the contact brief modal */}
       <ContactBriefCta heading={t('contactHeading')} cta={t('contactCta')} />
     </>
   );

@@ -78,6 +78,9 @@ importers:
       vitest:
         specifier: ^4.1.10
         version: 4.1.10(@types/node@26.2.0)(jsdom@29.1.1)(vite@8.1.5(@types/node@26.2.0)(jiti@2.7.0))
+      webmcp-types:
+        specifier: 0.1.5
+        version: 0.1.5
 
 packages:
 
@@ -2911,6 +2914,9 @@ packages:
   webidl-conversions@8.0.1:
     resolution: {integrity: sha512-BMhLD/Sw+GbJC21C/UgyaZX41nPt8bUTg+jWyDeg7e7YN4xOM05YPSIXceACnXVtqyEw/LMClUQMtMZ+PGGpqQ==}
     engines: {node: '>=20'}
+
+  webmcp-types@0.1.5:
+    resolution: {integrity: sha512-QAfuzNJ+hiY2JLpPbD/6xZruLQlsqtWUDqQCRruqD0dbtZHDg6IUZ2K0zctlRokwuscGlr47i6hKv8mQPSQLhw==}
 
   whatwg-mimetype@5.0.0:
     resolution: {integrity: sha512-sXcNcHOC51uPGF0P/D4NVtrkjSU2fNsm9iog4ZvZJsL3rjoDAzXZhkm2MWt1y+PUdggKAYVoMAIYcs78wJ51Cw==}
@@ -5846,6 +5852,8 @@ snapshots:
   web-vitals@6.0.0: {}
 
   webidl-conversions@8.0.1: {}
+
+  webmcp-types@0.1.5: {}
 
   whatwg-mimetype@5.0.0: {}
 
