@@ -128,6 +128,13 @@ Project skills live in `.claude/skills/`; shared agent permissions in `.claude/s
 - Keep temporary multi-agent handoff notes in `.context/`
 - Use `run_mode = "concurrent"` only while local services remain port-isolated
 
+## WebMCP operations
+
+- Production tools are feature-detected: `kool_find_projects` and `kool_prepare_project_inquiry`. The preparation tool only opens/populates the visible enquiry form and always returns `submitted: false`; never add an automatic submission tool.
+- ChatGPT's in-app browser supports WebMCP out of the box. Chrome 149 needs either `chrome://flags/#enable-webmcp-testing` for local testing or a matching origin-specific trial token for each preview/production origin.
+- Configure the optional token only as server-side `WEBMCP_ORIGIN_TRIAL_TOKEN`; the shared locale layout renders it as an early origin-trial meta. Do not commit a token. `NEXT_PUBLIC_WEBMCP_DEBUG=true` enables only the diagnostic tool outside development.
+- `document.modelContext === undefined` means the current browser/environment is unsupported, not that registration failed. Reproducible checks and safe prompts live in `docs/webmcp/evals.md`.
+
 ## Conventions
 
 - **Components**: PascalCase, one component per file (exception: `components/DesignSystem.tsx` groups the design-system primitives). Shared components sit at the top of `components/`; page-scoped components go in subdirectories (e.g. `components/oferta/`)

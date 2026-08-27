@@ -76,6 +76,12 @@ export default async function LocaleLayout({
   return (
     <html lang={validatedLocale} className={poppins.variable}>
       <head>
+        {process.env.WEBMCP_ORIGIN_TRIAL_TOKEN && (
+          <meta
+            httpEquiv="origin-trial"
+            content={process.env.WEBMCP_ORIGIN_TRIAL_TOKEN}
+          />
+        )}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

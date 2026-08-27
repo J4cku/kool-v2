@@ -12,3 +12,9 @@ test('all application responses request an origin-keyed agent cluster', async ()
     { key: 'Origin-Agent-Cluster', value: '?1' },
   ]);
 });
+
+test('the origin-trial token is not exposed through Next.js public env', () => {
+  const exposedEnv = nextConfig.env ?? {};
+
+  assert.equal('WEBMCP_ORIGIN_TRIAL_TOKEN' in exposedEnv, false);
+});
