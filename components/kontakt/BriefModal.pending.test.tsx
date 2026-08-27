@@ -100,6 +100,22 @@ it('handles a successful action once after close and reopens its terminal result
   expect(navigationMock).not.toHaveBeenCalled();
 });
 
+it('reopens a blank form after closing a confirmed success', async () => {
+  submitBriefMock.mockResolvedValue({ status: 'success', submittedAt: 103 });
+  render(<BriefModal navigateToMailto={navigationMock} />);
+
+  openAndSubmit();
+  await screen.findByText('status.successTitle');
+  fireEvent.click(screen.getByRole('button', { name: /close/ }));
+  fireEvent.click(screen.getByRole('button', { name: /openCta/ }));
+
+  expect(document.getElementById('brief-form')).toBeTruthy();
+  expect((document.getElementById('brief-name') as HTMLInputElement).value).toBe('');
+  expect(trackMock.mock.calls.filter(([event]) => event === 'contact_form_submitted'))
+    .toEqual([['contact_form_submitted']]);
+  expect(navigationMock).not.toHaveBeenCalled();
+});
+
 it('navigates a deferred fallback once and preserves its manual link on reopen', async () => {
   const response = deferred<BriefFormState>();
   const mailtoHref = 'mailto:hello@koolstudio.pl?subject=Brief';

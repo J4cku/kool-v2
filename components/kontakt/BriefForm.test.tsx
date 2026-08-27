@@ -165,14 +165,22 @@ describe('BriefForm', () => {
     expect(screen.getByRole('link', { name: linkName }).getAttribute('href')).toBe(href);
   });
 
-  it('focuses desiredScope fieldset for a tampered scope error', async () => {
+  it('makes desiredScope focusable only while its tampered error is active', async () => {
+    const view = render(<Harness />);
+    const group = document.getElementById('brief-desiredScope')!;
+    expect(group.hasAttribute('tabindex')).toBe(false);
+
     actionHarness.state = {
       status: 'invalid', errors: { desiredScope: 'option' }, submittedAt: 1,
     };
-    render(<Harness />);
-    const group = document.getElementById('brief-desiredScope')!;
+    view.rerender(<Harness />);
     await waitFor(() => expect(document.activeElement).toBe(group));
+    expect(group.getAttribute('tabindex')).toBe('-1');
     expect(group.getAttribute('aria-describedby')).toContain('brief-desiredScope-error');
+
+    actionHarness.state = initialBriefState;
+    view.rerender(<Harness />);
+    expect(group.hasAttribute('tabindex')).toBe(false);
   });
 
   it('focuses the invalid summary when hidden language is the first error', async () => {

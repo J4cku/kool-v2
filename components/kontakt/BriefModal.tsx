@@ -100,12 +100,14 @@ export default function BriefModal({ navigateToMailto }: BriefModalProps = {}) {
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState<InquiryDraft>(() => createInquiryDraft(language));
   const [renderedAt, setRenderedAt] = useState<number | null>(null);
+  const [dismissedSuccessAt, setDismissedSuccessAt] = useState<number | null>(null);
   const [state, formAction, isPending] = useActionState<BriefFormState, FormData>(
     submitBrief,
     initialBriefState,
   );
   const startedRef = useRef(false);
   const handledResponseRef = useRef<number | null>(null);
+  const actionStateRef = useRef(state);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -129,6 +131,7 @@ export default function BriefModal({ navigateToMailto }: BriefModalProps = {}) {
   }, [language]);
 
   useEffect(() => {
+    actionStateRef.current = state;
     if (state.submittedAt === undefined || handledResponseRef.current === state.submittedAt) return;
     handledResponseRef.current = state.submittedAt;
     if (state.status === 'success') {
@@ -142,6 +145,10 @@ export default function BriefModal({ navigateToMailto }: BriefModalProps = {}) {
   }, [state, resetAfterDelivery, navigateToMailto]);
 
   const close = useCallback(() => {
+    const currentState = actionStateRef.current;
+    if (currentState.status === 'success' && currentState.submittedAt !== undefined) {
+      setDismissedSuccessAt(currentState.submittedAt);
+    }
     pendingRestoreRef.current = triggerRef.current;
     setOpen(false);
   }, []);
@@ -270,7 +277,12 @@ export default function BriefModal({ navigateToMailto }: BriefModalProps = {}) {
                 renderedAt={renderedAt}
                 onDraftPatch={patchDraft}
                 onStarted={markStarted}
-                state={state}
+                state={
+                  state.status === 'success'
+                    && dismissedSuccessAt === state.submittedAt
+                    ? initialBriefState
+                    : state
+                }
                 formAction={formAction}
                 isPending={isPending}
               />
