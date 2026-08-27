@@ -3,7 +3,14 @@ import { createElement, type ComponentProps, type ComponentType, type ReactNode 
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import BriefModal from '@/components/kontakt/BriefModal';
 import type { BriefFormProps } from '@/components/kontakt/BriefForm';
-import { validateBrief } from '@/lib/brief';
+import {
+  validateBrief,
+  type InquiryDraftPatch,
+} from '@/lib/brief';
+import type {
+  InquiryPreparationHandler,
+  InquiryPreparationHandlerResult,
+} from '@/lib/webmcp/inquiry-preparation';
 
 const trackMock = vi.hoisted(() => vi.fn());
 type ProbeMode = 'form' | 'success' | 'error' | 'fallback';
@@ -17,6 +24,10 @@ const actionHarness = vi.hoisted(() => ({
   state: { status: 'idle' } as BriefFormProps['state'],
   formAction: vi.fn(),
   pending: false,
+}));
+const preparationHarness = vi.hoisted(() => ({
+  handler: null as InquiryPreparationHandler | null,
+  cleanup: vi.fn(),
 }));
 const NOW = 1_800_000_000_000;
 
@@ -37,6 +48,15 @@ vi.mock('next-intl', () => ({
 }));
 vi.mock('@/hooks/useReducedMotion', () => ({ useReducedMotion: () => false }));
 vi.mock('@/lib/analytics', () => ({ track: trackMock }));
+vi.mock('@/lib/webmcp/inquiry-preparation', () => ({
+  registerInquiryPreparationHandler: vi.fn((handler: InquiryPreparationHandler) => {
+    preparationHarness.handler = handler;
+    return () => {
+      if (preparationHarness.handler === handler) preparationHarness.handler = null;
+      preparationHarness.cleanup();
+    };
+  }),
+}));
 vi.mock('@/components/kontakt/BriefForm', () => ({
   default: (props: BriefFormProps) => {
     formProbe.props = props;
@@ -94,6 +114,15 @@ vi.mock('framer-motion', () => ({
   }),
 }));
 
+function prepare(patch: InquiryDraftPatch): InquiryPreparationHandlerResult {
+  let result: InquiryPreparationHandlerResult | undefined;
+  act(() => {
+    result = preparationHarness.handler?.(patch);
+  });
+  if (!result) throw new Error('Inquiry preparation handler was not registered');
+  return result;
+}
+
 beforeEach(() => {
   vi.spyOn(Date, 'now').mockReturnValue(NOW);
 });
@@ -107,10 +136,144 @@ afterEach(() => {
   actionHarness.state = { status: 'idle' };
   actionHarness.formAction.mockReset();
   actionHarness.pending = false;
+  preparationHarness.handler = null;
+  preparationHarness.cleanup.mockReset();
   vi.restoreAllMocks();
   vi.useRealTimers();
   window.history.replaceState(null, '', '/pl/kontakt');
   document.documentElement.style.overflow = '';
+});
+
+it('prepares and opens one atomically merged draft without marking it started', () => {
+  render(<BriefModal navigateToMailto={navigationMock} />);
+
+  const first = prepare({
+    name: 'Ola',
+    email: 'ola@example.com',
+    projectType: 'mieszkanie',
+    desiredScope: ['projekt-koncepcyjny'],
+  });
+
+  expect(first).toEqual({
+    status: 'prepared',
+    missingRecommendedFields: [
+      'location',
+      'propertyStage',
+      'area',
+      'designStart',
+      'constructionStart',
+      'budget',
+      'requirements',
+    ],
+    opened: true,
+  });
+  expect(screen.getByRole('dialog')).toBeTruthy();
+  expect(formProbe.props?.draft).toMatchObject({
+    name: 'Ola',
+    email: 'ola@example.com',
+    projectType: 'mieszkanie',
+    desiredScope: ['projekt-koncepcyjny'],
+  });
+  expect(formProbe.props?.renderedAt).toBe(NOW);
+  expect(actionHarness.formAction).not.toHaveBeenCalled();
+  expect(navigationMock).not.toHaveBeenCalled();
+  expect(trackMock.mock.calls).toEqual([['contact_form_opened']]);
+
+  fireEvent.click(screen.getByRole('button', { name: /close/ }));
+  trackMock.mockClear();
+
+  const second = prepare({ location: 'Wrocław' });
+
+  expect(second).toEqual({
+    status: 'prepared',
+    missingRecommendedFields: [
+      'propertyStage',
+      'area',
+      'designStart',
+      'constructionStart',
+      'budget',
+      'requirements',
+    ],
+    opened: true,
+  });
+  expect(formProbe.props?.draft).toMatchObject({
+    name: 'Ola',
+    email: 'ola@example.com',
+    projectType: 'mieszkanie',
+    desiredScope: ['projekt-koncepcyjny'],
+    location: 'Wrocław',
+  });
+  expect(formProbe.props?.renderedAt).toBe(NOW);
+  expect(actionHarness.formAction).not.toHaveBeenCalled();
+  expect(navigationMock).not.toHaveBeenCalled();
+  expect(trackMock.mock.calls).toEqual([['contact_form_opened']]);
+  expect(trackMock.mock.calls.some(([event]) => event === 'contact_form_started')).toBe(false);
+});
+
+it.each(['invalid', 'error'] as const)(
+  'allows preparation while the form is in the recoverable %s state',
+  (status) => {
+    actionHarness.state = status === 'invalid'
+      ? { status, errors: { email: 'required' } }
+      : { status, formError: 'generic' };
+    render(<BriefModal navigateToMailto={navigationMock} />);
+
+    expect(prepare({ name: 'Ola' })).toMatchObject({ status: 'prepared', opened: true });
+    expect(formProbe.props?.draft.name).toBe('Ola');
+    expect(screen.getByRole('dialog')).toBeTruthy();
+    expect(actionHarness.formAction).not.toHaveBeenCalled();
+    expect(navigationMock).not.toHaveBeenCalled();
+  },
+);
+
+it('rejects an invalid patch without changing or reopening the draft', () => {
+  render(<BriefModal navigateToMailto={navigationMock} />);
+  prepare({ name: 'Ola' });
+  fireEvent.click(screen.getByRole('button', { name: /close/ }));
+  trackMock.mockClear();
+
+  expect(prepare({ projectType: 'private-option' as never })).toEqual({
+    status: 'form_busy',
+    missingRecommendedFields: [],
+    opened: false,
+  });
+  expect(formProbe.props?.draft.name).toBe('Ola');
+  expect(formProbe.props?.draft.projectType).toBe('');
+  expect(screen.queryByRole('dialog')).toBeNull();
+  expect(actionHarness.formAction).not.toHaveBeenCalled();
+  expect(navigationMock).not.toHaveBeenCalled();
+  expect(trackMock).not.toHaveBeenCalled();
+});
+
+it.each([
+  { label: 'pending', state: { status: 'idle' } as BriefFormProps['state'], pending: true },
+  { label: 'success', state: { status: 'success', submittedAt: 101 } as BriefFormProps['state'], pending: false },
+  {
+    label: 'fallback',
+    state: {
+      status: 'fallback',
+      fallback: { reason: 'unconfigured', mailtoHref: 'mailto:hello@koolstudio.pl' },
+      submittedAt: 102,
+    } as BriefFormProps['state'],
+    pending: false,
+  },
+])('does not prepare or reopen a $label form', ({ state, pending }) => {
+  actionHarness.state = state;
+  actionHarness.pending = pending;
+  render(<BriefModal navigateToMailto={navigationMock} />);
+  navigationMock.mockClear();
+  trackMock.mockClear();
+
+  expect(prepare({ name: 'Private name' })).toEqual({
+    status: 'form_busy',
+    missingRecommendedFields: [],
+    opened: false,
+  });
+  expect(formProbe.props?.draft.name ?? '').not.toBe('Private name');
+  expect(screen.queryByRole('dialog')).toBeNull();
+  expect(actionHarness.formAction).not.toHaveBeenCalled();
+  expect(navigationMock).not.toHaveBeenCalled();
+  expect(trackMock).not.toHaveBeenCalled();
 });
 
 it('renders the always-on CTA and tracks an argument-free open', () => {

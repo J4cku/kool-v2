@@ -698,6 +698,56 @@
         "areaDifference": "{differenceM2, plural, one {powierzchnia różni się o # m²} few {powierzchnia różni się o # m²} many {powierzchnia różni się o # m²} other {powierzchnia różni się o # m²}}",
         "feature": "cecha: {label}"
       }
+    },
+    "projectInquiry": {
+      "title": "Przygotuj zapytanie projektowe",
+      "description": "Przygotuj widoczny formularz zapytania projektowego do sprawdzenia przez użytkownika. Populate the visible project-enquiry form without submitting or contacting kool studio. Jeśli formularz nie jest dostępny, przejdź pod zwrócony adres kontaktowy i wywołaj narzędzie ponownie; status form_busy oznacza, że bieżącego stanu wysyłki nie wolno zmieniać.",
+      "properties": {
+        "name": "Imię osoby kontaktowej.",
+        "email": "Adres e-mail do odpowiedzi.",
+        "phone": "Opcjonalny numer telefonu.",
+        "projectType": "Typ projektu.",
+        "location": "Lokalizacja projektu.",
+        "propertyStage": "Obecny etap nieruchomości.",
+        "area": "Przybliżona powierzchnia w metrach kwadratowych.",
+        "desiredScope": "Oczekiwane elementy zakresu projektu.",
+        "designStart": "Pożądany termin rozpoczęcia projektu.",
+        "constructionStart": "Planowany termin rozpoczęcia realizacji.",
+        "budget": "Opcjonalny przybliżony budżet realizacji.",
+        "requirements": "Wymagania, priorytety i ograniczenia projektu.",
+        "plansUrl": "Opcjonalny link HTTP lub HTTPS do rzutów albo zdjęć.",
+        "language": "Język korespondencji w formularzu."
+      },
+      "projectTypes": {
+        "mieszkanie": "mieszkanie",
+        "dom": "dom",
+        "komercyjne": "wnętrze komercyjne",
+        "inne": "inne"
+      },
+      "stages": {
+        "zakup": "planuję zakup",
+        "przed-zmianami": "przed zmianami lokatorskimi",
+        "w-budowie": "w budowie",
+        "po-odbiorze": "po odbiorze kluczy",
+        "remont": "remont istniejącego wnętrza"
+      },
+      "scopeItems": {
+        "uklad-funkcjonalny": "układ funkcjonalny",
+        "projekt-koncepcyjny": "projekt koncepcyjny",
+        "dokumentacja-wykonawcza": "dokumentacja wykonawcza",
+        "zabudowy-na-wymiar": "zabudowy na wymiar",
+        "zestawienia-wyceny": "zestawienia i wyceny",
+        "nadzor-autorski": "nadzór autorski"
+      },
+      "languages": {
+        "pl": "polski",
+        "en": "angielski"
+      },
+      "statusGuidance": {
+        "navigate_to_contact": "Przejdź pod zwrócony adres strony kontaktowej i wywołaj narzędzie ponownie.",
+        "prepared": "Formularz jest otwarty i przygotowany do sprawdzenia oraz ręcznej wysyłki przez użytkownika.",
+        "form_busy": "Formularz wysyła dane albo pokazuje wynik; nie zmieniaj go i nie próbuj wysyłać ponownie."
+      }
     }
   },
   "przelot": {

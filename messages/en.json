@@ -698,6 +698,56 @@
         "areaDifference": "{differenceM2, plural, one {floor area differs by # m²} other {floor area differs by # m²}}",
         "feature": "feature: {label}"
       }
+    },
+    "projectInquiry": {
+      "title": "Prepare a project inquiry",
+      "description": "Populate the visible project-enquiry form without submitting or contacting kool studio. If the form is unavailable, navigate to the returned contact URL and invoke the tool again; form_busy means the person's current submission state must remain untouched.",
+      "properties": {
+        "name": "Contact person's name.",
+        "email": "Email address for the reply.",
+        "phone": "Optional phone number.",
+        "projectType": "Project type.",
+        "location": "Project location.",
+        "propertyStage": "Current property stage.",
+        "area": "Approximate area in square metres.",
+        "desiredScope": "Desired project scope items.",
+        "designStart": "Desired design start date.",
+        "constructionStart": "Planned construction start date.",
+        "budget": "Optional approximate implementation budget.",
+        "requirements": "Project requirements, priorities, and constraints.",
+        "plansUrl": "Optional HTTP or HTTPS link to plans or photos.",
+        "language": "Correspondence language for the form."
+      },
+      "projectTypes": {
+        "mieszkanie": "apartment",
+        "dom": "house",
+        "komercyjne": "commercial interior",
+        "inne": "other"
+      },
+      "stages": {
+        "zakup": "planning to buy",
+        "przed-zmianami": "before tenant modifications",
+        "w-budowie": "under construction",
+        "po-odbiorze": "after keys handover",
+        "remont": "renovation of an existing interior"
+      },
+      "scopeItems": {
+        "uklad-funkcjonalny": "functional layout",
+        "projekt-koncepcyjny": "conceptual design",
+        "dokumentacja-wykonawcza": "construction documentation",
+        "zabudowy-na-wymiar": "custom cabinetry",
+        "zestawienia-wyceny": "specifications and quotes",
+        "nadzor-autorski": "author's supervision"
+      },
+      "languages": {
+        "pl": "Polish",
+        "en": "English"
+      },
+      "statusGuidance": {
+        "navigate_to_contact": "Navigate to the returned contact-page URL and invoke the tool again.",
+        "prepared": "The form is open and ready for the person to review and submit manually.",
+        "form_busy": "The form is submitting or showing a result; do not change it or try to submit again."
+      }
     }
   },
   "przelot": {

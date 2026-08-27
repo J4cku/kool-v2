@@ -21,10 +21,12 @@ import {
 import {
   applyInquiryDraftPatch,
   createInquiryDraft,
+  getMissingRecommendedInquiryFields,
   type InquiryDraft,
   type InquiryDraftPatch,
   type InquiryLanguage,
 } from '@/lib/brief';
+import { registerInquiryPreparationHandler } from '@/lib/webmcp/inquiry-preparation';
 
 /* Trigger button + modal shell for the project-brief form on the kontakt
    page. This page-scoped owner preserves the controlled draft across dialog
@@ -171,6 +173,27 @@ export default function BriefModal({ navigateToMailto }: BriefModalProps = {}) {
     }, 0);
     return () => clearTimeout(id);
   }, [show]);
+
+  useEffect(() => registerInquiryPreparationHandler((patch) => {
+    const canPrepare = !isPending
+      && (state.status === 'idle' || state.status === 'invalid' || state.status === 'error');
+    if (!canPrepare) {
+      return { status: 'form_busy', missingRecommendedFields: [], opened: false };
+    }
+
+    const result = applyInquiryDraftPatch(draft, patch);
+    if (!result.ok) {
+      return { status: 'form_busy', missingRecommendedFields: [], opened: false };
+    }
+
+    setDraft(result.draft);
+    show();
+    return {
+      status: 'prepared',
+      missingRecommendedFields: getMissingRecommendedInquiryFields(result.draft),
+      opened: true,
+    };
+  }), [draft, state, isPending, language, show]);
 
   useEffect(() => {
     if (open || !pendingRestoreRef.current) return;
