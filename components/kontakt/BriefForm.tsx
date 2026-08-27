@@ -116,7 +116,6 @@ export default function BriefForm({
         {state.fallback && (
           <a
             href={state.fallback.mailtoHref}
-            data-analytics-skip
             className="inline-flex items-center gap-2 mt-5 mb-8 border border-dark px-6 py-3 min-h-[48px] font-[600] uppercase tracking-[0.06em] text-dark hover:bg-coral hover:border-coral hover:text-white transition-colors"
           >
             {t('status.fallbackButton')} <span aria-hidden="true">→</span>

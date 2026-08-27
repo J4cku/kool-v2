@@ -7,6 +7,7 @@ import {
   useRef,
   useState,
 } from 'react';
+import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useLocale, useTranslations } from 'next-intl';
 import BriefForm from './BriefForm';
@@ -230,66 +231,69 @@ export default function BriefModal({ navigateToMailto }: BriefModalProps = {}) {
         <span aria-hidden="true">→</span>
       </button>
 
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            ref={dialogRef}
-            role="dialog"
-            aria-modal="true"
-            aria-label={t('heading')}
-            tabIndex={-1}
-            initial={reduceMotion ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-50 flex items-stretch justify-center bg-dark/40 backdrop-blur-sm md:items-center md:p-6"
-            onMouseDown={(event) => {
-              if (event.target === event.currentTarget) close();
-            }}
-          >
+      {typeof document !== 'undefined' && createPortal(
+        <AnimatePresence>
+          {open && (
             <motion.div
-              initial={reduceMotion ? false : { opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 24 }}
-              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              className="relative w-full overflow-y-auto bg-beige px-5 pb-14 pt-14 md:max-w-[860px] md:max-h-[88dvh] md:px-12 md:pb-16"
+              ref={dialogRef}
+              role="dialog"
+              aria-modal="true"
+              aria-label={t('heading')}
+              tabIndex={-1}
+              initial={reduceMotion ? false : { opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              className="ph-no-capture fixed inset-0 z-50 flex items-stretch justify-center bg-dark/40 backdrop-blur-sm md:items-center md:p-6"
+              onMouseDown={(event) => {
+                if (event.target === event.currentTarget) close();
+              }}
             >
-              <button
-                ref={closeRef}
-                onClick={close}
-                aria-label={t('close')}
-                className="absolute right-3 top-3 flex h-11 w-11 items-center justify-center text-dark hover:opacity-60 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
+              <motion.div
+                initial={reduceMotion ? false : { opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 24 }}
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                className="relative w-full overflow-y-auto bg-beige px-5 pb-14 pt-14 md:max-w-[860px] md:max-h-[88dvh] md:px-12 md:pb-16"
               >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 20 20"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  aria-hidden="true"
+                <button
+                  ref={closeRef}
+                  onClick={close}
+                  aria-label={t('close')}
+                  className="absolute right-3 top-3 flex h-11 w-11 items-center justify-center text-dark hover:opacity-60 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
                 >
-                  <line x1="4" y1="4" x2="16" y2="16" />
-                  <line x1="16" y1="4" x2="4" y2="16" />
-                </svg>
-              </button>
-              <BriefForm
-                draft={draft}
-                renderedAt={renderedAt}
-                onDraftPatch={patchDraft}
-                onStarted={markStarted}
-                state={
-                  state.status === 'success'
-                    && dismissedSuccessAt === state.submittedAt
-                    ? initialBriefState
-                    : state
-                }
-                formAction={formAction}
-                isPending={isPending}
-              />
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    aria-hidden="true"
+                  >
+                    <line x1="4" y1="4" x2="16" y2="16" />
+                    <line x1="16" y1="4" x2="4" y2="16" />
+                  </svg>
+                </button>
+                <BriefForm
+                  draft={draft}
+                  renderedAt={renderedAt}
+                  onDraftPatch={patchDraft}
+                  onStarted={markStarted}
+                  state={
+                    state.status === 'success'
+                      && dismissedSuccessAt === state.submittedAt
+                      ? initialBriefState
+                      : state
+                  }
+                  formAction={formAction}
+                  isPending={isPending}
+                />
+              </motion.div>
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>,
+        document.body,
+      )}
     </>
   );
 }

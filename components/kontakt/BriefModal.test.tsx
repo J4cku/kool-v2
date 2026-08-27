@@ -125,6 +125,34 @@ it('renders the always-on CTA and tracks an argument-free open', () => {
   expect(navigationMock).not.toHaveBeenCalled();
 });
 
+it('blocks the entire enquiry dialog subtree from replay and autocapture', () => {
+  render(<BriefModal />);
+  fireEvent.click(screen.getByRole('button', { name: /openCta/ }));
+
+  const dialog = screen.getByRole('dialog');
+  expect(dialog.classList.contains('ph-no-capture')).toBe(true);
+  expect(dialog.contains(document.getElementById('brief-form'))).toBe(true);
+});
+
+it('roots the fixed dialog at the viewport outside transformed page ancestors', () => {
+  const transformed = document.createElement('div');
+  const mount = document.createElement('section');
+  transformed.style.transform = 'translateX(0px)';
+  transformed.appendChild(mount);
+  document.body.appendChild(transformed);
+  const view = render(<BriefModal />, { container: mount });
+
+  try {
+    fireEvent.click(screen.getByRole('button', { name: /openCta/ }));
+    const dialog = screen.getByRole('dialog');
+    expect(dialog.parentElement).toBe(document.body);
+    expect(transformed.contains(dialog)).toBe(false);
+  } finally {
+    view.unmount();
+    transformed.remove();
+  }
+});
+
 it('opens from #brief after the effect schedules its timer', () => {
   vi.useFakeTimers();
   window.history.replaceState(null, '', '/pl/kontakt#brief');
@@ -320,7 +348,7 @@ it('closes by Escape and by the backdrop itself', async () => {
   await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
 });
 
-it('restores nested background state before restoring opener focus', async () => {
+it('restores the portaled background root and nested state before opener focus', async () => {
   const outer = document.createElement('div');
   const outerBefore = document.createElement('nav');
   const outerAfter = document.createElement('aside');
@@ -328,6 +356,7 @@ it('restores nested background state before restoring opener focus', async () =>
   const middleBefore = document.createElement('header');
   const middleAfter = document.createElement('footer');
   const mount = document.createElement('section');
+  outer.inert = false;
   outerBefore.inert = false;
   outerBefore.setAttribute('aria-hidden', 'false');
   outerAfter.inert = true;
@@ -342,14 +371,16 @@ it('restores nested background state before restoring opener focus', async () =>
   const opener = screen.getByRole('button', { name: /openCta/ });
   opener.inert = false;
   fireEvent.click(opener);
-  for (const sibling of [outerBefore, outerAfter, middleBefore, middleAfter]) {
-    expect(sibling.inert).toBe(true);
-    expect(sibling.getAttribute('aria-hidden')).toBe('true');
-  }
+  expect(outer.inert).toBe(true);
+  expect(outer.getAttribute('aria-hidden')).toBe('true');
+  expect([outerBefore.inert, outerBefore.getAttribute('aria-hidden')]).toEqual([false, 'false']);
+  expect([outerAfter.inert, outerAfter.getAttribute('aria-hidden')]).toEqual([true, null]);
+  expect([middleBefore.inert, middleBefore.getAttribute('aria-hidden')]).toEqual([false, null]);
+  expect([middleAfter.inert, middleAfter.getAttribute('aria-hidden')]).toEqual([false, 'false']);
 
   let stateAtFocus: Array<[boolean, string | null]> | null = null;
   opener.addEventListener('focus', () => {
-    stateAtFocus = [opener, outerBefore, outerAfter, middleBefore, middleAfter].map(
+    stateAtFocus = [outer, opener, outerBefore, outerAfter, middleBefore, middleAfter].map(
       (element) => [element.inert, element.getAttribute('aria-hidden')],
     );
   }, { once: true });
@@ -357,6 +388,7 @@ it('restores nested background state before restoring opener focus', async () =>
   fireEvent.click(screen.getByRole('button', { name: /close/ }));
   await waitFor(() => expect(document.activeElement).toBe(opener));
   expect(stateAtFocus).toEqual([
+    [false, null],
     [false, null],
     [false, 'false'],
     [true, null],
