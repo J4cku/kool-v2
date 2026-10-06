@@ -9,6 +9,7 @@ import { locales, type Locale } from '@/i18n/request';
 import { BASE_URL, INSTAGRAM_URL } from '@/lib/site';
 import { jsonLdScript } from '@/lib/metadata';
 import { getProjectSearchIndex } from '@/lib/projects/project-search-index.server';
+import MetaPixel from '@/components/MetaPixel';
 import PageTransition from '@/components/PageTransition';
 import WebMcpProvider from '@/components/WebMcpProvider';
 import '../globals.css';
@@ -140,6 +141,10 @@ export default async function LocaleLayout({
           <WebMcpProvider locale={validatedLocale} projectIndex={projectIndex} />
           <PageTransition>{children}</PageTransition>
         </NextIntlClientProvider>
+        {/* Outside the isVercelDeployment guard on purpose: the pixel gates
+            itself on consent and on NODE_ENV, and a Vercel-only mount would
+            make the ad campaign's measurement depend on where the build ran. */}
+        <MetaPixel />
         {isVercelDeployment && (
           <>
             <Analytics />

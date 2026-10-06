@@ -102,7 +102,7 @@ describe('BriefForm', () => {
     fireEvent.click(scope);
 
     const canonicalKeys = Array.from(new FormData(form).keys()).filter(
-      (key) => key !== 'company' && key !== 'ts',
+      (key) => key !== 'company' && key !== 'ts' && key !== 'marketingConsent',
     );
     expect(canonicalKeys).toEqual([
       'name', 'email', 'phone', 'projectType', 'location', 'propertyStage', 'area',

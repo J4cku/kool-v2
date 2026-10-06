@@ -10,7 +10,7 @@ const trackMock = vi.hoisted(() => vi.fn());
 const navigationMock = vi.hoisted(() => vi.fn());
 
 vi.mock('@/app/[locale]/kontakt/actions', () => ({ submitBrief: submitBriefMock }));
-vi.mock('@/lib/analytics', () => ({ track: trackMock }));
+vi.mock('@/lib/analytics', () => ({ track: trackMock, consentStatus: () => 'pending', subscribeConsentStatus: () => () => {} }));
 vi.mock('next-intl', () => ({
   useLocale: () => 'pl',
   useTranslations: () => (key: string) => key,

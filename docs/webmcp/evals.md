@@ -1,5 +1,11 @@
 # WebMCP Evaluation Log
 
+## PR 64 integration verification
+
+- Integrated current `origin/main` (`58ba68c`) while preserving WebMCP and the controlled enquiry lifecycle, main's consent-gated Meta browser/CAPI conversions, and main's exact dependency versions. Conversion tracking remains owned by the persistent modal; draft preparation and fallback do not emit a Lead event.
+- Installed the integrated frozen lockfile successfully. `pnpm check` with Next.js 16.3.7 exited `0`: 196/196 Vitest tests, 69/69 Node tests, typecheck, lint, 466-key translation parity, and the default Turbopack build with 58/58 pages passed. The earlier local build restriction below no longer blocks the integrated branch.
+- Independent integration review and 78 focused tests passed against the installed dependencies. One earlier focused run during dependency replacement failed the dismissed-success preparation test; the full gate and fresh focused reruns passed. The conversion regression additionally checks close/reopen/dismiss/reprepare without duplicating the Lead event.
+
 ## 2026-10-06 integration verification
 
 The evidence below applies to the current local working tree, not a deployed release. Earlier phase records remain historical.

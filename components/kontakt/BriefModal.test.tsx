@@ -12,6 +12,9 @@ import type {
   InquiryPreparationHandlerResult,
 } from '@/lib/webmcp/inquiry-preparation';
 
+const metaTrackMock = vi.hoisted(() => vi.fn());
+const consentHarness = vi.hoisted(() => ({ status: 'pending' }));
+vi.mock('@/lib/meta-pixel', () => ({ metaTrack: metaTrackMock }));
 const trackMock = vi.hoisted(() => vi.fn());
 type ProbeMode = 'form' | 'success' | 'error' | 'fallback';
 const formProbe = vi.hoisted(() => ({
@@ -47,7 +50,7 @@ vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
 }));
 vi.mock('@/hooks/useReducedMotion', () => ({ useReducedMotion: () => false }));
-vi.mock('@/lib/analytics', () => ({ track: trackMock }));
+vi.mock('@/lib/analytics', () => ({ track: trackMock, consentStatus: () => consentHarness.status, subscribeConsentStatus: () => () => {} }));
 vi.mock('@/lib/webmcp/inquiry-preparation', () => ({
   registerInquiryPreparationHandler: vi.fn((handler: InquiryPreparationHandler) => {
     preparationHarness.handler = handler;
@@ -132,6 +135,8 @@ afterEach(() => {
   formProbe.mode = 'form';
   formProbe.submittedTimestamp = null;
   trackMock.mockReset();
+  metaTrackMock.mockReset();
+  consentHarness.status = 'pending';
   navigationMock.mockReset();
   actionHarness.state = { status: 'idle' };
   actionHarness.formAction.mockReset();
@@ -629,4 +634,31 @@ it('restores pre-existing inert, absent aria-hidden, and overflow on unmount', (
   expect(background.hasAttribute('aria-hidden')).toBe(false);
   expect(document.documentElement.style.overflow).toBe('clip');
   background.remove();
+});
+
+
+it('reports one deduplicated Meta Lead only for confirmed delivery with consent', () => {
+  consentHarness.status = 'granted';
+  const view = render(<BriefModal navigateToMailto={navigationMock} />);
+  prepare({ name: 'Ola' });
+  expect(metaTrackMock).not.toHaveBeenCalled();
+  actionHarness.state = { status: 'fallback', submittedAt: 1, fallback: { reason: 'unconfigured', mailtoHref: 'mailto:test@example.com' } };
+  view.rerender(<BriefModal navigateToMailto={navigationMock} />);
+  expect(metaTrackMock).not.toHaveBeenCalled();
+  actionHarness.state = { status: 'success', submittedAt: 2, metaEventId: 'confirmed-lead' };
+  view.rerender(<BriefModal navigateToMailto={navigationMock} />);
+  view.rerender(<BriefModal navigateToMailto={navigationMock} />);
+  fireEvent.click(screen.getByRole('button', { name: /close/ }));
+  fireEvent.click(screen.getByRole('button', { name: /openCta/ }));
+  fireEvent.click(screen.getByRole('button', { name: /close/ }));
+  expect(prepare({ name: 'Nowa Ola' }).status).toBe('prepared');
+  expect(metaTrackMock.mock.calls).toEqual([['Lead', { content_name: 'project-brief', content_category: undefined }, 'confirmed-lead']]);
+});
+
+it.each(['pending', 'denied'])('does not report a Meta Lead with %s consent', (status) => {
+  consentHarness.status = status;
+  const view = render(<BriefModal navigateToMailto={navigationMock} />);
+  actionHarness.state = { status: 'success', submittedAt: 3, metaEventId: 'confirmed-lead' };
+  view.rerender(<BriefModal navigateToMailto={navigationMock} />);
+  expect(metaTrackMock).not.toHaveBeenCalled();
 });

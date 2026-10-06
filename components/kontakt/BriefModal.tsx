@@ -11,7 +11,8 @@ import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useLocale, useTranslations } from 'next-intl';
 import BriefForm from './BriefForm';
-import { track } from '@/lib/analytics';
+import { consentStatus, track } from '@/lib/analytics';
+import { metaTrack } from '@/lib/meta-pixel';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { submitBrief } from '@/app/[locale]/kontakt/actions';
 import {
@@ -142,6 +143,13 @@ export default function BriefModal({ navigateToMailto }: BriefModalProps = {}) {
     handledResponseRef.current = state.submittedAt;
     if (state.status === 'success') {
       track('contact_form_submitted');
+      if (consentStatus() === 'granted') {
+        metaTrack(
+          'Lead',
+          { content_name: 'project-brief', content_category: state.submitted?.projectType },
+          state.metaEventId,
+        );
+      }
       queueMicrotask(resetAfterDelivery);
     } else if (state.status === 'fallback' && state.fallback) {
       track('contact_form_mailto_fallback');

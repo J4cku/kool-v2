@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useSyncExternalStore } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { consentStatus, subscribeConsentStatus } from '@/lib/analytics';
 import { Link } from '@/i18n/navigation';
 import type { BriefFormState } from '@/app/[locale]/kontakt/brief-state';
 import {
@@ -50,6 +51,11 @@ export default function BriefForm({
 }: BriefFormProps) {
   const t = useTranslations('brief');
   const reduceMotion = useReducedMotion();
+  const marketingConsent = useSyncExternalStore(
+    subscribeConsentStatus,
+    () => consentStatus(),
+    () => null,
+  );
 
   const resultRef = useRef<HTMLDivElement>(null);
   const formErrorRef = useRef<HTMLParagraphElement>(null);
@@ -174,6 +180,7 @@ export default function BriefForm({
           />
         </div>
         <input type="hidden" name="ts" value={renderedAt === null ? '' : String(renderedAt)} />
+        <input type="hidden" name="marketingConsent" value={marketingConsent ?? 'unknown'} readOnly />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
           {/* name */}

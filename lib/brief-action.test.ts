@@ -3,6 +3,11 @@ import { submitBrief } from '@/app/[locale]/kontakt/actions';
 import { initialBriefState } from '@/app/[locale]/kontakt/brief-state';
 import type { NormalizedBrief } from '@/lib/brief';
 
+const afterMock = vi.hoisted(() => vi.fn());
+const metaLeadMock = vi.hoisted(() => vi.fn());
+vi.mock('next/server', () => ({ after: afterMock }));
+vi.mock('next/headers', () => ({ headers: async () => new Headers(), cookies: async () => ({ get: () => undefined }) }));
+vi.mock('@/lib/meta-capi', () => ({ sendMetaLeadEvent: metaLeadMock }));
 const NOW = 1_800_000_000_000;
 const EXPECTED_SUBMITTED = {
   name: 'Ola Testowa', email: 'ola@example.com', phone: '+48 600 700 800',
@@ -47,6 +52,9 @@ function form(overrides: Record<string, string | string[]> = {}): FormData {
 beforeEach(() => {
   vi.spyOn(Date, 'now').mockReturnValue(NOW);
   vi.stubEnv('RESEND_API_KEY', '');
+  vi.stubEnv('META_CAPI_ACCESS_TOKEN', '');
+  afterMock.mockReset();
+  metaLeadMock.mockReset();
   vi.stubEnv('BRIEF_FROM_EMAIL', 'briefs@example.test');
   vi.stubEnv('BRIEF_TO_EMAIL', 'studio@example.test');
 });
@@ -90,7 +98,7 @@ describe('submitBrief', () => {
     vi.stubGlobal('fetch', fetchMock);
     const result = await submitBrief(initialBriefState, form({ language: 'en' }));
     expect(result).toEqual({
-      status: 'success', submitted: EXPECTED_SUBMITTED, submittedAt: NOW,
+      status: 'success', submitted: EXPECTED_SUBMITTED, submittedAt: NOW, metaEventId: expect.any(String),
     });
     expect(fetchMock).toHaveBeenCalledTimes(2);
     const studio = JSON.parse(String(fetchMock.mock.calls[0][1]?.body));
@@ -131,4 +139,37 @@ describe('submitBrief', () => {
     });
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
+});
+
+
+it.each(['granted', 'denied', 'pending'])('schedules CAPI only after successful delivery with %s consent', async (consent) => {
+  vi.stubEnv('RESEND_API_KEY', 're_test');
+  vi.stubEnv('META_CAPI_ACCESS_TOKEN', 'test-token');
+  vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(null, { status: 200 })));
+  const result = await submitBrief(initialBriefState, form({ marketingConsent: consent, language: 'en' }));
+  expect(result.status).toBe('success');
+  expect(result.metaEventId).toEqual(expect.any(String));
+  if (consent === 'granted') {
+    expect(afterMock).toHaveBeenCalledOnce();
+    await afterMock.mock.calls[0][0]();
+    expect(metaLeadMock).toHaveBeenCalledWith(expect.objectContaining({ eventId: result.metaEventId, eventTime: NOW / 1000, eventSourceUrl: expect.stringContaining('/en/kontakt') }), 'test-token', expect.any(String));
+  } else {
+    expect(afterMock).not.toHaveBeenCalled();
+  }
+});
+
+it('never schedules CAPI for validation, spam, unconfigured or failed delivery', async () => {
+  vi.stubEnv('META_CAPI_ACCESS_TOKEN', 'test-token');
+  const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 503 }));
+  vi.stubGlobal('fetch', fetchMock);
+  const invalidInputs: Record<string, string | string[]>[] = [{ email: 'invalid' }, { company: 'bot' }, {}];
+  for (const overrides of invalidInputs) {
+    const result = await submitBrief(initialBriefState, form({ marketingConsent: 'granted', ...overrides }));
+    expect(result.metaEventId).toBeUndefined();
+  }
+  vi.stubEnv('RESEND_API_KEY', 're_test');
+  const result = await submitBrief(initialBriefState, form({ marketingConsent: 'granted' }));
+  expect(result.status).toBe('fallback');
+  expect(result.metaEventId).toBeUndefined();
+  expect(afterMock).not.toHaveBeenCalled();
 });
