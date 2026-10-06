@@ -16,6 +16,7 @@ export function projectSearchIndexFromLocalizedProjects(
     projectType: project.projectType,
     areaM2: project.areaM2,
     objectiveFeatures: [...project.objectiveFeatures],
+    scope: [...project.scope],
     url: `${baseUrl}/${locale}/projekty/${project.slug}`,
   }));
 }

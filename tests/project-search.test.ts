@@ -17,6 +17,7 @@ const expectedLeanKeys = [
   'location',
   'objectiveFeatures',
   'projectType',
+  'scope',
   'slug',
   'title',
   'url',
@@ -53,6 +54,9 @@ test('the project index localizes text and emits locale-prefixed absolute URLs',
   assert.equal(english.url, 'https://koolstudio.pl/en/projekty/dom-dobrzykowice');
   assert.equal(polish.category, 'residential');
   assert.notStrictEqual(polish.objectiveFeatures, projects[0].objectiveFeatures);
+  assert.deepEqual(polish.scope, projects[0].scope);
+  assert.deepEqual(english.scope, projects[0].en.scope);
+  assert.notStrictEqual(polish.scope, projects[0].scope);
 });
 
 test('only the server index wrapper runtime-imports the canonical catalog', () => {

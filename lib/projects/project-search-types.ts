@@ -37,6 +37,7 @@ export type ProjectIndexEntry = {
   projectType: PortfolioProjectType;
   areaM2: number;
   objectiveFeatures: ProjectObjectiveFeature[];
+  scope: string[];
   url: string;
 };
 

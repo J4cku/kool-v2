@@ -160,7 +160,7 @@ it('accepts an optional partial patch and forwards only prepared public fields',
     expect(handler).toHaveBeenCalledWith(suppliedPatch);
     expect(result).toEqual({
       status: 'prepared',
-      contactUrl: 'https://koolstudio.pl/en/kontakt#brief',
+      contactUrl: `${document.location.origin}/en/kontakt#brief`,
       missingRecommendedFields: ['name', 'location'],
       submitted: false,
       opened: true,
@@ -186,7 +186,7 @@ it('returns localized unavailable guidance without retaining or echoing the patc
 
   expect(result).toEqual({
     status: 'navigate_to_contact',
-    contactUrl: 'https://koolstudio.pl/pl/kontakt#brief',
+    contactUrl: `${document.location.origin}/pl/kontakt#brief`,
     missingRecommendedFields: [],
     submitted: false,
     opened: false,

@@ -1,10 +1,15 @@
 import type { Locale } from '@/i18n/request';
-import type { WebMcpTool } from '@/lib/webmcp/model-context';
+import { getWebMcpRegistrationDiagnostics, type WebMcpTool } from '@/lib/webmcp/model-context';
 
 export function createWebMcpDebugTool(
   locale: Locale,
   currentDocument: Document,
 ): WebMcpTool {
+  const annotations: WebMCP.ToolAnnotations & { debugging: boolean } = {
+    readOnlyHint: true,
+    debugging: true,
+  };
+
   return {
     name: 'kool_webmcp_debug',
     title: 'kool studio WebMCP diagnostics',
@@ -14,14 +19,13 @@ export function createWebMcpDebugTool(
       properties: {},
       additionalProperties: false,
     },
-    annotations: { readOnlyHint: true },
+    annotations,
     async execute(_input, { signal }) {
       signal.throwIfAborted();
       return {
-        supported: true,
+        supported: typeof currentDocument.modelContext?.registerTool === 'function',
         locale,
-        pathname: currentDocument.location?.pathname ?? '',
-        title: currentDocument.title,
+        registrations: getWebMcpRegistrationDiagnostics(currentDocument.modelContext),
       };
     },
   };

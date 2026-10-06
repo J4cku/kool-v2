@@ -18,6 +18,8 @@
 
 ## Production tool manifest
 
+As of 2026-10-06, search returns localized published scope plus category, project type, and curated objective features. Its `url` uses the current browser origin, while `canonicalUrl` preserves the published source. Inquiry preparation likewise uses the current origin for contact navigation, so local and preview evaluation stays on the tested deployment. Non-browser execution falls back to the canonical origin.
+
 | Tool | Classification | Boundary |
 | --- | --- | --- |
 | `kool_find_projects` | Read-only | Searches only canonical published portfolio facts. |
@@ -40,6 +42,9 @@ There is permanently no automatic inquiry-submission tool. WebMCP cannot submit 
 - The former PostHog `brief-form` gate has been removed. WebMCP and contact-form availability do not depend on PostHog feature flags.
 
 ## Verification and observability
+
+- Native discovery/manual invocation, English-to-Polish locale switching, and visible form preparation were observed in the Codex desktop in-app browser on 2026-10-06; see `evals.md` for the exact scope and remaining rollout limitations.
+- Registration errors are isolated and surfaced as a fixed error code plus tool name in production warnings. Optional diagnostics expose per-context registration states without input values or arbitrary exception text.
 
 - Vitest/jsdom covers component and hook tests.
 - Node's test runner covers `tests/*.test.ts`.

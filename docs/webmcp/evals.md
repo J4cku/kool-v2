@@ -1,5 +1,31 @@
 # WebMCP Evaluation Log
 
+## 2026-10-06 integration verification
+
+The evidence below applies to the current local working tree, not a deployed release. Earlier phase records remain historical.
+
+- Native discovery and invocation were performed through the Codex desktop in-app browser's document-bound WebMCP capability against `http://localhost:55991` using `pnpm dev`. No polyfill or mocked registration API was substituted.
+- `/en` exposed exactly the two production tools plus the development diagnostic tool. Search was classified read-only and preparation state-changing.
+- English search `{category: "residential", location: "Wroclaw", targetAreaM2: 85, limit: 2}` returned three total matches and two results, including the 84 m² Walecznych apartment. Results included canonical category/type/features, localized published scope, localhost navigation URLs, production `canonicalUrl`, and localized match reasons.
+- Preparing `{projectType: "mieszkanie", area: "85"}` on `/en` returned `navigate_to_contact`, `http://localhost:55991/en/kontakt#brief`, and `submitted: false`.
+- On `/en/kontakt#brief`, preparation with an 85 m² apartment, Wrocław, and a synthetic verification requirement returned `prepared`, `opened: true`, missing recommended fields, and `submitted: false`. Browser inspection confirmed those values in the visible form; name/email remained empty. The submit control was never invoked.
+- Switching to Polish through the visible locale control replaced the English registrations with exactly one Polish registration per tool. Polish search returned localized scope/reasons and a `/pl/projekty/...` localhost navigation URL.
+- Polish preparation returned `prepared` and `submitted: false`; browser inspection confirmed apartment/Wrocław/85 in the visible form.
+- The diagnostic tool returned only support, locale, and tool registration names/states. All three were `registered`; page title, pathname, input arguments, and arbitrary error messages were absent.
+- The debug definition includes the progressive `debugging` annotation described in [Chrome's imperative API documentation](https://developer.chrome.com/docs/ai/webmcp/imperative-api), which documents support from Chrome 156. This browser's manifest did not expose that annotation; filtering by it is not claimed verified.
+- The same browser was then checked against `PORT=55991 pnpm start` serving the successful Webpack production build. `/pl/kontakt` exposed exactly the two production tools with the expected read-only classification; the diagnostic tool was absent. Native search returned the rich localized facts/current-origin links, and preparation populated the visible form with `submitted: false`. Switching through the locale control to `/en/kontakt` yielded exactly the two English registrations.
+- `pnpm check` passed 182/182 Vitest tests, 58/58 Node tests, typecheck, lint, and 466-key i18n parity, but exited `1` at the build: the sandbox first blocked Google Fonts fetching, and the escalated rerun encountered Turbopack's OS worker-port binding restriction. An escalated standalone `pnpm build` reproduced that port restriction. The default gate is not claimed passed.
+- Supported fallback `pnpm build --webpack` exited `0`, compiled/typechecked successfully, and generated 58/58 pages. Independent code review approved the scoped changes; independent focused tests passed 75 WebMCP/provider tests and 12 project-search tests. `git diff --check` exited `0`.
+- Production deployment, Chrome origin-trial activation, ChatGPT account/model eligibility, and autonomous natural-language tool selection remain unverified. Successful local manual invocation does not establish those properties.
+- User-reported Chrome verification: enabling the local WebMCP testing flag made all three development tools visible in Chrome DevTools; the user subsequently confirmed manual execution worked. This is user-reported evidence, distinct from the agent-observed Codex browser checks above.
+
+## Current implementation behavior
+
+- Browser navigation stays on the current document origin; non-browser execution falls back to the canonical site origin. Search separately preserves the published source as `canonicalUrl`.
+- Search includes category, project type, curated objective features, and localized published scope, excluding long descriptions and galleries. The current maximal five-result regression fixture is capped at 4,500 serialized characters in both locales; this is a fixture regression budget, not a universal bound for future catalog data.
+- Registration handles synchronous exceptions and asynchronous rejection, frees failed names, isolates diagnostic callbacks, and prevents stale completion/rejection/cleanup from changing a newer registration. Registrations are isolated by model context.
+- Production registration warnings contain only the tool name and fixed `registration_failed` code. Diagnostic state never stores tool arguments or exception text. The debug tool remains development/explicit-opt-in only.
+
 ## Phase 4 availability evidence
 
 - RED: the prescribed availability command exited `1` with 9 passing and exactly 2 failing provider tests: the obsolete base-gate export was still present and a configured origin-trial token produced no meta.
@@ -48,7 +74,7 @@ There is no automatic submission tool. Evaluation must stop at the populated vis
 - HTTP checks against the enabled production server on `http://127.0.0.1:55990`: the header command exited `0` and returned `Origin-Agent-Cluster: ?1`; `/pl` returned `200`; `/en/projekty` returned `200`; `/pl/route-that-does-not-exist` returned `404`. Each status command exited `0`.
 - Payload budget from the maximal current five-result catalog fixture: Polish serialized output was 1,499 characters and 1,536 UTF-8 bytes; English serialized output was 1,462 characters and 1,478 UTF-8 bytes. `pnpm exec vitest run lib/webmcp/tools/find-projects.test.ts --reporter=verbose` exited `0` with 12/12 tests passing.
 
-## Native browser status
+## Historical Phase 2 native browser status
 
 - Unverified — no supported native-WebMCP browser context was connected.
 - The available browser tooling exposed ordinary Playwright only; it was not substituted for native WebMCP discovery.

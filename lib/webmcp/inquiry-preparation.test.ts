@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   prepareProjectInquiry,
   registerInquiryPreparationHandler,
@@ -12,7 +12,7 @@ describe('inquiry preparation bridge', () => {
 
     expect(first).toEqual({
       status: 'navigate_to_contact',
-      contactUrl: 'https://koolstudio.pl/en/kontakt#brief',
+      contactUrl: `${document.location.origin}/en/kontakt#brief`,
       missingRecommendedFields: [],
       submitted: false,
       opened: false,
@@ -42,7 +42,7 @@ describe('inquiry preparation bridge', () => {
     expect(handler).toHaveBeenCalledWith({ name: 'Ola' });
     expect(result).toEqual({
       status: 'prepared',
-      contactUrl: 'https://koolstudio.pl/pl/kontakt#brief',
+      contactUrl: `${document.location.origin}/pl/kontakt#brief`,
       missingRecommendedFields: ['email', 'budget'],
       submitted: false,
       opened: true,
@@ -97,4 +97,29 @@ describe('inquiry preparation bridge', () => {
 
     obsoleteCleanup();
   });
+});
+
+
+afterEach(() => vi.unstubAllGlobals());
+
+describe.each(['pl', 'en'] as const)('inquiry navigation in %s', (locale) => {
+  it.each([
+    'http://localhost:8080',
+    'https://kool-preview.vercel.app',
+    'https://koolstudio.pl',
+  ])('guides agents to the visible form on %s', (origin) => {
+    vi.stubGlobal('document', { location: new URL(`${origin}/${locale}/projekty`) });
+    expect(prepareProjectInquiry({}, locale)).toMatchObject({
+      status: 'navigate_to_contact',
+      contactUrl: `${origin}/${locale}/kontakt#brief`,
+      opened: false,
+      submitted: false,
+    });
+  });
+});
+
+
+it('falls back to the canonical origin during server rendering', () => {
+  vi.stubGlobal('document', undefined);
+  expect(prepareProjectInquiry({}, 'en').contactUrl).toBe('https://koolstudio.pl/en/kontakt#brief');
 });

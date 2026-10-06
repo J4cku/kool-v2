@@ -1,4 +1,4 @@
-import { Children, isValidElement, type ReactElement, type ReactNode } from 'react';
+import { Children, StrictMode, isValidElement, type ReactElement, type ReactNode } from 'react';
 import { cleanup, render } from '@testing-library/react';
 import { NextIntlClientProvider } from 'next-intl';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -19,6 +19,7 @@ const projectIndex: ProjectIndexEntry[] = [{
   catalogOrder: 0,
   slug: 'mieszkanie-walecznych',
   title: 'apartment',
+  scope: ['Interior design'],
   location: 'Wrocław',
   category: 'residential',
   projectType: 'apartment',
@@ -28,6 +29,7 @@ const projectIndex: ProjectIndexEntry[] = [{
 }];
 
 vi.mock('@/lib/webmcp/model-context', () => ({
+  getWebMcpRegistrationDiagnostics: vi.fn(() => []),
   registerWebMcpTool: vi.fn(() => {
     const unregister = vi.fn();
     unregisters.push(unregister);
@@ -151,21 +153,30 @@ describe('kool_webmcp_debug', () => {
     expect(tool.description).toBe(
       'Read public diagnostic state for the current kool studio page.',
     );
-    expect(tool.annotations).toEqual({ readOnlyHint: true });
+    expect(tool.annotations).toEqual({ readOnlyHint: true, debugging: true });
     expect(tool.inputSchema).toEqual({
       type: 'object',
       properties: {},
       additionalProperties: false,
     });
     await expect(tool.execute({}, { signal })).resolves.toEqual({
-      supported: true,
+      supported: false,
       locale: 'pl',
-      pathname: '/pl/projekty',
-      title: 'kool studio',
+      registrations: [],
     });
   });
 
-  it('honors execution cancellation', async () => {
+  it('excludes arbitrary page data from diagnostics', async () => {
+    document.title = 'private@example.com';
+    window.history.replaceState(null, '', '/pl/kontakt?email=private@example.com#secret');
+    const tool = createWebMcpDebugTool('pl', document);
+    const result = await tool.execute({}, { signal: new AbortController().signal });
+    expect(Object.keys(result as object).sort()).toEqual(['locale', 'registrations', 'supported']);
+    expect(JSON.stringify(result)).not.toContain('private@example.com');
+    expect(JSON.stringify(result)).not.toContain('secret');
+  });
+
+  it('honors execution cancellation' , async () => {
     const tool = createWebMcpDebugTool('en', document);
     const controller = new AbortController();
     controller.abort(new DOMException('Cancelled', 'AbortError'));
@@ -187,7 +198,24 @@ describe('WebMcpProvider', () => {
     ]);
   });
 
-  it('registers both production tools and debug in development', () => {
+  it('reports production registration failures with fixed codes and no tool arguments', () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    vi.stubEnv('NEXT_PUBLIC_WEBMCP_DEBUG', 'false');
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    renderProvider('en');
+    const options = vi.mocked(registerWebMcpTool).mock.calls[0][1];
+    options?.onError?.({
+      name: 'kool_find_projects',
+      state: 'failed',
+      errorCode: 'registration_failed',
+    });
+    expect(warn).toHaveBeenCalledExactlyOnceWith(
+      'WebMCP registration failed', 'kool_find_projects', 'registration_failed',
+    );
+    warn.mockRestore();
+  });
+
+  it('registers both production tools and debug in development' , () => {
     vi.stubEnv('NODE_ENV', 'development');
     renderProvider('pl');
 
@@ -233,6 +261,23 @@ describe('WebMcpProvider', () => {
 
     cleanup();
     expect(unregisters).toHaveLength(4);
+    expect(unregisters.every((unregister) => unregister.mock.calls.length === 1)).toBe(true);
+  });
+
+  it('cleans each registration during Strict Mode replay and final unmount', () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    vi.stubEnv('NEXT_PUBLIC_WEBMCP_DEBUG', 'false');
+    const mounted = render(
+      <StrictMode>
+        <NextIntlClientProvider locale="en" messages={enMessages}>
+          <WebMcpProvider locale="en" projectIndex={projectIndex} />
+        </NextIntlClientProvider>
+      </StrictMode>,
+    );
+    expect(unregisters).toHaveLength(4);
+    expect(unregisters.slice(0, 2).every((unregister) => unregister.mock.calls.length === 1)).toBe(true);
+    expect(unregisters.slice(2).every((unregister) => unregister.mock.calls.length === 0)).toBe(true);
+    mounted.unmount();
     expect(unregisters.every((unregister) => unregister.mock.calls.length === 1)).toBe(true);
   });
 

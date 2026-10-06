@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import type { Locale } from '@/i18n/request';
 import type { ProjectIndexEntry } from '@/lib/projects/project-search-types';
 import { isWebMcpDebugEnabled } from '@/lib/webmcp/flags';
-import { registerWebMcpTool } from '@/lib/webmcp/model-context';
+import { registerWebMcpTool, type WebMcpRegistrationDiagnostic } from '@/lib/webmcp/model-context';
 import { createWebMcpDebugTool } from '@/lib/webmcp/tools/debug';
 import {
   createFindProjectsTool,
@@ -29,9 +29,9 @@ export default function WebMcpProvider({ locale, projectIndex }: WebMcpProviderP
   );
 
   useEffect(() => {
-    const onError = process.env.NODE_ENV === 'development'
-      ? (error: unknown) => console.warn('WebMCP registration failed', error)
-      : undefined;
+    const onError = (diagnostic: WebMcpRegistrationDiagnostic) => {
+      console.warn('WebMCP registration failed', diagnostic.name, diagnostic.errorCode);
+    };
     const cleanups = [
       registerWebMcpTool(
         createFindProjectsTool(

@@ -11,6 +11,7 @@ import {
 } from '@/lib/projects/project-search-types';
 import { searchProjects, validateProjectSearchInput } from '@/lib/projects/search-projects';
 import type { WebMcpTool } from '@/lib/webmcp/model-context';
+import { webMcpSiteUrl } from '@/lib/webmcp/site-url';
 
 export type FindProjectsToolCopy = {
   title: string;
@@ -38,7 +39,12 @@ export type FindProjectsToolResult = {
     title: string;
     location: string;
     areaM2: number;
+    category: ProjectSearchCategory;
+    projectType: PortfolioProjectType;
+    objectiveFeatures: ProjectObjectiveFeature[];
+    scope: string[];
     url: string;
+    canonicalUrl: string;
     matchReasons: string[];
   }>;
 };
@@ -148,7 +154,12 @@ export function createFindProjectsTool(
           title: project.title,
           location: project.location,
           areaM2: project.areaM2,
-          url: project.url,
+          category: project.category,
+          projectType: project.projectType,
+          objectiveFeatures: [...project.objectiveFeatures],
+          scope: [...project.scope],
+          url: webMcpSiteUrl(`/${locale}/projekty/${project.slug}`),
+          canonicalUrl: project.url,
           matchReasons: matchReasons.map(reasonText),
         })),
       };

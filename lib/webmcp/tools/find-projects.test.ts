@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { localizeProject, projects } from '@/data/projects';
 import type { Locale } from '@/i18n/request';
 import { projectSearchIndexFromLocalizedProjects } from '@/lib/projects/project-search-index';
@@ -25,6 +25,8 @@ function indexFor(locale: Locale) {
     'https://koolstudio.pl',
   );
 }
+
+afterEach(() => vi.unstubAllGlobals());
 
 describe.each([
   ['pl', 'Znajdź projekty kool studio'],
@@ -129,7 +131,7 @@ it.each([
   });
 
 describe.each(['pl', 'en'] as const)('localized execution for %s', (locale) => {
-  it('returns only lean localized facts and one reason per supplied criterion', async () => {
+  it('returns published localized facts and one reason per supplied criterion', async () => {
     const tool = createFindProjectsTool(locale, indexFor(locale), copy(locale));
     const signal = new AbortController().signal;
     const result = await tool.execute({
@@ -142,9 +144,18 @@ describe.each(['pl', 'en'] as const)('localized execution for %s', (locale) => {
 
     expect(result).toMatchObject({ locale, totalMatches: 1, returnedMatches: 1 });
     expect(Object.keys(result.results[0]).sort()).toEqual([
-      'areaM2', 'location', 'matchReasons', 'slug', 'title', 'url',
+      'areaM2', 'canonicalUrl', 'category', 'location', 'matchReasons',
+      'objectiveFeatures', 'projectType', 'scope', 'slug', 'title', 'url',
     ]);
     expect(result.results[0].slug).toBe('mieszkanie-walecznych');
+    const source = projects.find(({ slug }) => slug === result.results[0].slug)!;
+    expect(result.results[0]).toMatchObject({
+      category: 'residential',
+      projectType: source.projectType,
+      objectiveFeatures: source.objectiveFeatures,
+      scope: localizeProject(source, locale).scope,
+      canonicalUrl: `https://koolstudio.pl/${locale}/projekty/${source.slug}`,
+    });
     expect(result.results[0].matchReasons).toEqual(locale === 'pl' ? [
       'ten sam typ projektu: mieszkanie',
       'ta sama lokalizacja: Wrocław',
@@ -157,11 +168,11 @@ describe.each(['pl', 'en'] as const)('localized execution for %s', (locale) => {
       'feature: pre-war building',
     ]);
     expect(JSON.stringify(result)).not.toMatch(
-      /"(?:objectiveFeatures|projectType|category|status|year|scope|description|images|gallery)"\s*:/,
+      /"(?:status|year|description|images|gallery)"\s*:/,
     );
   });
 
-  it('keeps the maximal current five-result catalog fixture within 1500 characters', async () => {
+  it('keeps the maximal current five-result catalog fixture within 4500 characters', async () => {
     const tool = createFindProjectsTool(locale, indexFor(locale), copy(locale));
     const result = await tool.execute({
       category: 'commercial',
@@ -181,7 +192,7 @@ describe.each(['pl', 'en'] as const)('localized execution for %s', (locale) => {
       'kancelaria',
     ]);
     expect(result.results.every((match) => match.matchReasons.length === 4)).toBe(true);
-    expect(JSON.stringify(result).length).toBeLessThanOrEqual(1500);
+    expect(JSON.stringify(result).length).toBeLessThanOrEqual(4500);
   });
 
   it('uses the exact same-area reason at zero difference', async () => {
@@ -211,4 +222,39 @@ it('honors an already-aborted execution signal', async () => {
   await expect(tool.execute({}, { signal: controller.signal })).rejects.toMatchObject({
     name: 'AbortError',
   });
+});
+
+
+describe.each(['pl', 'en'] as const)('navigation URLs in %s', (locale) => {
+  it.each([
+    'http://localhost:8080',
+    'https://kool-preview.vercel.app',
+    'https://koolstudio.pl',
+  ])('stays on %s while preserving the canonical source', async (origin) => {
+    vi.stubGlobal('document', { location: new URL(`${origin}/${locale}/studio`) });
+    const tool = createFindProjectsTool(locale, indexFor(locale), copy(locale));
+    const result = await tool.execute({ limit: 1 }, { signal: new AbortController().signal });
+    const match = result.results[0];
+    expect(match.url).toBe(`${origin}/${locale}/projekty/${match.slug}`);
+    expect(match.canonicalUrl).toBe(`https://koolstudio.pl/${locale}/projekty/${match.slug}`);
+    expect(await tool.execute({ limit: 1 }, { signal: new AbortController().signal })).toEqual(result);
+  });
+
+  it('copies published arrays so consumers cannot mutate the catalog index', async () => {
+    const index = indexFor(locale);
+    const before = structuredClone(index);
+    const tool = createFindProjectsTool(locale, index, copy(locale));
+    const result = await tool.execute({ limit: 1 }, { signal: new AbortController().signal });
+    result.results[0].scope.length = 0;
+    result.results[0].objectiveFeatures.length = 0;
+    expect(index).toEqual(before);
+  });
+});
+
+
+it('falls back to the canonical origin during server rendering', async () => {
+  vi.stubGlobal('document', undefined);
+  const tool = createFindProjectsTool('en', indexFor('en'), copy('en'));
+  const result = await tool.execute({ limit: 1 }, { signal: new AbortController().signal });
+  expect(result.results[0].url).toBe(result.results[0].canonicalUrl);
 });

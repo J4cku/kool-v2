@@ -1,6 +1,6 @@
 import type { Locale } from '@/i18n/request';
 import type { InquiryDraftPatch, InquiryRecommendedField } from '@/lib/brief';
-import { BASE_URL } from '@/lib/site';
+import { webMcpSiteUrl } from '@/lib/webmcp/site-url';
 
 export type InquiryPreparationStatus =
   | 'navigate_to_contact'
@@ -46,7 +46,7 @@ export function prepareProjectInquiry(
   patch: InquiryDraftPatch,
   locale: Locale = patch.language ?? 'pl',
 ): InquiryPreparationResult {
-  const contactUrl = `${BASE_URL}/${locale}/kontakt#brief`;
+  const contactUrl = webMcpSiteUrl(`/${locale}/kontakt#brief`);
   if (!currentRegistration) {
     return {
       status: 'navigate_to_contact',
