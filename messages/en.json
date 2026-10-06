@@ -524,7 +524,7 @@
     "title": "Privacy policy",
     "intro": "The controller of your personal data is kool studio, Zaporoska 83/15, Wrocław, Poland. For any data-related matters, write to hello@koolstudio.pl.",
     "contactLabel": "Email contact",
-    "contactBody": "When you write to hello@koolstudio.pl or send a brief via the contact form, we process the data you provide (name, email address, project details) solely to reply and discuss a potential collaboration; after sending a brief you receive an email confirmation. We keep correspondence for as long as the matter requires.",
+    "contactBody": "When you write to hello@koolstudio.pl or send a brief through the form, we process the details you provide: name, email address, optional phone number and correspondence language, plus project information (type, location, property stage, approximate area, scope, design and construction timing, budget, requirements, and an optional link to plans or photos). We use them to reply and discuss a potential collaboration. When form delivery is configured, Resend, our email-delivery provider acting as our processor, handles the message to the studio and your confirmation receipt. If the form cannot send the message, the site creates a prepared brief in your email app; the site does not send it — you decide whether to send it from the email app. We keep correspondence for as long as the matter requires.",
     "analyticsLabel": "Visit statistics",
     "analyticsBody": "With your consent we use PostHog (data processed in the EU) to understand how visitors use the site — which projects they view, how they find us, and how they move around the site (session recording: cursor movement and scrolling, never the content of text inputs). Without your consent we measure traffic anonymously only: no cookies and nothing stored on your device.",
     "adsLabel": "Advertising",
@@ -549,6 +549,10 @@
         "label": "Email",
         "help": "We'll reply to this address."
       },
+      "phone": {
+        "label": "Phone (optional)",
+        "help": "If you prefer us to contact you by phone."
+      },
       "projectType": {
         "label": "Project type",
         "placeholder": "Choose…"
@@ -558,38 +562,41 @@
         "placeholder": "e.g. Wrocław",
         "help": "The city is enough."
       },
-      "stage": {
-        "label": "Project stage",
+      "propertyStage": {
+        "label": "Property stage",
         "placeholder": "Choose…"
       },
       "area": {
         "label": "Approximate area (m²)",
         "placeholder": "e.g. 85"
       },
-      "startDate": {
-        "label": "Desired start",
+      "designStart": {
+        "label": "Desired design start",
         "placeholder": "e.g. September 2026"
       },
-      "completionDate": {
-        "label": "Desired completion",
+      "constructionStart": {
+        "label": "Planned construction start",
         "placeholder": "e.g. spring 2027"
       },
-      "scope": {
-        "label": "Expected scope",
-        "help": "Tick what you're interested in."
+      "desiredScope": {
+        "label": "Desired scope",
+        "help": "Select what you are interested in."
       },
       "budget": {
         "label": "Approximate implementation budget (optional)",
         "help": "If you'd like, give a rough figure."
       },
-      "priorities": {
-        "label": "Priorities",
-        "help": "What should work better than it does today? Max. 3 points."
+      "requirements": {
+        "label": "Requirements and priorities",
+        "help": "Describe your needs, constraints, and what should work better. Maximum 1,000 characters."
       },
       "plansUrl": {
         "label": "Link to plans or photos",
         "placeholder": "https://…",
         "help": "A link to a cloud folder. No file upload."
+      },
+      "language": {
+        "label": "Correspondence language"
       }
     },
     "projectTypeOptions": {
@@ -613,10 +620,18 @@
       "zestawienia-wyceny": "specifications and quotes",
       "nadzor-autorski": "author's supervision"
     },
+    "languageOptions": {
+      "pl": "Polish",
+      "en": "English"
+    },
     "honeypotLabel": "Leave this field empty",
     "submit": "Send brief",
     "sending": "Sending…",
-    "privacy": "Your details go solely to hello@koolstudio.pl and are used only to reply to this enquiry.",
+    "privacy": {
+      "beforeLink": "We use the form details to reply to your enquiry. Configured delivery is handled by our email provider; if the form cannot send the message, we will open a prepared brief in your email app. See our ",
+      "link": "privacy policy",
+      "afterLink": " for details."
+    },
     "errors": {
       "required": "This field is required.",
       "email": "Enter a valid email address.",
@@ -636,6 +651,104 @@
     },
     "openCta": "tell us about your project",
     "close": "Close the form"
+  },
+  "webmcp": {
+    "projectSearch": {
+      "title": "Find kool studio projects",
+      "description": "Search published kool studio projects by category, type, location, floor area, and curated objective features. Returns portfolio facts only; it does not assess style, budget, availability, or project acceptance.",
+      "properties": {
+        "category": "Project category.",
+        "projectType": "Type of space designed.",
+        "location": "Exact city or town (1–80 characters); matching ignores case and Polish diacritics.",
+        "targetAreaM2": "Target floor area in square metres; affects ordering but does not exclude results.",
+        "features": "Required curated objective features; a result must contain all of them.",
+        "limit": "Maximum number of projects to return, from 1 to 5."
+      },
+      "categories": {
+        "residential": "residential",
+        "commercial": "commercial"
+      },
+      "projectTypes": {
+        "house": "house",
+        "apartment": "apartment",
+        "bathroom": "bathrooms",
+        "retail": "retail",
+        "food_and_beverage": "food and beverage",
+        "hospitality": "hospitality",
+        "office": "office",
+        "public_cultural": "public or cultural space",
+        "service_pavilion": "service pavilion"
+      },
+      "features": {
+        "existing_space_rework": "existing-space rework",
+        "pre_war_building": "pre-war building",
+        "modernist_building": "modernist building",
+        "post_industrial_building": "post-industrial building",
+        "neurodiversity_support": "neurodiversity support",
+        "competition_entry": "competition entry",
+        "furniture_design": "furniture design",
+        "lighting_design": "lighting design",
+        "visual_identity": "visual identity"
+      },
+      "reasons": {
+        "category": "same category: {label}",
+        "projectType": "same project type: {label}",
+        "location": "same location: {location}",
+        "areaSame": "{areaM2, plural, one {same floor area: # m²} other {same floor area: # m²}}",
+        "areaDifference": "{differenceM2, plural, one {floor area differs by # m²} other {floor area differs by # m²}}",
+        "feature": "feature: {label}"
+      }
+    },
+    "projectInquiry": {
+      "title": "Prepare a project inquiry",
+      "description": "Populate the visible project-enquiry form without submitting or contacting kool studio. If the form is unavailable, navigate to the returned contact URL and invoke the tool again; form_busy means the person's current submission state must remain untouched.",
+      "properties": {
+        "name": "Contact person's name.",
+        "email": "Email address for the reply.",
+        "phone": "Optional phone number.",
+        "projectType": "Project type.",
+        "location": "Project location.",
+        "propertyStage": "Current property stage.",
+        "area": "Approximate area in square metres.",
+        "desiredScope": "Desired project scope items.",
+        "designStart": "Desired design start date.",
+        "constructionStart": "Planned construction start date.",
+        "budget": "Optional approximate implementation budget.",
+        "requirements": "Project requirements, priorities, and constraints.",
+        "plansUrl": "Optional HTTP or HTTPS link to plans or photos.",
+        "language": "Correspondence language for the form."
+      },
+      "projectTypes": {
+        "mieszkanie": "apartment",
+        "dom": "house",
+        "komercyjne": "commercial interior",
+        "inne": "other"
+      },
+      "stages": {
+        "zakup": "planning to buy",
+        "przed-zmianami": "before tenant modifications",
+        "w-budowie": "under construction",
+        "po-odbiorze": "after keys handover",
+        "remont": "renovation of an existing interior"
+      },
+      "scopeItems": {
+        "uklad-funkcjonalny": "functional layout",
+        "projekt-koncepcyjny": "conceptual design",
+        "dokumentacja-wykonawcza": "construction documentation",
+        "zabudowy-na-wymiar": "custom cabinetry",
+        "zestawienia-wyceny": "specifications and quotes",
+        "nadzor-autorski": "author's supervision"
+      },
+      "languages": {
+        "pl": "Polish",
+        "en": "English"
+      },
+      "statusGuidance": {
+        "navigate_to_contact": "Navigate to the returned contact-page URL and invoke the tool again.",
+        "prepared": "The form is open and ready for the person to review and submit manually.",
+        "form_busy": "The form is submitting or showing a result; do not change it or try to submit again."
+      }
+    }
   },
   "przelot": {
     "title": "flythrough",
