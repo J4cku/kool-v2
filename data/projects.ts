@@ -329,7 +329,7 @@ const projectCatalog: Project[] = [
     areaM2: 1140,
     projectType: 'service_pavilion',
     objectiveFeatures: ['existing_space_rework', 'modernist_building', 'furniture_design'],
-    scope: ['projekt koncepcyjny wnętrz', 'projekty mebli', 'projekt wykonawczy wnętrz', 'nadzór autorski'],
+    scope: ['projekt koncepcyjny i wykonawczy wnętrz dla wybranych przestrzeni'],
     thumbnail: '/images/pawilon-fandom/kool_fnd_www_main.webp',
     featured: false,
     meta: {
@@ -348,7 +348,7 @@ const projectCatalog: Project[] = [
     description: 'Rewitalizacja modernistycznego pawilonu usługowego w centrum Wrocławia, obecnie w realizacji. Gdy budowa dobiegnie końca, odsłonimy wszystkie detale.',
     en: {
       title: 'Fandom service pavilion',
-      scope: ['interior conceptual design', 'furniture design', 'interior construction design', 'author\'s supervision'],
+      scope: ['conceptual and construction interior design for selected spaces'],
       description: 'Revitalisation of a modernist service pavilion in the centre of Wrocław, currently underway. Once the building works are complete, we will reveal all the details.',
       descriptionBlocks: [
         'The revitalisation of this modernist pavilion is currently underway.\nOnce the building works are complete, we will reveal all the details.',
