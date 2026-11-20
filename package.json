@@ -20,14 +20,14 @@
     "@vercel/speed-insights": "^2.1.0",
     "framer-motion": "^12.43.0",
     "next": "^16.4.6",
-    "next-intl": "^4.14.9",
-    "posthog-js": "^1.447.7",
+    "next-intl": "^4.15.1",
+    "posthog-js": "^1.450.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "swiper": "^14.4.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.65.0",
+    "@playwright/test": "^1.65.1",
     "@tailwindcss/postcss": "^4.3.5",
     "@testing-library/react": "^16.3.3",
     "@types/node": "^26.6.6",
@@ -37,10 +37,10 @@
     "eslint": "^9.39.5",
     "eslint-config-next": "^16.4.6",
     "jsdom": "^29.1.1",
-    "postcss": "^8.5.32",
+    "postcss": "^8.5.33",
     "tailwindcss": "^4.3.5",
     "typescript": "^5.9.3",
     "vitest": "^4.1.11",
-    "webmcp-types": "0.1.10"
+    "webmcp-types": "0.1.11"
   }
 }
